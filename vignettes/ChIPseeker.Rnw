@@ -1,0 +1,202 @@
+% \VignetteEngine{knitr}
+% \VignetteIndexEntry{ChIPseeker: an R package for ChIP peak Annotation and Visualization}
+% \VignettePackage{ChIPseeker}
+% \VignetteDepends{clusterProfiler}
+% \VignetteDepends{org.Hs.eg.db}
+
+
+% To compile this document, run the commands within R
+% require(knitr); knit2pdf("ChIPseeker.Rnw")
+
+\documentclass[12pt]{article}
+\usepackage[a4paper,left=3cm,top=2cm,bottom=3cm,right=3cm,ignoreheadfoot]{geometry}
+\pagestyle{empty}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{helvet}
+\usepackage[titletoc]{appendix}
+\usepackage{tocloft}
+
+\setlength{\parindent}{0em}
+\setlength{\parskip}{.5em}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\newcommand{\Rcode}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\small\texttt{#1}}}
+\newcommand{\Rfunction}[1]{\Robject{#1}}
+\newcommand{\Rpackage}[1]{\textit{#1}}
+\newcommand{\Rparameter}[1]{\textit{#1}}
+\newcommand{\Rclass}[1]{\textit{#1}}
+\newcommand{\R}{\textsf{R}}
+
+\usepackage[
+  bookmarks,%
+  colorlinks,%
+  linktoc=section,%
+  linkcolor=RedViolet,%
+  citecolor=RedViolet,%
+  urlcolor=RedViolet,%
+  linkbordercolor={1 1 1},%
+  citebordercolor={1 1 1},%
+  urlbordercolor={1 1 1},%
+  raiselinks,%
+  plainpages,%
+  pdftex
+  ]{hyperref}
+
+
+\usepackage{cite}
+\renewcommand{\floatpagefraction}{0.9}
+
+\usepackage{sectsty}
+\sectionfont{\sffamily\bfseries\color{RoyalBlue}\sectionrule{0pt}{0pt}{-1ex}{1pt}}
+\subsectionfont{\sffamily\bfseries\color{RoyalBlue}}
+\subsubsectionfont{\sffamily\bfseries\color{RoyalBlue}}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\lfoot{}\cfoot{}\rfoot{}
+\renewcommand{\headrule}{}
+
+\usepackage{graphicx}
+%\usepackage{xstring}
+
+
+
+<<include=FALSE>>=
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+library(clusterProfiler)
+library(ChIPseeker)
+library(org.Hs.eg.db)
+library(GenomicFeatures)
+library(GenomicRanges)
+library(knitr)
+opts_chunk$set(tidy=TRUE, 
+               tidy.opts=list(keep.blank.line=FALSE, width.cutoff=50),
+               out.truncate=80,
+               out.lines=6,
+               cache=TRUE,
+               dev='pdf',
+               include=TRUE,
+               fig.width=6,
+               fig.height=6,
+               resolution=100)
+@
+
+\newcommand{\fixme}[1]{{\textbf{Fixme:} \textit{\textcolor{blue}{#1}}}}
+
+
+\title{\textsf{\textbf{chipseeker: an R package for ChIP peak Annotation and Visualization}}}
+\author{Guangchuang Yu\\ The University of Hong Kong}
+
+\begin{document}
+\maketitle
+
+<<options,results='hide',echo=FALSE>>=
+options(digits=3, width=80, prompt=" ", continue=" ")
+@
+
+
+\tableofcontents
+
+
+\section{Introduction}
+Chromatin immunoprecipitation followed by high-throughput sequencing (ChIP-seq) has become standard technologies for genome wide identification of DNA-binding protein target sites. After read mappings and peak callings, the peak should be annotated to answer the biological questions. I developed an R package called \Rpackage{chipseeker} for annotating nearest genes and genomic features to peaks. Several plot functions are implemented to summarize peaks and peak annotation. Functional enrichment analysis of the peaks can be performed by my Bioconductor packages \Rpackage{DOSE} , \Rpackage{ReactomePA}, \Rpackage{clusterProfiler} \cite{yu_clusterprofiler:_2012} . 
+
+
+\section{Peak Annotation}
+<<peak annotation>>=
+require(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+require(ChIPseeker)
+peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
+print(peakfile)
+peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 100), as="GRanges", 
+                         TranscriptDb=txdb, annoDb="org.Hs.eg.db")
+head(peakAnno)
+@ 
+
+Peak Annotation is performed by \Rfunction{annotatePeak}. User can define TSS (transcription start site) region, by default TSS is defined from -3kb to +100bp. The argument \Rparameter{as} can be one of "GRanges", "data.fram" and "txt" to specify the output format return by \Rfunction{annotatePeak}. If \Rparameter{as} is set to "txt", the output will save to a TXT file with name suffix by anno.txt.
+
+TranscriptDb object should be passed for annotation. annoDb is optional, if provided, extra columns such as SYMBOL, GENENAME will be added.
+
+All the peak information contained in peakfile will be retained in the output of \Rfunction{annotatePeak}. The position and strand information of nearest genes are reported. The distance from peak to the TSS of its nearest gene is also reported. The genomic region of the peak is reported in annotation column. \Rfunction{annotatePeak} report detail information, for instance "Exon (38885 exon 3 of 11)", means that the peak is overlap with an Exon of gene 38885 (EntrezID), and this overlaped exon is the 3rd exon of the 11 exons that gene 38885 prossess.
+
+\section{Visualize Genomic Annotation}
+To annotate the location of a given peak in terms of genomic features, \Rfunction{annotatePeak} assigns peaks to genomic annotation in "annotation" column of the output, which includes whether a peak is in the TSS, Exon, 5' UTR, 3' UTR, Intronic or Intergenic. Many researchers are very interesting in these annotations. TSS region can be defined by user and \Rfunction{annotatePeak} output in details of which exon/intron of which genes as illustrated in previous section.
+
+Pie and Bar plot are supported to visualize the genomic annotation.
+<<pieplot, fig.cap="Genomic Annotation by pieplot", fig.align="center", fig.height=6, fig.width=6, out.width="0.6\\textwidth", fig.pos="h">>= 
+plotAnnoPie(peakAnno)
+@ 
+
+<<barplot_anno, fig.cap="Genomic Annotation by barplot", fig.align="center", fig.height=2, fig.width=6, out.width="0.6\\textwidth", fig.pos="h">>= 
+plotAnnoBar(peakAnno)
+@ 
+
+\section{Visualize distribution of TF-binding loci relative to TSS}
+The distance from the peak (binding site) to the TSS of the nearest gene is calculated by \Rfunction{annotatePeak} and reported in the output. We provide \Rfunction{plotDistToTSS} to calculate the percentage of binding sites upstream and downstream from the TSS of the nearest genes, and visualize the distribution. 
+<<barplot_tss, fig.cap="Distribution of Binding Sites", fig.align="center", fig.height=2, fig.width=6, out.width="0.6\\textwidth", fig.pos="h">>= 
+plotDistToTSS(peakAnno, title="Distribution of transcription factor-binding loci \n relative to TSS")
+@
+
+\section{Compare among several ChIPseq data}
+The \Rfunction{plotAnnoBar} and \Rfunction{plotDistToTSS} can also accept input of a named list of annotated peaks (output of \Rfunction{annotatePeak}).
+
+
+For illustration, here I create a named list from peakAnno object:
+
+<<List_of_peakAnno>>=
+set.seed(123)
+peakAnnoList <- lapply(1:3, function(i) peakAnno[sample(1:length(peakAnno), 100),])
+names(peakAnnoList) <- paste("peak", 1:3, sep="_")
+lapply(peakAnnoList, head, n=2)
+@
+
+We can use \Rfunction{plotAnnoBar} to comparing their genomic annotation.
+<<barplot_anno_list, fig.cap="Genomic Annotation among different ChIPseq data", fig.align="center", fig.height=4, fig.width=6, out.width="0.6\\textwidth", fig.pos="h">>= 
+plotAnnoBar(peakAnnoList)
+@
+
+R function \Rfunction{plotDistToTSS} can use to comparing distance to TSS profiles among ChIPseq data.
+<<barplot_tss_list, fig.cap="Distribution of Binding Sites among different ChIPseq data", fig.align="center", fig.height=5, fig.width=8, out.width="0.6\\textwidth", fig.pos="h">>= 
+plotDistToTSS(peakAnnoList)
+@
+
+\section{Overlap of peaks and annotated genes}
+User may want to compare the overlap peaks of replicate experiments or from different experiments. \Rpackage{ChIPseeker} provides \Rfunction{peak2GRanges} that can read peak file and stored in GRanges object. Several files can be read simultaneously using lapply, and then passed to \Rfunction{vennplot} to calculate their overlap and draw venn plot.
+
+\Rfunction{vennplot} accept a list of object, can be a list of GRanges or a list of vector. Here, I will demonstrate using \Rfunction{vennplot} to visualize the overlap of the nearest genes stored in peakAnnoList.
+
+<<vennplot, fig.cap="Overlap of annotated genes", fig.align="center", fig.height=6, fig.width=6, out.width="0.6\\textwidth", fig.pos="h">>= 
+genes= lapply(peakAnnoList, function(i) unlist(i$geneId))
+vennplot(genes)
+@ 
+
+
+\section{Functional enrichment analysis}
+Once we have obtained the annotated nearest genes, we can perform functional enrichment analysis to identify predominant biological themes among these genes by incorporating biological knowledge provided by biological ontologies. For instance, Gene Ontology (GO) \cite{ashburner_gene_2000} annotates genes to biological processes, molecular functions, and cellular components in a directed acyclic graph structure, Kyoto Encyclopedia of Genes and Genomes (KEGG) \cite{kanehisa_kegg_2004} annotates genes to pathways, Disease Ontology (DO) \cite{schriml_disease_2011} annotates genes with human disease association, and Reactome \cite{croft_reactome_2013} annotates gene to pathways and reactions. 
+
+Enrichment analysis is a widely used approach to identify biological themes. I have developed several Bioconductor packages for investigating whether the number of selected genes associated with a particular biological term is larger than expected, including \Rpackage{DOSE} for Disease Ontology, \Rpackage{ReactomePA} for reactome pathway, \Rpackage{clusterProfiler} \cite{yu_clusterprofiler:_2012} for Gene Ontology and KEGG enrichment analysis. 
+
+<<enrichment>>= 
+require(clusterProfiler)
+bp <- enrichGO(unlist(peakAnno$geneId), ont="BP", readable=TRUE)
+head(summary(bp))
+@ 
+
+More information can be found in the vignettes of Bioconductor packages \Rpackage{DOSE} , \Rpackage{ReactomePA}, \Rpackage{clusterProfiler} \cite{yu_clusterprofiler:_2012}, which also provide several methods to visualize enrichment results. The \Rpackage{clusterProfiler} package is designed for comparing and visualizing functional profiles among gene clusters, and can directly applied to compare biological themes at GO, DO, KEGG, Reactome perspective.
+
+
+\section{Session Information}
+
+The version number of R and packages loaded for generating the vignette were:
+
+<<sessInfo, results='asis', echo=FALSE>>=
+toLatex(sessionInfo())
+@
+
+\bibliographystyle{unsrt}
+\bibliography{ChIPseeker}
+\end{document}

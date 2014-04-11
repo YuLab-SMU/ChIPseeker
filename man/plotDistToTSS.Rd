@@ -1,0 +1,44 @@
+\name{plotDistToTSS}
+\alias{plotDistToTSS}
+\title{plotDistToTSS}
+\usage{
+plotDistToTSS(peakAnno, distanceColumn = "distanceToTSS", xlab = "",
+  ylab = "Binding sites (\%)",
+  title = "Distribution of transcription factor-binding loci relative to TSS",
+  palette = NULL)
+}
+\arguments{
+  \item{peakAnno}{peak annotation}
+
+  \item{distanceColumn}{column name of the distance from
+  peak to nearest gene}
+
+  \item{xlab}{x label}
+
+  \item{ylab}{y lable}
+
+  \item{title}{figure title}
+
+  \item{palette}{color set}
+}
+\value{
+bar plot that summarize distance from peak to TSS of the
+nearest gene.
+}
+\description{
+plot feature distribution based on the distances to the TSS
+}
+\examples{
+require(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
+peakAnno <- annotatePeak(peakfile, TranscriptDb=txdb)
+plotDistToTSS(peakAnno)
+}
+\author{
+G Yu
+}
+\seealso{
+\code{\link{annotatePeak}}
+}
+

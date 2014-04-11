@@ -1,0 +1,41 @@
+\name{plotAnnoBar}
+\alias{plotAnnoBar}
+\title{plotAnnoBar}
+\usage{
+plotAnnoBar(peakAnno, title = "Feature Distribution", xlab = "",
+  ylab = "Percentage(\%)", palette = NULL)
+}
+\arguments{
+  \item{peakAnno}{peakAnno in data.frame}
+
+  \item{title}{plot title}
+
+  \item{xlab}{xlab}
+
+  \item{ylab}{ylab}
+
+  \item{palette}{color set}
+}
+\value{
+bar plot that summarize genomic features of peaks
+}
+\description{
+plot feature distribution based on their chromosome region
+}
+\details{
+plot chromosome region features
+}
+\examples{
+require(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
+peakAnno <- annotatePeak(peakfile, TranscriptDb=txdb)
+plotAnnoBar(peakAnno)
+}
+\author{
+G Yu
+}
+\seealso{
+\code{\link{annotatePeak}} \code{\link{plotAnnoPie}}
+}
+

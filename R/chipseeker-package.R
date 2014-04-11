@@ -1,0 +1,33 @@
+#' ChIP-SEQ Annotation
+#' 
+#'
+#' This package is designed for chip-seq data analysis
+#'
+#' \tabular{ll}{ Package: \tab ChIPseeker\cr Type: \tab Package\cr Version: \tab
+#' 0.99.0\cr Date: \tab 2-01-2014\cr biocViews:\tab ChIPSeq,
+#' Annotation, Software\cr Depends:\tab \cr Imports: \tab methods, ggplot2
+#' \cr Suggests:\tab clusterProfiler, GOSemSim\cr License: \tab
+#' Artistic-2.0\cr }
+#'
+#' @name ChIPseeker-package
+#' @aliases ChIPseeker-package ChIPseeker
+#' @docType package
+#' @author Guangchuang Yu
+#'
+#' Maintainer: Guangchuang Yu \email{guangchuangyu@@gmail.com}
+#' @keywords package
+NULL
+
+
+
+##' Datasets
+##' chipseekerENV
+##'
+##' 
+##' @name chipseekerENV
+##' @aliases chipseekerENV
+##' ucsc_release
+##' ucsc_release_link
+##' @docType data
+##' @keywords datasets
+NULL
