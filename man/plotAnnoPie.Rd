@@ -2,19 +2,19 @@
 \alias{plotAnnoPie}
 \title{plotAnnoPie}
 \usage{
-plotAnnoPie(peakAnno, ndigit = 2, radius = 0.8, explode = 0.05,
-  labelcex = 1, ...)
+plotAnnoPie(peakAnno, ndigit = 2, cex = 0.9, col = NA, pie3D = FALSE,
+  ...)
 }
 \arguments{
   \item{peakAnno}{peakAnno}
 
-  \item{ndigit}{ndigit}
+  \item{ndigit}{number of digit to round}
 
-  \item{radius}{the radius of the pie}
+  \item{cex}{label cex}
 
-  \item{explode}{the amount to "explode" the pie}
+  \item{col}{color}
 
-  \item{labelcex}{label font size}
+  \item{pie3D}{plot in 3D or not}
 
   \item{...}{extra parameter}
 }

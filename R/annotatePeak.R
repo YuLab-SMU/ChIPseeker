@@ -69,7 +69,8 @@ annotatePeak <- function(peak,
     } else {
         if (file.exists(peak)) {
             if (verbose)
-                cat(">> loading peak file...\n")
+                cat(">> loading peak file...\t\t\t\t",
+                    format(Sys.time(), "%Y-%m-%d %X"), "\n")
             ## peak.df <- peak2DF(peak)
             ## peak.gr <- peakDF2GRanges(peak.df)
             input <- "file"
@@ -80,7 +81,8 @@ annotatePeak <- function(peak,
     }
     
     if (verbose)
-        cat(">> preparing features information...\n")
+        cat(">> preparing features information...\t\t",
+            format(Sys.time(), "%Y-%m-%d %X"), "\n")
     if ( is.null(TranscriptDb) ) {
         TranscriptDb <- TxDb.Hsapiens.UCSC.hg19.knownGene
     }
@@ -97,17 +99,20 @@ annotatePeak <- function(peak,
     }
     
     if (verbose)
-        cat(">> identifying nearest features...\n")
+        cat(">> identifying nearest features...\t\t",
+            format(Sys.time(), "%Y-%m-%d %X"), "\n")
     ## nearest features
     idx.dist <- getNearestFeatureIndicesAndDistances(peak.gr, features)
     nearestFeatures <- features[idx.dist$index]
     if (verbose)
-        cat(">> calculating distance from peak to TSS...\n")
+        cat(">> calculating distance from peak to TSS...\t",
+            format(Sys.time(), "%Y-%m-%d %X"), "\n")
     ## distance
     distance <- idx.dist$distance
 
     if (verbose)
-        cat(">> assigning genomic annotation...\n")
+        cat(">> assigning genomic annotation...\t\t",
+            format(Sys.time(), "%Y-%m-%d %X"), "\n")
     ## annotation
     if (assignGenomicAnnotation == TRUE) {
         annotation <- getGenomicAnnotation(peak.gr, distance, tssRegion, TranscriptDb)
@@ -135,7 +140,8 @@ annotatePeak <- function(peak,
     ##              distanceToTSS=distance)
     if (!is.null(annoDb)) {
         if (verbose)
-            cat("adding gene annotation...\n")
+            cat(">> adding gene annotation...\t\t\t",
+                format(Sys.time(), "%Y-%m-%d %X"), "\n")
         geneAnno <- addGeneAnno(annoDb, peak.gr$geneId)
         for(cn in colnames(geneAnno)[-1])
             elementMetadata(peak.gr)[[cn]] <- geneAnno[, cn]
@@ -154,7 +160,8 @@ annotatePeak <- function(peak,
     }
     
     if(verbose)
-        cat(">> done...\n")
+        cat(">> done...\t\t\t\t\t",
+            format(Sys.time(), "%Y-%m-%d %X"), "\n")
 
     if (output == "df") {
         return(as.data.frame(peak.gr))
