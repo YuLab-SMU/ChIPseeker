@@ -27,6 +27,8 @@ vennplot <- function(Sets, by="gplots") {
     if (by == "Vennerable") {
         ## setRepositories(ind=7)
         ## install.package("Vennerable")
+        ## OR
+        ## install.packages("Vennerable", repos="http://R-Forge.R-project.org")
         pkg <- "Vennerable"
         require(pkg, character.only=TRUE)
         Venn <- eval(parse(text="Venn"))
