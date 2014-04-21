@@ -40,6 +40,8 @@
 ##' GENENAME: full gene name
 ##' @importFrom TxDb.Hsapiens.UCSC.hg19.knownGene TxDb.Hsapiens.UCSC.hg19.knownGene
 ##' @importFrom GenomicFeatures genes
+##' @importFrom GenomicRanges seqlengths
+## @importFrom GenomicFeatures getChromInfoFromUCSC
 ##' @importFrom AnnotationDbi get
 ##' @importMethodsFrom BiocGenerics as.data.frame
 ##' @examples
@@ -158,6 +160,16 @@ annotatePeak <- function(peak,
         write.table(as.data.frame(peak.gr), file=outfile,
                     sep="\t", row.names=FALSE, quote=FALSE)
     }
+
+    if(verbose)
+        cat(">> assigning chromosome lengths\t\t\t",
+            format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    ## md=metadata(txdb)
+    ## genVer=md[md[,1] == "Genome",2]
+    ## chromInfo=getChromInfoFromUCSC(genVer)
+    ## sln <- names(seqlengths(peak.gr))
+    ## seqlengths(peak.gr) = chromInfo[match(sln, chromInfo[,1]),2]
+    seqlengths(peak.gr) <- seqlengths(TranscriptDb)[names(seqlengths(peak.gr))]
     
     if(verbose)
         cat(">> done...\t\t\t\t\t",
