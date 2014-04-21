@@ -67,13 +67,12 @@ plotAnnoBar <- function(peakAnno,
 ##' 
 ##' @title plotAnnoPie
 ##' @param peakAnno peakAnno
-##' @param ndigit ndigit
-##' @param radius the radius of the pie
-##' @param explode the amount to "explode" the pie
-##' @param labelcex label font size
+##' @param ndigit number of digit to round
+##' @param cex label cex
+##' @param col color
+##' @param pie3D plot in 3D or not
 ##' @param ... extra parameter
 ##' @return pie plot of peak genomic feature annotation
-##' @importFrom plotrix pie3D
 ##' @examples
 ##' ## example not run
 ##' ## require(TxDb.Hsapiens.UCSC.hg19.knownGene)
@@ -86,23 +85,65 @@ plotAnnoBar <- function(peakAnno,
 ##' @author G Yu
 plotAnnoPie <- function(peakAnno,
                         ndigit=2,
-                        radius=0.8,
-                        explode=0.05,
-                        labelcex=1,
+                        cex=0.9,
+                        col=NA,
+                        pie3D=FALSE,
                         ...){
     
     anno.df <- getGenomicAnnoStat(peakAnno)
+    if (pie3D)
+        annoPie3D(anno.df, ndigit=ndigit, cex=cex, col=col, ...)
+    
+    annoPie(anno.df, ndigit=ndigit, cex=cex, col=col, ...)
+ }
 
+##' @importFrom RColorBrewer brewer.pal
+##' @importFrom grDevices colorRampPalette
+annoPie <- function(anno.df, ndigit=2, cex=0.9, col=NA, ...) {
+    if ( ! all(c("Feature", "Frequency") %in% colnames(anno.df))) {
+        stop("check your input...")
+    }
+    if (is.na(col)) {
+        cols <- colorRampPalette(brewer.pal(12, "Set3"))
+        col=cols(length(anno.df$Frequency))
+    }
+    
+    pie(anno.df$Frequency,
+        ## labels=paste(round(anno.df$Frequency/sum(anno.df$Frequency)*100, 2), "%", sep=""),
+        labels=paste(anno.df$Feature, " (",
+            round(anno.df$Frequency/sum(anno.df$Frequency)*100, ndigit),
+            "%)", sep=""),
+        cex=cex,
+        col=col,
+        ...
+        )
+    ## legend(legend=anno.df$Feature, fill=col, "topright")
+}
+
+## @param ndigit ndigit
+## @param radius the radius of the pie
+## @param explode the amount to "explode" the pie
+## @param labelcex label font size
+## @importFrom plotrix pie3D
+annoPie3D <- function(anno.df,
+                      ndigit=2,
+                      cex=1,
+                      ...){
+                  
+    ## anno.df <- getGenomicAnnoStat(peakAnno)
+
+    pkg <- "plotrix"
+    require(pkg, character.only=TRUE)
+    pie3D <- eval(parse(text="pie3D"))
     pie3D(anno.df$Frequency,
-          radius=radius,
-          explode=explode,
           labels=paste(
               anno.df$Feature,
               "(",
               paste(round(anno.df$Frequency, ndigit), "%", sep=""),
               ")",
               sep=""),
-          labelcex=labelcex,
+          labelcex=cex,
+          col=col,
           ...)
 }
 
