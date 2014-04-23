@@ -85,12 +85,12 @@ annotatePeak <- function(peak,
     if (verbose)
         cat(">> preparing features information...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
+
     if ( is.null(TranscriptDb) ) {
         TranscriptDb <- TxDb.Hsapiens.UCSC.hg19.knownGene
     }
 
-    if (!exists("ChIPseekerEnv"))
-        .ChIPseekerEnv(TranscriptDb)
+    .ChIPseekerEnv(TranscriptDb)
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
     
     if ( exists("features", envir=ChIPseekerEnv, inherits=FALSE) ) {
@@ -312,7 +312,7 @@ getGenomicAnnotation <- function(peaks,
     ##
     ## since some annotation overlap,
     ## a priority is assign based on the following:
-    ## 1. TSS
+    ## 1. Promoter
     ## 2. Exon
     ## 3. 5' UTR
     ## 4. 3' UTR
@@ -320,8 +320,8 @@ getGenomicAnnotation <- function(peaks,
     ## 6. Intergenic
     ##
 
-    if (!exists("ChIPseekerEnv"))
-        .ChIPseekerEnv(TranscriptDb)
+
+    .ChIPseekerEnv(TranscriptDb)
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
     
             
@@ -371,7 +371,7 @@ getGenomicAnnotation <- function(peaks,
     
     ## TSS
     annotation[distance >= tssRegion[1] &
-               distance <= tssRegion[2]] <- "Promoter-TSS"
+               distance <= tssRegion[2]] <- "Promoter"
     
     return(annotation)
 }
