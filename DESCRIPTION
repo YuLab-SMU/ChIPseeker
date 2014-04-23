@@ -1,7 +1,7 @@
 Package: ChIPseeker
 Type: Package
-Title: ChIP peak Annotation and Visualization
-Version: 1.1.1
+Title: ChIPseeker for ChIP peak Annotation, Visualization and Comparison
+Version: 1.1.2
 Author: Guangchuang Yu
 Maintainer: Guangchuang Yu <guangchuangyu@gmail.com>
 Description: This package implements functions to retrieve the nearest
@@ -9,7 +9,7 @@ Description: This package implements functions to retrieve the nearest
     Visualization functions are implemented to summarize genomic
     annotation, distance to TSS, and overlap of peaks or genes.
 Depends:
-    R (>= 2.10)
+    R (>= 3.0)
 Imports:
     AnnotationDbi,
     BiocGenerics,
@@ -20,6 +20,7 @@ Imports:
     gplots,
     grDevices,
     gtools,
+    pheatmap,
     plyr,
     RColorBrewer,
     TxDb.Hsapiens.UCSC.hg19.knownGene
