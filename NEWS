@@ -1,0 +1,21 @@
+CHANGES IN VERSION 1.1.2
+------------------------
+ o implemented plotChrCov <2014-04-25, Fri>
+ o implemented plotAvgProf and peakHeatmap <2014-04-24, Thu>
+
+CHANGES IN VERSION 1.1.1
+------------------------
+ o output of annotatePeak now contain chromosome length information <2014-04-22, Tue>
+ o re-implement plotAnnoPie to use ordinary pie plot instead of pie3D <2014-04-21, Mon>
+
+CHANGES IN VERSION 1.0.0
+------------------------
+ o initial version with the following functions implemented:
+   + annotatePeak
+   + overlap
+   + plotAnnoBar
+   + plotAnnoPie
+   + plotDistToTSS
+   + readPeakFile
+   + vennplot
+   + vennplot.peakfile

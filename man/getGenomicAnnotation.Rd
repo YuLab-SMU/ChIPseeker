@@ -2,14 +2,15 @@
 \alias{getGenomicAnnotation}
 \title{getGenomicAnnotation}
 \usage{
-getGenomicAnnotation(peaks, distance, tssRegion = c(-3000, 100), TranscriptDb)
+getGenomicAnnotation(peaks, distance, tssRegion = c(-3000, 3000),
+  TranscriptDb)
 }
 \arguments{
   \item{peaks}{peaks in GRanges object}
 
   \item{distance}{distance of peak to TSS}
 
-  \item{tssRegion}{tssRegion, default is -3kb to +100bp}
+  \item{tssRegion}{tssRegion, default is -3kb to +3kb}
 
   \item{TranscriptDb}{TranscriptDb object}
 }

@@ -20,7 +20,7 @@ Imports:
     gplots,
     grDevices,
     gtools,
-    pheatmap,
+    Matrix,
     plyr,
     RColorBrewer,
     TxDb.Hsapiens.UCSC.hg19.knownGene
@@ -33,4 +33,4 @@ Suggests:
     knitr
 VignetteBuilder: knitr
 License: Artistic-2.0
-biocViews: Annotation, ChIPSeq, Software
+biocViews: Annotation, ChIPSeq, Software, Visualization, MultipleComparison

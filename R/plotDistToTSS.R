@@ -7,7 +7,6 @@
 ##' @param xlab x label
 ##' @param ylab y lable
 ##' @param title figure title
-##' @param palette color set
 ##' @return bar plot that summarize distance from peak to
 ##' TSS of the nearest gene.
 ##' @importFrom plyr ddply
@@ -40,9 +39,8 @@
 ##' @author G Yu
 plotDistToTSS <- function(peakAnno,
                           distanceColumn="distanceToTSS", 
-                          xlab="", ylab="Binding sites (%)",
-                          title="Distribution of transcription factor-binding loci relative to TSS",
-                          palette=NULL) {
+                          xlab="", ylab="Binding sites (%) (5'->3')",
+                          title="Distribution of transcription factor-binding loci relative to TSS") {
 
     ## to satisfy codetools
     Feature <- freq <- NULL
@@ -118,19 +116,19 @@ plotDistToTSS <- function(peakAnno,
 
     if (categoryColumn == 1) {
         p <- p + scale_x_continuous(breaks=NULL)
-        xpos = 1
-    } else {
-        xpos = length(nn)/2
-    }
+        # xpos = 1
+    } ## else {
+    ## xpos = length(nn)/2
+    ##}
     
-    ##p=p+geom_text(x=1, y=-us+10, label="upstream") +geom_text(x=1, y=ds-10, label="downstream")
-    p <- p + geom_text(y=-us-2, x=xpos, label="upstream", angle=90) +
-        geom_text(y=ds+2, x=xpos, label="downstream", angle=90)
-    if (is.null(palette) || is.na(palette)) {
-        p <- p + scale_fill_hue("Feature", breaks=lbs, labels=lbs)
-        return(p)
-    }
-    p <- p + scale_fill_brewer("Feature", palette=palette, breaks=lbs, labels=lbs)
+    ## p=p+geom_text(x=1, y=-us+10, label="upstream") +geom_text(x=1, y=ds-10, label="downstream")
+    ## p <- p + geom_text(y=-us-2, x=xpos, label="upstream", angle=90) +
+    ##    geom_text(y=ds+2, x=xpos, label="downstream", angle=90)
+    ## if (is.null(palette) || is.na(palette)) {
+    p <- p + scale_fill_hue("Feature", breaks=lbs, labels=lbs)
+    ##    return(p)
+    ## }
+    ## p <- p + scale_fill_brewer("Feature", palette=palette, breaks=lbs, labels=lbs)
     return(p)
 }
 

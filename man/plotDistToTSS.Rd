@@ -3,9 +3,8 @@
 \title{plotDistToTSS}
 \usage{
 plotDistToTSS(peakAnno, distanceColumn = "distanceToTSS", xlab = "",
-  ylab = "Binding sites (\%)",
-  title = "Distribution of transcription factor-binding loci relative to TSS",
-  palette = NULL)
+  ylab = "Binding sites (\%) (5'->3')",
+  title = "Distribution of transcription factor-binding loci relative to TSS")
 }
 \arguments{
   \item{peakAnno}{peak annotation}
@@ -18,8 +17,6 @@ plotDistToTSS(peakAnno, distanceColumn = "distanceToTSS", xlab = "",
   \item{ylab}{y lable}
 
   \item{title}{figure title}
-
-  \item{palette}{color set}
 }
 \value{
 bar plot that summarize distance from peak to TSS of the

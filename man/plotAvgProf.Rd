@@ -1,13 +1,15 @@
-\name{plotPeakProf}
-\alias{plotPeakProf}
-\title{plotPeakProf}
+\name{plotAvgProf}
+\alias{plotAvgProf}
+\title{plotAvgProf}
 \usage{
-plotPeakProf(peak, TranscriptDb = NULL, upstream = 1000,
+plotAvgProf(peak, weightCol = NULL, TranscriptDb = NULL, upstream = 1000,
   downstream = 1000, xlab = "Genomic Region (5'->3')",
-  ylab = "Read count Per Million mapped reads")
+  ylab = "Read Count Frequency", verbose = TRUE)
 }
 \arguments{
   \item{peak}{peak file or GRanges object}
+
+  \item{weightCol}{column name of weight}
 
   \item{TranscriptDb}{TranscriptDb object}
 
@@ -18,6 +20,8 @@ plotPeakProf(peak, TranscriptDb = NULL, upstream = 1000,
   \item{xlab}{xlab}
 
   \item{ylab}{ylab}
+
+  \item{verbose}{print message or not}
 }
 \value{
 ggplot object
