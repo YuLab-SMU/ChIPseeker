@@ -3,7 +3,7 @@
 \title{plotAnnoBar}
 \usage{
 plotAnnoBar(peakAnno, title = "Feature Distribution", xlab = "",
-  ylab = "Percentage(\%)", palette = NULL)
+  ylab = "Percentage(\%)")
 }
 \arguments{
   \item{peakAnno}{peakAnno in data.frame}
@@ -13,8 +13,6 @@ plotAnnoBar(peakAnno, title = "Feature Distribution", xlab = "",
   \item{xlab}{xlab}
 
   \item{ylab}{ylab}
-
-  \item{palette}{color set}
 }
 \value{
 bar plot that summarize genomic features of peaks

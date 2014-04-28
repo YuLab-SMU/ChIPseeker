@@ -6,7 +6,6 @@
 ##' @param title plot title
 ##' @param xlab xlab
 ##' @param ylab ylab
-##' @param palette color set
 ##' @return bar plot that summarize genomic features of peaks
 ##' @importFrom plyr ldply
 ##' @importFrom ggplot2 ggplot
@@ -14,7 +13,6 @@
 ##' @importFrom ggplot2 geom_bar
 ##' @importFrom ggplot2 coord_flip
 ##' @importFrom ggplot2 theme_bw
-##' @importFrom ggplot2 scale_fill_brewer
 ##' @importFrom ggplot2 scale_x_continuous
 ##' @importFrom ggplot2 xlab
 ##' @importFrom ggplot2 ylab
@@ -31,8 +29,7 @@
 plotAnnoBar <- function(peakAnno,
                         title="Feature Distribution",
                         xlab="",
-                        ylab="Percentage(%)",
-                        palette=NULL) {
+                        ylab="Percentage(%)") {
     
     if ( class(peakAnno) == "data.frame" || class(peakAnno) == "GRanges" ) {
         anno.df <- getGenomicAnnoStat(peakAnno)
@@ -55,9 +52,8 @@ plotAnnoBar <- function(peakAnno,
     if (categoryColumn == 1) {
         p <- p + scale_x_continuous(breaks=NULL)
     }
-    if (is.null(palette) || is.na(palette))
-        return(p)
-    p <- p+scale_fill_brewer(palette=palette)
+
+    ## p <- p+scale_fill_manual(values=getCols(nrow(anno.df)))
     
     return(p)
 }
@@ -91,6 +87,10 @@ plotAnnoPie <- function(peakAnno,
                         ...){
     
     anno.df <- getGenomicAnnoStat(peakAnno)
+    if (is.na(col)) {
+        col <- getCols(nrow(anno.df))
+    }
+    
     if (pie3D)
         annoPie3D(anno.df, ndigit=ndigit, cex=cex, col=col, ...)
     
@@ -102,10 +102,6 @@ plotAnnoPie <- function(peakAnno,
 annoPie <- function(anno.df, ndigit=2, cex=0.9, col=NA, ...) {
     if ( ! all(c("Feature", "Frequency") %in% colnames(anno.df))) {
         stop("check your input...")
-    }
-    if (is.na(col)) {
-        cols <- colorRampPalette(brewer.pal(12, "Set3"))
-        col=cols(length(anno.df$Frequency))
     }
     
     pie(anno.df$Frequency,
@@ -151,8 +147,14 @@ getGenomicAnnoStat <- function(peakAnno) {
     if ( class(peakAnno) == "GRanges" )
         peakAnno <- as.data.frame(peakAnno)
     anno <- peakAnno$annotation
-    anno <- sub(" \\(.+", "", anno)
+    ## anno <- sub(" \\(.+", "", anno)
 
+    anno[grep("exon 1 of", anno)] <- "1st Exon"
+    anno[grep("intron 1 of", anno)] <- "1st Intron"
+    anno[grep("Exon \\(", anno)] <- "Other Exon"
+    anno[grep("Intron \\(", anno)] <- "Other Intron"
+    anno[grep("Downstream", anno)] <- "Downstream (<=3kb)"
+    
     ## count frequency
     anno.table <- table(anno)
     
@@ -160,6 +162,19 @@ getGenomicAnnoStat <- function(peakAnno) {
     anno.ratio <- anno.table/ sum(anno.table) * 100
     anno.df <- as.data.frame(anno.ratio)
     colnames(anno.df) <- c("Feature", "Frequency")
+    lvs <- c("Promoter (<=1kb)",
+             "Promoter (1-2kb)",
+             "Promoter (2-3kb)",
+             "5' UTR",
+             "3' UTR",
+             "1st Exon",
+             "Other Exon",
+             "1st Intron",
+             "Other Intron",
+             "Downstream (<=3kb)",
+             "Distal Intergenic")
+    anno.df$Feature <- factor(anno.df$Feature, levels=lvs[lvs %in% anno.df$Feature])
+    anno.df <- anno.df[order(anno.df$Feature),]
     return(anno.df)
 }
 

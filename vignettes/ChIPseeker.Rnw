@@ -1,5 +1,5 @@
 % \VignetteEngine{knitr}
-% \VignetteIndexEntry{ChIPseeker: an R package for ChIP peak Annotation and Visualization}
+% \VignetteIndexEntry{ChIPseeker: an R package for ChIP peak Annotation, Visualization and Comparison}
 % \VignettePackage{ChIPseeker}
 % \VignetteDepends{clusterProfiler}
 % \VignetteDepends{org.Hs.eg.db}
@@ -87,7 +87,7 @@ opts_chunk$set(tidy=TRUE,
 \newcommand{\fixme}[1]{{\textbf{Fixme:} \textit{\textcolor{blue}{#1}}}}
 
 
-\title{\textsf{\textbf{chipseeker: an R package for ChIP peak Annotation and Visualization}}}
+\title{\textsf{\textbf{chipseeker: an R package for ChIP peak Annotation, Visualization and Comparison}}}
 \author{Guangchuang Yu\\ The University of Hong Kong}
 
 \begin{document}
@@ -104,15 +104,91 @@ options(digits=3, width=80, prompt=" ", continue=" ")
 \section{Introduction}
 Chromatin immunoprecipitation followed by high-throughput sequencing (ChIP-seq) has become standard technologies for genome wide identification of DNA-binding protein target sites. After read mappings and peak callings, the peak should be annotated to answer the biological questions. I developed an R package called \Rpackage{chipseeker} for annotating nearest genes and genomic features to peaks. Several plot functions are implemented to summarize peaks and peak annotation. Functional enrichment analysis of the peaks can be performed by my Bioconductor packages \Rpackage{DOSE} , \Rpackage{ReactomePA}, \Rpackage{clusterProfiler} \cite{yu_clusterprofiler:_2012} . 
 
+<<loadPkgs>>=
+## loading packages
+require(ChIPseeker)
+require(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+require(clusterProfiler)
+@ 
+\section{ChIP profiling}
+The datasets in this vignettes were downloaded from GEO (GSE40740) \cite{pemberton_genome-wide_2014} . \Rpackage{ChIPseeker} provides \Rfunction{readPeakFile} to load the peak and store in \Robject{GRanges} object. Most of the functions in \Rpackage{ChIPseeker} can accept input in peak file (bed format) or \Robject{GRanges} object. 
+<<samplefiles>>=
+files <- getSampleFiles()
+print(files)
+peak <- readPeakFile(files[[1]])
+peak
+@ 
+\subsection{ChIP peaks over Chromosomes}
+After peak calling, we would like to know the peak locations over the whole genome, \Rfunction{plotChrCov} function calculates the coverage of peak regions over chromosomes and generate a figure to visualize.
+<<chromosomeCoverage, eval=FALSE>>=
+plotChrCov(peak, weightCol="V5")
+@ 
+
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=1\linewidth]{figures/chrCoverage.png}
+    \caption{ChIP peaks over Chromosomes}
+    \label{Fig:chromsomeCoverage}
+  \end{center}
+\end{figure}
+
+\subsection{Heatmap of ChIP binding to TSS regions}
+
+<<heatmap, eval=FALSE>>=
+peakHeatmap(files[[1]], weightCol="V5", TranscriptDb=txdb, upstream=3000, downstream=3000, color="red")
+@ 
+
+
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=.4\linewidth]{figures/peakHeat.png}
+    \caption{Heatmap of ChIP peaks binding to TSS regions}
+    \label{Fig:heatmap}
+  \end{center}
+\end{figure}
+
+<<heatmap2, eval=FALSE>>=
+peakHeatmap(files, weightCol="V5", TranscriptDb=txdb, upstream=3000, downstream=3000, color="red")
+@ 
+
+
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=.4\linewidth]{figures/peakHeat2.png}
+    \caption{Heatmap of ChIP peaks among different experiments}
+    \label{Fig:heatmap2}
+  \end{center}
+\end{figure}
+
+\subsection{Average Profile of ChIP peaks binding to TSS region}
+
+<<avgprof, eval=FALSE>>=
+plotAvgProf(files[[1]], TranscriptDb=txdb, weightCol="V5", upstream=3000, downstream=3000)
+@ 
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=.7\linewidth]{figures/avgProf.png}
+    \caption{Average Profile of ChIP peaks binding to TSS region}
+    \label{Fig:avgProf}
+  \end{center}
+\end{figure}
+
+<<avgprof2, eval=FALSE>>=
+plotAvgProf(files, TranscriptDb=txdb, weightCol="V5", upstream=3000, downstream=3000)
+@ 
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=.7\linewidth]{figures/avgProf2.png}
+    \caption{Average Profiles of ChIP peaks among different experiments}
+    \label{Fig:avgProf2}
+  \end{center}
+\end{figure}
+
 
 \section{Peak Annotation}
 <<peak annotation>>=
-require(TxDb.Hsapiens.UCSC.hg19.knownGene)
-txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-require(ChIPseeker)
-peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
-print(peakfile)
-peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 100), as="GRanges", 
+peakAnno <- annotatePeak(files[[1]], tssRegion=c(-3000, 3000), as="GRanges", 
                          TranscriptDb=txdb, annoDb="org.Hs.eg.db")
 head(peakAnno)
 @ 

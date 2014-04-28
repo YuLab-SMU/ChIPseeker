@@ -1,0 +1,28 @@
+\name{plotChrCov}
+\alias{plotChrCov}
+\title{plotChrCov}
+\usage{
+plotChrCov(peak, weightCol = NULL, xlab = "Chromosome Size (bp)",
+  ylab = "", title = "ChIP Peaks over Chromosomes")
+}
+\arguments{
+  \item{peak}{peak file or GRanges object}
+
+  \item{weightCol}{weight column of peak}
+
+  \item{xlab}{xlab}
+
+  \item{ylab}{ylab}
+
+  \item{title}{title}
+}
+\value{
+ggplot2 object
+}
+\description{
+plot the Peak Regions over Chromosomes
+}
+\author{
+G Yu
+}
+

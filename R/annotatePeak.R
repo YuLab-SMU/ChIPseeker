@@ -38,11 +38,8 @@
 ##' SYMBOL: gene symbol
 ##' 
 ##' GENENAME: full gene name
-##' @importFrom TxDb.Hsapiens.UCSC.hg19.knownGene TxDb.Hsapiens.UCSC.hg19.knownGene
-##' @importFrom GenomicFeatures genes
 ##' @importFrom GenomicRanges seqlengths
 ## @importFrom GenomicFeatures getChromInfoFromUCSC
-##' @importFrom AnnotationDbi get
 ##' @importMethodsFrom BiocGenerics as.data.frame
 ##' @examples
 ##' require(TxDb.Hsapiens.UCSC.hg19.knownGene)
@@ -69,36 +66,17 @@ annotatePeak <- function(peak,
         input <- "gr"
         peak.gr <- peak
     } else {
-        if (file.exists(peak)) {
-            if (verbose)
-                cat(">> loading peak file...\t\t\t\t",
-                    format(Sys.time(), "%Y-%m-%d %X"), "\n")
-            ## peak.df <- peak2DF(peak)
-            ## peak.gr <- peakDF2GRanges(peak.df)
-            input <- "file"
-            peak.gr <- readPeakFile(peak, as="GRanges")
-        } else {
-            stop("peak should be a GRanges object or a peak file...")
-        }
+        input <- "file"
+        peak.gr <- loadPeak(peak, verbose)
     }
     
     if (verbose)
         cat(">> preparing features information...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
 
-    if ( is.null(TranscriptDb) ) {
-        TranscriptDb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-    }
-
-    .ChIPseekerEnv(TranscriptDb)
-    ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
+    TranscriptDb <- loadTxDb(TranscriptDb)
     
-    if ( exists("features", envir=ChIPseekerEnv, inherits=FALSE) ) {
-        features <- get("features", envir=ChIPseekerEnv)
-    } else {
-        features <- genes(TranscriptDb)
-        assign("features", features, envir=ChIPseekerEnv)
-    }
+    features <- getGene(TranscriptDb, by="gene")
     
     if (verbose)
         cat(">> identifying nearest features...\t\t",
@@ -164,6 +142,7 @@ annotatePeak <- function(peak,
     if(verbose)
         cat(">> assigning chromosome lengths\t\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
+
     ## md=metadata(txdb)
     ## genVer=md[md[,1] == "Genome",2]
     ## chromInfo=getChromInfoFromUCSC(genVer)
@@ -295,7 +274,7 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
 ##' @title getGenomicAnnotation
 ##' @param peaks peaks in GRanges object
 ##' @param distance distance of peak to TSS
-##' @param tssRegion tssRegion, default is -3kb to +100bp
+##' @param tssRegion tssRegion, default is -3kb to +3kb
 ##' @param TranscriptDb TranscriptDb object
 ##' @importFrom GenomicFeatures intronsByTranscript
 ##' @importFrom GenomicFeatures threeUTRsByTranscript
@@ -305,7 +284,7 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
 ##' @author G Yu
 getGenomicAnnotation <- function(peaks,
                                  distance,
-                                 tssRegion=c(-3000, 100),
+                                 tssRegion=c(-3000, 3000),
                                  TranscriptDb
                                  ) {
     
@@ -313,11 +292,12 @@ getGenomicAnnotation <- function(peaks,
     ## since some annotation overlap,
     ## a priority is assign based on the following:
     ## 1. Promoter
-    ## 2. Exon
-    ## 3. 5' UTR
-    ## 4. 3' UTR
+    ## 2. 5' UTR
+    ## 3. 3' UTR
+    ## 4. Exon
     ## 5. Intron
-    ## 6. Intergenic
+    ## 6. Downstream
+    ## 7. Intergenic
     ##
 
 
@@ -338,7 +318,17 @@ getGenomicAnnotation <- function(peaks,
     }
     intronHits <- getGenomicAnnotation.internal(peaks, intronList, "Intron")
     annotation[intronHits$queryIndex] <- intronHits$annotation
-      
+          
+    ## Exon
+    if ( exists("exonList", envir=ChIPseekerEnv, inherits=FALSE) ) {
+        exonList <- get("exonList", envir=ChIPseekerEnv)
+    } else {
+        exonList <- exonsBy(TranscriptDb)
+        assign("exonList", exonList, envir=ChIPseekerEnv)
+    }
+    exonHits <- getGenomicAnnotation.internal(peaks, exonList, "Exon")
+    annotation[exonHits$queryIndex] <- exonHits$annotation
+
     ## 3' UTR Exons
     if ( exists("threeUTRList", envir=ChIPseekerEnv, inherits=FALSE) ) {
         threeUTRList <- get("threeUTRList", envir=ChIPseekerEnv)
@@ -359,19 +349,46 @@ getGenomicAnnotation <- function(peaks,
     fiveUTRHits <- getGenomicAnnotation.internal(peaks, fiveUTRList, "5' UTR")
     annotation[fiveUTRHits$queryIndex] <- fiveUTRHits$annotation
     
-    ## Exon
-    if ( exists("exonList", envir=ChIPseekerEnv, inherits=FALSE) ) {
-        exonList <- get("exonList", envir=ChIPseekerEnv)
-    } else {
-        exonList <- exonsBy(TranscriptDb)
-        assign("exonList", exonList, envir=ChIPseekerEnv)
-    }
-    exonHits <- getGenomicAnnotation.internal(peaks, exonList, "Exon")
-    annotation[exonHits$queryIndex] <- exonHits$annotation
-    
     ## TSS
     annotation[distance >= tssRegion[1] &
-               distance <= tssRegion[2]] <- "Promoter"
-    
+               distance <= tssRegion[2] ] <- "Promoter"
+
+    pm <- max(abs(tssRegion))
+    if (pm/1000 >= 2) {
+        dd <- seq(1:ceiling(pm/1000))*1000
+        for (i in 1:length(dd)) {
+            if (i == 1) {
+                lbs <- paste("Promoter", " (<=", dd[i]/1000, "kb)", sep="")
+                annotation[abs(distance) <= dd[i] &
+                           annotation == "Promoter"] <- lbs
+            } else {
+                lbs <- paste("Promoter", " (", dd[i-1]/1000, "-", dd[i]/1000, "kb)", sep="")
+                annotation[abs(distance) <= dd[i] &
+                           abs(distance) > dd[i-1] &
+                           annotation == "Promoter"] <- lbs
+            }
+        }
+    }
+
+    features <- getGene(TranscriptDb, by="gene")
+
+    ## nearest from gene end
+    idx <- follow(peaks, features)
+    peF <- features[idx]
+    dd <- ifelse(strand(peF) == "+",
+                 start(peaks) - end(peF),
+                 end(peaks) - start(peF))
+    for (i in 1:3) {
+        j <- which(annotation == "Intergenic" & abs(dd) <= i*1000)
+        if (length(j) > 0) {
+            if (i == 1) {
+                lbs <- "Downstream (<1kb)"
+            } else {
+                lbs <- paste("Downstream (", i-1, "-", i, "kb)", sep="")
+            }
+            annotation[j] <- lbs
+        }
+    }
+    annotation[annotation == "Intergenic"] = "Distal Intergenic"
     return(annotation)
 }
