@@ -113,6 +113,8 @@ peakHeatmap <- function(peak, weightCol=NULL, TranscriptDb=NULL,
         }
         if (length(color) != ncol) {
             cols <- rep(color[1], ncol)
+        } else {
+            cols <- color
         }
         if (is.null(title) || is.na(title))
             title <- names(peak)
