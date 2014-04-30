@@ -149,7 +149,7 @@ peakHeatmap(files[[1]], weightCol="V5", TranscriptDb=txdb, upstream=3000, downst
 \end{figure}
 
 <<heatmap2, eval=FALSE>>=
-peakHeatmap(files, weightCol="V5", TranscriptDb=txdb, upstream=3000, downstream=3000, color="red")
+peakHeatmap(files, weightCol="V5", TranscriptDb=txdb, upstream=3000, downstream=3000)
 @ 
 
 

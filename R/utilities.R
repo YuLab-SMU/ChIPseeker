@@ -10,7 +10,12 @@
         assign("TXDB", TranscriptDb, envir=ChIPseekerEnv)
     } else {
         TXDB <- get("TXDB", envir=ChIPseekerEnv)
-        if ( any(metadata(TXDB) != metadata(TranscriptDb)) ) {
+        m1 <- unlist(metadata(TXDB))
+        m2 <- unlist(metadata(TranscriptDb))
+        m1 <- m1[!is.na(m1)]
+        m2 <- m2[!is.na(m2)]
+
+        if ( any(m1 != m2) ) {
             rm(ChIPseekerEnv)
             assign("ChIPseekerEnv", new.env(), .GlobalEnv)
             ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
@@ -34,6 +39,14 @@ getTagCount <- function(tagMatrix, xlim) {
     return(dd)
 }
 
+updateGenomicAnnotation <- function(peaks, genomicRegion, type, annotation) {
+    hits <- getGenomicAnnotation.internal(peaks, genomicRegion, type)
+    if (length(hits) == 2) {
+        annotation[hits$queryIndex] <- hits$annotation
+    }
+    return(annotation)
+ }         
+ 
 
 ##' @importFrom IRanges elementLengths
 ##' @importFrom IRanges findOverlaps
@@ -53,6 +66,9 @@ getGenomicAnnotation.internal <- function(peaks, genomicRegion, type){
     }
     ## find overlap
     GRegionHit <- findOverlaps(peaks, GRegion)
+    if (length(GRegionHit) == 0) {
+        return(NA)
+    }
     qh <- queryHits(GRegionHit)
     hit.idx <- getFirstHitIndex(qh)
     GRegionHit <- GRegionHit[hit.idx]
