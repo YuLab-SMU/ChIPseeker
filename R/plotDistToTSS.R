@@ -97,7 +97,9 @@ plotDistToTSS <- function(peakAnno,
     dslim = ceiling(ds/10) * 10
     us = max(totalFreq$total[totalFreq$sign == -1])
     uslim = ceiling(us/10) * 10
-    ylbs <- seq(-uslim, dslim, by=10)
+    ybreaks <- seq(-uslim, dslim, by=10)
+    ylbs <- abs(ybreaks)
+    ylbs[ylbs == 0] <- "TSS"
     
     if (categoryColumn == 1) {
         p <- ggplot(peakDist, aes(x=1, fill=Feature))
@@ -110,7 +112,7 @@ plotDistToTSS <- function(peakAnno,
     
     p <- p + geom_hline(yintercept = 0, colour = "black") +
         coord_flip() + theme_bw() +
-            scale_y_continuous(breaks=ylbs,labels=abs(ylbs))
+            scale_y_continuous(breaks=ybreaks,labels=ylbs)
     
     p <- p + ylab(ylab) + xlab(xlab) + ggtitle(title) 
 

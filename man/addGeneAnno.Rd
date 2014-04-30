@@ -2,12 +2,14 @@
 \alias{addGeneAnno}
 \title{addGeneAnno}
 \usage{
-addGeneAnno(annoDb, geneID)
+addGeneAnno(annoDb, geneID, type)
 }
 \arguments{
   \item{annoDb}{annotation package}
 
   \item{geneID}{query geneID}
+
+  \item{type}{gene ID type}
 }
 \value{
 data.frame

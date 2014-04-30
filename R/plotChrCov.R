@@ -112,7 +112,7 @@ sortChrName <- function(chr.name) {
 
     chr.sorted <- chr.name[n.idx][order(chr.n)]
     if (length(ch.idx) != 0) {
-        chr.sorted <- c(chr.sorted, chr.name[ch.idx])
+        chr.sorted <- c(chr.sorted, sort(chr.name[ch.idx]))
     }
          
     return(chr.sorted)

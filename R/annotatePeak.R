@@ -122,10 +122,12 @@ annotatePeak <- function(peak,
         if (verbose)
             cat(">> adding gene annotation...\t\t\t",
                 format(Sys.time(), "%Y-%m-%d %X"), "\n")
-        geneAnno <- addGeneAnno(annoDb, peak.gr$geneId)
-        for(cn in colnames(geneAnno)[-1])
-            elementMetadata(peak.gr)[[cn]] <- geneAnno[, cn]
-        
+        IDType <- metadata(TranscriptDb)[8,2]     
+        geneAnno <- addGeneAnno(annoDb, peak.gr$geneId, type=IDType)
+        if (! all(is.na(geneAnno))) {
+            for(cn in colnames(geneAnno)[-1])
+                elementMetadata(peak.gr)[[cn]] <- geneAnno[, cn]
+        }
         ## out <- cbind(res, geneAnno[,-1])
     }
 
@@ -166,21 +168,31 @@ annotatePeak <- function(peak,
 ##' @title addGeneAnno 
 ##' @param annoDb annotation package
 ##' @param geneID query geneID
+##' @param type gene ID type
 ##' @return data.frame
 ##' @importFrom AnnotationDbi select
 ##' @author G Yu
-addGeneAnno <- function(annoDb, geneID){
+addGeneAnno <- function(annoDb, geneID, type){
     kk <- unlist(geneID)
     require(annoDb, character.only = TRUE)
     annoDb <- eval(parse(text=annoDb))
+    if (type == "Entrez Gene ID") {
+        kt <- "ENTREZID"
+    } else if (type =="Ensembl gene ID" || type == "Ensembl Gene ID") {
+        kt <- "ENSEMBL"
+    } else {
+        warnings("geneID type is not supported...\tPlease report it to developer...\n")
+        return(NA)
+    }
+
     ann <- suppressWarnings(select(annoDb,
                                    keys=kk,
-                                   keytype="ENTREZID",
+                                   keytype=kt,
                                    columns=c("ENTREZID", "ENSEMBL", "SYMBOL", "GENENAME")))
-    idx <- getFirstHitIndex(ann$ENTREZID)
+    idx <- getFirstHitIndex(ann[,kt])
     ann <- ann[idx,]
 
-    idx <- unlist(sapply(kk, function(x) which(x==ann$ENTREZID)))
+    idx <- unlist(sapply(kk, function(x) which(x==ann[,kt])))
     ann <- ann[idx,]
     return(ann)
 }
@@ -316,9 +328,8 @@ getGenomicAnnotation <- function(peaks,
         intronList <- intronsByTranscript(TranscriptDb)
         assign("intronList", intronList, envir=ChIPseekerEnv)
     }
-    intronHits <- getGenomicAnnotation.internal(peaks, intronList, "Intron")
-    annotation[intronHits$queryIndex] <- intronHits$annotation
-          
+    annotation <- updateGenomicAnnotation(peaks, intronList, "Intron", annotation)
+
     ## Exon
     if ( exists("exonList", envir=ChIPseekerEnv, inherits=FALSE) ) {
         exonList <- get("exonList", envir=ChIPseekerEnv)
@@ -326,8 +337,7 @@ getGenomicAnnotation <- function(peaks,
         exonList <- exonsBy(TranscriptDb)
         assign("exonList", exonList, envir=ChIPseekerEnv)
     }
-    exonHits <- getGenomicAnnotation.internal(peaks, exonList, "Exon")
-    annotation[exonHits$queryIndex] <- exonHits$annotation
+    annotation <- updateGenomicAnnotation(peaks, exonList, "Exon", annotation)
 
     ## 3' UTR Exons
     if ( exists("threeUTRList", envir=ChIPseekerEnv, inherits=FALSE) ) {
@@ -336,8 +346,7 @@ getGenomicAnnotation <- function(peaks,
         threeUTRList <- threeUTRsByTranscript(TranscriptDb)
         assign("threeUTRList", threeUTRList, envir=ChIPseekerEnv)
     }
-    threeUTRHits <- getGenomicAnnotation.internal(peaks, threeUTRList, "3' UTR")
-    annotation[threeUTRHits$queryIndex] <- threeUTRHits$annotation
+    annotation <- updateGenomicAnnotation(peaks, threeUTRList, "3' UTR", annotation)
     
     ## 5' UTR Exons
     if ( exists("fiveUTRList", envir=ChIPseekerEnv, inherits=FALSE) ) {
@@ -346,8 +355,7 @@ getGenomicAnnotation <- function(peaks,
         fiveUTRList <- fiveUTRsByTranscript(TranscriptDb)
         assign("fiveUTRList", fiveUTRList, envir=ChIPseekerEnv)
     }
-    fiveUTRHits <- getGenomicAnnotation.internal(peaks, fiveUTRList, "5' UTR")
-    annotation[fiveUTRHits$queryIndex] <- fiveUTRHits$annotation
+    annotation <- updateGenomicAnnotation(peaks, fiveUTRList, "5' UTR", annotation)
     
     ## TSS
     annotation[distance >= tssRegion[1] &
