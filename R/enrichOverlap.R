@@ -1,9 +1,22 @@
-enrichOverlap <- function(peak1, peak2, by="peak", TranscriptDb=NULL, pAdjustMethod="BH", ...) {
+##' calculate the enrichment of overlap between two peak sets
+##'
+##' 
+##' @title enrichPeakOverlap
+##' @param peak1 peak file in bed format
+##' @param peak2 peak file in bed format
+##' @param by one of peak or gene
+##' @param TranscriptDb TranscriptDb
+##' @param pAdjustMethod pvalue adjust method
+##' @param ... additional parameter
+##' @return data.frame
+##' @export
+##' @author G Yu
+enrichPeakOverlap <- function(peak1, peak2, by="peak", TranscriptDb=NULL, pAdjustMethod="BH", ...) {
     by <- match.arg(by, c("gene", "peak"))
+    TranscriptDb <- loadTxDb(TranscriptDb)
     if (by == "gene") {
         res <- enrichOverlap.gene(peak1, peak2, TranscriptDb=TranscriptDb, pAdjustMethod=pAdjustMethod, ...)
     } else {
-        ## not implemented yet
         res <- enrichOverlap.peak(peak1, peak2, TranscriptDb=TranscriptDb, pAdjustMethod=pAdjustMethod, ...)
     } 
     return(res)
@@ -37,22 +50,24 @@ enrichOverlap.peak <- function(peak1, peak2, TranscriptDb, nShuffle, pAdjustMeth
     return(res)
 }
 
+##' @importFrom GenomeInfoDb intersect
+##' @importFrom GenomeInfoDb seqlengths
 enrichOverlap.peak.internal <- function(peak1, peak2, TranscriptDb, nShuffle=1000) {
     peak1.gr <- loadPeak(peak1)
     peak2.gr <- loadPeak(peak2)
-    chrLens <- seqlengths(TranscriptDb)[names(seqlengths(peak2.gr))]
-
+    
     shuffle.OL <- mclapply(1:nShuffle, function(i) {
-        length(intersect(peak1.gr, shuffle(peak=peak2.gr, chrLens)))
+        length(intersect(peak1.gr, shuffle(peak=peak2.gr, TranscriptDb)))
     },
-                             mc.cores=detectCores()
-                             )
+                           mc.cores=detectCores()
+                           )
     sol <- unlist(shuffle.OL)
     ol <- length(intersect(peak1.gr, peak2.gr))
-
+    
     p <- sum(sol > ol)/nShuffle
     return(p)
 }
+
 
 enrichOverlap.gene <- function(peak1, peak2, TranscriptDb, pAdjustMethod="BH") {
     if (!file.exists(peak1)) {
@@ -89,4 +104,30 @@ enrichOverlap.gene <- function(peak1, peak2, TranscriptDb, pAdjustMethod="BH") {
                       pvalue=p,
                       p.adjust=padj)
     return(res)
+}
+
+
+##' shuffle the position of peak
+##'
+##' 
+##' @title shuffle
+##' @param peak peak file or GRanges object
+##' @param TranscriptDb TranscriptDb
+##' @return GRanges object
+##' @export
+##' @author G Yu
+shuffle <- function(peak, TranscriptDb) {
+    peak.gr <- loadPeak(peak)
+    chrLens <- seqlengths(TranscriptDb)[names(seqlengths(peak.gr))]
+    nn <- as.vector(seqnames(peak.gr))
+    ii <- order(nn)
+    w <- width(peak.gr)
+    nnt <- table(nn)
+    jj <- order(names(nnt))
+    nnt <- nnt[jj]
+    chrLens <- chrLens[jj]
+    ss <- unlist(sapply(1:length(nnt), function(i) sample(chrLens[i],nnt[i])))
+
+    res <- GRanges(seqnames=nn[ii], ranges=IRanges(ss, ss+w[ii]), strand="*")
+    return(res)   
 }

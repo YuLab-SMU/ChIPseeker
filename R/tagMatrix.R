@@ -54,7 +54,7 @@ getPromoters <- function(TranscriptDb=NULL,
 ##' @importFrom IRanges as.factor
 ##' @importFrom GenomicRanges GRanges
 ##' @importFrom GenomicRanges elementMetadata
-##' @importFrom GenomicRanges seqnames
+##' @importFrom GenomeInfoDb seqnames
 ##' @importFrom BiocGenerics intersect
 ##' @importFrom BiocGenerics unique
 getTagMatrix <- function(peak, weightCol, windows) {

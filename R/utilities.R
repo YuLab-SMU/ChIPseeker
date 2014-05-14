@@ -46,18 +46,46 @@ updateGenomicAnnotation <- function(peaks, genomicRegion, type, annotation) {
     }
     return(annotation)
  }         
- 
+
+##' @importFrom GenomicFeatures transcripts
+TXID2EG <- function(txid) {
+    ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
+    if (exists("txid2geneid", envir=ChIPseekerEnv, inherits=FALSE)) {
+        txid2geneid <- get("txid2geneid", envir=ChIPseekerEnv)
+    } else {
+        txdb <- get("TXDB", envir=ChIPseekerEnv)
+        txidinfo <- transcripts(txdb, columns=c("tx_id", "tx_name", "gene_id"))
+        idx <- which(sapply(txidinfo$gene_id, length) == 0)
+        txidinfo[idx,]$gene_id <- txidinfo[idx,]$tx_name
+        txid2geneid <- paste(elementMetadata(txidinfo)[["tx_name"]],
+                             elementMetadata(txidinfo)[["gene_id"]],
+                             sep="/")
+        txid2geneid <- sub("/NA", "", txid2geneid)
+        
+        names(txid2geneid) <- elementMetadata(txidinfo)[["tx_id"]]
+        assign("txid2geneid", txid2geneid, envir=ChIPseekerEnv)
+    }
+    return(as.character(txid2geneid[txid]))
+}
 
 ##' @importFrom IRanges elementLengths
 ##' @importFrom IRanges findOverlaps
-##' @importFrom IRanges queryHits
-##' @importFrom IRanges subjectHits
+## @importFrom IRanges queryHits
+## @importFrom IRanges subjectHits
+##' @importFrom S4Vectors queryHits
+##' @importFrom S4Vectors subjectHits
 ##' @importMethodsFrom BiocGenerics unlist
 getGenomicAnnotation.internal <- function(peaks, genomicRegion, type){
     GRegion <- unlist(genomicRegion)
     GRegionLen <- elementLengths(genomicRegion)
-    names(GRegionLen) <- names(genomicRegion)
-    GRegion$gene_id <- rep(names(genomicRegion), times=GRegionLen)
+    if (type == "Intron" || type =="Exon") {
+        nn <- TXID2EG(names(genomicRegion))
+        names(GRegionLen) <- nn
+        GRegion$gene_id <- rep(nn, times=GRegionLen)
+    } else {
+        names(GRegionLen) <- names(genomicRegion)
+        GRegion$gene_id <- rep(names(genomicRegion), times=GRegionLen)
+    }
 
     if (type == "Intron") {
         intron_rank <- unlist(sapply(GRegionLen, function(i) seq(0, i)))
@@ -79,10 +107,10 @@ getGenomicAnnotation.internal <- function(peaks, genomicRegion, type){
     geneID <- hits$gene_id
 
     if (type == "Intron") {
-        anno <- paste(type, " (", geneID, " intron ", hits$intron_rank,
+        anno <- paste(type, " (", geneID, ", intron ", hits$intron_rank,
                       " of ", GRegionLen[geneID], ")", sep="")
     } else if (type == "Exon") {
-        anno <- paste(type, " (", geneID, " exon ", hits$exon_rank,
+        anno <- paste(type, " (", geneID, ", exon ", hits$exon_rank,
                       " of ", GRegionLen[geneID], ")", sep="")
     } else {
         anno <- type
@@ -164,22 +192,6 @@ getIntersectLength <- function(Sets, idx) {
         ol <-  intersect(ol, ss[[j]])
     }
     return(length(ol))
-}
-
-shuffle <- function(peak, chrLens) {
-    peak.gr <- loadPeak(peak)
-
-    nn <- as.vector(seqnames(peak.gr))
-    ii <- order(nn)
-    w <- width(peak.gr)
-    nnt <- table(nn)
-    jj <- order(names(nnt))
-    nnt <- nnt[jj]
-    chrLens <- chrLens[jj]
-    ss <- unlist(sapply(1:length(nnt), function(i) sample(chrLens[i],nnt[i])))
-
-    res <- GRanges(seqnames=nn[ii], ranges=IRanges(ss, ss+w[ii]), strand="*")
-    return(res)   
 }
 
 loadPeak <- function(peak, verbose=FALSE) {

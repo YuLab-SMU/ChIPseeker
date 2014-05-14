@@ -21,13 +21,10 @@ NULL
 
 
 ##' Datasets
-##' chipseekerENV
-##'
-##' 
-##' @name chipseekerENV
-##' @aliases chipseekerENV
 ##' ucsc_release
-##' ucsc_release_link
+##' 
+##' @name ucsc_release
+##' @aliases ucsc_release
 ##' @docType data
 ##' @keywords datasets
 NULL

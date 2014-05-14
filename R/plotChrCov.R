@@ -19,7 +19,7 @@
 ##' @importFrom ggplot2 ylab
 ##' @importFrom ggplot2 ggtitle
 ##' @importFrom plyr ldply
-##' @importFrom GenomicRanges seqlengths
+##' @importFrom GenomeInfoDb seqlengths
 ##' @export
 ##' @author G Yu
 plotChrCov <- function(peak, weightCol=NULL,
@@ -51,7 +51,7 @@ plotChrCov <- function(peak, weightCol=NULL,
 
 ##' @importFrom GenomicRanges GRanges
 ##' @importFrom GenomicRanges elementMetadata
-##' @importFrom GenomicRanges seqnames
+##' @importFrom GenomeInfoDb seqnames
 ##' @importFrom IRanges elementLengths
 ##' @importFrom IRanges IRanges
 ##' @importFrom IRanges Views
