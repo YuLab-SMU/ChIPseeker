@@ -3,7 +3,7 @@ Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Visualization and Comparison
 Version: 1.1.4
 Author: Guangchuang Yu
-Maintainer: Guangchuang Yu <guangchuangyu@gmail.com>
+Maintainer: Guangchuang Yu <gcyu@connect.hku.hk>
 Description: This package implements functions to retrieve the nearest
     genes around the peak, annotate genomic region of the peak.
     Visualization functions are implemented to summarize genomic
@@ -11,14 +11,13 @@ Description: This package implements functions to retrieve the nearest
 Depends:
     R (>= 3.0)
 Imports:
-    methods,
     BiocGenerics,
-    S4Vectors,
     AnnotationDbi,
     IRanges,
     GenomeInfoDb,
     GenomicRanges,
     GenomicFeatures,
+    GEOquery,
     ggplot2,
     gplots,
     grDevices,
@@ -26,6 +25,7 @@ Imports:
     Matrix,
     plyr,
     RColorBrewer,
+    S4Vectors,
     TxDb.Hsapiens.UCSC.hg19.knownGene
 Suggests:
     clusterProfiler,

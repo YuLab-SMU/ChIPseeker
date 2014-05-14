@@ -46,5 +46,5 @@ peak2DF <- function(peakfile) {
 
 isBedFile <- function(peakfile) {
     ## peakfile is a peak file name
-    grepl("\\.bed$", peakfile) || grepl("\\.bed.gz$", peakfile)
+    grepl("\\.bed$", peakfile) || grepl("\\.bed.gz$", peakfile) || grepl("\\Peak.gz", peakfile)
 }
