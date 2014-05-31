@@ -1,0 +1,38 @@
+Package: ChIPseeker
+Type: Package
+Title: ChIPseeker for ChIP peak Annotation, Visualization and Comparison
+Version: 1.1.5
+Author: Guangchuang Yu
+Maintainer: Guangchuang Yu <gcyu@connect.hku.hk>
+Description: This package implements functions to retrieve the nearest
+    genes around the peak, annotate genomic region of the peak.
+    Visualization functions are implemented to summarize genomic
+    annotation, distance to TSS, and overlap of peaks or genes.
+Depends:
+    R (>= 3.0)
+Imports:
+    BiocGenerics,
+    AnnotationDbi,
+    IRanges,
+    GenomeInfoDb,
+    GenomicRanges,
+    GenomicFeatures,
+    ggplot2,
+    gplots,
+    grDevices,
+    gtools,
+    Matrix,
+    plyr,
+    RColorBrewer,
+    S4Vectors,
+    TxDb.Hsapiens.UCSC.hg19.knownGene
+Suggests:
+    clusterProfiler,
+    ReactomePA,
+    DOSE,
+    GOSemSim,
+    org.Hs.eg.db,
+    knitr
+VignetteBuilder: knitr
+License: Artistic-2.0
+biocViews: Annotation, ChIPSeq, Software, Visualization, MultipleComparison
