@@ -1,0 +1,46 @@
+CHANGES IN VERSION 1.1.5
+------------------------
+ o export getPromoters and getTagMatrix <2014-05-31, Sat>
+ o rename plotAvgProf to plotAvgProf2 and implement plotAvgProf based on tagMatrix  <2014-05-31, Sat>
+ o implement tagHeatmap for visualize heatmap of the tagMatrix or a list of tagMatrix <2014-05-31, Sat>
+ o implement shuffle function to generate a random ChIP data based on a real one <2014-05-31, Sat>
+ o implement enrichPeakOverlap to calcuate significant of ChIP experiments based on the genome coordinations <2014-05-31, Sat>
+ o implement enrichAnnoOverlap to calculate significant of ChIP experiments based on their nearest gene annotation <2014-05-31, Sat>
+ o incorporate GEO database for mining significant overlap of ChIP data <2014-05-31, Sat>
+   + getGEOspecies summarize the collected data by species
+   + getGEOgenomeVersion summarize the colleted data by genome version
+   + getGEOInfo extract the information by genome version query
+   + downloadGEObedFiles download all bed files of a particular genome version
+   + downloadGSMbedFiles download the bed files of the input GSM list.
+
+CHANGES IN VERSION 1.1.4
+------------------------
+ o in the annotation column of output of annotatePeak function, 
+	if Exon/Intron, the output change to 'Transcript_Name/GeneID, Exon no. of total_no.' <2014-05-14, Wed>
+
+CHANGES IN VERSION 1.1.3
+------------------------
+ o bug fixed when metadata(TranscriptDb) contained NA <2014-04-30, Wed>
+ o support ID type of Ensembl in annotatePeak (Entrez was supported) <2014-04-30, Wed> 
+
+CHANGES IN VERSION 1.1.2
+------------------------
+ o implemented plotChrCov <2014-04-25, Fri>
+ o implemented plotAvgProf and peakHeatmap <2014-04-24, Thu>
+
+CHANGES IN VERSION 1.1.1
+------------------------
+ o output of annotatePeak now contain chromosome length information <2014-04-22, Tue>
+ o re-implement plotAnnoPie to use ordinary pie plot instead of pie3D <2014-04-21, Mon>
+
+CHANGES IN VERSION 1.0.0
+------------------------
+ o initial version with the following functions implemented:
+   + annotatePeak
+   + overlap
+   + plotAnnoBar
+   + plotAnnoPie
+   + plotDistToTSS
+   + readPeakFile
+   + vennplot
+   + vennplot.peakfile
