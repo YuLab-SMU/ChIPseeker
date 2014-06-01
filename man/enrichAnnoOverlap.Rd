@@ -4,7 +4,7 @@
 \title{enrichAnnoOverlap}
 \usage{
 enrichAnnoOverlap(queryPeak, targetPeak, TranscriptDb = NULL,
-  pAdjustMethod = "BH")
+  pAdjustMethod = "BH", chainFile = NULL)
 }
 \arguments{
 \item{queryPeak}{query bed file}
@@ -14,6 +14,8 @@ enrichAnnoOverlap(queryPeak, targetPeak, TranscriptDb = NULL,
 \item{TranscriptDb}{TranscriptDb}
 
 \item{pAdjustMethod}{pvalue adjustment method}
+
+\item{chainFile}{chain file for liftOver}
 }
 \value{
 data.frame

@@ -4,7 +4,7 @@
 \title{enrichPeakOverlap}
 \usage{
 enrichPeakOverlap(queryPeak, targetPeak, TranscriptDb = NULL,
-  pAdjustMethod = "BH", nShuffle = 1000)
+  pAdjustMethod = "BH", nShuffle = 1000, chainFile = NULL)
 }
 \arguments{
 \item{queryPeak}{query bed file}
@@ -16,6 +16,8 @@ enrichPeakOverlap(queryPeak, targetPeak, TranscriptDb = NULL,
 \item{pAdjustMethod}{pvalue adjustment method}
 
 \item{nShuffle}{shuffle numbers}
+
+\item{chainFile}{chain file for liftOver}
 }
 \value{
 data.frame
