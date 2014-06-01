@@ -6,19 +6,29 @@
 ##' @param targetPeak target bed file(s) or folder containing bed files
 ##' @param TranscriptDb TranscriptDb
 ##' @param pAdjustMethod pvalue adjustment method
+##' @param chainFile chain file for liftOver
 ##' @return data.frame
 ##' @export
+##' @importFrom rtracklayer import.chain
+##' @importFrom rtracklayer liftOver
 ##' @author G Yu
-enrichAnnoOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustMethod="BH") {
+enrichAnnoOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustMethod="BH", chainFile=NULL) {
     targetFiles <- parse_targetPeak_Param(targetPeak)
     TranscriptDb <- loadTxDb(TranscriptDb)
  
     query.anno <- annotatePeak(queryPeak, TranscriptDb=TranscriptDb,
                                assignGenomicAnnotation=FALSE, annoDb=NULL, verbose=FALSE)
-    
-    target.anno <- lapply(targetFiles, annotatePeak, TranscriptDb=TranscriptDb,
+
+    target.gr <- lapply(targetFiles, loadPeak)
+    if (!is.null(chainFile)) {
+        chain <- import.chain(chainFile)
+        target.gr <- lapply(target.gr, liftOver, chain=chain)
+    }
+     
+    target.anno <- lapply(target.gr, annotatePeak, TranscriptDb=TranscriptDb,
                           assignGenomicAnnotation=FALSE, annoDb=NULL, verbose=FALSE)
     
+
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
     features <- get("features", envir=ChIPseekerEnv)
     ol <- lapply(target.anno, function(i) intersect(query.anno$geneId, i$geneId))
@@ -53,14 +63,22 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustM
 ##' @param TranscriptDb TranscriptDb
 ##' @param pAdjustMethod pvalue adjustment method
 ##' @param nShuffle shuffle numbers
+##' @param chainFile chain file for liftOver
 ##' @return data.frame
 ##' @export
+##' @importFrom rtracklayer import.chain
+##' @importFrom rtracklayer liftOver
 ##' @author G Yu
-enrichPeakOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustMethod="BH", nShuffle=1000) {
+enrichPeakOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustMethod="BH", nShuffle=1000, chainFile=NULL) {
     targetFiles <- parse_targetPeak_Param(targetPeak)
     TranscriptDb <- loadTxDb(TranscriptDb)
     query.gr <- loadPeak(queryPeak)
     target.gr <- lapply(targetFiles, loadPeak)
+    if (!is.null(chainFile)) {
+        chain <- import.chain(chainFile)
+        target.gr <- lapply(target.gr, liftOver, chain=chain)
+    }
+    
     p.ol <- enrichOverlap.peak.internal(query.gr, target.gr, TranscriptDb, nShuffle)
     p <- p.ol$pvalue
     ol <- p.ol$overlap
