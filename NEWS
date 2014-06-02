@@ -1,6 +1,8 @@
 CHANGES IN VERSION 1.1.6
 ------------------------
  o add chainFile parameter in enrichAnnoOverlap and enrichPeakOverlap to support different genome version comparision <2014-06-01, Sun>
+ o fixed color bug in peakHeatmap.internal2 and plotAnnoBar <2014-06-02, Mon>
+ o update vignettes <2014-06-02, Mon>
 
 CHANGES IN VERSION 1.1.5
 ------------------------

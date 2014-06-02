@@ -80,7 +80,7 @@ plotAvgProf2 <- function(peak, weightCol=NULL, TranscriptDb=NULL,
 ##' @return figure
 ##' @export
 ##' @author G Yu
-tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color) {
+tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="red") {
     listFlag <- FALSE
     if (is(tagMatrix, "list")) {
         listFlag <- TRUE
@@ -156,28 +156,28 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
         ylab <- ""
 
     if (listFlag) {
-        ncol <- length(tagMatrix)
+        nc <- length(tagMatrix)
         if ( is.null(color) || is.na(color) ) {
-            cols <- getCols(ncol)
-        }
-        if (length(color) != ncol) {
-            cols <- rep(color[1], ncol)
+            cols <- getCols(nc)
+        } else if (length(color) != nc) {
+            cols <- rep(color[1], nc)
         } else {
             cols <- color
         }
+        
         if (is.null(title) || is.na(title))
             title <- names(tagMatrix)
-        if (length(xlab) != ncol) {
-            xlab <- rep(xlab[1], ncol)
+        if (length(xlab) != nc) {
+            xlab <- rep(xlab[1], nc)
         }
-        if (length(ylab) != ncol) {
-            ylab <- rep(ylab[1], ncol)
+        if (length(ylab) != nc) {
+            ylab <- rep(ylab[1], nc)
         }
-        if (length(title) != ncol) {
-            title <- rep(title[1], ncol)
+        if (length(title) != nc) {
+            title <- rep(title[1], nc)
         }
-        par(mfrow=c(1, ncol))
-        for (i in 1:ncol) {
+        par(mfrow=c(1, nc))
+        for (i in 1:nc) {
             peakHeatmap.internal(tagMatrix[[i]], xlim, cols[i], xlab[i], ylab[i], title[i])
         }
     } else {
@@ -211,6 +211,7 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
 ##' @importFrom ggplot2 geom_line
 ##' @importFrom ggplot2 geom_vline
 ##' @importFrom ggplot2 scale_x_continuous
+##' @importFrom ggplot2 scale_color_manual
 ##' @importFrom ggplot2 xlab
 ##' @importFrom ggplot2 ylab
 ##' @importFrom ggplot2 theme_bw

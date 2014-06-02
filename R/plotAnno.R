@@ -14,6 +14,7 @@
 ##' @importFrom ggplot2 coord_flip
 ##' @importFrom ggplot2 theme_bw
 ##' @importFrom ggplot2 scale_x_continuous
+##' @importFrom ggplot2 scale_fill_manual
 ##' @importFrom ggplot2 xlab
 ##' @importFrom ggplot2 ylab
 ##' @importFrom ggplot2 ggtitle
@@ -51,9 +52,10 @@ plotAnnoBar <- function(peakAnno,
 
     if (categoryColumn == 1) {
         p <- p + scale_x_continuous(breaks=NULL)
+        p <- p+scale_fill_manual(values=getCols(nrow(anno.df)))
+    } else {
+        p <- p+scale_fill_manual(values=getCols(length(unique(anno.df$Feature))))
     }
-
-    p <- p+scale_fill_manual(values=getCols(nrow(anno.df)))
     
     return(p)
 }
