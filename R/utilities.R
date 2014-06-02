@@ -269,10 +269,12 @@ getGene <- function(TranscriptDb, by="gene") {
 ##' @export
 ##' @author G Yu
 getSampleFiles <- function() {
-    dir <- system.file("extdata", "GSE40740", package="ChIPseeker")
+    dir <- system.file("extdata", "GEO_sample_data", package="ChIPseeker")
     files <- list.files(dir)
-    protein <- sub("GSM\\d+_", "", files)
-    protein <- sub("_.+", "", protein)
+    ## protein <- sub("GSM\\d+_", "", files)
+    ## protein <- sub("_.+", "", protein)
+    protein <- gsub(pattern='GSM\\d+_(\\w+_\\w+)_.*', replacement='\\1',files)
+    protein <- sub("_Chip.+", "", protein)
     res <- paste(dir, files, sep="/")
     res <- as.list(res)
     names(res) <- protein

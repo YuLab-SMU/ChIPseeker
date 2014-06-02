@@ -31,7 +31,7 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustM
 
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
     features <- get("features", envir=ChIPseekerEnv)
-    ol <- lapply(target.anno, function(i) intersect(query.anno$geneId, i$geneId))
+    ol <- lapply(target.anno, function(i) unique(intersect(query.anno$geneId, i$geneId)))
     oln <- unlist(lapply(ol, length))
     N <- length(features)
     ## white ball
@@ -46,8 +46,8 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustM
     padj <- p.adjust(p, method=pAdjustMethod)
     res <- data.frame(qSample=qSample,
                       tSample=tSample,
-                      qLen=length(query.anno$geneId),
-                      tLen=unlist(lapply(target.anno, length)),
+                      qLen=length(unique(query.anno$geneId)),
+                      tLen=unlist(lapply(target.anno, function(i) length(unique(i$geneId)))),
                       N_OL=oln,
                       pvalue=p,
                       p.adjust=padj)
@@ -143,6 +143,7 @@ enrichOverlap.peak.internal <- function(query.gr, target.gr, TranscriptDb, nShuf
         length(intersect(query.gr, tt))
     }, mc.cores=detectCores()-1
                   )
+    qLen <- unlist(qLen)
     ## query ratio
     qr <- qLen/len
     p <- lapply(qr, function(q) mean(rr>q))
