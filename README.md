@@ -6,7 +6,7 @@ This package implements functions to retrieve the nearest genes around the peak,
 
 Guangchuang YU, School of Public Health, The University of Hong Kong [http://ygc.name](http://ygc.name)
 
-## License ## 
+## License ##
 
 All source code is copyright, under the Artistic-2.0 License.
 For more information on Artistic-2.0 License see [http://opensource.org/licenses/Artistic-2.0](http://opensource.org/licenses/Artistic-2.0)
