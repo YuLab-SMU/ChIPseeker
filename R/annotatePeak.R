@@ -258,13 +258,13 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     ## feature distances from peak start
     psD <- ifelse(strand(psF) == "+",
                  start(peaks) - start(psF),
-                 end(peaks)-end(psF))
+                 end(psF) - end(peaks))
 
     ## features from nearest peak end
     peF <- features[pe.idx]
     ## feature distances from peak end
     peD <- ifelse(strand(peF) == "+",
-                  start(peF) - start(peaks),
+                  start(peaks) - start(peF),
                   end(peF)-end(peaks))
 
     pse <- data.frame(ps=psD, pe=peD)
