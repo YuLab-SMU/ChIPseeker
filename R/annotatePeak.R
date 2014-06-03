@@ -38,14 +38,14 @@
 ##' SYMBOL: gene symbol
 ##' 
 ##' GENENAME: full gene name
-##' @importFrom GenomeInfoDb seqlengths
+##' @importFrom GenomicRanges seqlengths
 ## @importFrom GenomicFeatures getChromInfoFromUCSC
 ##' @importMethodsFrom BiocGenerics as.data.frame
 ##' @examples
 ##' require(TxDb.Hsapiens.UCSC.hg19.knownGene)
 ##' txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 ##' peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
-##' peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 3000), as="GRanges", TranscriptDb=txdb)
+##' peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 100), as="GRanges", TranscriptDb=txdb)
 ##' head(peakAnno)
 ##' @seealso \code{\link{plotAnnoBar}} \code{\link{plotAnnoPie}} \code{\link{plotDistToTSS}}
 ##' @export
@@ -77,10 +77,7 @@ annotatePeak <- function(peak,
     TranscriptDb <- loadTxDb(TranscriptDb)
     
     features <- getGene(TranscriptDb, by="gene")
-
-    if ( ! all(unique(as.character(seqnames(peak.gr))) %in% unique(as.character(seqnames(features)))) ) {
-        stop("chromosome names in peak file/object is not consistent with those in TranscriptDb object...")
-    }
+    
     if (verbose)
         cat(">> identifying nearest features...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -258,7 +255,7 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     ## feature distances from peak start
     psD <- ifelse(strand(psF) == "+",
                  start(peaks) - start(psF),
-                 end(psF) - end(peaks))
+                 end(psF)-end(peaks))
 
     ## features from nearest peak end
     peF <- features[pe.idx]
