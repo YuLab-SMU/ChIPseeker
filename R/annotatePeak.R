@@ -283,8 +283,10 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     })
     isOverlap <- unlist(isOverlap)
 
-    idx[isOverlap] <- pn.idx[isOverlap]
-    dd[isOverlap] <- 0
+    if(sum(isOverlap) > 0) {
+        idx[isOverlap] <- pn.idx[isOverlap]
+        dd[isOverlap] <- 0
+    }
     
     res <- data.frame(index=idx, distance=dd)
     return(res)
