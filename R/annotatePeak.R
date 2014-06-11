@@ -241,6 +241,8 @@ addGeneAnno <- function(annoDb, geneID, type){
 getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     ## peaks only conatin all peak records, in GRanges object
     ## feature is the annotation in GRanges object
+
+    features2 <- features
     
     ## only keep start position based on strand
     start(features) <- end(features) <- ifelse(strand(features) == "+", start(features), end(features))
@@ -274,11 +276,26 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     ## distance
     dd <- psD
     dd[j==2] <- peD[j==2]
+
+    pn.idx <- nearest(peaks, features)
+    isOverlap <- sapply(1:length(pn.idx), function(i) {
+        isPeakFeatureOverlap(peaks[i], features2[pn.idx[i]])
+    })
+    isOverlap <- unlist(isOverlap)
+
+    idx[isOverlap] <- pn.idx[isOverlap]
+    dd[isOverlap] <- 0
     
     res <- data.frame(index=idx, distance=dd)
     return(res)
 }
 
+isPeakFeatureOverlap <- function(peak, feature) {
+    peakRange <- ranges(peak)
+    featureRange <- ranges(feature)
+    x <- intersect(peakRange, featureRange)
+    return(length(x) != 0)
+}
 
 ##' get Genomic Annotation of peaks
 ##'
