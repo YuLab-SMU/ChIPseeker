@@ -2,6 +2,7 @@ CHANGES IN VERSION 1.1.8
 ------------------------
  o bug fixed when peak overlap with feature <2014-06-11, Wed>
  o optimize for getting overlap features of peaks <2014-06-11, Wed>
+ o update plotAnnoPie, separate the pie and legend to prevent label overlap <2014-06-12, Thu>
 
 CHANGES IN VERSION 1.1.7
 ------------------------

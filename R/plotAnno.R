@@ -105,16 +105,26 @@ annoPie <- function(anno.df, ndigit=2, cex=0.9, col=NA, ...) {
     if ( ! all(c("Feature", "Frequency") %in% colnames(anno.df))) {
         stop("check your input...")
     }
+
+    labels=paste(anno.df$Feature, " (",
+        round(anno.df$Frequency/sum(anno.df$Frequency)*100, ndigit),
+        "%)", sep="")
     
-    pie(anno.df$Frequency,
-        ## labels=paste(round(anno.df$Frequency/sum(anno.df$Frequency)*100, 2), "%", sep=""),
-        labels=paste(anno.df$Feature, " (",
-            round(anno.df$Frequency/sum(anno.df$Frequency)*100, ndigit),
-            "%)", sep=""),
-        cex=cex,
-        col=col,
-        ...
-        )
+    par(mai = c(0,0,0,0))
+    layout(matrix(c(1,2), ncol=2), width=c(0.6,0.4))
+    pie(anno.df$Frequency, labels=NA, cex=cex, col=col, ...)
+    plot.new()
+    legend("center", legend = labels, fill=col, bty="n")
+ 
+    ## pie(anno.df$Frequency,
+    ##     ## labels=paste(round(anno.df$Frequency/sum(anno.df$Frequency)*100, 2), "%", sep=""),
+    ##     labels=paste(anno.df$Feature, " (",
+    ##         round(anno.df$Frequency/sum(anno.df$Frequency)*100, ndigit),
+    ##         "%)", sep=""),
+    ##     cex=cex,
+    ##     col=col,
+    ##     ...
+    ##     )
     ## legend(legend=anno.df$Feature, fill=col, "topright")
 }
 

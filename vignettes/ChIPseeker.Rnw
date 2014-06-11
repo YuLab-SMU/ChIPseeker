@@ -231,7 +231,7 @@ To annotate the location of a given peak in terms of genomic features, \Rfunctio
 \\
 \\
 Pie and Bar plot are supported to visualize the genomic annotation.
-<<pieplot, fig.cap="Genomic Annotation by pieplot", fig.align="center", fig.height=6, fig.width=6, out.width="0.8\\textwidth", fig.pos="h">>= 
+<<pieplot, fig.cap="Genomic Annotation by pieplot", fig.align="center", fig.height=6, fig.width=8, out.width="0.8\\textwidth", fig.pos="h">>= 
 plotAnnoPie(peakAnno)
 @ 
 
