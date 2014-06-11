@@ -277,16 +277,31 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     dd <- psD
     dd[j==2] <- peD[j==2]
 
-    pn.idx <- nearest(peaks, features)
-    isOverlap <- sapply(1:length(pn.idx), function(i) {
-        isPeakFeatureOverlap(peaks[i], features2[pn.idx[i]])
-    })
-    isOverlap <- unlist(isOverlap)
-
-    if(sum(isOverlap) > 0) {
-        idx[isOverlap] <- pn.idx[isOverlap]
-        dd[isOverlap] <- 0
+    
+    hit <- findOverlaps(peaks, features2)
+    if ( length(hit) != 0 ) {
+        qh <- queryHits(hit)
+        hit.idx <- getFirstHitIndex(qh)
+        hit <- hit[hit.idx]
+        peakIdx <- queryHits(hit)
+        featureIdx <- subjectHits(hit)
     }
+
+    if( length(hit) != 0 ) {
+        idx[peakIdx] <- featureIdx
+        dd[peakIdx] <- 0
+    }
+
+    ## pn.idx <- nearest(peaks, features)
+    ## isOverlap <- sapply(1:length(pn.idx), function(i) {
+    ##     isPeakFeatureOverlap(peaks[i], features2[pn.idx[i]])
+    ## })
+    ## isOverlap <- unlist(isOverlap)
+
+    ## if(sum(isOverlap) > 0) {
+    ##     idx[isOverlap] <- pn.idx[isOverlap]
+    ##     dd[isOverlap] <- 0
+    ## }
     
     res <- data.frame(index=idx, distance=dd)
     return(res)
