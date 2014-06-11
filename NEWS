@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.1.8
+------------------------
+ o bug fixed when peak overlap with feature <2014-06-11, Wed>
+
 CHANGES IN VERSION 1.1.7
 ------------------------
  o bug fixed in calculating distanceToTSS <2014-06-03, Tue>
