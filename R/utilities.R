@@ -15,7 +15,7 @@
         m1 <- m1[!is.na(m1)]
         m2 <- m2[!is.na(m2)]
 
-        if ( any(m1 != m2) ) {
+        if ( length(m1) != length(m2) || any(m1 != m2) ) {
             rm(ChIPseekerEnv)
             assign("ChIPseekerEnv", new.env(), .GlobalEnv)
             ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
