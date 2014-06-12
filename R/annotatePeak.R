@@ -242,8 +242,6 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     ## peaks only conatin all peak records, in GRanges object
     ## feature is the annotation in GRanges object
 
-    features2 <- features
-    
     ## only keep start position based on strand
     start(features) <- end(features) <- ifelse(strand(features) == "+", start(features), end(features))
     
@@ -278,16 +276,14 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     dd[j==2] <- peD[j==2]
 
     
-    hit <- findOverlaps(peaks, features2)
+    hit <- findOverlaps(peaks, features)
     if ( length(hit) != 0 ) {
         qh <- queryHits(hit)
         hit.idx <- getFirstHitIndex(qh)
         hit <- hit[hit.idx]
         peakIdx <- queryHits(hit)
         featureIdx <- subjectHits(hit)
-    }
 
-    if( length(hit) != 0 ) {
         idx[peakIdx] <- featureIdx
         dd[peakIdx] <- 0
     }
