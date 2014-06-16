@@ -19,5 +19,11 @@ To install:
  * the latest development version:
    `install_github("GuangchuangYu/ChIPseeker")`
 
-Find out more at [http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html](http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) and check out the vignettes.
+Find out more at [http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html](http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) and check out the [vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/ChIPseeker/inst/doc/ChIPseeker.pdf).
+
+
+## Bugs/Feature requests ##
+
+ - If you have any, [let me know](https://github.com/GuangchuangYu/ChIPseeker/issues). Thx!
+
 

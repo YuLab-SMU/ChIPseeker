@@ -64,9 +64,20 @@ updateGenomicAnnotation <- function(peaks, genomicRegion, type, annotation) {
     return(annotation)
  }         
 
+TXID2EG <- function(txid, geneIdOnly=FALSE) {
+    txid <- as.character(txid)
+    if (geneIdOnly == TRUE) {
+        res <- TXID2EGID(txid)
+    } else {
+        res <- TXID2TXEG(txid)
+    }
+    return(res)
+}
+
 ##' @importFrom GenomicFeatures transcripts
-TXID2EG <- function(txid) {
+TXID2TXEG <- function(txid) {
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
+    
     if (exists("txid2geneid", envir=ChIPseekerEnv, inherits=FALSE)) {
         txid2geneid <- get("txid2geneid", envir=ChIPseekerEnv)
     } else {
@@ -81,6 +92,24 @@ TXID2EG <- function(txid) {
         
         names(txid2geneid) <- elementMetadata(txidinfo)[["tx_id"]]
         assign("txid2geneid", txid2geneid, envir=ChIPseekerEnv)
+    }
+    return(as.character(txid2geneid[txid]))
+}
+
+TXID2EGID <- function(txid) {
+    ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
+    
+    if (exists("txid2eg", envir=ChIPseekerEnv, inherits=FALSE)) {
+        txid2geneid <- get("txid2eg", envir=ChIPseekerEnv)
+    } else {
+        txdb <- get("TXDB", envir=ChIPseekerEnv)
+        txidinfo <- transcripts(txdb, columns=c("tx_id", "tx_name", "gene_id"))
+        idx <- which(sapply(txidinfo$gene_id, length) == 0)
+        txidinfo[idx,]$gene_id <- txidinfo[idx,]$tx_name
+        txid2geneid <- as.character(elementMetadata(txidinfo)[["gene_id"]])
+                
+        names(txid2geneid) <- elementMetadata(txidinfo)[["tx_id"]]
+        assign("txid2eg", txid2geneid, envir=ChIPseekerEnv)
     }
     return(as.character(txid2geneid[txid]))
 }

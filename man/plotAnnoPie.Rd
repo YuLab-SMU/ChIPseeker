@@ -3,8 +3,8 @@
 \alias{plotAnnoPie}
 \title{plotAnnoPie}
 \usage{
-plotAnnoPie(peakAnno, ndigit = 2, cex = 0.9, col = NA, pie3D = FALSE,
-  ...)
+plotAnnoPie(peakAnno, ndigit = 2, cex = 0.9, col = NA,
+  legend.position = "rightside", pie3D = FALSE, ...)
 }
 \arguments{
 \item{peakAnno}{peakAnno}
@@ -14,6 +14,8 @@ plotAnnoPie(peakAnno, ndigit = 2, cex = 0.9, col = NA, pie3D = FALSE,
 \item{cex}{label cex}
 
 \item{col}{color}
+
+\item{legend.position}{topright or other.}
 
 \item{pie3D}{plot in 3D or not}
 
