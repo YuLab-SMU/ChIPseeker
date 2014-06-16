@@ -68,6 +68,7 @@ plotAnnoBar <- function(peakAnno,
 ##' @param ndigit number of digit to round
 ##' @param cex label cex
 ##' @param col color
+##' @param legend.position topright or other.
 ##' @param pie3D plot in 3D or not
 ##' @param ... extra parameter
 ##' @return pie plot of peak genomic feature annotation
@@ -85,6 +86,7 @@ plotAnnoPie <- function(peakAnno,
                         ndigit=2,
                         cex=0.9,
                         col=NA,
+                        legend.position="rightside",
                         pie3D=FALSE,
                         ...){
     
@@ -96,36 +98,37 @@ plotAnnoPie <- function(peakAnno,
     if (pie3D)
         annoPie3D(anno.df, ndigit=ndigit, cex=cex, col=col, ...)
     
-    annoPie(anno.df, ndigit=ndigit, cex=cex, col=col, ...)
+    annoPie(anno.df, ndigit=ndigit, cex=cex, col=col, legend.position=legend.position, ...)
  }
 
 ##' @importFrom RColorBrewer brewer.pal
 ##' @importFrom grDevices colorRampPalette
-annoPie <- function(anno.df, ndigit=2, cex=0.9, col=NA, ...) {
+annoPie <- function(anno.df, ndigit=2, cex=0.9, col=NA, legend.position, ...) {
     if ( ! all(c("Feature", "Frequency") %in% colnames(anno.df))) {
         stop("check your input...")
     }
 
-    labels=paste(anno.df$Feature, " (",
-        round(anno.df$Frequency/sum(anno.df$Frequency)*100, ndigit),
-        "%)", sep="")
+    if (legend.position == "rightside") {
+        labels=paste(anno.df$Feature, " (",
+            round(anno.df$Frequency/sum(anno.df$Frequency)*100, ndigit),
+            "%)", sep="")
     
-    par(mai = c(0,0,0,0))
-    layout(matrix(c(1,2), ncol=2), width=c(0.6,0.4))
-    pie(anno.df$Frequency, labels=NA, cex=cex, col=col, ...)
-    plot.new()
-    legend("center", legend = labels, fill=col, bty="n")
- 
-    ## pie(anno.df$Frequency,
-    ##     ## labels=paste(round(anno.df$Frequency/sum(anno.df$Frequency)*100, 2), "%", sep=""),
-    ##     labels=paste(anno.df$Feature, " (",
-    ##         round(anno.df$Frequency/sum(anno.df$Frequency)*100, ndigit),
-    ##         "%)", sep=""),
-    ##     cex=cex,
-    ##     col=col,
-    ##     ...
-    ##     )
-    ## legend(legend=anno.df$Feature, fill=col, "topright")
+        par(mai = c(0,0,0,0))
+        layout(matrix(c(1,2), ncol=2), widths=c(0.6,0.4))
+        pie(anno.df$Frequency, labels=NA, cex=cex, col=col, ...)
+        plot.new()
+        legend("center", legend = labels, fill=col, bty="n")
+    } else {
+        pie(anno.df$Frequency,
+            ##     ## labels=paste(round(anno.df$Frequency/sum(anno.df$Frequency)*100, 2), "%", sep=""),
+            labels=paste(anno.df$Feature, " (",
+                round(anno.df$Frequency/sum(anno.df$Frequency)*100, ndigit),
+                "%)", sep=""),
+            cex=cex,
+            col=col,
+            ...
+            )
+    }
 }
 
 ## @param ndigit ndigit
