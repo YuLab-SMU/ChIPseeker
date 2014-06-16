@@ -1,4 +1,4 @@
-CHANGES IN VERSION 1.1.8
+CHANGES IN VERSION 1.1.9
 ------------------------
  o add level parameter to annotatePeak, and set it to "transcript" by default. 
    Now annotatePeak will annotate peaks in transcript level 
