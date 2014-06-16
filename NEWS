@@ -1,5 +1,13 @@
 CHANGES IN VERSION 1.1.8
 ------------------------
+ o add level parameter to annotatePeak, and set it to "transcript" by default. 
+   Now annotatePeak will annotate peaks in transcript level 
+   except user specify level = "gene" <2014-06-16, Mon>
+ o add addFlankGeneInfo parameter to annotatePeak. 
+   If it set to true, all features within the flankDistance will be annotated. <2014-06-16, Mon>
+
+CHANGES IN VERSION 1.1.8
+------------------------
  o bug fixed when peak overlap with feature <2014-06-11, Wed>
  o optimize for getting overlap features of peaks <2014-06-11, Wed>
  o update plotAnnoPie, separate the pie and legend to prevent label overlap <2014-06-12, Thu>
