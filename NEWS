@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.1.10
+------------------------
+ o bug fixed in calculating distances from peak end <2014-06-18, Wed>
+
 CHANGES IN VERSION 1.1.9
 ------------------------
  o add level parameter to annotatePeak, and set it to "transcript" by default. 
