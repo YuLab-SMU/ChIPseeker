@@ -56,13 +56,6 @@ getTagCount <- function(tagMatrix, xlim) {
     return(dd)
 }
 
-updateGenomicAnnotation <- function(peaks, genomicRegion, type, annotation) {
-    hits <- getGenomicAnnotation.internal(peaks, genomicRegion, type)
-    if (length(hits) == 2) {
-        annotation[hits$queryIndex] <- hits$annotation
-    }
-    return(annotation)
- }         
 
 TXID2EG <- function(txid, geneIdOnly=FALSE) {
     txid <- as.character(txid)
@@ -112,57 +105,6 @@ TXID2EGID <- function(txid) {
         assign("txid2eg", txid2geneid, envir=ChIPseekerEnv)
     }
     return(as.character(txid2geneid[txid]))
-}
-
-##' @importFrom IRanges elementLengths
-##' @importFrom IRanges findOverlaps
-## @importFrom IRanges queryHits
-## @importFrom IRanges subjectHits
-##' @importFrom S4Vectors queryHits
-##' @importFrom S4Vectors subjectHits
-##' @importMethodsFrom BiocGenerics unlist
-getGenomicAnnotation.internal <- function(peaks, genomicRegion, type){
-    GRegion <- unlist(genomicRegion)
-    GRegionLen <- elementLengths(genomicRegion)
-    if (type == "Intron" || type =="Exon") {
-        nn <- TXID2EG(names(genomicRegion))
-        names(GRegionLen) <- nn
-        GRegion$gene_id <- rep(nn, times=GRegionLen)
-    } else {
-        names(GRegionLen) <- names(genomicRegion)
-        GRegion$gene_id <- rep(names(genomicRegion), times=GRegionLen)
-    }
-
-    if (type == "Intron") {
-        intron_rank <- unlist(sapply(GRegionLen, function(i) seq(0, i)))
-        intron_rank <- intron_rank[intron_rank != 0]
-        GRegion$intron_rank <- intron_rank
-    }
-    ## find overlap
-    GRegionHit <- findOverlaps(peaks, GRegion)
-    if (length(GRegionHit) == 0) {
-        return(NA)
-    }
-    qh <- queryHits(GRegionHit)
-    hit.idx <- getFirstHitIndex(qh)
-    GRegionHit <- GRegionHit[hit.idx]
-    queryIndex <- queryHits(GRegionHit)
-    subjectIndex <- subjectHits(GRegionHit)
-
-    hits <- GRegion[subjectIndex]
-    geneID <- hits$gene_id
-
-    if (type == "Intron") {
-        anno <- paste(type, " (", geneID, ", intron ", hits$intron_rank,
-                      " of ", GRegionLen[geneID], ")", sep="")
-    } else if (type == "Exon") {
-        anno <- paste(type, " (", geneID, ", exon ", hits$exon_rank,
-                      " of ", GRegionLen[geneID], ")", sep="")
-    } else {
-        anno <- type
-    }
-    res <- list(queryIndex=queryIndex, annotation=anno)
-    return(res)
 }
 
 getFirstHitIndex <- function(x) {
