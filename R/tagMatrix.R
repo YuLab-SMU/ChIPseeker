@@ -72,7 +72,7 @@ getPromoters <- function(TranscriptDb=NULL,
 ##' @importFrom IRanges Views
 ##' @importFrom IRanges viewApply
 ##' @importFrom IRanges as.vector
-##' @importFrom IRanges as.factor
+##' @importFrom S4Vectors as.factor
 ##' @importFrom GenomicRanges GRanges
 ##' @importFrom GenomicRanges elementMetadata
 ##' @importFrom GenomeInfoDb seqnames
