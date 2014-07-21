@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.1.12
+------------------------
+ o bug fixed in plotChrCov <2014-07-21, Mon>
+
 CHANGES IN VERSION 1.1.10
 ------------------------
  o bug fixed in calculating distances from peak end <2014-06-18, Wed>
