@@ -68,6 +68,8 @@ getChrCov <- function(peak.gr, weightCol) {
         peak.cov <- coverage(peak.gr, weight=weight)
     }
     seqLen <- lapply(peak.cov, length)
+    seqLen <- seqLen[seqLen != 0]
+    peak.cov <- peak.cov[seqLen != 0]
     chrs <- GRanges(seqnames=names(seqLen),
                     ranges=IRanges(rep(1, length(seqLen)),unlist(seqLen)),
                     strand="*")
@@ -77,6 +79,8 @@ getChrCov <- function(peak.gr, weightCol) {
 
     tm <- list()
     nn <- names(tagMatrixList)
+    idx <- unlist(sapply(tagMatrixList, ncol)) != 0
+    tagMatrixList <- tagMatrixList[idx]
     for (i in 1:length(tagMatrixList)) {
         cat(">> processing chromosome ", nn[i])
         if (nchar(nn[i]) > 4) {
@@ -85,8 +89,7 @@ getChrCov <- function(peak.gr, weightCol) {
             cat("\t")
         }
         cat(format(Sys.time(), "%Y-%m-%d %X"), "\n")
-        
-        M <- summary(Matrix(tagMatrixList[[i]]))
+        M <- summary(Matrix(tagMatrixList[[i]], sparse=TRUE))
         tm[[i]] <- data.frame(chr=nn[i],
                               pos=M$j,
                               cnt=M$x)
