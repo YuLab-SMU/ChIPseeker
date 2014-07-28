@@ -147,7 +147,7 @@ plotChrCov(peak, weightCol="V5")
 First of all, for calculate the profile of ChIP peaks binding to TSS regions, we should prepare the TSS regions, which are defined as the flanking sequence of the TSS sites. Then align the peaks that are mapping to these regions, and generate the tagMatrix.
 
 <<promoter>>= 
-## promoter <- getPromoters(TranscriptDb=txdb, upstream=3000, downstream=3000)
+## promoter <- getPromoters(TxDb=txdb, upstream=3000, downstream=3000)
 ## tagMatrix <- getTagMatrix(peak, windows=promoter)
 ##
 ## to speed up the compilation of this vignettes, we use a precalculated tagMatrix
@@ -173,7 +173,7 @@ tagHeatmap(tagMatrix, xlim=c(-3000, 3000), color="red")
 
 \Rpackage{ChIPseeker} provide a one step function to generate this figure from bed file. The following function will generate the same figure as above.
 <<heatmap2, eval=FALSE>>=
-peakHeatmap(files[[4]], TranscriptDb=txdb, upstream=3000, downstream=3000, color="red")
+peakHeatmap(files[[4]], TxDb=txdb, upstream=3000, downstream=3000, color="red")
 @ 
 
 \subsubsection{Average Profile of ChIP peaks binding to TSS region}
@@ -190,21 +190,21 @@ plotAvgProf(tagMatrix, xlim=c(-3000, 3000), xlab="Genomic Region (5'->3')", ylab
 
 The function \Rfunction{plotAvgProf2} provide a one step from bed file to average profile plot. The following command will generate the same figure as shown above.
 <<avgprof2, eval=FALSE>>=
-plotAvgProf2(files[[4]], TranscriptDb=txdb, upstream=3000, downstream=3000, xlab="Genomic Region (5'->3')", ylab = "Read Count Frequency")
+plotAvgProf2(files[[4]], TxDb=txdb, upstream=3000, downstream=3000, xlab="Genomic Region (5'->3')", ylab = "Read Count Frequency")
 @
 
 
 \section{Peak Annotation}
 <<peak annotation>>=
 peakAnno <- annotatePeak(files[[4]], tssRegion=c(-3000, 3000), as="GRanges", 
-                         TranscriptDb=txdb, annoDb="org.Hs.eg.db")
+                         TxDb=txdb, annoDb="org.Hs.eg.db")
 head(peakAnno)
 @ 
 
 Peak Annotation is performed by \Rfunction{annotatePeak}. User can define TSS (transcription start site) region, by default TSS is defined from -3kb to +3kb. The argument \Rparameter{as} can be one of "GRanges", "data.fram" and "txt" to specify the output format return by \Rfunction{annotatePeak}. If \Rparameter{as} is set to "txt", the output will save to a TXT file with name suffix by anno.txt.
 \\
 \\
-\Robject{TranscriptDb} object contained transcript-related features of a particular genome. Bioconductor provides several package that containing \Robject{TranscriptDb} object of model organisms with multiple commonly used genome version, for instance \Rpackage{TxDb.Hsapiens.UCSC.hg19.knownGene} and \Rpackage{TxDb.Hsapiens.UCSC.hg18.knownGene} for human genome hg19 and hg18, \Rpackage{TxDb.Mmusculus.UCSC.mm10.knownGene} and \Rpackage{TxDb.Mmusculus.UCSC.mm9.knownGene} for mouse genome mm10 and mm9, etc. User can also prepare their own \Robject{TranscriptDb} object by retrieving information from UCSC Genome Bioinformatics and BioMart data resources by R function \Rfunction{makeTranscriptDbFromBiomart} and \Rfunction{makeTranscriptDbFromUCSC}. TranscriptDb object should be passed for peak annotation. 
+\Robject{TxDb} object contained transcript-related features of a particular genome. Bioconductor provides several package that containing \Robject{TxDb} object of model organisms with multiple commonly used genome version, for instance \Rpackage{TxDb.Hsapiens.UCSC.hg19.knownGene} and \Rpackage{TxDb.Hsapiens.UCSC.hg18.knownGene} for human genome hg19 and hg18, \Rpackage{TxDb.Mmusculus.UCSC.mm10.knownGene} and \Rpackage{TxDb.Mmusculus.UCSC.mm9.knownGene} for mouse genome mm10 and mm9, etc. User can also prepare their own \Robject{TxDb} object by retrieving information from UCSC Genome Bioinformatics and BioMart data resources by R function \Rfunction{makeTranscriptDbFromBiomart} and \Rfunction{makeTranscriptDbFromUCSC}. TxDb object should be passed for peak annotation. 
 \\
 \\
 All the peak information contained in peakfile will be retained in the output of \Rfunction{annotatePeak}. The position and strand information of nearest genes are reported. The distance from peak to the TSS of its nearest gene is also reported. The genomic region of the peak is reported in annotation column. Since some annotation may overlap, \Rpackage{ChIPseeker} adopted the following priority in genomic annotation.
@@ -224,7 +224,7 @@ Downstream is defined as the downstream of gene end.
 \Rfunction{annotatePeak} report detail information when the annotation is Exon or Intron, for instance "Exon (uc002sbe.3/9736, exon 69 of 80)", means that the peak is overlap with an Exon of transcript uc002sbe.3, and the corresponding Entrez gene ID is 9736 (Transcripts that belong to the same gene ID may differ in splice events), and this overlaped exon is the 69th exon of the 80 exons that this transcript uc002sbe.3 prossess. 
 \\
 \\
-Parameter annoDb is optional, if provided, extra columns including SYMBOL, GENENAME, ENSEMBL/ENTREZID will be added. The geneId column in annotation output will be consistent with the geneID in TranscriptDb. If it is ENTREZID, ENSEMBL will be added if annoDb is provided, while if it is ENSEMBL ID, ENTREZID will be added.
+Parameter annoDb is optional, if provided, extra columns including SYMBOL, GENENAME, ENSEMBL/ENTREZID will be added. The geneId column in annotation output will be consistent with the geneID in TxDb. If it is ENTREZID, ENSEMBL will be added if annoDb is provided, while if it is ENSEMBL ID, ENTREZID will be added.
 
 \subsection{Visualize Genomic Annotation}
 To annotate the location of a given peak in terms of genomic features, \Rfunction{annotatePeak} assigns peaks to genomic annotation in "annotation" column of the output, which includes whether a peak is in the TSS, Exon, 5' UTR, 3' UTR, Intronic or Intergenic. Many researchers are very interesting in these annotations. TSS region can be defined by user and \Rfunction{annotatePeak} output in details of which exon/intron of which genes as illustrated in previous section.
@@ -266,7 +266,7 @@ Function \Rfunction{plotAvgProf} and \Rfunction{tagHeatmap} can accept a list of
 
 \subsubsection{Average profiles}
 <<avgprof3, eval=TRUE, fig.cap="Average Profiles of ChIP peaks among different experiments", fig.align="center", fig.height=7, fig.width=7, out.width="0.8\\textwidth", fig.pos="h">>=
-## promoter <- getPromoters(TranscriptDb=txdb, upstream=3000, downstream=3000)
+## promoter <- getPromoters(TxDb=txdb, upstream=3000, downstream=3000)
 ## tagMatrixList <- lapply(files, getTagMatrix, windows=promoter)
 ## 
 ## to speed up the compilation of this vigenettes, we load a precaculated tagMatrixList
@@ -300,7 +300,7 @@ The \Rfunction{plotAnnoBar} and \Rfunction{plotDistToTSS} can also accept input 
 
 
 <<List_of_peakAnno>>=
-peakAnnoList <- lapply(files, annotatePeak, TranscriptDb=txdb, tssRegion=c(-3000, 3000), verbose=FALSE)
+peakAnnoList <- lapply(files, annotatePeak, TxDb=txdb, tssRegion=c(-3000, 3000), verbose=FALSE)
 @
 
 We can use \Rfunction{plotAnnoBar} to comparing their genomic annotation.
@@ -353,16 +353,16 @@ Overlap is very important, if two ChIP experiment by two different proteins over
 
 <<shuffle>>=
 p <- GRanges(seqnames=c("chr1", "chr3"), ranges=IRanges(start=c(1, 100), end=c(50, 130)))
-shuffle(p, TranscriptDb=txdb)
+shuffle(p, TxDb=txdb)
 @ 
 
-We implement the \Rfunction{shuffle} function to randomly permute the genomic locations of ChIP peaks defined in a genome which stored in \Robject{TranscriptDb} object.
+We implement the \Rfunction{shuffle} function to randomly permute the genomic locations of ChIP peaks defined in a genome which stored in \Robject{TxDb} object.
 
 \subsection{Peak overlap enrichment analysis}
 With the ease of this \Rfunction{shuffle} method, we can generate thousands of random ChIP data and calculate the background null distribution of the overlap among ChIP data sets.
 
 <<peakEnrichment>>=
-enrichPeakOverlap(queryPeak=files[[5]], targetPeak=unlist(files[1:4]), TranscriptDb=txdb, pAdjustMethod="BH", nShuffle=50, chainFile=NULL)
+enrichPeakOverlap(queryPeak=files[[5]], targetPeak=unlist(files[1:4]), TxDb=txdb, pAdjustMethod="BH", nShuffle=50, chainFile=NULL)
 @ 
 
 Parameter \Robject{queryPeak} is the query ChIP data, while \Robject{targetPeak} is bed file name or a vector of bed file names from comparison; \Robject{nShuffle} is the number to shuffle the peaks in \Robject{targetPeak}. To speed up the compilation of this vignettes, we only set \Robject{nShuffle} to 50 as an example for only demonstration. User should set the number to 1000 or above for more robust result. Parameter \Robject{chainFile} are chain file name for mapping the \Robject{targetPeak} to the genome version consistent with \Robject{queryPeak} when their genome version are different. This creat the possibility of comparison among different genome version and cross species.

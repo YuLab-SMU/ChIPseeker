@@ -2,7 +2,7 @@
 ##'
 ##'
 ##' @title getPromoters
-##' @param TranscriptDb TranscriptDb
+##' @param TxDb TxDb
 ##' @param upstream upstream from TSS site
 ##' @param downstream downstream from TSS site
 ##' @param by one of gene or transcript
@@ -16,15 +16,15 @@
 ##' @importFrom IRanges start
 ##' @importFrom IRanges end
 ##' @importFrom IRanges IRanges
-getPromoters <- function(TranscriptDb=NULL,
+getPromoters <- function(TxDb=NULL,
                          upstream=1000,
                          downstream=1000,
                          by = "gene") {
 
     by <- match.arg(by, c("gene", "transcript"))
     
-    TranscriptDb <- loadTxDb(TranscriptDb)
-    .ChIPseekerEnv(TranscriptDb)
+    TxDb <- loadTxDb(TxDb)
+    .ChIPseekerEnv(TxDb)
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
 
     if ( exists("upstream", envir=ChIPseekerEnv, inherits=FALSE) &&
@@ -41,7 +41,7 @@ getPromoters <- function(TranscriptDb=NULL,
     assign("upstream", upstream, envir=ChIPseekerEnv)
     assign("downstream", downstream, envir=ChIPseekerEnv)
 
-    Transcripts <- getGene(TranscriptDb, by)
+    Transcripts <- getGene(TxDb, by)
     ## get start position based on strand
     tss <- ifelse(strand(Transcripts) == "+", start(Transcripts), end(Transcripts))
     promoters <- GRanges(seqnames=seqnames(Transcripts),

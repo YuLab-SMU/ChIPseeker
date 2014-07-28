@@ -24,7 +24,7 @@ plotAvgProf <- function(tagMatrix, xlim,
 ##' @title plotAvgProf
 ##' @param peak peak file or GRanges object
 ##' @param weightCol column name of weight
-##' @param TranscriptDb TranscriptDb object
+##' @param TxDb TxDb object
 ##' @param upstream upstream position
 ##' @param downstream downstream position
 ##' @param xlab xlab
@@ -33,7 +33,7 @@ plotAvgProf <- function(tagMatrix, xlim,
 ##' @return ggplot object
 ##' @export
 ##' @author G Yu
-plotAvgProf2 <- function(peak, weightCol=NULL, TranscriptDb=NULL,
+plotAvgProf2 <- function(peak, weightCol=NULL, TxDb=NULL,
                         upstream=1000, downstream=1000,
                         xlab="Genomic Region (5'->3')",
                         ylab="Read Count Frequency",
@@ -43,7 +43,7 @@ plotAvgProf2 <- function(peak, weightCol=NULL, TranscriptDb=NULL,
         cat(">> preparing promoter regions...\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     }
-    promoter <- getPromoters(TranscriptDb=TranscriptDb,
+    promoter <- getPromoters(TxDb=TxDb,
                              upstream=upstream,
                              downstream=downstream)
     
@@ -94,7 +94,7 @@ tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="red
 ##' @title peakHeatmap
 ##' @param peak peak file or GRanges object
 ##' @param weightCol column name of weight
-##' @param TranscriptDb TranscriptDb object
+##' @param TxDb TxDb object
 ##' @param upstream upstream position
 ##' @param downstream downstream position
 ##' @param xlab xlab
@@ -105,7 +105,7 @@ tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="red
 ##' @return figure
 ##' @export
 ##' @author G Yu
-peakHeatmap <- function(peak, weightCol=NULL, TranscriptDb=NULL,
+peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
                             upstream=1000, downstream=1000,
                             xlab="", ylab="", title=NULL,
                             color=NULL, verbose=TRUE) {
@@ -120,7 +120,7 @@ peakHeatmap <- function(peak, weightCol=NULL, TranscriptDb=NULL,
         cat(">> preparing promoter regions...\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     }
-    promoter <- getPromoters(TranscriptDb=TranscriptDb,
+    promoter <- getPromoters(TxDb=TxDb,
                              upstream=upstream, downstream=downstream)
 
     if (verbose) {

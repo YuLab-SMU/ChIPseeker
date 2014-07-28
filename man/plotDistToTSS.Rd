@@ -29,7 +29,7 @@ plot feature distribution based on the distances to the TSS
 require(TxDb.Hsapiens.UCSC.hg19.knownGene)
 txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
-peakAnno <- annotatePeak(peakfile, TranscriptDb=txdb)
+peakAnno <- annotatePeak(peakfile, TxDb=txdb)
 plotDistToTSS(peakAnno)
 }
 \author{

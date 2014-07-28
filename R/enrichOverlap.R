@@ -4,7 +4,7 @@
 ##' @title enrichAnnoOverlap
 ##' @param queryPeak query bed file
 ##' @param targetPeak target bed file(s) or folder containing bed files
-##' @param TranscriptDb TranscriptDb
+##' @param TxDb TxDb
 ##' @param pAdjustMethod pvalue adjustment method
 ##' @param chainFile chain file for liftOver
 ##' @return data.frame
@@ -12,11 +12,11 @@
 ##' @importFrom rtracklayer import.chain
 ##' @importFrom rtracklayer liftOver
 ##' @author G Yu
-enrichAnnoOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustMethod="BH", chainFile=NULL) {
+enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="BH", chainFile=NULL) {
     targetFiles <- parse_targetPeak_Param(targetPeak)
-    TranscriptDb <- loadTxDb(TranscriptDb)
+    TxDb <- loadTxDb(TxDb)
  
-    query.anno <- annotatePeak(queryPeak, TranscriptDb=TranscriptDb,
+    query.anno <- annotatePeak(queryPeak, TxDb=TxDb,
                                assignGenomicAnnotation=FALSE, annoDb=NULL, verbose=FALSE)
 
     target.gr <- lapply(targetFiles, loadPeak)
@@ -25,7 +25,7 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustM
         target.gr <- lapply(target.gr, liftOver, chain=chain)
     }
      
-    target.anno <- lapply(target.gr, annotatePeak, TranscriptDb=TranscriptDb,
+    target.anno <- lapply(target.gr, annotatePeak, TxDb=TxDb,
                           assignGenomicAnnotation=FALSE, annoDb=NULL, verbose=FALSE)
     
 
@@ -60,7 +60,7 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustM
 ##' @title enrichPeakOverlap
 ##' @param queryPeak query bed file
 ##' @param targetPeak target bed file(s) or folder that containing bed files
-##' @param TranscriptDb TranscriptDb
+##' @param TxDb TxDb
 ##' @param pAdjustMethod pvalue adjustment method
 ##' @param nShuffle shuffle numbers
 ##' @param chainFile chain file for liftOver
@@ -69,9 +69,9 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustM
 ##' @importFrom rtracklayer import.chain
 ##' @importFrom rtracklayer liftOver
 ##' @author G Yu
-enrichPeakOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustMethod="BH", nShuffle=1000, chainFile=NULL) {
+enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="BH", nShuffle=1000, chainFile=NULL) {
     targetFiles <- parse_targetPeak_Param(targetPeak)
-    TranscriptDb <- loadTxDb(TranscriptDb)
+    TxDb <- loadTxDb(TxDb)
     query.gr <- loadPeak(queryPeak)
     target.gr <- lapply(targetFiles, loadPeak)
     if (!is.null(chainFile)) {
@@ -79,7 +79,7 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustM
         target.gr <- lapply(target.gr, liftOver, chain=chain)
     }
     
-    p.ol <- enrichOverlap.peak.internal(query.gr, target.gr, TranscriptDb, nShuffle)
+    p.ol <- enrichOverlap.peak.internal(query.gr, target.gr, TxDb, nShuffle)
     p <- p.ol$pvalue
     ol <- p.ol$overlap
     qSample <- sub(".+/", "", queryPeak)  ## remove path, only keep file name
@@ -103,12 +103,12 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TranscriptDb=NULL, pAdjustM
 ##' 
 ##' @title shuffle
 ##' @param peak.gr GRanges object
-##' @param TranscriptDb TranscriptDb
+##' @param TxDb TxDb
 ##' @return GRanges object
 ##' @export
 ##' @author G Yu
-shuffle <- function(peak.gr, TranscriptDb) {
-    chrLens <- seqlengths(TranscriptDb)[names(seqlengths(peak.gr))]
+shuffle <- function(peak.gr, TxDb) {
+    chrLens <- seqlengths(TxDb)[names(seqlengths(peak.gr))]
     nn <- as.vector(seqnames(peak.gr))
     ii <- order(nn)
     w <- width(peak.gr)
@@ -127,19 +127,19 @@ shuffle <- function(peak.gr, TranscriptDb) {
 
 ##' @importFrom GenomeInfoDb intersect
 ##' @importFrom GenomeInfoDb seqlengths
-enrichOverlap.peak.internal <- function(query.gr, target.gr, TranscriptDb, nShuffle=1000) {
+enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000) {
     idx <- sample(1:length(target.gr), nShuffle, replace=TRUE)
 
     len <- unlist(lapply(target.gr, length))
 
     if(Sys.info()[1] == "Windows") {
         rr <- lapply(idx, function(i) {
-            tarShuffle <- shuffle(target.gr[[i]], TranscriptDb)
+            tarShuffle <- shuffle(target.gr[[i]], TxDb)
             length(intersect(query.gr, tarShuffle))/len[i]
         })
     } else {
         rr <- mclapply(idx, function(i) {
-            tarShuffle <- shuffle(target.gr[[i]], TranscriptDb)
+            tarShuffle <- shuffle(target.gr[[i]], TxDb)
             length(intersect(query.gr, tarShuffle))/len[i]
         }, mc.cores=detectCores()-1
                        )

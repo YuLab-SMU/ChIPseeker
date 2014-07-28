@@ -32,7 +32,7 @@ pieplot from peak genomic annotation
 ## require(TxDb.Hsapiens.UCSC.hg19.knownGene)
 ## txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 ## peakfile <- system.file("extdata", "sample_peaks.txt", package="chipseeker")
-## peakAnno <- annotatePeak(peakfile, TranscriptDb=txdb)
+## peakAnno <- annotatePeak(peakfile, TxDb=txdb)
 ## plotAnnoPie(peakAnno)
 }
 \author{

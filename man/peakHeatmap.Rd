@@ -3,7 +3,7 @@
 \alias{peakHeatmap}
 \title{peakHeatmap}
 \usage{
-peakHeatmap(peak, weightCol = NULL, TranscriptDb = NULL, upstream = 1000,
+peakHeatmap(peak, weightCol = NULL, TxDb = NULL, upstream = 1000,
   downstream = 1000, xlab = "", ylab = "", title = NULL, color = NULL,
   verbose = TRUE)
 }
@@ -12,7 +12,7 @@ peakHeatmap(peak, weightCol = NULL, TranscriptDb = NULL, upstream = 1000,
 
 \item{weightCol}{column name of weight}
 
-\item{TranscriptDb}{TranscriptDb object}
+\item{TxDb}{TxDb object}
 
 \item{upstream}{upstream position}
 

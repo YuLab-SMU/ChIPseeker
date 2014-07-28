@@ -15,7 +15,7 @@
 ##' require(TxDb.Hsapiens.UCSC.hg19.knownGene)
 ##' txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 ##' peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
-##' peakAnno <- annotatePeak(peakfile, TranscriptDb=txdb)
+##' peakAnno <- annotatePeak(peakfile, TxDb=txdb)
 ##' peakAnnoList <- lapply(1:3, function(i) peakAnno[sample(1:length(peakAnno), 100),])
 ##' names(peakAnnoList) <- paste("peak", 1:3, sep="_")
 ##' genes= lapply(peakAnnoList, function(i) unlist(i$geneId))
