@@ -14,7 +14,7 @@ updateGenomicAnnotation <- function(peaks, genomicRegion, type, annotation) {
 ##' @param peaks peaks in GRanges object
 ##' @param distance distance of peak to TSS
 ##' @param tssRegion tssRegion, default is -3kb to +3kb
-##' @param TranscriptDb TranscriptDb object
+##' @param TxDb TxDb object
 ##' @importFrom GenomicFeatures intronsByTranscript
 ##' @importFrom GenomicFeatures threeUTRsByTranscript
 ##' @importFrom GenomicFeatures fiveUTRsByTranscript
@@ -24,7 +24,7 @@ updateGenomicAnnotation <- function(peaks, genomicRegion, type, annotation) {
 getGenomicAnnotation <- function(peaks,
                                  distance,
                                  tssRegion=c(-3000, 3000),
-                                 TranscriptDb
+                                 TxDb
                                  ) {
     
     ##
@@ -40,7 +40,7 @@ getGenomicAnnotation <- function(peaks,
     ##
 
 
-    .ChIPseekerEnv(TranscriptDb)
+    .ChIPseekerEnv(TxDb)
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
     
             
@@ -52,7 +52,7 @@ getGenomicAnnotation <- function(peaks,
     if ( exists("intronList", envir=ChIPseekerEnv, inherits=FALSE) ) {
         intronList <- get("intronList", envir=ChIPseekerEnv)
     } else {
-        intronList <- intronsByTranscript(TranscriptDb)
+        intronList <- intronsByTranscript(TxDb)
         assign("intronList", intronList, envir=ChIPseekerEnv)
     }
     annotation <- updateGenomicAnnotation(peaks, intronList, "Intron", annotation)
@@ -61,7 +61,7 @@ getGenomicAnnotation <- function(peaks,
     if ( exists("exonList", envir=ChIPseekerEnv, inherits=FALSE) ) {
         exonList <- get("exonList", envir=ChIPseekerEnv)
     } else {
-        exonList <- exonsBy(TranscriptDb)
+        exonList <- exonsBy(TxDb)
         assign("exonList", exonList, envir=ChIPseekerEnv)
     }
     annotation <- updateGenomicAnnotation(peaks, exonList, "Exon", annotation)
@@ -70,7 +70,7 @@ getGenomicAnnotation <- function(peaks,
     if ( exists("threeUTRList", envir=ChIPseekerEnv, inherits=FALSE) ) {
         threeUTRList <- get("threeUTRList", envir=ChIPseekerEnv)
     } else {
-        threeUTRList <- threeUTRsByTranscript(TranscriptDb)
+        threeUTRList <- threeUTRsByTranscript(TxDb)
         assign("threeUTRList", threeUTRList, envir=ChIPseekerEnv)
     }
     annotation <- updateGenomicAnnotation(peaks, threeUTRList, "3' UTR", annotation)
@@ -79,7 +79,7 @@ getGenomicAnnotation <- function(peaks,
     if ( exists("fiveUTRList", envir=ChIPseekerEnv, inherits=FALSE) ) {
         fiveUTRList <- get("fiveUTRList", envir=ChIPseekerEnv)
     } else {
-        fiveUTRList <- fiveUTRsByTranscript(TranscriptDb)
+        fiveUTRList <- fiveUTRsByTranscript(TxDb)
         assign("fiveUTRList", fiveUTRList, envir=ChIPseekerEnv)
     }
     annotation <- updateGenomicAnnotation(peaks, fiveUTRList, "5' UTR", annotation)
@@ -105,7 +105,7 @@ getGenomicAnnotation <- function(peaks,
         }
     }
 
-    features <- getGene(TranscriptDb, by="gene")
+    features <- getGene(TxDb, by="gene")
 
     ## nearest from gene end
     idx <- follow(peaks, features)

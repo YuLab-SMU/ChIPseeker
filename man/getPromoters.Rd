@@ -3,11 +3,11 @@
 \alias{getPromoters}
 \title{getPromoters}
 \usage{
-getPromoters(TranscriptDb = NULL, upstream = 1000, downstream = 1000,
+getPromoters(TxDb = NULL, upstream = 1000, downstream = 1000,
   by = "gene")
 }
 \arguments{
-\item{TranscriptDb}{TranscriptDb}
+\item{TxDb}{TxDb}
 
 \item{upstream}{upstream from TSS site}
 

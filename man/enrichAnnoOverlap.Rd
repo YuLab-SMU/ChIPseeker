@@ -3,7 +3,7 @@
 \alias{enrichAnnoOverlap}
 \title{enrichAnnoOverlap}
 \usage{
-enrichAnnoOverlap(queryPeak, targetPeak, TranscriptDb = NULL,
+enrichAnnoOverlap(queryPeak, targetPeak, TxDb = NULL,
   pAdjustMethod = "BH", chainFile = NULL)
 }
 \arguments{
@@ -11,7 +11,7 @@ enrichAnnoOverlap(queryPeak, targetPeak, TranscriptDb = NULL,
 
 \item{targetPeak}{target bed file(s) or folder containing bed files}
 
-\item{TranscriptDb}{TranscriptDb}
+\item{TxDb}{TxDb}
 
 \item{pAdjustMethod}{pvalue adjustment method}
 

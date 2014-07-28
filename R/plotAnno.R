@@ -22,7 +22,7 @@
 ##' require(TxDb.Hsapiens.UCSC.hg19.knownGene)
 ##' txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 ##' peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
-##' peakAnno <- annotatePeak(peakfile, TranscriptDb=txdb)
+##' peakAnno <- annotatePeak(peakfile, TxDb=txdb)
 ##' plotAnnoBar(peakAnno)
 ##' @seealso \code{\link{annotatePeak}} \code{\link{plotAnnoPie}}
 ##' @export
@@ -77,7 +77,7 @@ plotAnnoBar <- function(peakAnno,
 ##' ## require(TxDb.Hsapiens.UCSC.hg19.knownGene)
 ##' ## txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 ##' ## peakfile <- system.file("extdata", "sample_peaks.txt", package="chipseeker")
-##' ## peakAnno <- annotatePeak(peakfile, TranscriptDb=txdb)
+##' ## peakAnno <- annotatePeak(peakfile, TxDb=txdb)
 ##' ## plotAnnoPie(peakAnno)
 ##' @seealso \code{\link{annotatePeak}} \code{\link{plotAnnoBar}}
 ##' @export

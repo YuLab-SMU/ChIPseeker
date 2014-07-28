@@ -4,7 +4,7 @@
 \title{getGenomicAnnotation}
 \usage{
 getGenomicAnnotation(peaks, distance, tssRegion = c(-3000, 3000),
-  TranscriptDb)
+  TxDb)
 }
 \arguments{
 \item{peaks}{peaks in GRanges object}
@@ -13,7 +13,7 @@ getGenomicAnnotation(peaks, distance, tssRegion = c(-3000, 3000),
 
 \item{tssRegion}{tssRegion, default is -3kb to +3kb}
 
-\item{TranscriptDb}{TranscriptDb object}
+\item{TxDb}{TxDb object}
 }
 \value{
 character vector

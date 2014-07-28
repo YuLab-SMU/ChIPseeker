@@ -3,7 +3,7 @@
 \alias{plotAvgProf2}
 \title{plotAvgProf}
 \usage{
-plotAvgProf2(peak, weightCol = NULL, TranscriptDb = NULL, upstream = 1000,
+plotAvgProf2(peak, weightCol = NULL, TxDb = NULL, upstream = 1000,
   downstream = 1000, xlab = "Genomic Region (5'->3')",
   ylab = "Read Count Frequency", verbose = TRUE)
 }
@@ -12,7 +12,7 @@ plotAvgProf2(peak, weightCol = NULL, TranscriptDb = NULL, upstream = 1000,
 
 \item{weightCol}{column name of weight}
 
-\item{TranscriptDb}{TranscriptDb object}
+\item{TxDb}{TxDb object}
 
 \item{upstream}{upstream position}
 
