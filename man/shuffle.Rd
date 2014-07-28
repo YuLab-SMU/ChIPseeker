@@ -3,12 +3,12 @@
 \alias{shuffle}
 \title{shuffle}
 \usage{
-shuffle(peak.gr, TranscriptDb)
+shuffle(peak.gr, TxDb)
 }
 \arguments{
 \item{peak.gr}{GRanges object}
 
-\item{TranscriptDb}{TranscriptDb}
+\item{TxDb}{TxDb}
 }
 \value{
 GRanges object

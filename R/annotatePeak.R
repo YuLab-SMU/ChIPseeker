@@ -5,7 +5,7 @@
 ##' @param peak peak file or GRanges object
 ##' @param tssRegion Region Range of TSS 
 ##' @param as one of "data.frame", "GRanges" and "txt"
-##' @param TranscriptDb TranscriptDb object
+##' @param TxDb TxDb object
 ##' @param level one of transcript and gene
 ##' @param assignGenomicAnnotation logical, assign peak genomic annotation or not
 ##' @param annoDb annotation package
@@ -48,7 +48,7 @@
 ##' require(TxDb.Hsapiens.UCSC.hg19.knownGene)
 ##' txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 ##' peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
-##' peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 3000), as="GRanges", TranscriptDb=txdb)
+##' peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 3000), as="GRanges", TxDb=txdb)
 ##' head(peakAnno)
 ##' @seealso \code{\link{plotAnnoBar}} \code{\link{plotAnnoPie}} \code{\link{plotDistToTSS}}
 ##' @export
@@ -56,7 +56,7 @@
 annotatePeak <- function(peak,
                          tssRegion=c(-3000, 3000),
                          as="GRanges",
-                         TranscriptDb=NULL,
+                         TxDb=NULL,
                          level = "transcript",
                          assignGenomicAnnotation=TRUE,
                          annoDb=NULL,
@@ -81,12 +81,12 @@ annotatePeak <- function(peak,
         cat(">> preparing features information...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
 
-    TranscriptDb <- loadTxDb(TranscriptDb)
+    TxDb <- loadTxDb(TxDb)
 
     if (level=="transcript") {
-        features <- getGene(TranscriptDb, by="transcript")
+        features <- getGene(TxDb, by="transcript")
     } else {
-         features <- getGene(TranscriptDb, by="gene")
+         features <- getGene(TxDb, by="gene")
     }
     if (verbose)
         cat(">> identifying nearest features...\t\t",
@@ -105,7 +105,7 @@ annotatePeak <- function(peak,
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     ## annotation
     if (assignGenomicAnnotation == TRUE) {
-        annotation <- getGenomicAnnotation(peak.gr, distance, tssRegion, TranscriptDb)
+        annotation <- getGenomicAnnotation(peak.gr, distance, tssRegion, TxDb)
     } else {
         annotation <- NULL
     }
@@ -138,7 +138,7 @@ annotatePeak <- function(peak,
         if (verbose)
             cat(">> adding gene annotation...\t\t\t",
                 format(Sys.time(), "%Y-%m-%d %X"), "\n")
-        IDType <- metadata(TranscriptDb)[8,2]     
+        IDType <- metadata(TxDb)[8,2]     
         geneAnno <- addGeneAnno(annoDb, peak.gr$geneId, type=IDType)
         if (! all(is.na(geneAnno))) {
             for(cn in colnames(geneAnno)[-1])
@@ -182,7 +182,7 @@ annotatePeak <- function(peak,
     ## chromInfo=getChromInfoFromUCSC(genVer)
     ## sln <- names(seqlengths(peak.gr))
     ## seqlengths(peak.gr) = chromInfo[match(sln, chromInfo[,1]),2]
-    seqlengths(peak.gr) <- seqlengths(TranscriptDb)[names(seqlengths(peak.gr))]
+    seqlengths(peak.gr) <- seqlengths(TxDb)[names(seqlengths(peak.gr))]
     
     if(verbose)
         cat(">> done...\t\t\t\t\t",

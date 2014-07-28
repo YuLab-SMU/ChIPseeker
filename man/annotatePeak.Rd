@@ -4,7 +4,7 @@
 \title{annotatePeak}
 \usage{
 annotatePeak(peak, tssRegion = c(-3000, 3000), as = "GRanges",
-  TranscriptDb = NULL, level = "transcript",
+  TxDb = NULL, level = "transcript",
   assignGenomicAnnotation = TRUE, annoDb = NULL, addFlankGeneInfo = FALSE,
   flankDistance = 5000, verbose = TRUE)
 }
@@ -15,7 +15,7 @@ annotatePeak(peak, tssRegion = c(-3000, 3000), as = "GRanges",
 
 \item{as}{one of "data.frame", "GRanges" and "txt"}
 
-\item{TranscriptDb}{TranscriptDb object}
+\item{TxDb}{TxDb object}
 
 \item{level}{one of transcript and gene}
 
@@ -67,7 +67,7 @@ Annotate peaks
 require(TxDb.Hsapiens.UCSC.hg19.knownGene)
 txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
-peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 3000), as="GRanges", TranscriptDb=txdb)
+peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 3000), as="GRanges", TxDb=txdb)
 head(peakAnno)
 }
 \author{

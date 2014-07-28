@@ -3,7 +3,7 @@
 \alias{enrichPeakOverlap}
 \title{enrichPeakOverlap}
 \usage{
-enrichPeakOverlap(queryPeak, targetPeak, TranscriptDb = NULL,
+enrichPeakOverlap(queryPeak, targetPeak, TxDb = NULL,
   pAdjustMethod = "BH", nShuffle = 1000, chainFile = NULL)
 }
 \arguments{
@@ -11,7 +11,7 @@ enrichPeakOverlap(queryPeak, targetPeak, TranscriptDb = NULL,
 
 \item{targetPeak}{target bed file(s) or folder that containing bed files}
 
-\item{TranscriptDb}{TranscriptDb}
+\item{TxDb}{TxDb}
 
 \item{pAdjustMethod}{pvalue adjustment method}
 

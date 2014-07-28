@@ -1,5 +1,5 @@
 ##' @importFrom AnnotationDbi get
-.ChIPseekerEnv <- function(TranscriptDb) {
+.ChIPseekerEnv <- function(TxDb) {
     if (!exists("ChIPseekerEnv", envir=.GlobalEnv)) {
         assign("ChIPseekerEnv", new.env(), .GlobalEnv)
     }
@@ -7,11 +7,11 @@
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
     if (!exists("TXDB", envir=ChIPseekerEnv, inherits=FALSE)) {
         ## first run
-        assign("TXDB", TranscriptDb, envir=ChIPseekerEnv)
+        assign("TXDB", TxDb, envir=ChIPseekerEnv)
     } else {
         TXDB <- get("TXDB", envir=ChIPseekerEnv)
         m1 <- unlist(metadata(TXDB))
-        m2 <- unlist(metadata(TranscriptDb))
+        m2 <- unlist(metadata(TxDb))
         m1 <- m1[!is.na(m1)]
         m2 <- m2[!is.na(m2)]
 
@@ -19,7 +19,7 @@
             rm(ChIPseekerEnv)
             assign("ChIPseekerEnv", new.env(), .GlobalEnv)
             ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
-            assign("TXDB", TranscriptDb, envir=ChIPseekerEnv)
+            assign("TXDB", TxDb, envir=ChIPseekerEnv)
         }
     }
     
@@ -197,32 +197,32 @@ loadPeak <- function(peak, verbose=FALSE) {
 }
 
 ##' @importFrom TxDb.Hsapiens.UCSC.hg19.knownGene TxDb.Hsapiens.UCSC.hg19.knownGene
-loadTxDb <- function(TranscriptDb) {
-    if ( is.null(TranscriptDb) ) {
-        TranscriptDb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+loadTxDb <- function(TxDb) {
+    if ( is.null(TxDb) ) {
+        TxDb <- TxDb.Hsapiens.UCSC.hg19.knownGene
     }
-    return(TranscriptDb)
+    return(TxDb)
 }
 
 ##' @importFrom AnnotationDbi get
 ##' @importFrom GenomicFeatures genes
 ##' @importFrom GenomicFeatures transcriptsBy
-getGene <- function(TranscriptDb, by="gene") {
-    .ChIPseekerEnv(TranscriptDb)
+getGene <- function(TxDb, by="gene") {
+    .ChIPseekerEnv(TxDb)
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
 
     if (by == "gene") {
         if ( exists("features", envir=ChIPseekerEnv, inherits=FALSE) ) {
             features <- get("features", envir=ChIPseekerEnv)
         } else {
-            features <- genes(TranscriptDb)
+            features <- genes(TxDb)
             assign("features", features, envir=ChIPseekerEnv)
         }
     } else {
         if ( exists("Transcripts", envir=ChIPseekerEnv, inherits=FALSE) ) {
             features <- get("Transcripts", envir=ChIPseekerEnv)
         } else {
-            features <- transcriptsBy(TranscriptDb)
+            features <- transcriptsBy(TxDb)
             features <- unlist(features)
             assign("Transcripts", features, envir=ChIPseekerEnv)
         }
