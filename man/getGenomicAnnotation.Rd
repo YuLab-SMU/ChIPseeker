@@ -3,8 +3,7 @@
 \alias{getGenomicAnnotation}
 \title{getGenomicAnnotation}
 \usage{
-getGenomicAnnotation(peaks, distance, tssRegion = c(-3000, 3000),
-  TxDb)
+getGenomicAnnotation(peaks, distance, tssRegion = c(-3000, 3000), TxDb)
 }
 \arguments{
 \item{peaks}{peaks in GRanges object}
