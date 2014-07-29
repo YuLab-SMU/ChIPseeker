@@ -4,9 +4,9 @@
 \title{annotatePeak}
 \usage{
 annotatePeak(peak, tssRegion = c(-3000, 3000), as = "GRanges",
-  TxDb = NULL, level = "transcript",
-  assignGenomicAnnotation = TRUE, annoDb = NULL, addFlankGeneInfo = FALSE,
-  flankDistance = 5000, verbose = TRUE)
+  TxDb = NULL, level = "transcript", assignGenomicAnnotation = TRUE,
+  annoDb = NULL, addFlankGeneInfo = FALSE, flankDistance = 5000,
+  verbose = TRUE)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}

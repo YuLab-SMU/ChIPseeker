@@ -3,8 +3,8 @@
 \alias{enrichPeakOverlap}
 \title{enrichPeakOverlap}
 \usage{
-enrichPeakOverlap(queryPeak, targetPeak, TxDb = NULL,
-  pAdjustMethod = "BH", nShuffle = 1000, chainFile = NULL)
+enrichPeakOverlap(queryPeak, targetPeak, TxDb = NULL, pAdjustMethod = "BH",
+  nShuffle = 1000, chainFile = NULL)
 }
 \arguments{
 \item{queryPeak}{query bed file}
