@@ -100,6 +100,9 @@ annotatePeak <- function(peak,
     ## distance
     distance <- idx.dist$distance
 
+    ## update peak, remove un-map peak if exists.
+    peak.gr <- idx.dist$peak
+
     if (verbose)
         cat(">> assigning genomic annotation...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")

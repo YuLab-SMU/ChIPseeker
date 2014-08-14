@@ -11,7 +11,7 @@ getNearestFeatureIndicesAndDistances(peaks, features)
 \item{features}{features in GRanges}
 }
 \value{
-data.frame
+list
 }
 \description{
 get index of features that closest to peak and calculate distance
