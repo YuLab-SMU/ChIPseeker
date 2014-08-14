@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.1.14
+------------------------
+ o bug fixed in plotDistToTSS <2014-08-14, Thu>
+
 CHANGES IN VERSION 1.1.13
 ------------------------
  o change TranscriptDb to TxDb according to GenomicFeatures <2014-07-29, Tue>

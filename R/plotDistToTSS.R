@@ -65,7 +65,7 @@ plotDistToTSS <- function(peakAnno,
     limit <- c(0, 1000, 3000, 5000, 10000, 100000)
     lbs <- c("0-1kb", "1-3kb", "3-5kb", "5-10kb", "10-100kb", ">100kb")
     for (i in 1:length(limit)) {
-	if (i < length(limit)) {
+        if (i < length(limit)) {
             peakDist$Feature[ abs(peakDist[, distanceColumn]) >= limit[i] & abs(peakDist[,distanceColumn]) < limit[i+1] ] <- lbs[i]
 	} else {
             peakDist$Feature[abs(peakDist[,distanceColumn]) > limit[i]] <- lbs[i]
@@ -90,6 +90,15 @@ plotDistToTSS <- function(peakAnno,
             peakDist$freq[idx] <- peakDist$freq[idx]/sum(peakDist$freq[idx])
         }
         peakDist$freq = peakDist$freq * 100
+
+        zeroDist <- peakDist[peakDist$sign == 0,]
+        zeroDist$freq <- zeroDist$freq/2
+        zeroDist$sign <- -1
+        peakDist[peakDist$sign == 0,] <- zeroDist
+        zeroDist$sign <- 1
+        peakDist <- rbind(peakDist, zeroDist)        
+        peakDist <- ddply(peakDist, c(categoryColumn, "Feature", "sign"), summarise, freq=sum(freq))
+          
         totalFreq <- ddply(peakDist, c(categoryColumn, "sign"), summarise, total=sum(freq))
     }
 
