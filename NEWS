@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.1.15
+------------------------
+ o remove un-map peak to prevent fail in peak annotation <2014-08-14, Thu>
+
 CHANGES IN VERSION 1.1.14
 ------------------------
  o bug fixed in plotDistToTSS <2014-08-14, Thu>
