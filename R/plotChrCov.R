@@ -36,10 +36,12 @@ plotChrCov <- function(peak, weightCol=NULL,
     
     tm <- getChrCov(peak.gr=peak.gr, weightCol=weightCol)
     
-    pos <- cnt <- chr <- NULL
-    p <- ggplot(tm, aes(pos,cnt))
-    p <- p + geom_segment(aes(x=pos, y=0, xend=pos, yend=cnt))
-    
+    pos <- cnt <- chr <- start <- end <- value <- NULL
+    ## p <- ggplot(tm, aes(pos,cnt))
+    ## p <- p + geom_segment(aes(x=pos, y=0, xend=pos, yend=cnt))
+    p <- ggplot(tm, aes(start, value))
+    p <- p + geom_segment(aes(x=start, y=0, xend=start, yend= value))
+    ## p <- p + geom_segment(aes(x=end, y=0, xend=end, yend= value))
     p <- p + facet_grid(chr ~., scales="free")
     p <- p + theme_classic()
     p <- p + xlab(xlab) + ylab(ylab) + ggtitle(title)
@@ -57,6 +59,8 @@ plotChrCov <- function(peak, weightCol=NULL,
 ##' @importFrom IRanges Views
 ##' @importFrom IRanges viewApply
 ##' @importFrom IRanges as.vector
+##' @importFrom IRanges slice
+##' @importFrom S4Vectors runValue
 ##' @importFrom Matrix Matrix
 ##' @importFrom Matrix summary
 getChrCov <- function(peak.gr, weightCol) {
@@ -67,41 +71,56 @@ getChrCov <- function(peak.gr, weightCol) {
         weight <- elementMetadata(peak.gr)[[weightCol]]
         peak.cov <- coverage(peak.gr, weight=weight)
     }
-    seqLen <- lapply(peak.cov, length)
-    seqLen <- seqLen[seqLen != 0]
-    peak.cov <- peak.cov[seqLen != 0]
-    chrs <- GRanges(seqnames=names(seqLen),
-                    ranges=IRanges(rep(1, length(seqLen)),unlist(seqLen)),
-                    strand="*")
+
+    cov <- lapply(peak.cov, slice, lower=1)
+
+    ldf <- lapply(1:length(cov), function(i) {
+        x <- cov[[i]]
+        data.frame(chr=names(cov[i]),
+                   start=start(x),
+                   end = end(x),
+                   value = as.numeric(runValue(x)))
+    })
     
-    peakView <- Views(peak.cov, as(chrs, "RangesList"))
-    tagMatrixList <- lapply(peakView, function(x) t(viewApply(x, as.vector)))
+    df <- do.call("rbind", ldf)
+    chr.sorted <- sortChrName(as.character(unique(df$chr)))
+    df$chr <- factor(df$chr, levels=chr.sorted)
+    return(df)
+    
+    ## seqLen <- lapply(peak.cov, length)
+    ## seqLen <- seqLen[seqLen != 0]
+    ## peak.cov <- peak.cov[seqLen != 0]
+    ## chrs <- GRanges(seqnames=names(seqLen),
+    ##                 ranges=IRanges(rep(1, length(seqLen)),unlist(seqLen)),
+    ##                 strand="*")
+    
+    ## peakView <- Views(peak.cov, as(chrs, "RangesList"))
+    ## tagMatrixList <- lapply(peakView, function(x) t(viewApply(x, as.vector)))
 
-    tm <- list()
-    nn <- names(tagMatrixList)
-    idx <- unlist(sapply(tagMatrixList, ncol)) != 0
-    tagMatrixList <- tagMatrixList[idx]
-    for (i in 1:length(tagMatrixList)) {
-        cat(">> processing chromosome ", nn[i])
-        if (nchar(nn[i]) > 4) {
-            cat("\t\t")
-        } else {
-            cat("\t")
-        }
-        cat(format(Sys.time(), "%Y-%m-%d %X"), "\n")
-        M <- summary(Matrix(tagMatrixList[[i]], sparse=TRUE))
-        tm[[i]] <- data.frame(chr=nn[i],
-                              pos=M$j,
-                              cnt=M$x)
-    }
+    ## tm <- list()
+    ## nn <- names(tagMatrixList)
+    ## idx <- unlist(sapply(tagMatrixList, ncol)) != 0
+    ## tagMatrixList <- tagMatrixList[idx]
+    ## for (i in 1:length(tagMatrixList)) {
+    ##     cat(">> processing chromosome ", nn[i])
+    ##     if (nchar(nn[i]) > 4) {
+    ##         cat("\t\t")
+    ##     } else {
+    ##         cat("\t")
+    ##     }
+    ##     cat(format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    ##     M <- summary(Matrix(tagMatrixList[[i]], sparse=TRUE))
+    ##     tm[[i]] <- data.frame(chr=nn[i],
+    ##                           pos=M$j,
+    ##                           cnt=M$x)
+    ## }
 
-    tmd <- do.call("rbind", tm)
+    ## tmd <- do.call("rbind", tm)
 
-    ## sort chromosome name
-    chr.sorted <- sortChrName(names(seqLen))
-    tmd$chr <- factor(tmd$chr, levels=chr.sorted)
-  
-    return(tmd)
+    ## ## sort chromosome name
+    ## chr.sorted <- sortChrName(names(seqLen))
+    ## tmd$chr <- factor(tmd$chr, levels=chr.sorted)
+    ## return(tmd)
 }
 
 sortChrName <- function(chr.name) {
