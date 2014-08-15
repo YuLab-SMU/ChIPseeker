@@ -1,6 +1,10 @@
+CHANGES IN VERSION 1.1.16
+------------------------
+ o optimize plotChrCov, running time reduce drastically <2014-08-15, Fri>
+
 CHANGES IN VERSION 1.1.15
 ------------------------
- o remove un-map peak to prevent fail in peak annotation <2014-08-14, Thu>
+ o remove un-mappable peak to prevent fail in peak annotation <2014-08-14, Thu>
 
 CHANGES IN VERSION 1.1.14
 ------------------------
