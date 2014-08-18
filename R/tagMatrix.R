@@ -88,52 +88,52 @@ getTagMatrix <- function(peak, weightCol=NULL, windows) {
         stop("width of windows should be equal...")
     }
 
-    if (!exists("ChIPseekerEnv", envir = .GlobalEnv)) {
-        assign("ChIPseekerEnv", new.env(), .GlobalEnv)
-    }
-    ChIPseekerEnv <- get("ChIPseekerEnv", envir = .GlobalEnv)
+    ## if (!exists("ChIPseekerEnv", envir = .GlobalEnv)) {
+    ##     assign("ChIPseekerEnv", new.env(), .GlobalEnv)
+    ## }
+    ## ChIPseekerEnv <- get("ChIPseekerEnv", envir = .GlobalEnv)
     
-    if (exists("peak", envir=ChIPseekerEnv, inherits=FALSE) &&
-        exists("promoters", envir=ChIPseekerEnv, inherits=FALSE) &&
-        exists("weightCol", envir=ChIPseekerEnv, inherits=FALSE) &&
-        exists("tagMatrix", envir=ChIPseekerEnv, inherits=FALSE) ) {
+    ## if (exists("peak", envir=ChIPseekerEnv, inherits=FALSE) &&
+    ##     exists("promoters", envir=ChIPseekerEnv, inherits=FALSE) &&
+    ##     exists("weightCol", envir=ChIPseekerEnv, inherits=FALSE) &&
+    ##     exists("tagMatrix", envir=ChIPseekerEnv, inherits=FALSE) ) {
 
-        pp <- get("peak", envir=ChIPseekerEnv)
-        promoters <- get("promoters", envir=ChIPseekerEnv)
-        w <- get("weightCol", envir=ChIPseekerEnv)
+    ##     pp <- get("peak", envir=ChIPseekerEnv)
+    ##     promoters <- get("promoters", envir=ChIPseekerEnv)
+    ##     w <- get("weightCol", envir=ChIPseekerEnv)
         
-        if (all(pp == peak)) {
-            if (all(windows == promoters)) {
-                if ( (is.null(w) && is.null(weightCol)) ||
-                    (!is.null(w) && !is.null(weightCol) && w == weightCol)) {
-                    tagMatrix <- get("tagMatrix", envir=ChIPseekerEnv)
-                    return(tagMatrix)
-                } else {
-                    assign("weightCol", weightCol, envir=ChIPseekerEnv)
-                }
-            } else {
-                assign("promoters", windows)
-                ## make sure it is not conflict with getPromoters
-                if ( exists("upstream", envir=ChIPseekerEnv, inherits=FALSE))
-                    rm("upstream", envir=ChIPseekerEnv)
-            }
-        } else {
-            assign("peak", peak, envir=ChIPseekerEnv)
-        }
+    ##     if (all(pp == peak)) {
+    ##         if (all(windows == promoters)) {
+    ##             if ( (is.null(w) && is.null(weightCol)) ||
+    ##                 (!is.null(w) && !is.null(weightCol) && w == weightCol)) {
+    ##                 tagMatrix <- get("tagMatrix", envir=ChIPseekerEnv)
+    ##                 return(tagMatrix)
+    ##             } else {
+    ##                 assign("weightCol", weightCol, envir=ChIPseekerEnv)
+    ##             }
+    ##         } else {
+    ##             assign("promoters", windows)
+    ##             ## make sure it is not conflict with getPromoters
+    ##             if ( exists("upstream", envir=ChIPseekerEnv, inherits=FALSE))
+    ##                 rm("upstream", envir=ChIPseekerEnv)
+    ##         }
+    ##     } else {
+    ##         assign("peak", peak, envir=ChIPseekerEnv)
+    ##     }
         
-    }
+    ## }
 
-    if ( !exists("peak", envir=ChIPseekerEnv, inherits=FALSE)) {
-        assign("peak", peak, envir=ChIPseekerEnv)
-    }
+    ## if ( !exists("peak", envir=ChIPseekerEnv, inherits=FALSE)) {
+    ##     assign("peak", peak, envir=ChIPseekerEnv)
+    ## }
 
-    if ( !exists("promoters", envir=ChIPseekerEnv, inherits=FALSE)) {
-        assign("promoters", windows, envir=ChIPseekerEnv)
-    }
+    ## if ( !exists("promoters", envir=ChIPseekerEnv, inherits=FALSE)) {
+    ##     assign("promoters", windows, envir=ChIPseekerEnv)
+    ## }
 
-    if (!exists("weightCol", envir=ChIPseekerEnv, inherits=FALSE)) {
-        assign("weightCol", weightCol, envir=ChIPseekerEnv)
-    }
+    ## if (!exists("weightCol", envir=ChIPseekerEnv, inherits=FALSE)) {
+    ##     assign("weightCol", weightCol, envir=ChIPseekerEnv)
+    ## }
     if (is.null(weightCol)) {
         peak.cov <- coverage(peak.gr)
     } else {
@@ -165,7 +165,7 @@ getTagMatrix <- function(peak, weightCol=NULL, windows) {
     minus.idx <- which(as.character(strand(windows)) == "-")
     tagMatrix[minus.idx,] <- tagMatrix[minus.idx, ncol(tagMatrix):1]
     tagMatrix <- tagMatrix[rowSums(tagMatrix)!=0,]
-    assign("tagMatrix", tagMatrix, envir=ChIPseekerEnv)
+    ## assign("tagMatrix", tagMatrix, envir=ChIPseekerEnv)
     return(tagMatrix)
 }
 
