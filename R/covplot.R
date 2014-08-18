@@ -23,9 +23,44 @@
 ##' @export
 ##' @author G Yu
 plotChrCov <- function(peak, weightCol=NULL,
-                       xlab = "Chromosome Size (bp)",
-                       ylab = "",
-                       title = "ChIP Peaks over Chromosomes") {
+                    xlab = "Chromosome Size (bp)",
+                    ylab = "",
+                    title = "ChIP Peaks over Chromosomes"){
+    .Deprecated("covplot")
+}
+
+
+##' plot peak coverage
+##'
+##' 
+##' @title covplot
+##' @param peak peak file or GRanges object
+##' @param weightCol weight column of peak
+##' @param xlab xlab
+##' @param ylab ylab
+##' @param title title
+##' @param chrs selected chromosomes to plot, all chromosomes by default
+##' @param xlim ranges to plot, default is whole chromosome
+##' @return ggplot2 object
+##' @importFrom ggplot2 ggplot
+##' @importFrom ggplot2 geom_segment
+##' @importFrom ggplot2 facet_grid
+##' @importFrom ggplot2 theme
+##' @importFrom ggplot2 theme_classic
+##' @importFrom ggplot2 element_text
+##' @importFrom ggplot2 xlab
+##' @importFrom ggplot2 ylab
+##' @importFrom ggplot2 ggtitle
+##' @importFrom plyr ldply
+##' @importFrom GenomeInfoDb seqlengths
+##' @export
+##' @author G Yu
+covplot <- function(peak, weightCol=NULL,
+                    xlab = "Chromosome Size (bp)",
+                    ylab = "",
+                    title = "ChIP Peaks over Chromosomes",
+                    chrs = NULL,
+                    xlim = NULL) {
     if (is(peak, "GRanges")) {
         peak.gr <- peak
     } else if (file.exists(peak)) {
@@ -34,20 +69,31 @@ plotChrCov <- function(peak, weightCol=NULL,
         stop("peak should be a GRanges object or a peak file...")
     }
     
-    tm <- getChrCov(peak.gr=peak.gr, weightCol=weightCol)
+    tm <- getChrCov(peak.gr=peak.gr, weightCol=weightCol, chrs, xlim)
+    bin <- floor((max(tm$end) - min(tm$start))/10000)
+    if (bin < 1) {
+        bin <- 1
+    }
     
-    pos <- cnt <- chr <- start <- end <- value <- NULL
-    ## p <- ggplot(tm, aes(pos,cnt))
-    ## p <- p + geom_segment(aes(x=pos, y=0, xend=pos, yend=cnt))
-    p <- ggplot(tm, aes(start, value))
-    p <- p + geom_segment(aes(x=start, y=0, xend=start, yend= value))
-    ## p <- p + geom_segment(aes(x=end, y=0, xend=end, yend= value))
-    p <- p + facet_grid(chr ~., scales="free")
+    tml <- lapply(1:nrow(tm), function(i) {
+        x <- tm[i,]
+        data.frame(chr=x$chr, pos=seq(x$start, x$end, by=bin), value=x$value)
+    })
+    
+    tm2 <- do.call("rbind", tml)
+    
+    pos <- chr <- value <- NULL
+    
+    p <- ggplot(tm2, aes(pos, value))
+    p <- p + geom_segment(aes(x=pos, y=0, xend=pos, yend= value))
+    if(length(unique(tm$chr)) > 1) {
+        p <- p + facet_grid(chr ~., scales="free")
+    }
     p <- p + theme_classic()
     p <- p + xlab(xlab) + ylab(ylab) + ggtitle(title)
-    
+    p <- p + scale_y_continuous(expand=c(0,0))
     p <- p + theme(strip.text.y=element_text(angle=360))
-
+    
     return(p)
 }
 
@@ -63,7 +109,7 @@ plotChrCov <- function(peak, weightCol=NULL,
 ##' @importFrom S4Vectors runValue
 ##' @importFrom Matrix Matrix
 ##' @importFrom Matrix summary
-getChrCov <- function(peak.gr, weightCol) {
+getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
 
     if ( is.null(weightCol)) {
         peak.cov <- coverage(peak.gr)
@@ -85,6 +131,12 @@ getChrCov <- function(peak.gr, weightCol) {
     df <- do.call("rbind", ldf)
     chr.sorted <- sortChrName(as.character(unique(df$chr)))
     df$chr <- factor(df$chr, levels=chr.sorted)
+    if (!is.null(chrs) && !is.na(chrs) && chrs %in% chr.sorted) {
+        df <- df[df$chr %in% chrs, ]
+    }
+    if (!is.null(xlim) && !is.na(xlim) && is.numeric(xlim) && length(xlim) == 2) {
+        df <- df[df$start >= xlim[1] & df$end <= xlim[2],]
+    }
     return(df)
     
     ## seqLen <- lapply(peak.cov, length)

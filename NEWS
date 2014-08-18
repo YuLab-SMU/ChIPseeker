@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.1.17
+------------------------
+ o deprecate plotChrCov to new function covplot <2014-08-18, Mon>
+ o add new paramter chrs and xlim to covplot <2014-08-18, Mon>
+
 CHANGES IN VERSION 1.1.16
 ------------------------
  o optimize plotChrCov, running time reduce drastically <2014-08-15, Fri>
