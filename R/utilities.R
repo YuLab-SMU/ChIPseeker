@@ -211,6 +211,8 @@ getGene <- function(TxDb, by="gene") {
     .ChIPseekerEnv(TxDb)
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
 
+    by <- match.arg(by, c("gene", "transcript"))
+    
     if (by == "gene") {
         if ( exists("features", envir=ChIPseekerEnv, inherits=FALSE) ) {
             features <- get("features", envir=ChIPseekerEnv)

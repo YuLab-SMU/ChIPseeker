@@ -15,6 +15,7 @@ updateGenomicAnnotation <- function(peaks, genomicRegion, type, annotation) {
 ##' @param distance distance of peak to TSS
 ##' @param tssRegion tssRegion, default is -3kb to +3kb
 ##' @param TxDb TxDb object
+##' @param level one of gene or transcript
 ##' @importFrom GenomicFeatures intronsByTranscript
 ##' @importFrom GenomicFeatures threeUTRsByTranscript
 ##' @importFrom GenomicFeatures fiveUTRsByTranscript
@@ -24,7 +25,8 @@ updateGenomicAnnotation <- function(peaks, genomicRegion, type, annotation) {
 getGenomicAnnotation <- function(peaks,
                                  distance,
                                  tssRegion=c(-3000, 3000),
-                                 TxDb
+                                 TxDb,
+                                 level
                                  ) {
     
     ##
@@ -105,7 +107,8 @@ getGenomicAnnotation <- function(peaks,
         }
     }
 
-    features <- getGene(TxDb, by="transcripts")
+ 
+    features <- getGene(TxDb, by=level)
 
     ## nearest from gene end
     idx <- follow(peaks, features)
