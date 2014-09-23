@@ -105,7 +105,7 @@ getGenomicAnnotation <- function(peaks,
         }
     }
 
-    features <- getGene(TxDb, by="gene")
+    features <- getGene(TxDb, by="transcripts")
 
     ## nearest from gene end
     idx <- follow(peaks, features)
