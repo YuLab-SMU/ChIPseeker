@@ -108,7 +108,7 @@ annotatePeak <- function(peak,
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     ## annotation
     if (assignGenomicAnnotation == TRUE) {
-        annotation <- getGenomicAnnotation(peak.gr, distance, tssRegion, TxDb)
+        annotation <- getGenomicAnnotation(peak.gr, distance, tssRegion, TxDb, level)
     } else {
         annotation <- NULL
     }
