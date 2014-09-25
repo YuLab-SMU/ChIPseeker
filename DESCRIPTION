@@ -40,6 +40,7 @@ Suggests:
     GOSemSim,
     org.Hs.eg.db,
     knitr
+URL: https://github.com/GuangchuangYu/ChIPseeker
 VignetteBuilder: knitr
 License: Artistic-2.0
 biocViews: Annotation, ChIPSeq, Software, Visualization, MultipleComparison
