@@ -1,9 +1,11 @@
-updateGenomicAnnotation <- function(peaks, genomicRegion, type, annotation) {
+updateGenomicAnnotation <- function(peaks, genomicRegion, type, anno) {
     hits <- getGenomicAnnotation.internal(peaks, genomicRegion, type)
     if (length(hits) == 2) {
-        annotation[hits$queryIndex] <- hits$annotation
+        hitIndex <- hits$queryIndex
+        anno[["annotation"]][hitIndex] <- hits$annotation
+        anno[["detailGenomicAnnotation"]][hitIndex, type] <- TRUE
     }
-    return(annotation)
+    return(anno)
  }         
 
 
@@ -42,13 +44,30 @@ getGenomicAnnotation <- function(peaks,
     ##
 
 
+
     .ChIPseekerEnv(TxDb)
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
     
             
     annotation <- rep(NA, length(distance))
+
+    flag <- rep(FALSE, length(distance))
+    detailGenomicAnnotation <- data.frame(
+        genic=flag,
+        Intergenic=flag,
+        Promoter=flag,
+        fiveUTR=flag,
+        threeUTR=flag,
+        Exon=flag,
+        Intron=flag,
+        downstream=flag,
+        distal_intergenic=flag)
+        
     ## Intergenic
     annotation[is.na(annotation)] <- "Intergenic"
+
+    anno <- list(annotation=annotation,
+                 detailGenomicAnnotation=detailGenomicAnnotation)
     
     ## Introns
     if ( exists("intronList", envir=ChIPseekerEnv, inherits=FALSE) ) {
@@ -57,7 +76,7 @@ getGenomicAnnotation <- function(peaks,
         intronList <- intronsByTranscript(TxDb)
         assign("intronList", intronList, envir=ChIPseekerEnv)
     }
-    annotation <- updateGenomicAnnotation(peaks, intronList, "Intron", annotation)
+    anno <- updateGenomicAnnotation(peaks, intronList, "Intron", anno)
 
     ## Exon
     if ( exists("exonList", envir=ChIPseekerEnv, inherits=FALSE) ) {
@@ -66,8 +85,12 @@ getGenomicAnnotation <- function(peaks,
         exonList <- exonsBy(TxDb)
         assign("exonList", exonList, envir=ChIPseekerEnv)
     }
-    annotation <- updateGenomicAnnotation(peaks, exonList, "Exon", annotation)
+    anno <- updateGenomicAnnotation(peaks, exonList, "Exon", anno)
 
+    intergenicIndex <- anno[["annotation"]] == "Intergenic"
+    anno[["detailGenomicAnnotation"]][intergenicIndex, "Intergenic"] <- TRUE
+    anno[["detailGenomicAnnotation"]][!intergenicIndex, "genic"] <- TRUE
+    
     ## 3' UTR Exons
     if ( exists("threeUTRList", envir=ChIPseekerEnv, inherits=FALSE) ) {
         threeUTRList <- get("threeUTRList", envir=ChIPseekerEnv)
@@ -75,7 +98,7 @@ getGenomicAnnotation <- function(peaks,
         threeUTRList <- threeUTRsByTranscript(TxDb)
         assign("threeUTRList", threeUTRList, envir=ChIPseekerEnv)
     }
-    annotation <- updateGenomicAnnotation(peaks, threeUTRList, "3' UTR", annotation)
+    anno <- updateGenomicAnnotation(peaks, threeUTRList, "threeUTR", anno)
     
     ## 5' UTR Exons
     if ( exists("fiveUTRList", envir=ChIPseekerEnv, inherits=FALSE) ) {
@@ -84,12 +107,16 @@ getGenomicAnnotation <- function(peaks,
         fiveUTRList <- fiveUTRsByTranscript(TxDb)
         assign("fiveUTRList", fiveUTRList, envir=ChIPseekerEnv)
     }
-    annotation <- updateGenomicAnnotation(peaks, fiveUTRList, "5' UTR", annotation)
-    
-    ## TSS
-    annotation[distance >= tssRegion[1] &
-               distance <= tssRegion[2] ] <- "Promoter"
+    anno <- updateGenomicAnnotation(peaks, fiveUTRList, "fiveUTR", anno)
 
+    annotation <- anno[["annotation"]]
+    detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
+
+    ## TSS
+    tssIndex <- distance >= tssRegion[1] & distance <= tssRegion[2] 
+    annotation[tssIndex] <- "Promoter"
+    detailGenomicAnnotation[tssIndex, "Promoter"] <- TRUE
+    
     pm <- max(abs(tssRegion))
     if (pm/1000 >= 2) {
         dd <- seq(1:ceiling(pm/1000))*1000
@@ -128,7 +155,11 @@ getGenomicAnnotation <- function(peaks,
         }
     }
     annotation[annotation == "Intergenic"] = "Distal Intergenic"
-    return(annotation)
+
+    downstreamIndex <- dd > 0 & dd < pm
+    detailGenomicAnnotation[downstreamIndex, "downstream"] <- TRUE
+    detailGenomicAnnotation[annotation == "Distal Intergenic", "distal_intergenic"] <- TRUE
+    return(list(annotation=annotation, detailGenomicAnnotation=detailGenomicAnnotation))
 }
 
 
@@ -176,6 +207,10 @@ getGenomicAnnotation.internal <- function(peaks, genomicRegion, type){
     } else if (type == "Exon") {
         anno <- paste(type, " (", geneID, ", exon ", hits$exon_rank,
                       " of ", GRegionLen[geneID], ")", sep="")
+    } else if (type == "fiveUTR") {
+        anno <- "5' UTR"
+    } else if (type == "threeUTR") {
+        anno <- "3' UTR"
     } else {
         anno <- type
     }

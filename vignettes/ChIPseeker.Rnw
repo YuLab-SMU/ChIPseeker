@@ -72,8 +72,8 @@ library(org.Hs.eg.db)
 library(GenomicFeatures)
 library(GenomicRanges)
 library(knitr)
-opts_chunk$set(tidy=TRUE, 
-               tidy.opts=list(keep.blank.line=FALSE, width.cutoff=50),
+opts_chunk$set(tidy_source=TRUE, 
+               tidy.opts=list(blank=FALSE, width.cutoff=50),
                out.truncate=80,
                out.lines=6,
                cache=TRUE,
@@ -121,7 +121,8 @@ txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 require(clusterProfiler)
 @ 
 \section{ChIP profiling}
-The datasets CBX6 and CBX7 in this vignettes were downloaded from GEO (GSE40740) \cite{pemberton_genome-wide_2014} while ARmo\_0M, ARmo\_1nM and ARmo\_100nM were downloaded from GEO (GSE48308) \cite{urbanucci_overexpression_2012} . \Rpackage{ChIPseeker} provides \Rfunction{readPeakFile} to load the peak and store in \Robject{GRanges} object. Most of the functions in \Rpackage{ChIPseeker} can accept input in peak file (bed format) or \Robject{GRanges} object. 
+The datasets CBX6 and CBX7 in this vignettes were downloaded from GEO (GSE40740) \cite{pemberton_genome-wide_2014} while ARmo\_0M, ARmo\_1nM and ARmo\_100nM were downloaded from GEO (GSE48308) \cite{urbanucci_overexpression_2012} . \Rpackage{ChIPseeker} provides \Rfunction{readPeakFile} to load the peak and store in \Robject{GRanges} object. 
+%%Most of the functions in \Rpackage{ChIPseeker} can accept input in peak file (bed format) or \Robject{GRanges} object. 
 <<samplefiles>>=
 files <- getSampleFiles()
 print(files)
@@ -199,12 +200,12 @@ plotAvgProf2(files[[4]], TxDb=txdb, upstream=3000, downstream=3000, xlab="Genomi
 
 \section{Peak Annotation}
 <<peak annotation>>=
-peakAnno <- annotatePeak(files[[4]], tssRegion=c(-3000, 3000), as="GRanges", 
+peakAnno <- annotatePeak(files[[4]], tssRegion=c(-3000, 3000), 
                          TxDb=txdb, annoDb="org.Hs.eg.db")
-head(peakAnno)
+peakAnno
 @ 
 
-Peak Annotation is performed by \Rfunction{annotatePeak}. User can define TSS (transcription start site) region, by default TSS is defined from -3kb to +3kb. The argument \Rparameter{as} can be one of "GRanges", "data.fram" and "txt" to specify the output format return by \Rfunction{annotatePeak}. If \Rparameter{as} is set to "txt", the output will save to a TXT file with name suffix by anno.txt.
+Peak Annotation is performed by \Rfunction{annotatePeak}. User can define TSS (transcription start site) region, by default TSS is defined from -3kb to +3kb. The output of \Rfunction{annotatePeak} is \Robject{csAnno} instance. \Rpackage{ChIPseeker} provides \Rfunction{as.GRanges} to convert \Robject{csAnno} to \Robject{GRanges} instance, and \Rfunction{as.data.frame} to convert \Robject{csAnno} to \Robject{data.frame} which can be exported to file by \Rfunction{write.table}.
 \\
 \\
 \Robject{TxDb} object contained transcript-related features of a particular genome. Bioconductor provides several package that containing \Robject{TxDb} object of model organisms with multiple commonly used genome version, for instance \Rpackage{TxDb.Hsapiens.UCSC.hg19.knownGene} and \Rpackage{TxDb.Hsapiens.UCSC.hg18.knownGene} for human genome hg19 and hg18, \Rpackage{TxDb.Mmusculus.UCSC.mm10.knownGene} and \Rpackage{TxDb.Mmusculus.UCSC.mm9.knownGene} for mouse genome mm10 and mm9, etc. User can also prepare their own \Robject{TxDb} object by retrieving information from UCSC Genome Bioinformatics and BioMart data resources by R function \Rfunction{makeTranscriptDbFromBiomart} and \Rfunction{makeTranscriptDbFromUCSC}. TxDb object should be passed for peak annotation. 
@@ -242,6 +243,13 @@ plotAnnoPie(peakAnno)
 plotAnnoBar(peakAnno)
 @ 
 
+Since some annotation overlap, user may interested to view the full annotation with their overlap, which can be partially resolved by \Rfunction{vennpie} function.
+
+<<vennpie, fig.cap="Genomic Annotation by vennpie", fig.align="center", fig.height=4, fig.width=10, out.width="0.8\\textwidth", fig.pos="h">>= 
+vennpie(peakAnno)
+@ 
+
+
 \subsection{Visualize distribution of TF-binding loci relative to TSS}
 The distance from the peak (binding site) to the TSS of the nearest gene is calculated by \Rfunction{annotatePeak} and reported in the output. We provide \Rfunction{plotDistToTSS} to calculate the percentage of binding sites upstream and downstream from the TSS of the nearest genes, and visualize the distribution. 
 <<barplot_tss, fig.cap="Distribution of Binding Sites", fig.align="center", fig.height=2, fig.width=6, out.width="0.8\\textwidth", fig.pos="h">>= 
@@ -256,7 +264,7 @@ Enrichment analysis is a widely used approach to identify biological themes. I h
 
 <<enrichment>>= 
 require(clusterProfiler)
-bp <- enrichGO(unlist(peakAnno$geneId), ont="BP", readable=TRUE)
+bp <- enrichGO(as.data.frame(peakAnno)$geneId, ont="BP", readable=TRUE)
 head(summary(bp))
 @ 
 
@@ -323,7 +331,7 @@ As shown in section 4, the annotated genes can analyzed by \Rpackage{clusterProf
 The \Rpackage{clusterProfiler} package provide \Rfunction{compareCluster} function for comparing biological themes among gene clusters, and can be easily adopted to compare different ChIP peak experiments.
 
 <<compareCluster, eval=FALSE>>=
-genes = lapply(peakAnnoList, function(i) i$geneId)
+genes = lapply(peakAnnoList, function(i) as.data.frame(i)$geneId)
 names(genes) = sub("_", "\n", names(genes))
 compGO <- compareCluster(geneCluster=genes, fun="enrichGO", ont="MF", organism="human", pvalueCutoff=0.05, pAdjustMethod="BH")
 plot(compGO, showCategory=20, title="Molecular Function Enrichment")
@@ -345,7 +353,7 @@ User may want to compare the overlap peaks of replicate experiments or from diff
 \Rfunction{vennplot} accept a list of object, can be a list of GRanges or a list of vector. Here, I will demonstrate using \Rfunction{vennplot} to visualize the overlap of the nearest genes stored in peakAnnoList.
 
 <<vennplot, fig.cap="Overlap of annotated genes", fig.align="center", fig.height=7, fig.width=7, out.width="0.7\\textwidth", fig.pos="h">>= 
-genes= lapply(peakAnnoList, function(i) unlist(i$geneId))
+genes= lapply(peakAnnoList, function(i) as.data.frame(i)$geneId)
 vennplot(genes)
 @ 
 
