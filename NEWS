@@ -1,3 +1,9 @@
+CHANGES IN VERSION 1.1.19
+------------------------
+ o implement csAnno S4 object <2014-09-28, Sun>
+ o modify plot function for csAnno instance <2014-09-28, Sun>
+ o implement vennpie function <2014-09-28, Sun>
+
 CHANGES IN VERSION 1.1.17
 ------------------------
  o deprecate plotChrCov to new function covplot <2014-08-18, Mon>

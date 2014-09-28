@@ -4,7 +4,6 @@
 ##' @title annotatePeak
 ##' @param peak peak file or GRanges object
 ##' @param tssRegion Region Range of TSS 
-##' @param as one of "data.frame", "GRanges" and "txt"
 ##' @param TxDb TxDb object
 ##' @param level one of transcript and gene
 ##' @param assignGenomicAnnotation logical, assign peak genomic annotation or not
@@ -48,14 +47,13 @@
 ##' require(TxDb.Hsapiens.UCSC.hg19.knownGene)
 ##' txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 ##' peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
-##' peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 3000), as="GRanges", TxDb=txdb)
-##' head(peakAnno)
+##' peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 3000), TxDb=txdb)
+##' peakAnno
 ##' @seealso \code{\link{plotAnnoBar}} \code{\link{plotAnnoPie}} \code{\link{plotDistToTSS}}
 ##' @export
 ##' @author G Yu 
 annotatePeak <- function(peak,
                          tssRegion=c(-3000, 3000),
-                         as="GRanges",
                          TxDb=NULL,
                          level = "transcript",
                          assignGenomicAnnotation=TRUE,
@@ -64,7 +62,6 @@ annotatePeak <- function(peak,
                          flankDistance=5000,
                          verbose=TRUE) {
     
-    output <- match.arg(as, c("data.frame", "GRanges", "txt"))
     level <- match.arg(level, c("transcript", "gene"))
     
     if ( is(peak, "GRanges") ){
@@ -76,6 +73,8 @@ annotatePeak <- function(peak,
         input <- "file"
         peak.gr <- loadPeak(peak, verbose)
     }
+
+    peakNum <- length(peak.gr)
     
     if (verbose)
         cat(">> preparing features information...\t\t",
@@ -108,9 +107,12 @@ annotatePeak <- function(peak,
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     ## annotation
     if (assignGenomicAnnotation == TRUE) {
-        annotation <- getGenomicAnnotation(peak.gr, distance, tssRegion, TxDb, level)
+        anno <- getGenomicAnnotation(peak.gr, distance, tssRegion, TxDb, level)
+        annotation <- anno[["annotation"]]
+        detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
     } else {
         annotation <- NULL
+        detailGenomicAnnotation <- NULL
     }
     ## duplicated names since more than 1 peak may annotated by only 1 gene
     names(nearestFeatures) <- NULL
@@ -133,10 +135,7 @@ annotatePeak <- function(peak,
     }
 
     elementMetadata(peak.gr)[["distanceToTSS"]] <- distance
-    ## res <- cbind(peak.df,
-    ##              annotation=annotation,
-    ##              nearestFeatures.df,
-    ##              distanceToTSS=distance)
+ 
     if (!is.null(annoDb)) {
         if (verbose)
             cat(">> adding gene annotation...\t\t\t",
@@ -147,7 +146,6 @@ annotatePeak <- function(peak,
             for(cn in colnames(geneAnno)[-1])
                 elementMetadata(peak.gr)[[cn]] <- geneAnno[, cn]
         }
-        ## out <- cbind(res, geneAnno[,-1])
     }
 
     if (addFlankGeneInfo == TRUE) {
@@ -166,16 +164,6 @@ annotatePeak <- function(peak,
         
     }
     
-    if (output == "txt") {
-        if (input == "gr") {
-            outfile <- "peak_anno.txt"
-        } else {
-            outfile <- sub("\\.\\w+", "_anno.txt", peak)
-        }
-        write.table(as.data.frame(peak.gr), file=outfile,
-                    sep="\t", row.names=FALSE, quote=FALSE)
-    }
-
     if(verbose)
         cat(">> assigning chromosome lengths\t\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -191,10 +179,15 @@ annotatePeak <- function(peak,
         cat(">> done...\t\t\t\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
 
-    if (output == "df") {
-        return(as.data.frame(peak.gr))
-    }
-    return(peak.gr)
+    res <- new("csAnno",
+               anno = peak.gr,
+               tssRegion = tssRegion,
+               level=level,
+               detailGenomicAnnotation=detailGenomicAnnotation,
+               annoStat=getGenomicAnnoStat(peak.gr),
+               peakNum=peakNum
+               )
+    return(res)
 }
 
 

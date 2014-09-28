@@ -1,12 +1,14 @@
+
 ##' plot feature distribution based on the distances to the TSS
 ##'
 ##' 
-##' @title plotDistToTSS
-##' @param peakAnno peak annotation
+##' @title plotDistToTSS.data.frame
+##' @param peakDist peak annotation
 ##' @param distanceColumn column name of the distance from peak to nearest gene
 ##' @param xlab x label
 ##' @param ylab y lable
 ##' @param title figure title
+##' @param categoryColumn category column
 ##' @return bar plot that summarize distance from peak to
 ##' TSS of the nearest gene.
 ##' @importFrom plyr ddply
@@ -36,30 +38,17 @@
 ##' peakAnno <- annotatePeak(peakfile, TxDb=txdb)
 ##' plotDistToTSS(peakAnno)
 ##' @seealso \code{\link{annotatePeak}}
-##' @export
-##' @author G Yu
-plotDistToTSS <- function(peakAnno,
-                          distanceColumn="distanceToTSS", 
-                          xlab="", ylab="Binding sites (%) (5'->3')",
-                          title="Distribution of transcription factor-binding loci relative to TSS") {
+##' @author Guangchuang Yu \url{http://ygc.name}
+plotDistToTSS.data.frame <- function(peakDist,
+                                     distanceColumn="distanceToTSS", 
+                                     xlab="",
+                                     ylab="Binding sites (%) (5'->3')",
+                                     title="Distribution of transcription factor-binding loci relative to TSS",
+                                     categoryColumn) {
 
     ## to satisfy codetools
     Feature <- freq <- NULL
 
-    if (class(peakAnno) == "GRanges")
-        peakAnno <- as.data.frame(peakAnno)
-    
-    if (class(peakAnno) == "data.frame") {
-        peakDist <- peakAnno
-        categoryColumn <- 1
-    } else if (class(peakAnno) == "list") {
-        peakAnno <- lapply(peakAnno, as.data.frame)
-        peakDist <- ldply(peakAnno)
-        categoryColumn <- ".id"
-    } else {
-        stop("peakAnno should be a data.frame or a named list of data.frame.")
-    }
-    
     ## assign Feature according to the distancetoFeature
     peakDist$Feature <- NA
     limit <- c(0, 1000, 3000, 5000, 10000, 100000)

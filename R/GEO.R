@@ -111,7 +111,8 @@ prepareGSMInfo <- function() {
     require(sqlpkg, character.only=TRUE)
     dbConnect <- eval(parse(text="dbConnect"))
     dbGetQuery <- eval(parse(text="dbGetQuery"))
-
+    SQLite <- eval(parse(text="SQLite"))
+    
     con <- dbConnect(SQLite(),GEOmetadbFile)
     ## dbListTables(con)
 
