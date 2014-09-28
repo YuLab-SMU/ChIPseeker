@@ -1,11 +1,12 @@
 ##' plot feature distribution based on their chromosome region
 ##'
 ##' plot chromosome region features
-##' @title plotAnnoBar
-##' @param peakAnno peakAnno in data.frame
-##' @param title plot title
+##' @title plotAnnoBar.data.frame
+##' @param anno.df annotation stats
 ##' @param xlab xlab
 ##' @param ylab ylab
+##' @param title plot title
+##' @param categoryColumn category column
 ##' @return bar plot that summarize genomic features of peaks
 ##' @importFrom plyr ldply
 ##' @importFrom ggplot2 ggplot
@@ -18,30 +19,14 @@
 ##' @importFrom ggplot2 xlab
 ##' @importFrom ggplot2 ylab
 ##' @importFrom ggplot2 ggtitle
-##' @examples
-##' require(TxDb.Hsapiens.UCSC.hg19.knownGene)
-##' txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-##' peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
-##' peakAnno <- annotatePeak(peakfile, TxDb=txdb)
-##' plotAnnoBar(peakAnno)
 ##' @seealso \code{\link{annotatePeak}} \code{\link{plotAnnoPie}}
-##' @export
-##' @author G Yu
-plotAnnoBar <- function(peakAnno,
-                        title="Feature Distribution",
-                        xlab="",
-                        ylab="Percentage(%)") {
-    
-    if ( class(peakAnno) == "data.frame" || class(peakAnno) == "GRanges" ) {
-        anno.df <- getGenomicAnnoStat(peakAnno)
-        categoryColumn <- 1
-    } else if ( class(peakAnno) == "list" ) {
-        anno <- lapply(peakAnno, getGenomicAnnoStat)
-        anno.df <- ldply(anno)
-        categoryColumn <- ".id"
-    } else {
-        stop("peakAnno should be a data.frame, a GRanges object or a named list of data.frame.")
-    }
+##' @author Guangchuang Yu \url{http://ygc.name}
+plotAnnoBar.data.frame <- function(anno.df,
+                                   xlab="",
+                                   ylab="Percentage(%)",
+                                   title="Feature Distribution",
+                                   categoryColumn) {
+
     
     p <- ggplot(anno.df, aes_string(x = categoryColumn,
                                     fill = "Feature",
@@ -64,7 +49,7 @@ plotAnnoBar <- function(peakAnno,
 ##'
 ##' 
 ##' @title plotAnnoPie
-##' @param peakAnno peakAnno
+##' @param x csAnno object
 ##' @param ndigit number of digit to round
 ##' @param cex label cex
 ##' @param col color
@@ -82,7 +67,7 @@ plotAnnoBar <- function(peakAnno,
 ##' @seealso \code{\link{annotatePeak}} \code{\link{plotAnnoBar}}
 ##' @export
 ##' @author G Yu
-plotAnnoPie <- function(peakAnno,
+plotAnnoPie.csAnno <- function(x,
                         ndigit=2,
                         cex=0.9,
                         col=NA,
@@ -90,7 +75,7 @@ plotAnnoPie <- function(peakAnno,
                         pie3D=FALSE,
                         ...){
     
-    anno.df <- getGenomicAnnoStat(peakAnno)
+    anno.df <- getAnnoStat(x)
     if (is.na(col)) {
         col <- getCols(nrow(anno.df))
     }

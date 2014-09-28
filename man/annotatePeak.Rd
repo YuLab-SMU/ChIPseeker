@@ -3,17 +3,14 @@
 \alias{annotatePeak}
 \title{annotatePeak}
 \usage{
-annotatePeak(peak, tssRegion = c(-3000, 3000), as = "GRanges",
-  TxDb = NULL, level = "transcript", assignGenomicAnnotation = TRUE,
-  annoDb = NULL, addFlankGeneInfo = FALSE, flankDistance = 5000,
-  verbose = TRUE)
+annotatePeak(peak, tssRegion = c(-3000, 3000), TxDb = NULL,
+  level = "transcript", assignGenomicAnnotation = TRUE, annoDb = NULL,
+  addFlankGeneInfo = FALSE, flankDistance = 5000, verbose = TRUE)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}
 
 \item{tssRegion}{Region Range of TSS}
-
-\item{as}{one of "data.frame", "GRanges" and "txt"}
 
 \item{TxDb}{TxDb object}
 
@@ -67,8 +64,8 @@ Annotate peaks
 require(TxDb.Hsapiens.UCSC.hg19.knownGene)
 txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
-peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 3000), as="GRanges", TxDb=txdb)
-head(peakAnno)
+peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 3000), TxDb=txdb)
+peakAnno
 }
 \author{
 G Yu
