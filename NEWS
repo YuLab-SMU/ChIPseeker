@@ -1,6 +1,9 @@
 CHANGES IN VERSION 1.1.20
 ------------------------
- o runValue for RleList is deprecated, modified runValue(x) to sapply(x, runValue) <2014-09-30, Tue>
+ o seqlengths in GRanges object is deprecated, now use Seqinfo defined by GenomeInfoDb.
+   update annotatePeak to store this information <2014-09-30, Tue>
+ o runValue (in S4Vector) for RleList is deprecated, 
+   modified runValue(x) to sapply(x, runValue) <2014-09-30, Tue>
 
 CHANGES IN VERSION 1.1.19
 ------------------------
