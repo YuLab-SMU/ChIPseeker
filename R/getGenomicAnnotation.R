@@ -156,7 +156,7 @@ getGenomicAnnotation <- function(peaks,
     }
     annotation[annotation == "Intergenic"] = "Distal Intergenic"
 
-    downstreamIndex <- dd > 0 & dd < pm
+    downstreamIndex <- dd > 0 & dd < 3000
     detailGenomicAnnotation[downstreamIndex, "downstream"] <- TRUE
     detailGenomicAnnotation[annotation == "Distal Intergenic", "distal_intergenic"] <- TRUE
     return(list(annotation=annotation, detailGenomicAnnotation=detailGenomicAnnotation))
