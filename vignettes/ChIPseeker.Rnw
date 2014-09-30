@@ -245,7 +245,7 @@ plotAnnoBar(peakAnno)
 
 Since some annotation overlap, user may interested to view the full annotation with their overlap, which can be partially resolved by \Rfunction{vennpie} function.
 
-<<vennpie, fig.cap="Genomic Annotation by vennpie", fig.align="center", fig.height=4, fig.width=10, out.width="0.8\\textwidth", fig.pos="h">>= 
+<<vennpie, fig.cap="Genomic Annotation by vennpie", fig.align="center", fig.height=8, fig.width=10, out.width="0.8\\textwidth", fig.pos="h">>= 
 vennpie(peakAnno)
 @ 
 
