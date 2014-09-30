@@ -41,6 +41,7 @@
 ##' 
 ##' GENENAME: full gene name
 ##' @importFrom GenomeInfoDb seqlengths
+##' @importFrom GenomeInfoDb seqinfo
 ## @importFrom GenomicFeatures getChromInfoFromUCSC
 ##' @importMethodsFrom BiocGenerics as.data.frame
 ##' @examples
@@ -168,12 +169,7 @@ annotatePeak <- function(peak,
         cat(">> assigning chromosome lengths\t\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
 
-    ## md=metadata(txdb)
-    ## genVer=md[md[,1] == "Genome",2]
-    ## chromInfo=getChromInfoFromUCSC(genVer)
-    ## sln <- names(seqlengths(peak.gr))
-    ## seqlengths(peak.gr) = chromInfo[match(sln, chromInfo[,1]),2]
-    seqlengths(peak.gr) <- seqlengths(TxDb)[names(seqlengths(peak.gr))]
+    seqinfo(peak.gr) <- seqinfo(TxDb)[names(seqlengths(peak.gr))]
     
     if(verbose)
         cat(">> done...\t\t\t\t\t",
