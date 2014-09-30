@@ -53,6 +53,6 @@ vennpie.csAnno <- function(x, r=0.2) {
                  border=NA)
     ##plot.new()
     ##legend(center), legend=names(cols)[-1], fill=cols[-1], bty="n")
-    legend(3*r, 2*r, legend=sub("_", " ", names(cols)[-1]),
+    legend(3*r, 3*r, legend=sub("_", " ", names(cols)[-1]),
            fill=cols[-1], bty="n", cex=1.2)
 }

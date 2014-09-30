@@ -1,7 +1,7 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.1.19
+Version: 1.1.20
 Author: Guangchuang Yu
 Maintainer: Guangchuang Yu <guangchuangyu@gmail.com>
 Description: This package implements functions to retrieve the nearest genes
@@ -27,7 +27,6 @@ Imports:
     gplots,
     grDevices,
     gtools,
-    Matrix,
     methods,
     plotrix,
     plyr,

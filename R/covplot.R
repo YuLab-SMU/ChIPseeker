@@ -9,17 +9,6 @@
 ##' @param ylab ylab
 ##' @param title title
 ##' @return ggplot2 object
-##' @importFrom ggplot2 ggplot
-##' @importFrom ggplot2 geom_segment
-##' @importFrom ggplot2 facet_grid
-##' @importFrom ggplot2 theme
-##' @importFrom ggplot2 theme_classic
-##' @importFrom ggplot2 element_text
-##' @importFrom ggplot2 xlab
-##' @importFrom ggplot2 ylab
-##' @importFrom ggplot2 ggtitle
-##' @importFrom plyr ldply
-##' @importFrom GenomeInfoDb seqlengths
 ##' @export
 ##' @author G Yu
 plotChrCov <- function(peak, weightCol=NULL,
@@ -97,18 +86,9 @@ covplot <- function(peak, weightCol=NULL,
     return(p)
 }
 
-##' @importFrom GenomicRanges GRanges
 ##' @importFrom GenomicRanges elementMetadata
-##' @importFrom GenomeInfoDb seqnames
-##' @importFrom IRanges elementLengths
-##' @importFrom IRanges IRanges
-##' @importFrom IRanges Views
-##' @importFrom IRanges viewApply
-##' @importFrom IRanges as.vector
 ##' @importFrom IRanges slice
 ##' @importFrom S4Vectors runValue
-##' @importFrom Matrix Matrix
-##' @importFrom Matrix summary
 getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
 
     if ( is.null(weightCol)) {
@@ -125,7 +105,10 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
         data.frame(chr=names(cov[i]),
                    start=start(x),
                    end = end(x),
-                   value = as.numeric(runValue(x)))
+                   value = sapply(x, runValue)
+                                        # value <- x@subject@values
+                                        # value <- value[value != 0]
+                   )
     })
     
     df <- do.call("rbind", ldf)
@@ -138,41 +121,6 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
         df <- df[df$start >= xlim[1] & df$end <= xlim[2],]
     }
     return(df)
-    
-    ## seqLen <- lapply(peak.cov, length)
-    ## seqLen <- seqLen[seqLen != 0]
-    ## peak.cov <- peak.cov[seqLen != 0]
-    ## chrs <- GRanges(seqnames=names(seqLen),
-    ##                 ranges=IRanges(rep(1, length(seqLen)),unlist(seqLen)),
-    ##                 strand="*")
-    
-    ## peakView <- Views(peak.cov, as(chrs, "RangesList"))
-    ## tagMatrixList <- lapply(peakView, function(x) t(viewApply(x, as.vector)))
-
-    ## tm <- list()
-    ## nn <- names(tagMatrixList)
-    ## idx <- unlist(sapply(tagMatrixList, ncol)) != 0
-    ## tagMatrixList <- tagMatrixList[idx]
-    ## for (i in 1:length(tagMatrixList)) {
-    ##     cat(">> processing chromosome ", nn[i])
-    ##     if (nchar(nn[i]) > 4) {
-    ##         cat("\t\t")
-    ##     } else {
-    ##         cat("\t")
-    ##     }
-    ##     cat(format(Sys.time(), "%Y-%m-%d %X"), "\n")
-    ##     M <- summary(Matrix(tagMatrixList[[i]], sparse=TRUE))
-    ##     tm[[i]] <- data.frame(chr=nn[i],
-    ##                           pos=M$j,
-    ##                           cnt=M$x)
-    ## }
-
-    ## tmd <- do.call("rbind", tm)
-
-    ## ## sort chromosome name
-    ## chr.sorted <- sortChrName(names(seqLen))
-    ## tmd$chr <- factor(tmd$chr, levels=chr.sorted)
-    ## return(tmd)
 }
 
 sortChrName <- function(chr.name) {

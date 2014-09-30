@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.1.20
+------------------------
+ o runValue for RleList is deprecated, modified runValue(x) to sapply(x, runValue) <2014-09-30, Tue>
+
 CHANGES IN VERSION 1.1.19
 ------------------------
  o implement csAnno S4 object <2014-09-28, Sun>
