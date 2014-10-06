@@ -42,6 +42,7 @@ plotChrCov <- function(peak, weightCol=NULL,
 ##' @importFrom ggplot2 ggtitle
 ##' @importFrom plyr ldply
 ##' @importFrom GenomeInfoDb seqlengths
+##' @importFrom data.table data.table
 ##' @export
 ##' @author G Yu
 covplot <- function(peak, weightCol=NULL,
@@ -59,17 +60,22 @@ covplot <- function(peak, weightCol=NULL,
     }
     
     tm <- getChrCov(peak.gr=peak.gr, weightCol=weightCol, chrs, xlim)
-    bin <- floor((max(tm$end) - min(tm$start))/10000)
+    bin <- floor((max(tm$end) - min(tm$start))/1000)
     if (bin < 1) {
         bin <- 1
     }
     
     tml <- lapply(1:nrow(tm), function(i) {
         x <- tm[i,]
-        data.frame(chr=x$chr, pos=seq(x$start, x$end, by=bin), value=x$value)
+        data.table(chr=x$chr, pos=seq(x$start, x$end, by=bin), cnt=x[,4])
     })
     
     tm2 <- do.call("rbind", tml)
+    tm2 <- ddply(tm2, .(chr, pos), transform, value=sum(cnt))
+    tm2 <- tm2[,-3]
+    tm2 <- unique(tm2)
+    tm2 <- as.data.frame(tm2)
+    ##colnames(tm2) <- c("chr", "pos", "value")
     
     pos <- chr <- value <- NULL
     
@@ -105,7 +111,7 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
         data.frame(chr=names(cov[i]),
                    start=start(x),
                    end = end(x),
-                   value = sapply(x, runValue)
+                   cnt = sapply(x, runValue)
                                         # value <- x@subject@values
                                         # value <- value[value != 0]
                    )
@@ -120,6 +126,12 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
     if (!is.null(xlim) && !is.na(xlim) && is.numeric(xlim) && length(xlim) == 2) {
         df <- df[df$start >= xlim[1] & df$end <= xlim[2],]
     }
+
+    ##colnames(df) <- c("chr", "start", "end", "cnt")
+    
+    df2 <- ddply(df, .(chr, start, end), transform, value=sum(cnt))
+    df2 <- df2[,-4]
+    df2 <- unique(df2)
     return(df)
 }
 

@@ -1,7 +1,7 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.1.20
+Version: 1.1.21
 Author: Guangchuang Yu
 Maintainer: Guangchuang Yu <guangchuangyu@gmail.com>
 Description: This package implements functions to retrieve the nearest genes
@@ -19,6 +19,7 @@ Depends:
 Imports:
     BiocGenerics,
     AnnotationDbi,
+    data.table,
     IRanges,
     GenomeInfoDb,
     GenomicRanges,
