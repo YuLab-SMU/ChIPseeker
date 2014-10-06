@@ -111,7 +111,8 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
         data.frame(chr=names(cov[i]),
                    start=start(x),
                    end = end(x),
-                   cnt = sapply(x, runValue)
+                   cnt = runValue(x)[[1]]
+                                        # sapply(x, runValue)
                                         # value <- x@subject@values
                                         # value <- value[value != 0]
                    )
