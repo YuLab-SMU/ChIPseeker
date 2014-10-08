@@ -19,8 +19,18 @@ To install:
  * the latest development version:
    `install_github("GuangchuangYu/ChIPseeker")`
 
+## Documentation ##
+
++ [Peak Annotation](http://ygc.name/2014/04/13/chipseeker-for-chip-peak-annotation/)
++ [Multiple Annotation](http://ygc.name/2014/10/01/multiple-annotation-in-chipseeker/)
++ [Visualization Methods](http://ygc.name/2014/04/30/visualization-methods-in-chipseeker/)
+
 Find out more at [http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html](http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) and check out the [vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/ChIPseeker/inst/doc/ChIPseeker.pdf).
 
+To view the vignette of `ChIPseeker` installed in your system, start R and enter:
+```
+browseVignettes("ChIPseeker")
+```
 
 ## Bugs/Feature requests ##
 
