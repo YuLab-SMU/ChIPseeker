@@ -15,9 +15,9 @@ For more information on Artistic-2.0 License see [http://opensource.org/licenses
 
 To install:
  * the latest released version:
-   `biocLite("ChIPseeker")`
+   `r biocLite("ChIPseeker")`
  * the latest development version:
-   `install_github("GuangchuangYu/ChIPseeker")`
+   `r install_github("GuangchuangYu/ChIPseeker")`
 
 ## Documentation ##
 
