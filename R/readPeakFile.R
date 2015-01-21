@@ -23,12 +23,12 @@ readPeakFile <- function(peakfile, as="GRanges") {
 }
 
 peakDF2GRanges <- function(peak.df) {
-    peak.gr=GRanges(seqnames=Rle(peak.df[,1]),
+    peak.gr=GRanges(seqnames=peak.df[,1],
         ranges=IRanges(peak.df[,2], peak.df[,3]))
     cn <- colnames(peak.df)
     if (length(cn) > 3) {
         for (i in 4:length(cn)) {
-            elementMetadata(peak.gr)[[cn[i]]] <- peak.df[, cn[i]]
+            mcols(peak.gr)[[cn[i]]] <- peak.df[, cn[i]]
         }
     }
     return(peak.gr)
