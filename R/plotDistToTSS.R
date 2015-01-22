@@ -32,11 +32,13 @@
 ##' @importFrom ggplot2 scale_fill_manual
 ##' @importFrom ggplot2 geom_text
 ##' @examples
-##' require(TxDb.Hsapiens.UCSC.hg19.knownGene)
-##' txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+##' \dontrun{
+##' require(TxDb.Hsapiens.UCSC.hg38.knownGene)
+##' txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 ##' peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
 ##' peakAnno <- annotatePeak(peakfile, TxDb=txdb)
 ##' plotDistToTSS(peakAnno)
+##' }
 ##' @seealso \code{\link{annotatePeak}}
 ##' @author Guangchuang Yu \url{http://ygc.name}
 plotDistToTSS.data.frame <- function(peakDist,

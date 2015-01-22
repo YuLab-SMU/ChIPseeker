@@ -65,7 +65,7 @@
 
 
 <<include=FALSE>>=
-library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
 library(clusterProfiler)
 library(ChIPseeker)
 library(org.Hs.eg.db)
@@ -88,7 +88,7 @@ opts_chunk$set(tidy_source=TRUE,
 
 
 \title{\textsf{\textbf{ChIPseeker: an R package for ChIP peak Annotation, Comparision and Visualization}}}
-\author{Guangchuang Yu\\ The University of Hong Kong}
+\author{Guangchuang Yu\\ School of Public Health, The University of Hong Kong}
 
 \begin{document}
 \maketitle
@@ -116,8 +116,8 @@ Functional enrichment analysis of the peaks can be performed by my Bioconductor 
 <<loadPkgs>>=
 ## loading packages
 require(ChIPseeker)
-require(TxDb.Hsapiens.UCSC.hg19.knownGene)
-txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+require(TxDb.Hsapiens.UCSC.hg38.knownGene)
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 require(clusterProfiler)
 @ 
 \section{ChIP profiling}
@@ -143,7 +143,7 @@ covplot(peak, weightCol="V5")
 %%   \end{center}
 %% \end{figure}
 
-<<covplot, fig.height=6, fig.width=4, out.width="0.6\\textwidth">>=
+<<covplot, fig.height=3, fig.width=7, out.width="0.6\\textwidth">>=
 covplot(peak, weightCol="V5", chrs=c("chr17", "chr18"), xlim=c(4.5e7, 5e7))
 @ 
 
@@ -208,7 +208,7 @@ peakAnno
 Peak Annotation is performed by \Rfunction{annotatePeak}. User can define TSS (transcription start site) region, by default TSS is defined from -3kb to +3kb. The output of \Rfunction{annotatePeak} is \Robject{csAnno} instance. \Rpackage{ChIPseeker} provides \Rfunction{as.GRanges} to convert \Robject{csAnno} to \Robject{GRanges} instance, and \Rfunction{as.data.frame} to convert \Robject{csAnno} to \Robject{data.frame} which can be exported to file by \Rfunction{write.table}.
 \\
 \\
-\Robject{TxDb} object contained transcript-related features of a particular genome. Bioconductor provides several package that containing \Robject{TxDb} object of model organisms with multiple commonly used genome version, for instance \Rpackage{TxDb.Hsapiens.UCSC.hg19.knownGene} and \Rpackage{TxDb.Hsapiens.UCSC.hg18.knownGene} for human genome hg19 and hg18, \Rpackage{TxDb.Mmusculus.UCSC.mm10.knownGene} and \Rpackage{TxDb.Mmusculus.UCSC.mm9.knownGene} for mouse genome mm10 and mm9, etc. User can also prepare their own \Robject{TxDb} object by retrieving information from UCSC Genome Bioinformatics and BioMart data resources by R function \Rfunction{makeTranscriptDbFromBiomart} and \Rfunction{makeTranscriptDbFromUCSC}. TxDb object should be passed for peak annotation. 
+\Robject{TxDb} object contained transcript-related features of a particular genome. Bioconductor provides several package that containing \Robject{TxDb} object of model organisms with multiple commonly used genome version, for instance \Rpackage{TxDb.Hsapiens.UCSC.hg38.knownGene} and \Rpackage{TxDb.Hsapiens.UCSC.hg19.knownGene} for human genome hg38 and hg19, \Rpackage{TxDb.Mmusculus.UCSC.mm10.knownGene} and \Rpackage{TxDb.Mmusculus.UCSC.mm9.knownGene} for mouse genome mm10 and mm9, etc. User can also prepare their own \Robject{TxDb} object by retrieving information from UCSC Genome Bioinformatics and BioMart data resources by R function \Rfunction{makeTranscriptDbFromBiomart} and \Rfunction{makeTranscriptDbFromUCSC}. TxDb object should be passed for peak annotation. 
 \\
 \\
 All the peak information contained in peakfile will be retained in the output of \Rfunction{annotatePeak}. The position and strand information of nearest genes are reported. The distance from peak to the TSS of its nearest gene is also reported. The genomic region of the peak is reported in annotation column. Since some annotation may overlap, \Rpackage{ChIPseeker} adopted the following priority in genomic annotation.

@@ -205,7 +205,8 @@ getGenomicVersion <- function(ucsc_release, data_processing, organism, supplemen
     data_processing <- as.character(data_processing)
     organism <- as.character(organism)
     supplementary_file <- as.character(supplementary_file)
-    
+   
+    species <- NULL 
     gs <- subset(ucsc_release, subset = species == organism)
     if (nrow(gs) == 0) return(NA)
 
@@ -245,6 +246,8 @@ getGenomicVersion <- function(ucsc_release, data_processing, organism, supplemen
 ##     return(gsm)
 ## }
 
+##' @importFrom parallel mclapply
+##' @importFrom parallel detectCores
 batchGetGSMsuppFile <- function(gsm) {
     suppfiles <- mclapply(seq_along(gsm), function(i) {
         cat("processing ", gsm[i], "\t",  i , " of ", length(gsm), "\n")
