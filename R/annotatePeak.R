@@ -40,13 +40,17 @@
 ##' SYMBOL: gene symbol
 ##' 
 ##' GENENAME: full gene name
+##' @importFrom S4Vectors metadata
+##' @importFrom S4Vectors mcols
+##' @importFrom S4Vectors mcols<-
 ##' @importFrom GenomeInfoDb seqlengths
 ##' @importFrom GenomeInfoDb seqinfo
+##' @importFrom GenomeInfoDb seqinfo<-
 ## @importFrom GenomicFeatures getChromInfoFromUCSC
 ##' @importMethodsFrom BiocGenerics as.data.frame
 ##' @examples
-##' require(TxDb.Hsapiens.UCSC.hg19.knownGene)
-##' txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+##' require(TxDb.Hsapiens.UCSC.hg38.knownGene)
+##' txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 ##' peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
 ##' peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 3000), TxDb=txdb)
 ##' peakAnno
@@ -129,13 +133,16 @@ annotatePeak <- function(peak,
 
     ## append annotation to peak.gr
     if (!is.null(annotation))
-        elementMetadata(peak.gr)[["annotation"]] <- annotation
+        ## elementMetadata(peak.gr)[["annotation"]] <- annotation
+	mcols(peak.gr)[["annotation"]] <- annotation
 
     for(cn in colnames(nearestFeatures.df)) {
-        elementMetadata(peak.gr)[[cn]] <- unlist(nearestFeatures.df[, cn])
+        ## elementMetadata(peak.gr)[[cn]] <- unlist(nearestFeatures.df[, cn])
+    	mcols(peak.gr)[[cn]] <- unlist(nearestFeatures.df[, cn])
     }
 
-    elementMetadata(peak.gr)[["distanceToTSS"]] <- distance
+    ## elementMetadata(peak.gr)[["distanceToTSS"]] <- distance
+    mcols(peak.gr)[["distanceToTSS"]] <- distance
  
     if (!is.null(annoDb)) {
         if (verbose)
@@ -144,8 +151,10 @@ annotatePeak <- function(peak,
         IDType <- metadata(TxDb)[8,2]     
         geneAnno <- addGeneAnno(annoDb, peak.gr$geneId, type=IDType)
         if (! all(is.na(geneAnno))) {
-            for(cn in colnames(geneAnno)[-1])
-                elementMetadata(peak.gr)[[cn]] <- geneAnno[, cn]
+            for(cn in colnames(geneAnno)[-1]) {
+                ## elementMetadata(peak.gr)[[cn]] <- geneAnno[, cn]
+		mcols(peak.gr)[[cn]] <- geneAnno[, cn]
+	    }
         }
     }
 
@@ -155,14 +164,22 @@ annotatePeak <- function(peak,
                 format(Sys.time(), "%Y-%m-%d %X"), "\n")
  
         flankInfo <- getAllFlankingGene(peak.gr, features, flankDistance)
-        elementMetadata(peak.gr)[["flank_txIds"]] <- NA
-        elementMetadata(peak.gr)[["flank_geneIds"]] <- NA
-        elementMetadata(peak.gr)[["flank_gene_distances"]] <- NA
+        ## elementMetadata(peak.gr)[["flank_txIds"]] <- NA
+        ## elementMetadata(peak.gr)[["flank_geneIds"]] <- NA
+        ## elementMetadata(peak.gr)[["flank_gene_distances"]] <- NA
         
-        elementMetadata(peak.gr)[["flank_txIds"]][flankInfo$peakIdx] <- flankInfo$flank_txIds
-        elementMetadata(peak.gr)[["flank_geneIds"]][flankInfo$peakIdx] <- flankInfo$flank_geneIds
-        elementMetadata(peak.gr)[["flank_gene_distances"]][flankInfo$peakIdx] <- flankInfo$flank_gene_distances
+        ## elementMetadata(peak.gr)[["flank_txIds"]][flankInfo$peakIdx] <- flankInfo$flank_txIds
+        ## elementMetadata(peak.gr)[["flank_geneIds"]][flankInfo$peakIdx] <- flankInfo$flank_geneIds
+        ## elementMetadata(peak.gr)[["flank_gene_distances"]][flankInfo$peakIdx] <- flankInfo$flank_gene_distances
+
+        mcols(peak.gr)[["flank_txIds"]] <- NA
+        mcols(peak.gr)[["flank_geneIds"]] <- NA
+        mcols(peak.gr)[["flank_gene_distances"]] <- NA
         
+        mcols(peak.gr)[["flank_txIds"]][flankInfo$peakIdx] <- flankInfo$flank_txIds
+        mcols(peak.gr)[["flank_geneIds"]][flankInfo$peakIdx] <- flankInfo$flank_geneIds
+        mcols(peak.gr)[["flank_gene_distances"]][flankInfo$peakIdx] <- flankInfo$flank_gene_distances
+
     }
     
     if(verbose)
