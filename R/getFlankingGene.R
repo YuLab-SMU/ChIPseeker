@@ -1,5 +1,11 @@
 
 ##' @importFrom plyr ddply
+##' @importFrom IRanges ranges
+##' @importFrom IRanges ranges<-
+##' @importFrom IRanges start
+##' @importFrom IRanges start<-
+##' @importFrom IRanges end
+##' @importFrom IRanges end<-
 getAllFlankingGene <- function(peak.gr, features, distance=5000) {
     peak.gr2 <- peak.gr
     start(ranges(peak.gr)) = start(ranges(peak.gr)) - distance

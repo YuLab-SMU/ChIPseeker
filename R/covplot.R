@@ -65,6 +65,7 @@ covplot <- function(peak, weightCol=NULL,
         bin <- 1
     }
     
+    chr <- pos <- cnt <- NULL
     tml <- lapply(1:nrow(tm), function(i) {
         x <- tm[i,]
         data.table(chr=x$chr, pos=seq(x$start, x$end, by=bin), cnt=x[,4])
@@ -129,7 +130,7 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
     }
 
     ##colnames(df) <- c("chr", "start", "end", "cnt")
-    
+    chr <- start <- end <- cnt <- NULL    
     df2 <- ddply(df, .(chr, start, end), transform, value=sum(cnt))
     df2 <- df2[,-4]
     df2 <- unique(df2)

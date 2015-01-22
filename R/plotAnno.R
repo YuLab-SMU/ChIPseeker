@@ -58,12 +58,13 @@ plotAnnoBar.data.frame <- function(anno.df,
 ##' @param ... extra parameter
 ##' @return pie plot of peak genomic feature annotation
 ##' @examples
-##' ## example not run
-##' ## require(TxDb.Hsapiens.UCSC.hg19.knownGene)
-##' ## txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-##' ## peakfile <- system.file("extdata", "sample_peaks.txt", package="chipseeker")
-##' ## peakAnno <- annotatePeak(peakfile, TxDb=txdb)
-##' ## plotAnnoPie(peakAnno)
+##' \dontrun{
+##' require(TxDb.Hsapiens.UCSC.hg38.knownGene)
+##' txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+##' peakfile <- system.file("extdata", "sample_peaks.txt", package="chipseeker")
+##' peakAnno <- annotatePeak(peakfile, TxDb=txdb)
+##' plotAnnoPie(peakAnno)
+##' }
 ##' @seealso \code{\link{annotatePeak}} \code{\link{plotAnnoBar}}
 ##' @export
 ##' @author G Yu
