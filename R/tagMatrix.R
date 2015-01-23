@@ -73,8 +73,8 @@ getPromoters <- function(TxDb=NULL,
 ##' @importFrom IRanges viewApply
 ##' @importFrom IRanges as.vector
 ##' @importFrom S4Vectors as.factor
+##' @importFrom S4Vectors mcols
 ##' @importFrom GenomicRanges GRanges
-##' @importFrom GenomicRanges elementMetadata
 ##' @importFrom GenomeInfoDb seqnames
 ##' @importFrom BiocGenerics intersect
 ##' @importFrom BiocGenerics unique
@@ -137,7 +137,7 @@ getTagMatrix <- function(peak, weightCol=NULL, windows) {
     if (is.null(weightCol)) {
         peak.cov <- coverage(peak.gr)
     } else {
-        weight <- elementMetadata(peak.gr)[[weightCol]]
+        weight <- mcols(peak.gr)[[weightCol]]
         peak.cov <- coverage(peak.gr, weight=weight)
     }
     cov.len <- elementLengths(peak.cov)
