@@ -93,7 +93,7 @@ covplot <- function(peak, weightCol=NULL,
     return(p)
 }
 
-##' @importFrom GenomicRanges elementMetadata
+##' @importFrom S4Vectors mcols
 ##' @importFrom IRanges slice
 ##' @importFrom S4Vectors runValue
 getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
@@ -101,7 +101,7 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
     if ( is.null(weightCol)) {
         peak.cov <- coverage(peak.gr)
     } else {
-        weight <- elementMetadata(peak.gr)[[weightCol]]
+        weight <- mcols(peak.gr)[[weightCol]]
         peak.cov <- coverage(peak.gr, weight=weight)
     }
 

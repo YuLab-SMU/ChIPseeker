@@ -133,15 +133,12 @@ annotatePeak <- function(peak,
 
     ## append annotation to peak.gr
     if (!is.null(annotation))
-        ## elementMetadata(peak.gr)[["annotation"]] <- annotation
-	mcols(peak.gr)[["annotation"]] <- annotation
+        mcols(peak.gr)[["annotation"]] <- annotation
 
     for(cn in colnames(nearestFeatures.df)) {
-        ## elementMetadata(peak.gr)[[cn]] <- unlist(nearestFeatures.df[, cn])
-    	mcols(peak.gr)[[cn]] <- unlist(nearestFeatures.df[, cn])
+        mcols(peak.gr)[[cn]] <- unlist(nearestFeatures.df[, cn])
     }
 
-    ## elementMetadata(peak.gr)[["distanceToTSS"]] <- distance
     mcols(peak.gr)[["distanceToTSS"]] <- distance
  
     if (!is.null(annoDb)) {
@@ -152,9 +149,8 @@ annotatePeak <- function(peak,
         geneAnno <- addGeneAnno(annoDb, peak.gr$geneId, type=IDType)
         if (! all(is.na(geneAnno))) {
             for(cn in colnames(geneAnno)[-1]) {
-                ## elementMetadata(peak.gr)[[cn]] <- geneAnno[, cn]
-		mcols(peak.gr)[[cn]] <- geneAnno[, cn]
-	    }
+                mcols(peak.gr)[[cn]] <- geneAnno[, cn]
+            }
         }
     }
 
@@ -164,14 +160,7 @@ annotatePeak <- function(peak,
                 format(Sys.time(), "%Y-%m-%d %X"), "\n")
  
         flankInfo <- getAllFlankingGene(peak.gr, features, flankDistance)
-        ## elementMetadata(peak.gr)[["flank_txIds"]] <- NA
-        ## elementMetadata(peak.gr)[["flank_geneIds"]] <- NA
-        ## elementMetadata(peak.gr)[["flank_gene_distances"]] <- NA
         
-        ## elementMetadata(peak.gr)[["flank_txIds"]][flankInfo$peakIdx] <- flankInfo$flank_txIds
-        ## elementMetadata(peak.gr)[["flank_geneIds"]][flankInfo$peakIdx] <- flankInfo$flank_geneIds
-        ## elementMetadata(peak.gr)[["flank_gene_distances"]][flankInfo$peakIdx] <- flankInfo$flank_gene_distances
-
         mcols(peak.gr)[["flank_txIds"]] <- NA
         mcols(peak.gr)[["flank_geneIds"]] <- NA
         mcols(peak.gr)[["flank_gene_distances"]] <- NA
