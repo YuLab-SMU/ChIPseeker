@@ -1,94 +1,47 @@
-% \VignetteEngine{knitr}
 % \VignetteIndexEntry{ChIPseeker: an R package for ChIP peak Annotation, Comparison, and Visualization}
 % \VignettePackage{ChIPseeker}
-% \VignetteDepends{clusterProfiler}
-% \VignetteDepends{org.Hs.eg.db}
-
+% \VignetteEngine{knitr::knitr}
 
 % To compile this document, run the commands within R
-% require(knitr); knit2pdf("ChIPseeker.Rnw")
+% R CMD Sweave --engine=knitr::knitr --pdf ChIPseeker.Rnw
 
 \documentclass[12pt]{article}
-\usepackage[a4paper,left=3cm,top=2cm,bottom=3cm,right=3cm,ignoreheadfoot]{geometry}
-\pagestyle{empty}
-\usepackage[usenames,dvipsnames]{xcolor}
-\usepackage{helvet}
-\usepackage[titletoc]{appendix}
-\usepackage{tocloft}
 
-\setlength{\parindent}{0em}
-\setlength{\parskip}{.5em}
-
-\renewcommand{\familydefault}{\sfdefault}
-
-\newcommand{\Rcode}[1]{{\texttt{#1}}}
-\newcommand{\Robject}[1]{{\small\texttt{#1}}}
-\newcommand{\Rfunction}[1]{\Robject{#1}}
-\newcommand{\Rpackage}[1]{\textit{#1}}
-\newcommand{\Rparameter}[1]{\textit{#1}}
-\newcommand{\Rclass}[1]{\textit{#1}}
-\newcommand{\R}{\textsf{R}}
-
-\usepackage[
-  bookmarks,%
-  colorlinks,%
-  linktoc=section,%
-  linkcolor=RedViolet,%
-  citecolor=RedViolet,%
-  urlcolor=RedViolet,%
-  linkbordercolor={1 1 1},%
-  citebordercolor={1 1 1},%
-  urlbordercolor={1 1 1},%
-  raiselinks,%
-  plainpages,%
-  pdftex
-  ]{hyperref}
-
-
-\usepackage{cite}
-\renewcommand{\floatpagefraction}{0.9}
-
-\usepackage{sectsty}
-\sectionfont{\sffamily\bfseries\color{RoyalBlue}\sectionrule{0pt}{0pt}{-1ex}{1pt}}
-\subsectionfont{\sffamily\bfseries\color{RoyalBlue}}
-\subsubsectionfont{\sffamily\bfseries\color{RoyalBlue}}
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhead{}
-\fancyfoot{}
-\lfoot{}\cfoot{}\rfoot{}
-\renewcommand{\headrule}{}
-
-\usepackage{graphicx}
-%\usepackage{xstring}
-
-
-
-<<include=FALSE>>=
-library(TxDb.Hsapiens.UCSC.hg38.knownGene)
-library(clusterProfiler)
-library(ChIPseeker)
-library(org.Hs.eg.db)
-library(GenomicFeatures)
-library(GenomicRanges)
-library(knitr)
-opts_chunk$set(tidy_source=TRUE, 
-               tidy.opts=list(blank=FALSE, width.cutoff=50),
-               out.truncate=80,
-               out.lines=6,
-               cache=TRUE,
-               dev='pdf',
-               include=TRUE,
-               fig.width=6,
-               fig.height=6,
-               resolution=100)
+<<knitr, echo=FALSE, result="hide">>=
+library("knitr")
+opts_chunk$set(tidy         = FALSE,
+               out.truncate = 80,
+               out.lines    = 6,
+               dev          = 'pdf',
+               include      = TRUE,
+               fig.width    = 6,
+               fig.height   = 6,
+               resolution   = 100,
+               message      = FALSE)
 @
 
-\newcommand{\fixme}[1]{{\textbf{Fixme:} \textit{\textcolor{blue}{#1}}}}
+<<style-Sweave, eval=TRUE, echo=FALSE, results="asis">>=
+BiocStyle::latex()
+@ 
+
+<<loadPKG, echo=FALSE>>=
+library(GenomicFeatures)
+library(GenomicRanges)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(org.Hs.eg.db)
+library(clusterProfiler)
+library(ChIPseeker)
+@ 
 
 
-\title{\textsf{\textbf{ChIPseeker: an R package for ChIP peak Annotation, Comparision and Visualization}}}
-\author{Guangchuang Yu\\ School of Public Health, The University of Hong Kong}
+\author{Guangchuang Yu \\[1em]
+  \small{School of Public Health} \\
+  \small{The University of Hong Kong} \\
+  \small{\email{guangchuangyu@gmail.com}}
+}
+
+\title{ChIPseeker: an R package for ChIP peak Annotation, Comparision and Visualization}
+
 
 \begin{document}
 \maketitle
@@ -97,21 +50,21 @@ opts_chunk$set(tidy_source=TRUE,
 options(digits=3, width=80, prompt=" ", continue=" ")
 @
 
-
+\newpage
 \tableofcontents
-
+\newpage
 
 \section{Introduction}
-Chromatin immunoprecipitation followed by high-throughput sequencing (ChIP-seq) has become standard technologies for genome wide identification of DNA-binding protein target sites. After read mappings and peak callings, the peak should be annotated to answer the biological questions. Annotation also create the possibility of integrate expression profile data to predict gene expression regulation. \Rpackage{ChIPseeker} was developed for annotating nearest genes and genomic features to peaks. 
+Chromatin immunoprecipitation followed by high-throughput sequencing (ChIP-seq) has become standard technologies for genome wide identification of DNA-binding protein target sites. After read mappings and peak callings, the peak should be annotated to answer the biological questions. Annotation also create the possibility of integrate expression profile data to predict gene expression regulation. \Biocpkg{ChIPseeker} was developed for annotating nearest genes and genomic features to peaks. 
 \\
 \\
-ChIP peak data set comparison is also very important. We can use it as an index to estimate how well biological replications are. Even more important is applying to infer cooperative regulation. If two ChIP seq data, obtained by two different binding proteins, overlap significantly, these two proteins may form a complex or have interaction in regulation chromosome remodelling or gene expression. \Rpackage{ChIPseeker} support statistical testing of significant overlap among ChIP seq data sets, and incorporate open access database GEO for users to compare their own dataset to those deposited in database. Protein interaction hypothesis can be generated by mining data deposited in database. Converting genome coordinations from one genome version to another is also supported, making this comparison available for different genome version and different species.
+ChIP peak data set comparison is also very important. We can use it as an index to estimate how well biological replications are. Even more important is applying to infer cooperative regulation. If two ChIP seq data, obtained by two different binding proteins, overlap significantly, these two proteins may form a complex or have interaction in regulation chromosome remodelling or gene expression. \Biocpkg{ChIPseeker} support statistical testing of significant overlap among ChIP seq data sets, and incorporate open access database GEO for users to compare their own dataset to those deposited in database. Protein interaction hypothesis can be generated by mining data deposited in database. Converting genome coordinations from one genome version to another is also supported, making this comparison available for different genome version and different species.
 \\
 \\
 Several visualization functions are implemented to visualize the coverage of the ChIP seq data, peak annotation, average profile and heatmap of peaks binding to TSS region. 
 \\
 \\
-Functional enrichment analysis of the peaks can be performed by my Bioconductor packages \Rpackage{DOSE} , \Rpackage{ReactomePA}, \Rpackage{clusterProfiler} \cite{yu_clusterprofiler:_2012} . 
+Functional enrichment analysis of the peaks can be performed by my Bioconductor packages \Biocpkg{DOSE} , \Biocpkg{ReactomePA}, \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler:_2012} . 
 
 <<loadPkgs>>=
 ## loading packages
@@ -121,8 +74,8 @@ txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 require(clusterProfiler)
 @ 
 \section{ChIP profiling}
-The datasets CBX6 and CBX7 in this vignettes were downloaded from GEO (GSE40740) \cite{pemberton_genome-wide_2014} while ARmo\_0M, ARmo\_1nM and ARmo\_100nM were downloaded from GEO (GSE48308) \cite{urbanucci_overexpression_2012} . \Rpackage{ChIPseeker} provides \Rfunction{readPeakFile} to load the peak and store in \Robject{GRanges} object. 
-%%Most of the functions in \Rpackage{ChIPseeker} can accept input in peak file (bed format) or \Robject{GRanges} object. 
+The datasets CBX6 and CBX7 in this vignettes were downloaded from GEO (GSE40740) \cite{pemberton_genome-wide_2014} while ARmo\_0M, ARmo\_1nM and ARmo\_100nM were downloaded from GEO (GSE48308) \cite{urbanucci_overexpression_2012} . \Biocpkg{ChIPseeker} provides \Rfunction{readPeakFile} to load the peak and store in \Robject{GRanges} object. 
+
 <<samplefiles>>=
 files <- getSampleFiles()
 print(files)
@@ -135,13 +88,6 @@ After peak calling, we would like to know the peak locations over the whole geno
 covplot(peak, weightCol="V5")
 @ 
 
-%% \begin{figure}[htb]
-%%   \begin{center}
-%%     \includegraphics[width=1\linewidth]{figures/chrCoverage.png}
-%%     \caption{ChIP peaks over Chromosomes}
-%%     \label{Fig:chromsomeCoverage}
-%%   \end{center}
-%% \end{figure}
 
 <<covplot, fig.height=3, fig.width=7, out.width="0.6\\textwidth">>=
 covplot(peak, weightCol="V5", chrs=c("chr17", "chr18"), xlim=c(4.5e7, 5e7))
@@ -167,34 +113,24 @@ In the above code, you should notice that tagMatrix is not restricted to TSS reg
 tagHeatmap(tagMatrix, xlim=c(-3000, 3000), color="red")
 @ 
 
-%% \begin{figure}[htb]
-%%   \begin{center}
-%%     \includegraphics[width=.4\linewidth]{figures/peakHeat.png}
-%%     \caption{Heatmap of ChIP peaks binding to TSS regions}
-%%     \label{Fig:heatmap}
-%%   \end{center}
-%% \end{figure}
-
-\Rpackage{ChIPseeker} provide a one step function to generate this figure from bed file. The following function will generate the same figure as above.
+\Biocpkg{ChIPseeker} provide a one step function to generate this figure from bed file. The following function will generate the same figure as above.
 <<heatmap2, eval=FALSE>>=
 peakHeatmap(files[[4]], TxDb=txdb, upstream=3000, downstream=3000, color="red")
 @ 
 
 \subsubsection{Average Profile of ChIP peaks binding to TSS region}
 <<avgprof, eval=TRUE, fig.cap="Average Profile of ChIP peaks binding to TSS region", fig.align="center", fig.height=7, fig.width=7, out.width="0.8\\textwidth", fig.pos="h">>=
-plotAvgProf(tagMatrix, xlim=c(-3000, 3000), xlab="Genomic Region (5'->3')", ylab = "Read Count Frequency")
+plotAvgProf(tagMatrix, xlim=c(-3000, 3000), 
+            xlab="Genomic Region (5'->3')", 
+            ylab = "Read Count Frequency")
 @ 
-%% \begin{figure}[htb]
-%%   \begin{center}
-%%     \includegraphics[width=.7\linewidth]{figures/avgProf.png}
-%%     \caption{Average Profile of ChIP peaks binding to TSS region}
-%%     \label{Fig:avgProf}
-%%   \end{center}
-%% \end{figure}
+
 
 The function \Rfunction{plotAvgProf2} provide a one step from bed file to average profile plot. The following command will generate the same figure as shown above.
 <<avgprof2, eval=FALSE>>=
-plotAvgProf2(files[[4]], TxDb=txdb, upstream=3000, downstream=3000, xlab="Genomic Region (5'->3')", ylab = "Read Count Frequency")
+plotAvgProf2(files[[4]], TxDb=txdb, upstream=3000, downstream=3000, 
+             xlab="Genomic Region (5'->3')", 
+             ylab = "Read Count Frequency")
 @
 
 
@@ -205,13 +141,13 @@ peakAnno <- annotatePeak(files[[4]], tssRegion=c(-3000, 3000),
 peakAnno
 @ 
 
-Peak Annotation is performed by \Rfunction{annotatePeak}. User can define TSS (transcription start site) region, by default TSS is defined from -3kb to +3kb. The output of \Rfunction{annotatePeak} is \Robject{csAnno} instance. \Rpackage{ChIPseeker} provides \Rfunction{as.GRanges} to convert \Robject{csAnno} to \Robject{GRanges} instance, and \Rfunction{as.data.frame} to convert \Robject{csAnno} to \Robject{data.frame} which can be exported to file by \Rfunction{write.table}.
+Peak Annotation is performed by \Rfunction{annotatePeak}. User can define TSS (transcription start site) region, by default TSS is defined from -3kb to +3kb. The output of \Rfunction{annotatePeak} is \Robject{csAnno} instance. \Biocpkg{ChIPseeker} provides \Rfunction{as.GRanges} to convert \Robject{csAnno} to \Robject{GRanges} instance, and \Rfunction{as.data.frame} to convert \Robject{csAnno} to \Robject{data.frame} which can be exported to file by \Rfunction{write.table}.
 \\
 \\
-\Robject{TxDb} object contained transcript-related features of a particular genome. Bioconductor provides several package that containing \Robject{TxDb} object of model organisms with multiple commonly used genome version, for instance \Rpackage{TxDb.Hsapiens.UCSC.hg38.knownGene} and \Rpackage{TxDb.Hsapiens.UCSC.hg19.knownGene} for human genome hg38 and hg19, \Rpackage{TxDb.Mmusculus.UCSC.mm10.knownGene} and \Rpackage{TxDb.Mmusculus.UCSC.mm9.knownGene} for mouse genome mm10 and mm9, etc. User can also prepare their own \Robject{TxDb} object by retrieving information from UCSC Genome Bioinformatics and BioMart data resources by R function \Rfunction{makeTranscriptDbFromBiomart} and \Rfunction{makeTranscriptDbFromUCSC}. TxDb object should be passed for peak annotation. 
+\Robject{TxDb} object contained transcript-related features of a particular genome. Bioconductor provides several package that containing \Robject{TxDb} object of model organisms with multiple commonly used genome version, for instance \Biocannopkg{TxDb.Hsapiens.UCSC.hg38.knownGene} and \Biocannopkg{TxDb.Hsapiens.UCSC.hg19.knownGene} for human genome hg38 and hg19, \Biocannopkg{TxDb.Mmusculus.UCSC.mm10.knownGene} and \Biocannopkg{TxDb.Mmusculus.UCSC.mm9.knownGene} for mouse genome mm10 and mm9, etc. User can also prepare their own \Robject{TxDb} object by retrieving information from UCSC Genome Bioinformatics and BioMart data resources by R function \Rfunction{makeTranscriptDbFromBiomart} and \Rfunction{makeTranscriptDbFromUCSC}. \Robject{TxDb} object should be passed for peak annotation. 
 \\
 \\
-All the peak information contained in peakfile will be retained in the output of \Rfunction{annotatePeak}. The position and strand information of nearest genes are reported. The distance from peak to the TSS of its nearest gene is also reported. The genomic region of the peak is reported in annotation column. Since some annotation may overlap, \Rpackage{ChIPseeker} adopted the following priority in genomic annotation.
+All the peak information contained in peakfile will be retained in the output of \Rfunction{annotatePeak}. The position and strand information of nearest genes are reported. The distance from peak to the TSS of its nearest gene is also reported. The genomic region of the peak is reported in annotation column. Since some annotation may overlap, \Biocpkg{ChIPseeker} adopted the following priority in genomic annotation.
 \begin{itemize}
   \item Promoter
   \item 5' UTR
@@ -253,14 +189,15 @@ vennpie(peakAnno)
 \subsection{Visualize distribution of TF-binding loci relative to TSS}
 The distance from the peak (binding site) to the TSS of the nearest gene is calculated by \Rfunction{annotatePeak} and reported in the output. We provide \Rfunction{plotDistToTSS} to calculate the percentage of binding sites upstream and downstream from the TSS of the nearest genes, and visualize the distribution. 
 <<barplot_tss, fig.cap="Distribution of Binding Sites", fig.align="center", fig.height=2, fig.width=6, out.width="0.8\\textwidth", fig.pos="h">>= 
-plotDistToTSS(peakAnno, title="Distribution of transcription factor-binding loci \n relative to TSS")
+plotDistToTSS(peakAnno, 
+              title="Distribution of transcription factor-binding loci\nrelative to TSS")
 @
 
 \section{Functional enrichment analysis}
 Once we have obtained the annotated nearest genes, we can perform functional enrichment analysis to identify predominant biological themes among these genes by incorporating biological knowledge provided by biological ontologies. For instance, Gene Ontology (GO) \cite{ashburner_gene_2000} annotates genes to biological processes, molecular functions, and cellular components in a directed acyclic graph structure, Kyoto Encyclopedia of Genes and Genomes (KEGG) \cite{kanehisa_kegg_2004} annotates genes to pathways, Disease Ontology (DO) \cite{schriml_disease_2011} annotates genes with human disease association, and Reactome \cite{croft_reactome_2013} annotates gene to pathways and reactions. 
 \\
 \\
-Enrichment analysis is a widely used approach to identify biological themes. I have developed several Bioconductor packages for investigating whether the number of selected genes associated with a particular biological term is larger than expected, including \Rpackage{DOSE} for Disease Ontology, \Rpackage{ReactomePA} for reactome pathway, \Rpackage{clusterProfiler} \cite{yu_clusterprofiler:_2012} for Gene Ontology and KEGG enrichment analysis. 
+Enrichment analysis is a widely used approach to identify biological themes. I have developed several Bioconductor packages for investigating whether the number of selected genes associated with a particular biological term is larger than expected, including \Biocpkg{DOSE} for Disease Ontology, \Biocpkg{ReactomePA} for reactome pathway, \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler:_2012} for Gene Ontology and KEGG enrichment analysis. 
 
 <<enrichment>>= 
 require(clusterProfiler)
@@ -268,7 +205,7 @@ bp <- enrichGO(as.data.frame(peakAnno)$geneId, ont="BP", readable=TRUE)
 head(summary(bp))
 @ 
 
-More information can be found in the vignettes of Bioconductor packages \Rpackage{DOSE} , \Rpackage{ReactomePA}, \Rpackage{clusterProfiler} \cite{yu_clusterprofiler:_2012}, which also provide several methods to visualize enrichment results. The \Rpackage{clusterProfiler} package is designed for comparing and visualizing functional profiles among gene clusters, and can directly applied to compare biological themes at GO, DO, KEGG, Reactome perspective.
+More information can be found in the vignettes of Bioconductor packages \Biocpkg{DOSE} , \Biocpkg{ReactomePA}, \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler:_2012}, which also provide several methods to visualize enrichment results. The \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler:_2012} is designed for comparing and visualizing functional profiles among gene clusters, and can directly applied to compare biological themes at GO, DO, KEGG, Reactome perspective.
 \\
 \\
 \section{ChIP peak data set comparison}
@@ -284,13 +221,6 @@ Function \Rfunction{plotAvgProf} and \Rfunction{tagHeatmap} can accept a list of
 data("tagMatrixList")
 plotAvgProf(tagMatrixList, xlim=c(-3000, 3000))
 @ 
-%% \begin{figure}[htb]
-%%   \begin{center}
-%%     \includegraphics[width=.7\linewidth]{figures/avgProf2.png}
-%%     \caption{Average Profiles of ChIP peaks among different experiments}
-%%     \label{Fig:avgProf2}
-%%   \end{center}
-%% \end{figure}
 
 \subsubsection{Peak heatmaps}
 <<heatmap3, eval=TRUE, fig.cap="Heatmap of ChIP peaks among different experiments", fig.align="center", fig.height=9, fig.width=7, out.width="0.8\\textwidth", fig.pos="h">>=
@@ -298,20 +228,13 @@ tagHeatmap(tagMatrixList, xlim=c(-3000, 3000), color=NULL)
 @ 
 
 
-%% \begin{figure}[htb]
-%%   \begin{center}
-%%     \includegraphics[width=.4\linewidth]{figures/peakHeat2.png}
-%%     \caption{Heatmap of ChIP peaks among different experiments}
-%%     \label{Fig:heatmap2}
-%%   \end{center}
-%% \end{figure}
-
 \subsection{ChIP peak annotation comparision}
 The \Rfunction{plotAnnoBar} and \Rfunction{plotDistToTSS} can also accept input of a named list of annotated peaks (output of \Rfunction{annotatePeak}).
 
 
 <<List_of_peakAnno>>=
-peakAnnoList <- lapply(files, annotatePeak, TxDb=txdb, tssRegion=c(-3000, 3000), verbose=FALSE)
+peakAnnoList <- lapply(files, annotatePeak, TxDb=txdb, 
+                       tssRegion=c(-3000, 3000), verbose=FALSE)
 @
 
 We can use \Rfunction{plotAnnoBar} to comparing their genomic annotation.
@@ -325,16 +248,21 @@ plotDistToTSS(peakAnnoList)
 @
 
 \subsection{Functional profiles comparison}
-As shown in section 4, the annotated genes can analyzed by \Rpackage{clusterProfiler}, \Rpackage{DOSE} and \Rpackage{ReactomePA} for Gene Ontology, KEGG, Disease Ontology and Reactome Pathway enrichment analysis. 
+As shown in section 4, the annotated genes can analyzed by \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler:_2012}, \Biocpkg{DOSE} and \Biocpkg{ReactomePA} for Gene Ontology, KEGG, Disease Ontology and Reactome Pathway enrichment analysis. 
 \\
 \\
-The \Rpackage{clusterProfiler} package provide \Rfunction{compareCluster} function for comparing biological themes among gene clusters, and can be easily adopted to compare different ChIP peak experiments.
+The \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler:_2012} package provide \Rfunction{compareCluster} function for comparing biological themes among gene clusters, and can be easily adopted to compare different ChIP peak experiments.
 
 <<compareCluster, eval=FALSE>>=
 genes = lapply(peakAnnoList, function(i) as.data.frame(i)$geneId)
 names(genes) = sub("_", "\n", names(genes))
-compGO <- compareCluster(geneCluster=genes, fun="enrichGO", ont="MF", organism="human", pvalueCutoff=0.05, pAdjustMethod="BH")
-plot(compGO, showCategory=20, title="Molecular Function Enrichment")
+compGO <- compareCluster(geneCluster   = genes, 
+                         fun           = "enrichGO", 
+                         ont           = "MF", 
+                         organism      = "human", 
+                         pvalueCutoff  = 0.05, 
+                         pAdjustMethod = "BH")
+plot(compGO, showCategory = 20, title = "Molecular Function Enrichment")
 @
 
 \begin{figure}[htb]
@@ -347,7 +275,7 @@ plot(compGO, showCategory=20, title="Molecular Function Enrichment")
 
 
 \subsection{Overlap of peaks and annotated genes}
-User may want to compare the overlap peaks of replicate experiments or from different experiments. \Rpackage{ChIPseeker} provides \Rfunction{peak2GRanges} that can read peak file and stored in GRanges object. Several files can be read simultaneously using lapply, and then passed to \Rfunction{vennplot} to calculate their overlap and draw venn plot.
+User may want to compare the overlap peaks of replicate experiments or from different experiments. \Biocpkg{ChIPseeker} provides \Rfunction{peak2GRanges} that can read peak file and stored in GRanges object. Several files can be read simultaneously using lapply, and then passed to \Rfunction{vennplot} to calculate their overlap and draw venn plot.
 \\
 \\
 \Rfunction{vennplot} accept a list of object, can be a list of GRanges or a list of vector. Here, I will demonstrate using \Rfunction{vennplot} to visualize the overlap of the nearest genes stored in peakAnnoList.
@@ -358,12 +286,13 @@ vennplot(genes)
 @ 
 
 \section{Statistical testing of ChIP seq overlap} 
-Overlap is very important, if two ChIP experiment by two different proteins overlap in a large fraction of their peaks, they may cooperative in regulation. Calculating the overlap is only touch the surface. \Rpackage{ChIPseeker} implemented statistical methods to measure the significance of the overlap.
+Overlap is very important, if two ChIP experiment by two different proteins overlap in a large fraction of their peaks, they may cooperative in regulation. Calculating the overlap is only touch the surface. \Biocpkg{ChIPseeker} implemented statistical methods to measure the significance of the overlap.
 
 \subsection{Shuffle genome coordination}
 
 <<shuffle>>=
-p <- GRanges(seqnames=c("chr1", "chr3"), ranges=IRanges(start=c(1, 100), end=c(50, 130)))
+p <- GRanges(seqnames=c("chr1", "chr3"), 
+             ranges=IRanges(start=c(1, 100), end=c(50, 130)))
 shuffle(p, TxDb=txdb)
 @ 
 
@@ -373,7 +302,12 @@ We implement the \Rfunction{shuffle} function to randomly permute the genomic lo
 With the ease of this \Rfunction{shuffle} method, we can generate thousands of random ChIP data and calculate the background null distribution of the overlap among ChIP data sets.
 
 <<peakEnrichment>>=
-enrichPeakOverlap(queryPeak=files[[5]], targetPeak=unlist(files[1:4]), TxDb=txdb, pAdjustMethod="BH", nShuffle=50, chainFile=NULL)
+enrichPeakOverlap(queryPeak     = files[[5]], 
+                  targetPeak    = unlist(files[1:4]), 
+                  TxDb          = txdb, 
+                  pAdjustMethod = "BH", 
+                  nShuffle      = 50, 
+                  chainFile     = NULL)
 @ 
 
 Parameter \Robject{queryPeak} is the query ChIP data, while \Robject{targetPeak} is bed file name or a vector of bed file names from comparison; \Robject{nShuffle} is the number to shuffle the peaks in \Robject{targetPeak}. To speed up the compilation of this vignettes, we only set \Robject{nShuffle} to 50 as an example for only demonstration. User should set the number to 1000 or above for more robust result. Parameter \Robject{chainFile} are chain file name for mapping the \Robject{targetPeak} to the genome version consistent with \Robject{queryPeak} when their genome version are different. This creat the possibility of comparison among different genome version and cross species.
@@ -407,7 +341,7 @@ head(hg19)
 If \Robject{simplify} is set to \Robject{FALSE}, extra information including \Robject{source\_name}, \Robject{extract\_protocol}, \Robject{description}, \Robject{data\_processing}, and \Robject{submission\_date} will be incorporated.
 
 \subsection{Download GEO ChIP data sets}
-\Rpackage{ChIPseeker} provide function \Rfunction{downloadGEObedFiles} to download all the bed files of a particular genome.
+\Biocpkg{ChIPseeker} provide function \Rfunction{downloadGEObedFiles} to download all the bed files of a particular genome.
 
 <<downloadGEO, eval=FALSE>>=
 downloadGEObedFiles(genome="hg19", destDir="hg19")
@@ -426,13 +360,13 @@ After download the bed files from GEO, we can pass them to \Rfunction{enrichPeak
 
 \section{Session Information}
 
-The version number of R and packages loaded for generating the vignette were:
+Here is the output of \Rcode{sessionInfo()} on the system on which this document was compiled:
 
 <<sessInfo, results='asis', echo=FALSE>>=
 toLatex(sessionInfo())
 @
 
-\bibliographystyle{unsrt}
+
 \bibliography{ChIPseeker}
 \end{document}
 

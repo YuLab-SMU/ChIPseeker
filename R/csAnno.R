@@ -229,7 +229,9 @@ setMethod("plotDistToTSS", signature(x="list"),
 ##' @param ... additional parameter
 ##' @return plot
 ##' @exportMethod plotDistToTSS
-##' @usage plotDistToTSS(x,distanceColumn="distanceToTSS", xlab="", ylab="Binding sites (\%) (5'->3')", title="Distribution of transcription factor-binding loci relative to TSS",...)
+##' @usage plotDistToTSS(x,distanceColumn="distanceToTSS", xlab="",
+##' ylab="Binding sites (\%) (5'->3')",
+##' title="Distribution of transcription factor-binding loci relative to TSS",...)
 ##' @author Guangchuang Yu \url{http://ygc.name}
 setMethod("plotDistToTSS", signature(x="csAnno"),
           function(x, distanceColumn="distanceToTSS",
