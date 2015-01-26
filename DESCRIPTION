@@ -1,7 +1,7 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.3.1
+Version: 1.3.3
 Author: Guangchuang Yu
 Maintainer: Guangchuang Yu <guangchuangyu@gmail.com>
 Description: This package implements functions to retrieve the nearest genes
@@ -15,11 +15,10 @@ Description: This package implements functions to retrieve the nearest genes
     regions, genomic annotation, distance to TSS, and overlap of peaks or
     genes.
 Depends:
-    R (>= 3.0)
+    R (>= 3.1.0)
 Imports:
     BiocGenerics,
     AnnotationDbi,
-    data.table,
     IRanges,
     GenomeInfoDb,
     GenomicRanges,
@@ -30,19 +29,22 @@ Imports:
     gtools,
     methods,
     plotrix,
+    dplyr,
     plyr,
+    magrittr,
     RColorBrewer,
     rtracklayer,
     S4Vectors,
     TxDb.Hsapiens.UCSC.hg38.knownGene
 Suggests:
     clusterProfiler,
-    ReactomePA,
     DOSE,
-    GOSemSim,
+    ReactomePA,
     org.Hs.eg.db,
-    knitr
+    knitr,
+    BiocStyle
 URL: https://github.com/GuangchuangYu/ChIPseeker
+BugReports: https://github.com/GuangchuangYu/ChIPseeker/issues
 VignetteBuilder: knitr
 License: Artistic-2.0
 biocViews: Annotation, ChIPSeq, Software, Visualization, MultipleComparison

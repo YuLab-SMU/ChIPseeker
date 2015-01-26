@@ -40,9 +40,7 @@ plotChrCov <- function(peak, weightCol=NULL,
 ##' @importFrom ggplot2 xlab
 ##' @importFrom ggplot2 ylab
 ##' @importFrom ggplot2 ggtitle
-##' @importFrom plyr ldply
 ##' @importFrom GenomeInfoDb seqlengths
-##' @importFrom data.table data.table
 ##' @export
 ##' @author G Yu
 covplot <- function(peak, weightCol=NULL,
@@ -60,28 +58,11 @@ covplot <- function(peak, weightCol=NULL,
     }
     
     tm <- getChrCov(peak.gr=peak.gr, weightCol=weightCol, chrs, xlim)
-    bin <- floor((max(tm$end) - min(tm$start))/1000)
-    if (bin < 1) {
-        bin <- 1
-    }
-    
-    chr <- pos <- cnt <- NULL
-    tml <- lapply(1:nrow(tm), function(i) {
-        x <- tm[i,]
-        data.table(chr=x$chr, pos=seq(x$start, x$end, by=bin), cnt=x[,4])
-    })
-    
-    tm2 <- do.call("rbind", tml)
-    tm2 <- ddply(tm2, .(chr, pos), transform, value=sum(cnt))
-    tm2 <- tm2[,-3]
-    tm2 <- unique(tm2)
-    tm2 <- as.data.frame(tm2)
-    ##colnames(tm2) <- c("chr", "pos", "value")
-    
-    pos <- chr <- value <- NULL
-    
-    p <- ggplot(tm2, aes(pos, value))
-    p <- p + geom_segment(aes(x=pos, y=0, xend=pos, yend= value))
+       
+    chr <- start <- end <- value <- NULL
+   
+    p <- ggplot(tm, aes(start, value))
+    p <- p + geom_segment(aes(x=start, y=0, xend=end, yend= value))
     if(length(unique(tm$chr)) > 1) {
         p <- p + facet_grid(chr ~., scales="free")
     }
@@ -93,9 +74,13 @@ covplot <- function(peak, weightCol=NULL,
     return(p)
 }
 
+
 ##' @importFrom S4Vectors mcols
 ##' @importFrom IRanges slice
 ##' @importFrom S4Vectors runValue
+##' @importFrom dplyr group_by
+##' @importFrom dplyr summarise
+##' @importFrom magrittr %>%
 getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
 
     if ( is.null(weightCol)) {
@@ -107,19 +92,27 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
 
     cov <- lapply(peak.cov, slice, lower=1)
 
+    get.runValue <- function(x) {
+        value <- x@subject@values
+        value[value != 0]
+    }
+
+    chr <- start <- end <- cnt <- NULL
+    
     ldf <- lapply(1:length(cov), function(i) {
         x <- cov[[i]]
-        data.frame(chr=names(cov[i]),
-                   start=start(x),
-                   end = end(x),
-                   cnt = runValue(x)[[1]]
+        data.frame(chr   = names(cov[i]),
+                   start = start(x),
+                   end   = end(x),
+                   cnt   = get.runValue(x)
+                                        # the following versions are more slower
+                                        # unlist(runValue(x)) 
                                         # sapply(x, runValue)
-                                        # value <- x@subject@values
-                                        # value <- value[value != 0]
                    )
     })
     
     df <- do.call("rbind", ldf)
+    
     chr.sorted <- sortChrName(as.character(unique(df$chr)))
     df$chr <- factor(df$chr, levels=chr.sorted)
     if (!is.null(chrs) && !is.na(chrs) && chrs %in% chr.sorted) {
@@ -129,12 +122,8 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
         df <- df[df$start >= xlim[1] & df$end <= xlim[2],]
     }
 
-    ##colnames(df) <- c("chr", "start", "end", "cnt")
-    chr <- start <- end <- cnt <- NULL    
-    df2 <- ddply(df, .(chr, start, end), transform, value=sum(cnt))
-    df2 <- df2[,-4]
-    df2 <- unique(df2)
-    return(df)
+    df2 <- group_by(df, chr, start, end) %>% summarise(value=sum(cnt))
+    return(df2)
 }
 
 sortChrName <- function(chr.name) {
