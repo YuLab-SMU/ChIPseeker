@@ -175,7 +175,7 @@ annotatePeak <- function(peak,
         cat(">> assigning chromosome lengths\t\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
 
-    seqinfo(peak.gr) <- seqinfo(TxDb)[names(seqlengths(peak.gr))]
+    peak.gr@seqinfo <- seqinfo(TxDb)[names(seqlengths(peak.gr))]
     
     if(verbose)
         cat(">> done...\t\t\t\t\t",

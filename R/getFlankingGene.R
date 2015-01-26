@@ -1,5 +1,6 @@
 
-##' @importFrom plyr ddply
+##' @importFrom dplyr mutate
+##' @importFrom dplyr group_by
 ##' @importFrom IRanges ranges
 ##' @importFrom IRanges ranges<-
 ##' @importFrom IRanges start
@@ -41,10 +42,15 @@ getAllFlankingGene <- function(peak.gr, features, distance=5000) {
     hitInfo$distance[ii] <- dd[ii]
 
     peakIdx <- tx_name <- geneId <- distance <- NULL
-    hitInfo2 <- ddply(hitInfo, .(peakIdx), transform,
-                      flank_txIds=paste(tx_name, collapse=";"),
-                      flank_geneIds=paste(geneId, collapse=";"),
-                      flank_gene_distances=paste(distance, collapse=";"))
+    hitInfo2 <- group_by(hitInfo, peakIdx) %>%
+        mutate(flank_txIds=paste(tx_name, collapse=";"),
+                  flank_geneIds=paste(geneId, collapse=";"),
+                  flank_gene_distances=paste(distance, collapse=";"))
+    
+    ## hitInfo2 <- ddply(hitInfo, .(peakIdx), transform,
+    ##                   flank_txIds=paste(tx_name, collapse=";"),
+    ##                   flank_geneIds=paste(geneId, collapse=";"),
+    ##                   flank_gene_distances=paste(distance, collapse=";"))
 
     res <- hitInfo2[,c("peakIdx", "flank_txIds", "flank_geneIds", "flank_gene_distances")]
     res <- unique(res)

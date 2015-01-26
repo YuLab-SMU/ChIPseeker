@@ -11,9 +11,8 @@
 ##' @param categoryColumn category column
 ##' @return bar plot that summarize distance from peak to
 ##' TSS of the nearest gene.
-##' @importFrom plyr ddply
+##' @importFrom magrittr %<>%
 ##' @importFrom plyr .
-##' @importFrom plyr summarise
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 aes
 ##' @importFrom ggplot2 aes_string
@@ -49,7 +48,7 @@ plotDistToTSS.data.frame <- function(peakDist,
                                      categoryColumn) {
 
     ## to satisfy codetools
-    Feature <- freq <- NULL
+    Feature <- freq <- .id <- NULL
 
     ## assign Feature according to the distancetoFeature
     peakDist$Feature <- NA
@@ -69,28 +68,45 @@ plotDistToTSS.data.frame <- function(peakDist,
 
     ## count frequencies
     if (categoryColumn == 1) {
-        peakDist <- ddply(peakDist, .(Feature, sign), summarise, freq=length(Feature))
+        peakDist <- group_by(peakDist, Feature, sign) %>%
+            mutate(freq = length(Feature))
+        
+        ## peakDist <- ddply(peakDist, .(Feature, sign), summarise, freq=length(Feature))
         peakDist$freq = peakDist$freq/sum(peakDist$freq)
         peakDist$freq = peakDist$freq * 100
-        totalFreq <- ddply(peakDist, .(sign), summarise, total=sum(freq))
+        totalFreq <- group_by(peakDist, sign) %>%
+            summarise(total = sum(freq))
+        
+        ## totalFreq <- ddply(peakDist, .(sign), summarise, total=sum(freq))
     } else {
-        peakDist <- ddply(peakDist, c(categoryColumn, "Feature", "sign"), summarise, freq=length(Feature))
-        nn <- unique(peakDist[, categoryColumn])
-        for (i in 1:length(nn)) {
-            idx <- peakDist[, categoryColumn] == nn[i]
-            peakDist$freq[idx] <- peakDist$freq[idx]/sum(peakDist$freq[idx])
-        }
-        peakDist$freq = peakDist$freq * 100
-
+        ## peakDist <- ddply(peakDist, c(categoryColumn, "Feature", "sign"), summarise, freq=length(Feature))
+        peakDist %<>% group_by(.id, Feature, sign) %>%
+            mutate(freq = length(Feature)) %>%
+                group_by(.id) %>%
+                    mutate(freq = freq/sum(freq) * 100)
+        
+        
+        
+        ## nn <- as.character(unique(peakDist[, categoryColumn]))
+        ## for (i in 1:length(nn)) {
+        ##     idx <- peakDist[, categoryColumn] == nn[i]
+        ##     peakDist$freq[idx] <- peakDist$freq[idx]/sum(peakDist$freq[idx])
+        ## }
+        ## peakDist$freq = peakDist$freq * 100
+        
         zeroDist <- peakDist[peakDist$sign == 0,]
         zeroDist$freq <- zeroDist$freq/2
         zeroDist$sign <- -1
         peakDist[peakDist$sign == 0,] <- zeroDist
         zeroDist$sign <- 1
         peakDist <- rbind(peakDist, zeroDist)        
-        peakDist <- ddply(peakDist, c(categoryColumn, "Feature", "sign"), summarise, freq=sum(freq))
-          
-        totalFreq <- ddply(peakDist, c(categoryColumn, "sign"), summarise, total=sum(freq))
+        ## peakDist <- ddply(peakDist, c(categoryColumn, "Feature", "sign"), summarise, freq=sum(freq))
+        peakDist %<>% group_by(.id, Feature, sign) %>%
+            mutate(freq = sum(freq))
+        totalFreq <- peakDist %>% group_by(.id, sign) %>%
+            summarise(total = sum(freq))
+        
+        ## totalFreq <- ddply(peakDist, c(categoryColumn, "sign"), summarise, total=sum(freq))
     }
 
     ## preparing ylim and y tick labels
@@ -116,7 +132,7 @@ plotDistToTSS.data.frame <- function(peakDist,
             scale_y_continuous(breaks=ybreaks,labels=ylbs)
     
     p <- p + ylab(ylab) + xlab(xlab) + ggtitle(title) 
-
+    
     if (categoryColumn == 1) {
         p <- p + scale_x_continuous(breaks=NULL)
     }
