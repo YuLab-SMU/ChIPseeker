@@ -68,12 +68,13 @@ plotDistToTSS.data.frame <- function(peakDist,
 
     ## count frequencies
     if (categoryColumn == 1) {
-        peakDist <- group_by(peakDist, Feature, sign) %>%
-            mutate(freq = length(Feature))
+        peakDist %<>% group_by(Feature, sign) %>%
+            summarise(freq = length(Feature)) 
         
         ## peakDist <- ddply(peakDist, .(Feature, sign), summarise, freq=length(Feature))
         peakDist$freq = peakDist$freq/sum(peakDist$freq)
         peakDist$freq = peakDist$freq * 100
+  
         totalFreq <- group_by(peakDist, sign) %>%
             summarise(total = sum(freq))
         
@@ -81,7 +82,7 @@ plotDistToTSS.data.frame <- function(peakDist,
     } else {
         ## peakDist <- ddply(peakDist, c(categoryColumn, "Feature", "sign"), summarise, freq=length(Feature))
         peakDist %<>% group_by(.id, Feature, sign) %>%
-            mutate(freq = length(Feature)) %>%
+            summarise(freq = length(Feature)) %>%
                 group_by(.id) %>%
                     mutate(freq = freq/sum(freq) * 100)
         
