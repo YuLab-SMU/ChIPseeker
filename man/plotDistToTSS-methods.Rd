@@ -17,7 +17,9 @@ plotDistToTSS(x, distanceColumn = "distanceToTSS", xlab = "",
   title = "Distribution of transcription factor-binding loci relative to TSS",
   ...)
 
-plotDistToTSS(x,distanceColumn="distanceToTSS", xlab="", ylab="Binding sites (\%) (5'->3')", title="Distribution of transcription factor-binding loci relative to TSS",...)
+plotDistToTSS(x,distanceColumn="distanceToTSS", xlab="",
+ylab="Binding sites (\%) (5'->3')",
+title="Distribution of transcription factor-binding loci relative to TSS",...)
 }
 \arguments{
 \item{x}{\code{csAnno} instance}
