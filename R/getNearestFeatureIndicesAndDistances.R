@@ -26,7 +26,8 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     pe.idx <- follow(peaks, features)
     
     na.idx <- is.na(ps.idx) | is.na(pe.idx)
-    if (sum(na.idx) > 1) {
+    ## if (sum(na.idx) > 1) {
+    if (sum(na.idx) > 0) { ## suggested by Thomas Schwarzl
         ps.idx <- ps.idx[!na.idx]
         pe.idx <- pe.idx[!na.idx]
         peaks <- peaks[!na.idx]
