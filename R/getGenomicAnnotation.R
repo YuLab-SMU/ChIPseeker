@@ -87,9 +87,9 @@ getGenomicAnnotation <- function(peaks,
     }
     anno <- updateGenomicAnnotation(peaks, exonList, "Exon", anno)
 
-    intergenicIndex <- anno[["annotation"]] == "Intergenic"
+    intergenicIndex <- which(anno[["annotation"]] == "Intergenic")
     anno[["detailGenomicAnnotation"]][intergenicIndex, "Intergenic"] <- TRUE
-    anno[["detailGenomicAnnotation"]][!intergenicIndex, "genic"] <- TRUE
+    anno[["detailGenomicAnnotation"]][-intergenicIndex, "genic"] <- TRUE
     
     ## 3' UTR Exons
     if ( exists("threeUTRList", envir=ChIPseekerEnv, inherits=FALSE) ) {
@@ -139,12 +139,15 @@ getGenomicAnnotation <- function(peaks,
 
     ## nearest from gene end
     idx <- follow(peaks, features)
-    peF <- features[idx]
+    na.idx <- which(is.na(idx))
+    peF <- features[idx[-na.idx]]
     dd <- ifelse(strand(peF) == "+",
-                 start(peaks) - end(peF),
-                 end(peaks) - start(peF))
-    for (i in 1:3) {
-        j <- which(annotation == "Intergenic" & abs(dd) <= i*1000)
+                 start(peaks[-na.idx]) - end(peF),
+                 end(peaks[-na.idx]) - start(peF))
+    dd2 <- numeric(length(idx))
+    dd2[-na.idx] <- dd
+    for (i in 1:3) { ## downstream within 3k
+        j <- which(annotation == "Intergenic" & abs(dd2) <= i*1000)
         if (length(j) > 0) {
             if (i == 1) {
                 lbs <- "Downstream (<1kb)"
@@ -154,11 +157,11 @@ getGenomicAnnotation <- function(peaks,
             annotation[j] <- lbs
         }
     }
-    annotation[annotation == "Intergenic"] = "Distal Intergenic"
+    annotation[which(annotation == "Intergenic")] = "Distal Intergenic"
 
-    downstreamIndex <- dd > 0 & dd < 3000
+    downstreamIndex <- dd2 > 0 & dd2 < 3000 ## downstream 3k
     detailGenomicAnnotation[downstreamIndex, "downstream"] <- TRUE
-    detailGenomicAnnotation[annotation == "Distal Intergenic", "distal_intergenic"] <- TRUE
+    detailGenomicAnnotation[which(annotation == "Distal Intergenic"), "distal_intergenic"] <- TRUE
     return(list(annotation=annotation, detailGenomicAnnotation=detailGenomicAnnotation))
 }
 
