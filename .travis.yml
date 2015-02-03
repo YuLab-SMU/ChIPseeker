@@ -10,14 +10,11 @@ before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
+env:
+  global:
+    - BIOC_USE_DEVEL="TRUE"
 install:
-  - ./travis-tool.sh bioc_install GenomicRanges
-  - ./travis-tool.sh bioc_install GenomicFeatures
-  - ./travis-tool.sh bioc_install TxDb.Hsapiens.UCSC.hg39.knownGene
-  - ./travis-tool.sh bioc_install org.Hs.eg.db
-  - ./travis-tool.sh bioc_install clusterProfiler
-  - ./travis-tool.sh bioc_install ReactomePA
-  - ./travis-tool.sh bioc_install BiocStyle
+  - ./travis-tool.sh install_bioc_deps
   - ./travis-tool.sh install_deps
 script: ./travis-tool.sh run_tests
 
