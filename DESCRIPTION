@@ -1,7 +1,7 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.3.6
+Version: 1.3.7
 Author: Guangchuang Yu
 Maintainer: Guangchuang Yu <guangchuangyu@gmail.com>
 Description: This package implements functions to retrieve the nearest genes
@@ -35,7 +35,7 @@ Imports:
     RColorBrewer,
     rtracklayer,
     S4Vectors,
-    TxDb.Hsapiens.UCSC.hg38.knownGene
+    TxDb.Hsapiens.UCSC.hg19.knownGene
 Suggests:
     clusterProfiler,
     DOSE,

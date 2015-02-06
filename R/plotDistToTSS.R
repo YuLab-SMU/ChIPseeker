@@ -32,8 +32,8 @@
 ##' @importFrom ggplot2 geom_text
 ##' @examples
 ##' \dontrun{
-##' require(TxDb.Hsapiens.UCSC.hg38.knownGene)
-##' txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+##' require(TxDb.Hsapiens.UCSC.hg19.knownGene)
+##' txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 ##' peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
 ##' peakAnno <- annotatePeak(peakfile, TxDb=txdb)
 ##' plotDistToTSS(peakAnno)
@@ -71,44 +71,35 @@ plotDistToTSS.data.frame <- function(peakDist,
         peakDist %<>% group_by(Feature, sign) %>%
             summarise(freq = length(Feature)) 
         
-        ## peakDist <- ddply(peakDist, .(Feature, sign), summarise, freq=length(Feature))
         peakDist$freq = peakDist$freq/sum(peakDist$freq)
         peakDist$freq = peakDist$freq * 100
-  
-        totalFreq <- group_by(peakDist, sign) %>%
-            summarise(total = sum(freq))
-        
-        ## totalFreq <- ddply(peakDist, .(sign), summarise, total=sum(freq))
     } else {
-        ## peakDist <- ddply(peakDist, c(categoryColumn, "Feature", "sign"), summarise, freq=length(Feature))
         peakDist %<>% group_by(.id, Feature, sign) %>%
             summarise(freq = length(Feature)) %>%
                 group_by(.id) %>%
                     mutate(freq = freq/sum(freq) * 100)
+    }
+
+    zeroDist <- peakDist[peakDist$sign == 0,]
+    zeroDist$freq <- zeroDist$freq/2
+    zeroDist$sign <- -1
+    peakDist[peakDist$sign == 0,] <- zeroDist
+    zeroDist$sign <- 1
+    peakDist <- rbind(peakDist, zeroDist)        
+    
+    if (categoryColumn == 1) {
+        peakDist %<>% group_by(Feature, sign) %>%
+            summarise(freq = sum(freq))
         
-        
-        
-        ## nn <- as.character(unique(peakDist[, categoryColumn]))
-        ## for (i in 1:length(nn)) {
-        ##     idx <- peakDist[, categoryColumn] == nn[i]
-        ##     peakDist$freq[idx] <- peakDist$freq[idx]/sum(peakDist$freq[idx])
-        ## }
-        ## peakDist$freq = peakDist$freq * 100
-        
-        zeroDist <- peakDist[peakDist$sign == 0,]
-        zeroDist$freq <- zeroDist$freq/2
-        zeroDist$sign <- -1
-        peakDist[peakDist$sign == 0,] <- zeroDist
-        zeroDist$sign <- 1
-        peakDist <- rbind(peakDist, zeroDist)        
-        ## peakDist <- ddply(peakDist, c(categoryColumn, "Feature", "sign"), summarise, freq=sum(freq))
+        totalFreq <- peakDist %>% group_by(sign) %>%
+            summarise(total = sum(freq))
+    } else {
         peakDist %<>% group_by(.id, Feature, sign) %>%
-            mutate(freq = sum(freq))
+            summarise(freq = sum(freq))
         totalFreq <- peakDist %>% group_by(.id, sign) %>%
             summarise(total = sum(freq))
-        
-        ## totalFreq <- ddply(peakDist, c(categoryColumn, "sign"), summarise, total=sum(freq))
     }
+    
 
     ## preparing ylim and y tick labels
     ds = max(totalFreq$total[totalFreq$sign == 1])
@@ -137,8 +128,11 @@ plotDistToTSS.data.frame <- function(peakDist,
     if (categoryColumn == 1) {
         p <- p + scale_x_continuous(breaks=NULL)
     }
+
+    cols <- c("#9ecae1", "#3182bd", "#C7A76C", "#86B875", "#39BEB1", "#CD99D8")
     ## p <- p + scale_fill_hue("Feature", breaks=lbs, labels=lbs)
-    p <- p + scale_fill_manual(values=getCols(length(lbs)), breaks=lbs, labels=lbs)
+    ## p <- p + scale_fill_manual(values=getCols(length(lbs)), breaks=lbs, labels=lbs)
+    p <- p + scale_fill_manual(values=cols, breaks=lbs, labels=lbs)
     
     return(p)
 }
