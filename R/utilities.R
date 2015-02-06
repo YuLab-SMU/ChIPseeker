@@ -196,10 +196,10 @@ loadPeak <- function(peak, verbose=FALSE) {
     return(peak.gr)
 }
 
-##' @importFrom TxDb.Hsapiens.UCSC.hg38.knownGene TxDb.Hsapiens.UCSC.hg38.knownGene
+##' @importFrom TxDb.Hsapiens.UCSC.hg19.knownGene TxDb.Hsapiens.UCSC.hg19.knownGene
 loadTxDb <- function(TxDb) {
     if ( is.null(TxDb) ) {
-        TxDb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+        TxDb <- TxDb.Hsapiens.UCSC.hg19.knownGene
     }
     return(TxDb)
 }

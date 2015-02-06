@@ -62,11 +62,13 @@ GENENAME: full gene name
 Annotate peaks
 }
 \examples{
-require(TxDb.Hsapiens.UCSC.hg38.knownGene)
-txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+\dontrun{
+require(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
 peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 3000), TxDb=txdb)
 peakAnno
+}
 }
 \author{
 G Yu
