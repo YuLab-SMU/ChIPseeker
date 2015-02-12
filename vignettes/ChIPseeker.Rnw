@@ -357,7 +357,15 @@ downloadGSMbedFiles(gsm, destDir="hg19")
 \subsection{Overlap significant testing}
 After download the bed files from GEO, we can pass them to \Rfunction{enrichPeakOverlap} for testing the significant of overlap. Parameter \Robject{targetPeak} can be the folder, e.g. hg19, that containing bed files. \Rfunction{enrichPeakOverlap} will parse the folder and compare all the bed files. It is possible to test the overlap with bed files that are mapping to different genome or different genome versions, \Rfunction{enrichPeakOverlap} provide a parameter \Robject{chainFile} that can pass a chain file and liftOver the \Robject{targetPeak} to the genome version consistent with \Robject{queryPeak}. Signifcant overlap can be use to generate hypothesis of cooperative regulation.By mining the data deposited in GEO, we can identify some putative complex or interacted regulators in gene expression regulation or chromsome remodelling for further validation.  
 
+\section{External documents}
 
+\begin{itemize}
+  \item \href{http://ygc.name/2014/01/14/bug-of-r-package-chippeakanno/}{Bug of R package ChIPpeakAnno}
+  \item \href{http://ygc.name/2014/04/13/chipseeker-for-chip-peak-annotation/}{ChIPseeker for ChIP peak annotation}
+  \item \href{http://ygc.name/2014/04/30/visualization-methods-in-chipseeker/}{visualization methods in ChIPseeker}
+  \item \href{http://ygc.name/2014/10/01/multiple-annotation-in-chipseeker/}{multiple annotation in ChIPseeker}
+\end{itemize}
+    
 \section{Session Information}
 
 Here is the output of \Rcode{sessionInfo()} on the system on which this document was compiled:
