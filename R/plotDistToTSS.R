@@ -80,12 +80,14 @@ plotDistToTSS.data.frame <- function(peakDist,
                     mutate(freq = freq/sum(freq) * 100)
     }
 
-    zeroDist <- peakDist[peakDist$sign == 0,]
-    zeroDist$freq <- zeroDist$freq/2
-    zeroDist$sign <- -1
-    peakDist[peakDist$sign == 0,] <- zeroDist
-    zeroDist$sign <- 1
-    peakDist <- rbind(peakDist, zeroDist)        
+    if (any(peakDist$sign == 0)) {
+        zeroDist <- peakDist[peakDist$sign == 0,]
+        zeroDist$freq <- zeroDist$freq/2
+        zeroDist$sign <- -1
+        peakDist[peakDist$sign == 0,] <- zeroDist
+        zeroDist$sign <- 1
+        peakDist <- rbind(peakDist, zeroDist)        
+    }
     
     if (categoryColumn == 1) {
         peakDist %<>% group_by(Feature, sign) %>%
