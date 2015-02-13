@@ -64,7 +64,7 @@ ChIP peak data set comparison is also very important. We can use it as an index 
 Several visualization functions are implemented to visualize the coverage of the ChIP seq data, peak annotation, average profile and heatmap of peaks binding to TSS region. 
 \\
 \\
-Functional enrichment analysis of the peaks can be performed by my Bioconductor packages \Biocpkg{DOSE} , \Biocpkg{ReactomePA}, \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler:_2012} . 
+Functional enrichment analysis of the peaks can be performed by my Bioconductor packages \Biocpkg{DOSE} \cite{yu_dose_2015}, \Biocpkg{ReactomePA}, \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler_2012} . 
 
 <<loadPkgs>>=
 ## loading packages
@@ -197,7 +197,7 @@ plotDistToTSS(peakAnno,
 Once we have obtained the annotated nearest genes, we can perform functional enrichment analysis to identify predominant biological themes among these genes by incorporating biological knowledge provided by biological ontologies. For instance, Gene Ontology (GO) \cite{ashburner_gene_2000} annotates genes to biological processes, molecular functions, and cellular components in a directed acyclic graph structure, Kyoto Encyclopedia of Genes and Genomes (KEGG) \cite{kanehisa_kegg_2004} annotates genes to pathways, Disease Ontology (DO) \cite{schriml_disease_2011} annotates genes with human disease association, and Reactome \cite{croft_reactome_2013} annotates gene to pathways and reactions. 
 \\
 \\
-Enrichment analysis is a widely used approach to identify biological themes. I have developed several Bioconductor packages for investigating whether the number of selected genes associated with a particular biological term is larger than expected, including \Biocpkg{DOSE} for Disease Ontology, \Biocpkg{ReactomePA} for reactome pathway, \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler:_2012} for Gene Ontology and KEGG enrichment analysis. 
+Enrichment analysis is a widely used approach to identify biological themes. I have developed several Bioconductor packages for investigating whether the number of selected genes associated with a particular biological term is larger than expected, including \Biocpkg{DOSE} \cite{yu_dose_2015} for Disease Ontology, \Biocpkg{ReactomePA} for reactome pathway, \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler:_2012} for Gene Ontology and KEGG enrichment analysis. 
 
 <<enrichment>>= 
 require(clusterProfiler)
@@ -205,7 +205,7 @@ bp <- enrichGO(as.data.frame(peakAnno)$geneId, ont="BP", readable=TRUE)
 head(summary(bp))
 @ 
 
-More information can be found in the vignettes of Bioconductor packages \Biocpkg{DOSE} , \Biocpkg{ReactomePA}, \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler:_2012}, which also provide several methods to visualize enrichment results. The \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler:_2012} is designed for comparing and visualizing functional profiles among gene clusters, and can directly applied to compare biological themes at GO, DO, KEGG, Reactome perspective.
+More information can be found in the vignettes of Bioconductor packages \Biocpkg{DOSE} \cite{yu_dose_2015}, \Biocpkg{ReactomePA}, \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler_2012}, which also provide several methods to visualize enrichment results. The \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler_2012} is designed for comparing and visualizing functional profiles among gene clusters, and can directly applied to compare biological themes at GO, DO, KEGG, Reactome perspective.
 \\
 \\
 \section{ChIP peak data set comparison}
