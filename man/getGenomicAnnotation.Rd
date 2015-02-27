@@ -4,7 +4,8 @@
 \alias{getGenomicAnnotation}
 \title{getGenomicAnnotation}
 \usage{
-getGenomicAnnotation(peaks, distance, tssRegion = c(-3000, 3000), TxDb, level)
+getGenomicAnnotation(peaks, distance, tssRegion = c(-3000, 3000), TxDb, level,
+  genomicAnnotationPriority)
 }
 \arguments{
 \item{peaks}{peaks in GRanges object}
@@ -16,6 +17,8 @@ getGenomicAnnotation(peaks, distance, tssRegion = c(-3000, 3000), TxDb, level)
 \item{TxDb}{TxDb object}
 
 \item{level}{one of gene or transcript}
+
+\item{genomicAnnotationPriority}{genomic Annotation Priority}
 }
 \value{
 character vector

@@ -18,6 +18,7 @@ updateGenomicAnnotation <- function(peaks, genomicRegion, type, anno) {
 ##' @param tssRegion tssRegion, default is -3kb to +3kb
 ##' @param TxDb TxDb object
 ##' @param level one of gene or transcript
+##' @param genomicAnnotationPriority genomic Annotation Priority
 ##' @importFrom GenomicFeatures intronsByTranscript
 ##' @importFrom GenomicFeatures threeUTRsByTranscript
 ##' @importFrom GenomicFeatures fiveUTRsByTranscript
@@ -28,12 +29,15 @@ getGenomicAnnotation <- function(peaks,
                                  distance,
                                  tssRegion=c(-3000, 3000),
                                  TxDb,
-                                 level
+                                 level,
+                                 genomicAnnotationPriority
                                  ) {
     
     ##
     ## since some annotation overlap,
-    ## a priority is assign based on the following:
+    ## a priority is assign based on *genomicAnnotationPriority*
+    ## use the following priority by default:
+    ##
     ## 1. Promoter
     ## 2. 5' UTR
     ## 3. 3' UTR
@@ -62,79 +66,87 @@ getGenomicAnnotation <- function(peaks,
         Intron=flag,
         downstream=flag,
         distal_intergenic=flag)
-        
-    ## Intergenic
-    annotation[is.na(annotation)] <- "Intergenic"
 
-    anno <- list(annotation=annotation,
-                 detailGenomicAnnotation=detailGenomicAnnotation)
-    
-    ## Introns
-    if ( exists("intronList", envir=ChIPseekerEnv, inherits=FALSE) ) {
-        intronList <- get("intronList", envir=ChIPseekerEnv)
-    } else {
-        intronList <- intronsByTranscript(TxDb)
-        assign("intronList", intronList, envir=ChIPseekerEnv)
-    }
-    anno <- updateGenomicAnnotation(peaks, intronList, "Intron", anno)
+    genomicAnnotationPriority <- rev(genomicAnnotationPriority)   
+    for (AP in genomicAnnotationPriority) {
+        if (AP == "Intergenic") {
+            ## Intergenic
+            annotation[is.na(annotation)] <- "Intergenic"
 
-    ## Exon
-    if ( exists("exonList", envir=ChIPseekerEnv, inherits=FALSE) ) {
-        exonList <- get("exonList", envir=ChIPseekerEnv)
-    } else {
-        exonList <- exonsBy(TxDb)
-        assign("exonList", exonList, envir=ChIPseekerEnv)
-    }
-    anno <- updateGenomicAnnotation(peaks, exonList, "Exon", anno)
+            anno <- list(annotation=annotation,
+                         detailGenomicAnnotation=detailGenomicAnnotation)
 
-    intergenicIndex <- which(anno[["annotation"]] == "Intergenic")
-    anno[["detailGenomicAnnotation"]][intergenicIndex, "Intergenic"] <- TRUE
-    anno[["detailGenomicAnnotation"]][-intergenicIndex, "genic"] <- TRUE
-    
-    ## 3' UTR Exons
-    if ( exists("threeUTRList", envir=ChIPseekerEnv, inherits=FALSE) ) {
-        threeUTRList <- get("threeUTRList", envir=ChIPseekerEnv)
-    } else {
-        threeUTRList <- threeUTRsByTranscript(TxDb)
-        assign("threeUTRList", threeUTRList, envir=ChIPseekerEnv)
-    }
-    anno <- updateGenomicAnnotation(peaks, threeUTRList, "threeUTR", anno)
-    
-    ## 5' UTR Exons
-    if ( exists("fiveUTRList", envir=ChIPseekerEnv, inherits=FALSE) ) {
-        fiveUTRList <- get("fiveUTRList", envir=ChIPseekerEnv)
-    } else {
-        fiveUTRList <- fiveUTRsByTranscript(TxDb)
-        assign("fiveUTRList", fiveUTRList, envir=ChIPseekerEnv)
-    }
-    anno <- updateGenomicAnnotation(peaks, fiveUTRList, "fiveUTR", anno)
-
-    annotation <- anno[["annotation"]]
-    detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
-
-    ## TSS
-    tssIndex <- distance >= tssRegion[1] & distance <= tssRegion[2] 
-    annotation[tssIndex] <- "Promoter"
-    detailGenomicAnnotation[tssIndex, "Promoter"] <- TRUE
-    
-    pm <- max(abs(tssRegion))
-    if (pm/1000 >= 2) {
-        dd <- seq(1:ceiling(pm/1000))*1000
-        for (i in 1:length(dd)) {
-            if (i == 1) {
-                lbs <- paste("Promoter", " (<=", dd[i]/1000, "kb)", sep="")
-                annotation[abs(distance) <= dd[i] &
-                           annotation == "Promoter"] <- lbs
+        } else if (AP == "Introns") {
+            ## Introns
+            if ( exists("intronList", envir=ChIPseekerEnv, inherits=FALSE) ) {
+                intronList <- get("intronList", envir=ChIPseekerEnv)
             } else {
-                lbs <- paste("Promoter", " (", dd[i-1]/1000, "-", dd[i]/1000, "kb)", sep="")
-                annotation[abs(distance) <= dd[i] &
-                           abs(distance) > dd[i-1] &
-                           annotation == "Promoter"] <- lbs
+                intronList <- intronsByTranscript(TxDb)
+                assign("intronList", intronList, envir=ChIPseekerEnv)
+            }
+            anno <- updateGenomicAnnotation(peaks, intronList, "Intron", anno)
+        } else if (AP == "Exon") {
+            ## Exon
+            if ( exists("exonList", envir=ChIPseekerEnv, inherits=FALSE) ) {
+                exonList <- get("exonList", envir=ChIPseekerEnv)
+            } else {
+                exonList <- exonsBy(TxDb)
+                assign("exonList", exonList, envir=ChIPseekerEnv)
+            }
+            anno <- updateGenomicAnnotation(peaks, exonList, "Exon", anno)
+        } else if (AP == "3UTR") {
+            ## 3' UTR Exons
+            if ( exists("threeUTRList", envir=ChIPseekerEnv, inherits=FALSE) ) {
+                threeUTRList <- get("threeUTRList", envir=ChIPseekerEnv)
+            } else {
+                threeUTRList <- threeUTRsByTranscript(TxDb)
+                assign("threeUTRList", threeUTRList, envir=ChIPseekerEnv)
+            }
+            anno <- updateGenomicAnnotation(peaks, threeUTRList, "threeUTR", anno)
+        } else if (AP == "5UTR") {
+            ## 5' UTR Exons
+            if ( exists("fiveUTRList", envir=ChIPseekerEnv, inherits=FALSE) ) {
+                fiveUTRList <- get("fiveUTRList", envir=ChIPseekerEnv)
+            } else {
+                fiveUTRList <- fiveUTRsByTranscript(TxDb)
+                assign("fiveUTRList", fiveUTRList, envir=ChIPseekerEnv)
+            }
+            anno <- updateGenomicAnnotation(peaks, fiveUTRList, "fiveUTR", anno)
+        } else if (AP == "Promoter") {
+            annotation <- anno[["annotation"]]
+            detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
+            
+            ## TSS
+            tssIndex <- distance >= tssRegion[1] & distance <= tssRegion[2] 
+            annotation[tssIndex] <- "Promoter"
+            detailGenomicAnnotation[tssIndex, "Promoter"] <- TRUE
+    
+            pm <- max(abs(tssRegion))
+            if (pm/1000 >= 2) {
+                dd <- seq(1:ceiling(pm/1000))*1000
+                for (i in 1:length(dd)) {
+                    if (i == 1) {
+                        lbs <- paste("Promoter", " (<=", dd[i]/1000, "kb)", sep="")
+                        annotation[abs(distance) <= dd[i] &
+                                       annotation == "Promoter"] <- lbs
+                    } else {
+                        lbs <- paste("Promoter", " (", dd[i-1]/1000, "-", dd[i]/1000, "kb)", sep="")
+                        annotation[abs(distance) <= dd[i] &
+                                       abs(distance) > dd[i-1] &
+                                           annotation == "Promoter"] <- lbs
+                    }
+                }
             }
         }
+
     }
 
- 
+
+    genicIndex <- which(apply(anno[["detailGenomicAnnotation"]][, c("Exon", "Intron")], 1, any))
+    anno[["detailGenomicAnnotation"]][-genicIndex, "Intergenic"] <- TRUE
+    anno[["detailGenomicAnnotation"]][genicIndex, "genic"] <- TRUE
+
+
     features <- getGene(TxDb, by=level)
 
     ## nearest from gene end
