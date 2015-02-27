@@ -5,8 +5,10 @@
 \title{annotatePeak}
 \usage{
 annotatePeak(peak, tssRegion = c(-3000, 3000), TxDb = NULL,
-  level = "transcript", assignGenomicAnnotation = TRUE, annoDb = NULL,
-  addFlankGeneInfo = FALSE, flankDistance = 5000, verbose = TRUE)
+  level = "transcript", assignGenomicAnnotation = TRUE,
+  genomicAnnotationPriority = c("Promoter", "5UTR", "3UTR", "Exon", "Intron",
+  "Downstream", "Intergenic"), annoDb = NULL, addFlankGeneInfo = FALSE,
+  flankDistance = 5000, verbose = TRUE)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}
@@ -18,6 +20,8 @@ annotatePeak(peak, tssRegion = c(-3000, 3000), TxDb = NULL,
 \item{level}{one of transcript and gene}
 
 \item{assignGenomicAnnotation}{logical, assign peak genomic annotation or not}
+
+\item{genomicAnnotationPriority}{genomic annotation priority}
 
 \item{annoDb}{annotation package}
 
