@@ -7,6 +7,7 @@
 ##' @param TxDb TxDb object
 ##' @param level one of transcript and gene
 ##' @param assignGenomicAnnotation logical, assign peak genomic annotation or not
+##' @param genomicAnnotationPriority genomic annotation priority
 ##' @param annoDb annotation package
 ##' @param addFlankGeneInfo logical, add flanking gene information from the peaks 
 ##' @param flankDistance distance of flanking sequence
@@ -64,12 +65,17 @@ annotatePeak <- function(peak,
                          TxDb=NULL,
                          level = "transcript",
                          assignGenomicAnnotation=TRUE,
+                         genomicAnnotationPriority = c("Promoter", "5UTR", "3UTR", "Exon", "Intron", "Downstream", "Intergenic"),
                          annoDb=NULL,
                          addFlankGeneInfo=FALSE,
                          flankDistance=5000,
                          verbose=TRUE) {
     
     level <- match.arg(level, c("transcript", "gene"))
+
+    if (all(genomicAnnotationPriority %in% c("Promoter", "5UTR", "3UTR", "Exon", "Intron", "Downstream", "Intergenic")) == FALSE) {
+        stop('genomicAnnotationPriority should be any order of c("Promoter", "5UTR", "3UTR", "Exon", "Intron", "Downstream", "Intergenic")')
+    }
     
     if ( is(peak, "GRanges") ){
         ## this test will be TRUE
@@ -114,7 +120,7 @@ annotatePeak <- function(peak,
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     ## annotation
     if (assignGenomicAnnotation == TRUE) {
-        anno <- getGenomicAnnotation(peak.gr, distance, tssRegion, TxDb, level)
+        anno <- getGenomicAnnotation(peak.gr, distance, tssRegion, TxDb, level, genomicAnnotationPriority)
         annotation <- anno[["annotation"]]
         detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
     } else {

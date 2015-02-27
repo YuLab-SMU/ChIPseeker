@@ -160,6 +160,8 @@ All the peak information contained in peakfile will be retained in the output of
 
 Downstream is defined as the downstream of gene end.
 \\
+\Biocpkg{ChIPseeker} also provides parameter \Robject{genomicAnnotationPriority} for user to prioritize this hierachy.
+\\
 \\
 \Rfunction{annotatePeak} report detail information when the annotation is Exon or Intron, for instance "Exon (uc002sbe.3/9736, exon 69 of 80)", means that the peak is overlap with an Exon of transcript uc002sbe.3, and the corresponding Entrez gene ID is 9736 (Transcripts that belong to the same gene ID may differ in splice events), and this overlaped exon is the 69th exon of the 80 exons that this transcript uc002sbe.3 prossess. 
 \\
