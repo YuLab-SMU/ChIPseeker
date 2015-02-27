@@ -163,9 +163,10 @@ getGenomicAnnoStat <- function(peakAnno) {
     anno.ratio <- anno.table/ sum(anno.table) * 100
     anno.df <- as.data.frame(anno.ratio)
     colnames(anno.df) <- c("Feature", "Frequency")
-    lvs <- c("Promoter (<=1kb)",
-             "Promoter (1-2kb)",
-             "Promoter (2-3kb)",
+
+    lvs <- c(## "Promoter (<=1kb)",
+             ## "Promoter (1-2kb)",
+             ## "Promoter (2-3kb)",
              "5' UTR",
              "3' UTR",
              "1st Exon",
@@ -174,6 +175,13 @@ getGenomicAnnoStat <- function(peakAnno) {
              "Other Intron",
              "Downstream (<=3kb)",
              "Distal Intergenic")
+
+    promoter.idx <- grep("Promoter", anno.df$Feature)
+    if (length(promoter.idx) > 0) {
+        promoter <- sort(as.character(anno.df$Feature[promoter.idx]))
+        lvs <- c(promoter, lvs)
+    }
+    
     anno.df$Feature <- factor(anno.df$Feature, levels=lvs[lvs %in% anno.df$Feature])
     anno.df <- anno.df[order(anno.df$Feature),]
     return(anno.df)
