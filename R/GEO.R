@@ -1,3 +1,11 @@
+########################################
+##                                    ##
+## data last update: Mar 03, 2015     ##
+##                                    ##
+########################################
+
+
+
 ##' accessing species statistics collecting from GEO database
 ##'
 ##' 
@@ -132,14 +140,40 @@ prepareGSMInfo <- function() {
     gpl <- gpl[gpl[,2] == "high-throughput sequencing",1]
     gpl <- gpl[!is.na(gpl)]
 
-    for (gid in gpl) {
-        gg <- getGEO(gid)
-        gsm <- Meta(gg)$sample_id
-        sf <- batchGetGSMsuppFile(gsm)
-        save(sf, file=paste(gid, "_sf.rda", sep=""))
+    ## save the processedGSM vector that contain all the GSM that have been processed.
+    ## next time when preparing GSMInfo, filter those have been processed before.
+    load(system.file("extdata/processedGSM.rda", package="ChIPseeker"))
+    processedGSM <- get("processedGSM")
+    newGSM <- c()
 
+    gpldir <- "GPL"
+    if (!file.exists(gpldir)) {
+        dir.create(gpldir)
+    }
+    
+    for (gid in gpl) {
+        gg <- tryCatch(getGEO(gid, destdir=gpldir), error=function(e) NULL)
+        if (is.null(gg)) {
+            next
+        }
+        gsm <- Meta(gg)$sample_id
+        gsm <- gsm[! (gsm %in% processedGSM) ]
+        if (length(gsm) == 0) {
+            next
+        }
+        newGSM <- c(newGSM, gsm)
+        
+        sf <- batchGetGSMsuppFile(gsm)
+        if (!is.null(sf)) {
+            save(sf, file=paste(gid, "_sf.rda", sep=""))
+        }
     }
 
+    processedGSM <- c(processedGSM, newGSM)
+    processedGSM <- unique(processedGSM)
+    save(processedGSM, file="../processedGSM.rda", compress="xz")
+
+    
     sfiles <- list.files(pattern="_sf.rda")
     res <- data.frame(gsm=NULL, remoteFile=NULL)
     for (ff in sfiles) {
@@ -187,17 +221,14 @@ prepareGSMInfo <- function() {
     for(i in 1:ncol(gsminfo)) {
         gsminfo[,i] = iconv(gsminfo[,i], "latin1", "ASCII", sub="")
     }
+    gsminfo2 <- gsminfo
+
+    data(gsminfo, package="ChIPseeker")
+    gsminfo <- get("gsminfo")
+    gsminfo <- rbind(gsminfo, gsminfo2)
+    gsminfo <- unique(gsminfo)
     
     save(gsminfo, file="../gsminfo.rda", compress="xz")
-########## 30 May ########
-    
-#### IMPORTANT ####
-####
-#### save the processedGSM vector that contain all the GSM that have been processed.
-#### next time when preparing GSMInfo, filter those have been processed before.
-####
-####
-    
 }
 
 
