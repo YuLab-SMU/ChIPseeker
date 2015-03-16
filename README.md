@@ -6,6 +6,19 @@ This package implements functions to retrieve the nearest genes around the peak,
 
 Guangchuang YU, School of Public Health, The University of Hong Kong [http://ygc.name](http://ygc.name)
 
+## Citation ##
+
+Please cite the following article when using `ChIPseeker`:
+
+```
+Yu G, Wang LG and He QY.
+ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization.
+Bioinformatics, 2015.
+doi: 10.1093/bioinformatics/btv145
+```
+
+URL: [http://bioinformatics.oxfordjournals.org/cgi/content/abstract/btv145](http://bioinformatics.oxfordjournals.org/cgi/content/abstract/btv145)
+
 ## License ##
 
 All source code is copyright, under the Artistic-2.0 License.

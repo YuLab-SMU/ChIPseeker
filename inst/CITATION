@@ -1,0 +1,20 @@
+citHeader("To cite ChIPseeker in publications use:")
+
+citEntry(entry  ="ARTICLE",
+         title  = "ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization",
+         author = personList(
+             as.person("Guangchuang Yu"),
+             as.person("Li-Gen Wang"),
+             as.person("Qing-Yu He")
+             ),
+         journal = "Bioinformatics",
+         year    = "2015",
+         volume  = "",
+         number  = "",
+         pages   = "",
+         PMID    = "25765347",
+         doi     = "10.1093/bioinformatics/btv145",
+         textVersion = paste("Guangchuang Yu, Li-Gen Wang, and Qing-Yu He.",
+             "ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization.",
+             "Bioinformatics 2015")
+         )
