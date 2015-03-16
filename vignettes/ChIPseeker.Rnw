@@ -50,6 +50,30 @@ library(ChIPseeker)
 options(digits=3, width=80, prompt=" ", continue=" ")
 @
 
+\begin{abstract}
+ChIPseeker is an R package for annotating ChIP-seq data analysis. It supports annotating ChIP peaks and provides functions to visualize ChIP peaks coverage over chromosomes and profiles of peaks binding to TSS regions. Comparison of ChIP peak profiles and annotation are also supported. Moreover, it supports evaluating significant overlap among ChIP-seq datasets. Currently, ChIPseeker contains 17,000 bed file information from GEO database. These datasets can be downloaded and compare with user's own data to explore significant overlap datasets for inferring co-regulation or transcription factor complex for further investigation.
+
+  \begin{center}
+    
+    \vspace{1em}
+    \textbf{\Biocpkg{ChIPseeker} version:} \Sexpr{packageVersion("ChIPseeker")}
+    \vspace{1em}
+    
+    \begin{tabular}{ | l | }
+      \hline
+      If you use \Biocpkg{ChIPseeker} in published research, please cite: \\
+      \\
+      G Yu, LG Wang, QY He. \textbf{ChIPseeker: an R/Bioconductor package for} \\
+      \textbf{ChIP peak annotation, comparison and visualization}. \\
+      \emph{Bioinformatics} 2015. \\
+      \url{http://dx.doi.org/10.1093/bioinformatics/btv145} \\
+      \hline
+    \end{tabular}
+    
+  \end{center}
+\end{abstract}
+
+
 \newpage
 \tableofcontents
 \newpage
