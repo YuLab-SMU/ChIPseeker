@@ -40,7 +40,6 @@ CHANGES IN VERSION 1.3.3
 CHANGES IN VERSION 1.3.2
 ------------------------
  o fixed import issue to meet the changes of AnnotationDbi and S4Vectors <2015-01-22, Thu>
- o use human genome hg38 in examples <2015-01-22, Thu>
 
 CHANGES IN VERSION 1.1.21
 ------------------------
