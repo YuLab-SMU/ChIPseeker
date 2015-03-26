@@ -6,6 +6,7 @@
 ##' @param xlim xlim
 ##' @param xlab x label
 ##' @param ylab y label
+##' @param conf confidence interval
 ##' @return ggplot object
 ##' @export
 ##' @author G Yu
@@ -327,6 +328,6 @@ plotAvgProfConf.internal <-  function(tagMatrix, conf = 0.95,
                                        floor(xlim[2]/2), xlim[2]))
     }
     p <- p + xlab(xlab) + ylab(ylab)
-    p <- p + theme_bw() + theme(legend.title = element_blank())
+    p <- p + theme_bw() + theme(legend.title = element_blank())
     return(p)
 }

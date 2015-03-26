@@ -15,6 +15,8 @@ plotAvgProf(tagMatrix, xlim, xlab = "Genomic Region (5'->3')",
 \item{xlab}{x label}
 
 \item{ylab}{y label}
+
+\item{conf}{confidence interval}
 }
 \value{
 ggplot object
