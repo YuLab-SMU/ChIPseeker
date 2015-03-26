@@ -11,9 +11,16 @@
 ##' @author G Yu
 plotAvgProf <- function(tagMatrix, xlim,
                         xlab="Genomic Region (5'->3')",
-                        ylab = "Read Count Frequency") {
-    p <- plotAvgProf.internal(tagMatrix, xlim=xlim,
-                              xlab=xlab, ylab=ylab)
+                        ylab = "Read Count Frequency",
+                        conf) {
+
+    if (!(missingArg(conf))) {
+        p <- plotAvgProfConf.internal(tagMatrix, conf = conf, xlim = xlim,
+                                        xlab = xlab, ylab = ylab) 
+    } else {
+        p <- plotAvgProf.internal(tagMatrix, xlim=xlim,
+                                  xlab=xlab, ylab=ylab)
+    }
     
     return(p)
 }
@@ -269,5 +276,57 @@ plotAvgProf.internal <- function(tagMatrix,
     }
     p <- p+xlab(xlab)+ylab(ylab)
     p <- p + theme_bw() + theme(legend.title=element_blank())
+    return(p)
+}
+
+##' @importFrom plyr ldply
+##' @importFrom ggplot2 ggplot
+##' @importFrom ggplot2 geom_line
+##' @importFrom ggplot2 geom_vline
+##' @importFrom ggplot2 geom_ribbon
+##' @importFrom ggplot2 scale_x_continuous
+##' @importFrom ggplot2 scale_color_manual
+##' @importFrom ggplot2 xlab
+##' @importFrom ggplot2 ylab
+##' @importFrom ggplot2 theme_bw
+##' @importFrom ggplot2 theme
+##' @importFrom ggplot2 element_blank
+plotAvgProfConf.internal <-  function(tagMatrix, conf = 0.95, 
+                                  xlim = c(-3000,3000),
+                                  xlab = "Genomic Region (5'->3')",
+                                  ylab = "Read Count Frequency", 
+                                  verbose = TRUE) {     ## prototype: only support one data
+
+    if (verbose){
+        cat(">> Running bootstrapping for tag matrix...\t\t",
+            format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    }
+    tagMxCi <- getTagCountCI(tagMatrix, xlim = xlim, conf = conf)
+
+    if (verbose){
+        cat(">> Generating figures...\t\t",
+            format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    } 
+    tagCount <- getTagCount(tagMatrix, xlim = xlim)
+    tagCount$Lower <- tagMxCi["Lower", ]
+    tagCount$Upper <- tagMxCi["Upper", ]
+
+    pos <- value <- Lower <- Upper <- NULL
+    p <- ggplot(tagCount, aes(pos)) 
+    p <- p + geom_line(aes(y = value)) + 
+            geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha = 0.2) 
+    # the below are same as ygc
+    if ( 0 > xlim[1] && 0 < xlim[2] ) {
+        p <- p + geom_vline(xintercept=0,
+                            linetype="longdash")
+        p <- p + scale_x_continuous(breaks=c(xlim[1], floor(xlim[1]/2),
+                                       0,
+                                       floor(xlim[2]/2), xlim[2]),
+                                   labels=c(xlim[1], floor(xlim[1]/2),
+                                       "TSS",
+                                       floor(xlim[2]/2), xlim[2]))
+    }
+    p <- p + xlab(xlab) + ylab(ylab)
+    p <- p + theme_bw() + theme(legend.title = element_blank())
     return(p)
 }
