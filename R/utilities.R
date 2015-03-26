@@ -57,6 +57,43 @@ getTagCount <- function(tagMatrix, xlim) {
 }
 
 
+##
+## estimate CI using bootstraping
+##
+getSgn <- function(data, idx){
+    d <- data[idx, ]
+    ss <- colSums(d)
+    ss <- ss / sum(ss)
+    return(ss)
+}
+parseBootCiPerc <- function(bootCiPerc){
+    bootCiPerc <- bootCiPerc$percent
+    tmp <- length(bootCiPerc)
+    ciLo <- bootCiPerc[tmp - 1]
+    ciUp <- bootCiPerc[tmp]
+    return(c(ciLo, ciUp))
+}
+##' @importFrom boot boot
+##' @importFrom boot boot.ci
+getTagCountCI <- function(tagMatrix, xlim, conf = 0.95){
+    RESAMPLE_TIME <- 500
+    trackLen <- ncol(tagMatrix)
+    tagMxBoot <- boot(data = tagMatrix, statistic = getSgn, R = RESAMPLE_TIME)
+    tagMxBootCi <- sapply(seq_len(trackLen), function(i) {
+                        bootCiToken <- boot.ci(tagMxBoot, type = "perc", index = i) 
+                        ## parse boot.ci results
+                        return(parseBootCiPerc(bootCiToken))
+                        }
+                    )
+    row.names(tagMxBootCi) <- c("Lower", "Upper")
+    # pos <- value <- NULL
+    # dd <- data.frame(pos = c(xlim[1]:xlim[2]), 
+    #                 lw = tagMxBootCi[1, ], up = tagMxBootCi[2, ])
+    # return(dd)
+    return(tagMxBootCi)
+}
+
+
 TXID2EG <- function(txid, geneIdOnly=FALSE) {
     txid <- as.character(txid)
     if (geneIdOnly == TRUE) {
