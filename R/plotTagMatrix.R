@@ -11,7 +11,13 @@
 ##' @author G Yu
 plotAvgProf <- function(tagMatrix, xlim,
                         xlab="Genomic Region (5'->3')",
-                        ylab = "Read Count Frequency") {
+                        ylab = "Read Count Frequency",
+                        conf = 0.95) {
+
+    if (!is.null(conf)) {
+        p <- plotAvgProfConf.internal(tagMatrix, conf = conf, xlim = xlim,
+                                        xlab = xlab, ylab = ylab) 
+    }
     p <- plotAvgProf.internal(tagMatrix, xlim=xlim,
                               xlab=xlab, ylab=ylab)
     
@@ -270,4 +276,27 @@ plotAvgProf.internal <- function(tagMatrix,
     p <- p+xlab(xlab)+ylab(ylab)
     p <- p + theme_bw() + theme(legend.title=element_blank())
     return(p)
+}
+
+##' @importFrom plyr ldply
+##' @importFrom ggplot2 ggplot
+##' @importFrom ggplot2 geom_line
+##' @importFrom ggplot2 geom_vline
+##' @importFrom ggplot2 scale_x_continuous
+##' @importFrom ggplot2 scale_color_manual
+##' @importFrom ggplot2 xlab
+##' @importFrom ggplot2 ylab
+##' @importFrom ggplot2 theme_bw
+##' @importFrom ggplot2 theme
+##' @importFrom ggplot2 element_blank
+##' @importFrom boot boot
+##' @importFrom boot boot.ci
+plotAvgProfConf.internal function(tagMatrix, conf = 0.95, 
+                                  xlim=c(-3000,3000),
+                                  xlab="Genomic Region (5'->3')",
+                                  ylab="Read Count Frequency") {
+
+## prototype: only support one data
+
+
 }
