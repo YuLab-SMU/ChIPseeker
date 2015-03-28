@@ -252,14 +252,17 @@ plotAvgProf.internal <- function(tagMatrix, conf,
         tagCount <- lapply(tagMatrix, getTagCount, xlim = xlim, conf = conf)
         tagCount <- ldply(tagCount)
         p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
+        if (!(is.na(conf))) {
+            p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper, fill = .id), 
+                                linetype = 0, alpha = 0.2)
+        }  
     } else {
         tagCount <- getTagCount(tagMatrix, xlim = xlim, conf = conf)
         p <- ggplot(tagCount, aes(pos))
-    }
-
-    if (!(is.na(conf))) {
-        p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper, fill = .id), 
-                             linetype = 0, alpha = 0.2)
+        if (!(is.na(conf))) {
+            p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper), 
+                                 linetype = 0, alpha = 0.2)
+        }
     }
 
     p <- p + geom_line(aes(y = value))
