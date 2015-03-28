@@ -47,7 +47,7 @@ getCols <- function(n) {
 }
 
 
-getTagCount <- function(tagMatrix, xlim) {
+getTagCount <- function(tagMatrix, xlim, conf) {
     ss <- colSums(tagMatrix)
     ss <- ss/sum(ss)
     ## plot(1:length(ss), ss, type="l", xlab=xlab, ylab=ylab)

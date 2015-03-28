@@ -14,15 +14,10 @@ plotAvgProf <- function(tagMatrix, xlim,
                         xlab="Genomic Region (5'->3')",
                         ylab = "Read Count Frequency",
                         conf) {
-
-    if (!(missingArg(conf))) {
-        p <- plotAvgProfConf.internal(tagMatrix, conf = conf, xlim = xlim,
-                                        xlab = xlab, ylab = ylab) 
-    } else {
-        p <- plotAvgProf.internal(tagMatrix, xlim=xlim,
-                                  xlab=xlab, ylab=ylab)
-    }
+    conf <- ifelse(missingArg(conf), NA, conf)
     
+    p <- plotAvgProf.internal(tagMatrix, conf = conf, xlim = xlim, 
+                            xlab = xlab, ylab = ylab)
     return(p)
 }
 
@@ -225,7 +220,7 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
 ##' @importFrom ggplot2 theme_bw
 ##' @importFrom ggplot2 theme
 ##' @importFrom ggplot2 element_blank
-plotAvgProf.internal <- function(tagMatrix,
+plotAvgProf.internal <- function(tagMatrix, conf, 
                                   xlim=c(-3000,3000),
                                   xlab="Genomic Region (5'->3')",
                                   ylab="Read Count Frequency") {
@@ -247,6 +242,8 @@ plotAvgProf.internal <- function(tagMatrix,
             stop("please specify appropreate xcoordinations...")
         }
     }
+
+    conf <- ifelse(missingArg(conf), NA, conf)
 
     pos <- value <- .id <- NULL
     
