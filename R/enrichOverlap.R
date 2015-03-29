@@ -80,11 +80,17 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
     }
     
     p.ol <- enrichOverlap.peak.internal(query.gr, target.gr, TxDb, nShuffle)
-    p <- p.ol$pvalue
+    if (is.null(p.ol$pvalue)) {
+        p <- padj <- NA
+    } else {
+        p <- p.ol$pvalue
+        padj <- p.adjust(p, method=pAdjustMethod)
+    }
+        
     ol <- p.ol$overlap
     qSample <- sub(".+/", "", queryPeak)  ## remove path, only keep file name
     tSample <- sub(".+/", "", targetFiles) 
-    padj <- p.adjust(p, method=pAdjustMethod)
+    
     res <- data.frame(qSample=qSample,
                       tSample=tSample,
                       qLen=length(query.gr),
@@ -133,6 +139,26 @@ enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000
     len <- unlist(lapply(target.gr, length))
 
     if(Sys.info()[1] == "Windows") {
+        qLen <- lapply(target.gr, function(tt) {
+            length(intersect(query.gr, tt))
+        })
+    } else {
+        qLen <- mclapply(target.gr, function(tt) {
+            length(intersect(query.gr, tt))
+        }, mc.cores=detectCores()-1
+                         )
+    }
+    qLen <- unlist(qLen)
+    ## query ratio
+    qr <- qLen/len
+    
+    if (nShuffle < 1) {
+        res <- list(pvalue=NULL, overlap=qLen)
+        return(res)
+    }
+
+    
+    if(Sys.info()[1] == "Windows") {
         rr <- lapply(idx, function(i) {
             tarShuffle <- shuffle(target.gr[[i]], TxDb)
             length(intersect(query.gr, tarShuffle))/len[i]
@@ -147,19 +173,7 @@ enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000
     
     rr <- unlist(rr) ## random ratio
 
-    if(Sys.info()[1] == "Windows") {
-        qLen <- lapply(target.gr, function(tt) {
-            length(intersect(query.gr, tt))
-        })
-    } else {
-        qLen <- mclapply(target.gr, function(tt) {
-            length(intersect(query.gr, tt))
-        }, mc.cores=detectCores()-1
-                         )
-    }
-    qLen <- unlist(qLen)
-    ## query ratio
-    qr <- qLen/len
+    
     p <- lapply(qr, function(q) mean(rr>q))
     res <- list(pvalue=unlist(p), overlap=qLen)
     return(res)

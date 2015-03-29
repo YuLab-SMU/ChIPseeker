@@ -1,5 +1,6 @@
 CHANGES IN VERSION 1.3.13
 ------------------------
+ o update enrichPeakOverlap to support nShuffle = 0, which now will report only overlay with pvalue = NA <2015-03-29, Sun>
  o add facet and free_y parameter for plotAvgProf and plotAvgProf2 <2015-03-29, Sun>
  o update docs <2015-03-29, Sun>
  o update plotAvgProf and plotAvgProf2 to fully supporting confidence interval,
