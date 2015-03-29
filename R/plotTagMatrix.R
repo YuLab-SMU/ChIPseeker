@@ -15,9 +15,12 @@ plotAvgProf <- function(tagMatrix, xlim,
                         ylab = "Read Count Frequency",
                         conf) {
     conf <- ifelse(missingArg(conf), NA, conf)
-
-    p <- plotAvgProf.internal(tagMatrix, conf = conf, xlim = xlim, 
-                            xlab = xlab, ylab = ylab)
+    if (!(missingArg(conf) || is.na(conf))){
+        p <- plotAvgProf.internal(tagMatrix, conf = conf, xlim = xlim, 
+                                xlab = xlab, ylab = ylab)
+    } else {
+        p <- plotAvgProf.internal(tagMatrix, xlim = xlim, xlab = xlab, ylab = ylab) 
+    }
     return(p)
 }
 
@@ -36,11 +39,12 @@ plotAvgProf <- function(tagMatrix, xlim,
 ##' @return ggplot object
 ##' @export
 ##' @author G Yu
-plotAvgProf2 <- function(peak, weightCol=NULL, TxDb=NULL,
-                        upstream=1000, downstream=1000,
-                        xlab="Genomic Region (5'->3')",
-                        ylab="Read Count Frequency",
-                        verbose=TRUE) {
+plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
+                        upstream = 1000, downstream = 1000,
+                        xlab = "Genomic Region (5'->3')",
+                        ylab = "Read Count Frequency",
+                        conf, 
+                        verbose = TRUE) {
     
     if (verbose) {
         cat(">> preparing promoter regions...\t",
@@ -65,8 +69,14 @@ plotAvgProf2 <- function(peak, weightCol=NULL, TxDb=NULL,
         cat(">> plotting figure...\t\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     }
-    p <- plotAvgProf.internal(tagMatrix, xlim=c(-upstream, downstream),
+
+    if (!(missingArg(conf) || is.na(conf))){
+        p <- plotAvgProf.internal(tagMatrix, xlim = c(-upstream, downstream),
+                               xlab = xlab, ylab = ylab, conf = conf)
+    } else {
+        p <- plotAvgProf.internal(tagMatrix, xlim=c(-upstream, downstream),
                                xlab=xlab, ylab=ylab)
+    }
     return(p)
 }
 
