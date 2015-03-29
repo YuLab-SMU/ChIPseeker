@@ -9,7 +9,7 @@
 ##' @param conf confidence interval
 ##' @return ggplot object
 ##' @export
-##' @author G Yu
+##' @author G Yu; Y Yan
 plotAvgProf <- function(tagMatrix, xlim,
                         xlab="Genomic Region (5'->3')",
                         ylab = "Read Count Frequency",
@@ -35,6 +35,7 @@ plotAvgProf <- function(tagMatrix, xlim,
 ##' @param downstream downstream position
 ##' @param xlab xlab
 ##' @param ylab ylab
+##' @param conf confidence interval
 ##' @param verbose print message or not
 ##' @return ggplot object
 ##' @export
