@@ -6,7 +6,7 @@
 \usage{
 plotAvgProf2(peak, weightCol = NULL, TxDb = NULL, upstream = 1000,
   downstream = 1000, xlab = "Genomic Region (5'->3')",
-  ylab = "Read Count Frequency", verbose = TRUE)
+  ylab = "Read Count Frequency", conf, verbose = TRUE)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}
@@ -22,6 +22,8 @@ plotAvgProf2(peak, weightCol = NULL, TxDb = NULL, upstream = 1000,
 \item{xlab}{xlab}
 
 \item{ylab}{ylab}
+
+\item{conf}{confidence interval}
 
 \item{verbose}{print message or not}
 }

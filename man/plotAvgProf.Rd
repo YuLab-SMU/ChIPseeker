@@ -25,6 +25,6 @@ ggplot object
 plot the profile of peaks
 }
 \author{
-G Yu
+G Yu; Y Yan
 }
 
