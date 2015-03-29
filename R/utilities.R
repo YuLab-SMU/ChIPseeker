@@ -46,19 +46,7 @@ getCols <- function(n) {
     colorRampPalette(col3)(n)  
 }
 
-
-getTagCount <- function(tagMatrix, xlim) {
-    ss <- colSums(tagMatrix)
-    ss <- ss/sum(ss)
-    ## plot(1:length(ss), ss, type="l", xlab=xlab, ylab=ylab)
-    pos <- value <- NULL
-    dd <- data.frame(pos=c(xlim[1]:xlim[2]), value=ss)
-    return(dd)
-}
-
-
-##
-## estimate CI using bootstraping
+##' 
 ##
 getSgn <- function(data, idx){
     d <- data[idx, ]
@@ -73,12 +61,15 @@ parseBootCiPerc <- function(bootCiPerc){
     ciUp <- bootCiPerc[tmp]
     return(c(ciLo, ciUp))
 }
+##' estimate CI using bootstraping
 ##' @importFrom boot boot
 ##' @importFrom boot boot.ci
-getTagCountCI <- function(tagMatrix, xlim, conf = 0.95){
+getTagCiMatrix <- function(tagMatrix, conf = 0.95){
     RESAMPLE_TIME <- 500
     trackLen <- ncol(tagMatrix)
     tagMxBoot <- boot(data = tagMatrix, statistic = getSgn, R = RESAMPLE_TIME)
+    cat(">> Running bootstrapping for tag matrix...\t\t",
+        format(Sys.time(), "%Y-%m-%d %X"), "\n")
     tagMxBootCi <- sapply(seq_len(trackLen), function(i) {
                         bootCiToken <- boot.ci(tagMxBoot, type = "perc", index = i) 
                         ## parse boot.ci results
@@ -86,11 +77,21 @@ getTagCountCI <- function(tagMatrix, xlim, conf = 0.95){
                         }
                     )
     row.names(tagMxBootCi) <- c("Lower", "Upper")
-    # pos <- value <- NULL
-    # dd <- data.frame(pos = c(xlim[1]:xlim[2]), 
-    #                 lw = tagMxBootCi[1, ], up = tagMxBootCi[2, ])
-    # return(dd)
     return(tagMxBootCi)
+}
+
+getTagCount <- function(tagMatrix, xlim, conf) {
+    ss <- colSums(tagMatrix)
+    ss <- ss/sum(ss)
+    ## plot(1:length(ss), ss, type="l", xlab=xlab, ylab=ylab)
+    pos <- value <- NULL
+    dd <- data.frame(pos=c(xlim[1]:xlim[2]), value=ss)
+    if (!(missingArg(conf) || is.na(conf))){
+        tagCiMx <- getTagCiMatrix(tagMatrix, conf = conf)
+        dd$Lower <- tagCiMx["Lower", ]
+        dd$Upper <- tagCiMx["Upper", ]
+    }
+    return(dd)
 }
 
 

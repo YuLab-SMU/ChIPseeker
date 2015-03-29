@@ -9,20 +9,18 @@
 ##' @param conf confidence interval
 ##' @return ggplot object
 ##' @export
-##' @author G Yu
+##' @author G Yu; Y Yan
 plotAvgProf <- function(tagMatrix, xlim,
                         xlab="Genomic Region (5'->3')",
                         ylab = "Read Count Frequency",
                         conf) {
-
-    if (!(missingArg(conf))) {
-        p <- plotAvgProfConf.internal(tagMatrix, conf = conf, xlim = xlim,
-                                        xlab = xlab, ylab = ylab) 
+    conf <- ifelse(missingArg(conf), NA, conf)
+    if (!(missingArg(conf) || is.na(conf))){
+        p <- plotAvgProf.internal(tagMatrix, conf = conf, xlim = xlim, 
+                                xlab = xlab, ylab = ylab)
     } else {
-        p <- plotAvgProf.internal(tagMatrix, xlim=xlim,
-                                  xlab=xlab, ylab=ylab)
+        p <- plotAvgProf.internal(tagMatrix, xlim = xlim, xlab = xlab, ylab = ylab) 
     }
-    
     return(p)
 }
 
@@ -37,15 +35,17 @@ plotAvgProf <- function(tagMatrix, xlim,
 ##' @param downstream downstream position
 ##' @param xlab xlab
 ##' @param ylab ylab
+##' @param conf confidence interval
 ##' @param verbose print message or not
 ##' @return ggplot object
 ##' @export
 ##' @author G Yu
-plotAvgProf2 <- function(peak, weightCol=NULL, TxDb=NULL,
-                        upstream=1000, downstream=1000,
-                        xlab="Genomic Region (5'->3')",
-                        ylab="Read Count Frequency",
-                        verbose=TRUE) {
+plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
+                        upstream = 1000, downstream = 1000,
+                        xlab = "Genomic Region (5'->3')",
+                        ylab = "Read Count Frequency",
+                        conf, 
+                        verbose = TRUE) {
     
     if (verbose) {
         cat(">> preparing promoter regions...\t",
@@ -70,8 +70,14 @@ plotAvgProf2 <- function(peak, weightCol=NULL, TxDb=NULL,
         cat(">> plotting figure...\t\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     }
-    p <- plotAvgProf.internal(tagMatrix, xlim=c(-upstream, downstream),
+
+    if (!(missingArg(conf) || is.na(conf))){
+        p <- plotAvgProf.internal(tagMatrix, xlim = c(-upstream, downstream),
+                               xlab = xlab, ylab = ylab, conf = conf)
+    } else {
+        p <- plotAvgProf.internal(tagMatrix, xlim=c(-upstream, downstream),
                                xlab=xlab, ylab=ylab)
+    }
     return(p)
 }
 
@@ -218,6 +224,7 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 geom_line
 ##' @importFrom ggplot2 geom_vline
+##' @importFrom ggplot2 geom_ribbon
 ##' @importFrom ggplot2 scale_x_continuous
 ##' @importFrom ggplot2 scale_color_manual
 ##' @importFrom ggplot2 xlab
@@ -225,10 +232,10 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
 ##' @importFrom ggplot2 theme_bw
 ##' @importFrom ggplot2 theme
 ##' @importFrom ggplot2 element_blank
-plotAvgProf.internal <- function(tagMatrix,
-                                  xlim=c(-3000,3000),
-                                  xlab="Genomic Region (5'->3')",
-                                  ylab="Read Count Frequency") {
+plotAvgProf.internal <- function(tagMatrix, conf, 
+                                  xlim = c(-3000,3000),
+                                  xlab = "Genomic Region (5'->3')",
+                                  ylab = "Read Count Frequency") {
 
     listFlag <- FALSE
     if (is(tagMatrix, "list")) {
@@ -248,18 +255,29 @@ plotAvgProf.internal <- function(tagMatrix,
         }
     }
 
+    conf <- ifelse(missingArg(conf), NA, conf)
+
     pos <- value <- .id <- NULL
     
     if ( listFlag ) {
-        tagCount <- lapply(tagMatrix, getTagCount, xlim=xlim)
+        tagCount <- lapply(tagMatrix, getTagCount, xlim = xlim, conf = conf)
         tagCount <- ldply(tagCount)
-        p <- ggplot(tagCount, aes(pos, value, group=.id, color=.id))
+        p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
+        if (!(is.na(conf))) {
+            p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper, fill = .id), 
+                                linetype = 0, alpha = 0.2)
+        }  
     } else {
-        tagCount <- getTagCount(tagMatrix, xlim=xlim)
-        p <- ggplot(tagCount, aes(pos, value))
+        tagCount <- getTagCount(tagMatrix, xlim = xlim, conf = conf)
+        p <- ggplot(tagCount, aes(pos))
+        if (!(is.na(conf))) {
+            p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper), 
+                                 linetype = 0, alpha = 0.2)
+        }
     }
 
-    p <- p + geom_line()
+    p <- p + geom_line(aes(y = value))
+
     if ( 0 > xlim[1] && 0 < xlim[2] ) {
         p <- p + geom_vline(xintercept=0,
                             linetype="longdash")
@@ -280,54 +298,3 @@ plotAvgProf.internal <- function(tagMatrix,
     return(p)
 }
 
-##' @importFrom plyr ldply
-##' @importFrom ggplot2 ggplot
-##' @importFrom ggplot2 geom_line
-##' @importFrom ggplot2 geom_vline
-##' @importFrom ggplot2 geom_ribbon
-##' @importFrom ggplot2 scale_x_continuous
-##' @importFrom ggplot2 scale_color_manual
-##' @importFrom ggplot2 xlab
-##' @importFrom ggplot2 ylab
-##' @importFrom ggplot2 theme_bw
-##' @importFrom ggplot2 theme
-##' @importFrom ggplot2 element_blank
-plotAvgProfConf.internal <-  function(tagMatrix, conf = 0.95, 
-                                  xlim = c(-3000,3000),
-                                  xlab = "Genomic Region (5'->3')",
-                                  ylab = "Read Count Frequency", 
-                                  verbose = TRUE) {     ## prototype: only support one data
-
-    if (verbose){
-        cat(">> Running bootstrapping for tag matrix...\t\t",
-            format(Sys.time(), "%Y-%m-%d %X"), "\n")
-    }
-    tagMxCi <- getTagCountCI(tagMatrix, xlim = xlim, conf = conf)
-
-    if (verbose){
-        cat(">> Generating figures...\t\t",
-            format(Sys.time(), "%Y-%m-%d %X"), "\n")
-    } 
-    tagCount <- getTagCount(tagMatrix, xlim = xlim)
-    tagCount$Lower <- tagMxCi["Lower", ]
-    tagCount$Upper <- tagMxCi["Upper", ]
-
-    pos <- value <- Lower <- Upper <- NULL
-    p <- ggplot(tagCount, aes(pos)) 
-    p <- p + geom_line(aes(y = value)) + 
-            geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha = 0.2) 
-    # the below are same as ygc
-    if ( 0 > xlim[1] && 0 < xlim[2] ) {
-        p <- p + geom_vline(xintercept=0,
-                            linetype="longdash")
-        p <- p + scale_x_continuous(breaks=c(xlim[1], floor(xlim[1]/2),
-                                       0,
-                                       floor(xlim[2]/2), xlim[2]),
-                                   labels=c(xlim[1], floor(xlim[1]/2),
-                                       "TSS",
-                                       floor(xlim[2]/2), xlim[2]))
-    }
-    p <- p + xlab(xlab) + ylab(ylab)
-    p <- p + theme_bw() + theme(legend.title = element_blank())
-    return(p)
-}
