@@ -46,8 +46,7 @@ getCols <- function(n) {
     colorRampPalette(col3)(n)  
 }
 
-##' 
-##
+
 getSgn <- function(data, idx){
     d <- data[idx, ]
     ss <- colSums(d)

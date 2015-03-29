@@ -17,9 +17,9 @@ plotAvgProf <- function(tagMatrix, xlim,
     conf <- ifelse(missingArg(conf), NA, conf)
     if (!(missingArg(conf) || is.na(conf))){
         p <- plotAvgProf.internal(tagMatrix, conf = conf, xlim = xlim, 
-                                xlab = xlab, ylab = ylab)
+                                xlab = xlab, ylab = ylab)
     } else {
-        p <- plotAvgProf.internal(tagMatrix, xlim = xlim, xlab = xlab, ylab = ylab) 
+        p <- plotAvgProf.internal(tagMatrix, xlim = xlim, xlab = xlab, ylab = ylab) 
     }
     return(p)
 }
@@ -40,8 +40,8 @@ plotAvgProf <- function(tagMatrix, xlim,
 ##' @return ggplot object
 ##' @export
 ##' @author G Yu
-plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
-                        upstream = 1000, downstream = 1000,
+plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
+                        upstream = 1000, downstream = 1000,
                         xlab = "Genomic Region (5'->3')",
                         ylab = "Read Count Frequency",
                         conf, 
@@ -73,7 +73,7 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
 
     if (!(missingArg(conf) || is.na(conf))){
         p <- plotAvgProf.internal(tagMatrix, xlim = c(-upstream, downstream),
-                               xlab = xlab, ylab = ylab, conf = conf)
+                               xlab = xlab, ylab = ylab, conf = conf)
     } else {
         p <- plotAvgProf.internal(tagMatrix, xlim=c(-upstream, downstream),
                                xlab=xlab, ylab=ylab)
@@ -260,7 +260,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
     pos <- value <- .id <- NULL
     
     if ( listFlag ) {
-        tagCount <- lapply(tagMatrix, getTagCount, xlim = xlim, conf = conf)
+        tagCount <- lapply(tagMatrix, getTagCount, xlim = xlim, conf = conf)
         tagCount <- ldply(tagCount)
         p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
         if (!(is.na(conf))) {
@@ -268,7 +268,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
                                 linetype = 0, alpha = 0.2)
         }  
     } else {
-        tagCount <- getTagCount(tagMatrix, xlim = xlim, conf = conf)
+        tagCount <- getTagCount(tagMatrix, xlim = xlim, conf = conf)
         p <- ggplot(tagCount, aes(pos))
         if (!(is.na(conf))) {
             p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper), 
