@@ -7,19 +7,26 @@
 ##' @param xlab x label
 ##' @param ylab y label
 ##' @param conf confidence interval
+##' @param facet one of 'none', 'row' and 'column'
+##' @param free_y if TRUE, y will be scaled by AvgProf
 ##' @return ggplot object
 ##' @export
 ##' @author G Yu; Y Yan
 plotAvgProf <- function(tagMatrix, xlim,
                         xlab="Genomic Region (5'->3')",
                         ylab = "Read Count Frequency",
-                        conf) {
+                        conf,
+                        facet="none", free_y = TRUE) {
     conf <- ifelse(missingArg(conf), NA, conf)
     if (!(missingArg(conf) || is.na(conf))){
         p <- plotAvgProf.internal(tagMatrix, conf = conf, xlim = xlim, 
-                                xlab = xlab, ylab = ylab)
+                                  xlab = xlab, ylab = ylab,
+                                  facet = facet, free_y = free_y
+                                  )
     } else {
-        p <- plotAvgProf.internal(tagMatrix, xlim = xlim, xlab = xlab, ylab = ylab) 
+        p <- plotAvgProf.internal(tagMatrix, xlim = xlim,
+                                  xlab = xlab, ylab = ylab,
+                                  facet = facet, free_y = free_y) 
     }
     return(p)
 }
@@ -36,16 +43,20 @@ plotAvgProf <- function(tagMatrix, xlim,
 ##' @param xlab xlab
 ##' @param ylab ylab
 ##' @param conf confidence interval
+##' @param facet one of 'none', 'row' and 'column'
+##' @param free_y if TRUE, y will be scaled by AvgProf
 ##' @param verbose print message or not
 ##' @return ggplot object
 ##' @export
 ##' @author G Yu
 plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
-                        upstream = 1000, downstream = 1000,
-                        xlab = "Genomic Region (5'->3')",
-                        ylab = "Read Count Frequency",
-                        conf, 
-                        verbose = TRUE) {
+                         upstream = 1000, downstream = 1000,
+                         xlab = "Genomic Region (5'->3')",
+                         ylab = "Read Count Frequency",
+                         conf,
+                         facet = "none",
+                         free_y = TRUE,
+                         verbose = TRUE) {
     
     if (verbose) {
         cat(">> preparing promoter regions...\t",
@@ -72,11 +83,15 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
     }
 
     if (!(missingArg(conf) || is.na(conf))){
-        p <- plotAvgProf.internal(tagMatrix, xlim = c(-upstream, downstream),
-                               xlab = xlab, ylab = ylab, conf = conf)
+        p <- plotAvgProf.internal(tagMatrix,
+                                  xlim = c(-upstream, downstream),
+                                  xlab = xlab, ylab = ylab, conf = conf,
+                                  facet = facet, free_y = free_y)
     } else {
-        p <- plotAvgProf.internal(tagMatrix, xlim=c(-upstream, downstream),
-                               xlab=xlab, ylab=ylab)
+        p <- plotAvgProf.internal(tagMatrix,
+                                  xlim=c(-upstream, downstream),
+                                  xlab=xlab, ylab=ylab,
+                                  facet = facet, free_y = free_y)
     }
     return(p)
 }
@@ -232,10 +247,12 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
 ##' @importFrom ggplot2 theme_bw
 ##' @importFrom ggplot2 theme
 ##' @importFrom ggplot2 element_blank
+##' @importFrom ggplot2 facet_grid
 plotAvgProf.internal <- function(tagMatrix, conf, 
-                                  xlim = c(-3000,3000),
-                                  xlab = "Genomic Region (5'->3')",
-                                  ylab = "Read Count Frequency") {
+                                 xlim = c(-3000,3000),
+                                 xlab = "Genomic Region (5'->3')",
+                                 ylab = "Read Count Frequency",
+                                 facet="none", free_y = TRUE) {
 
     listFlag <- FALSE
     if (is(tagMatrix, "list")) {
@@ -246,6 +263,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
     } 
     
     if ( listFlag ) {
+        facet <- match.arg(facet, c("none", "row", "column"))
         if ( (xlim[2]-xlim[1]+1) != ncol(tagMatrix[[1]]) ) {
             stop("please specify appropreate xcoordinations...")
         }
@@ -257,7 +275,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
 
     conf <- ifelse(missingArg(conf), NA, conf)
 
-    pos <- value <- .id <- NULL
+    pos <- value <- .id <- Lower <- Upper <- NULL
     
     if ( listFlag ) {
         tagCount <- lapply(tagMatrix, getTagCount, xlim = xlim, conf = conf)
@@ -292,6 +310,19 @@ plotAvgProf.internal <- function(tagMatrix, conf,
     if (listFlag) {
         cols <- getCols(length(tagMatrix))
         p <- p + scale_color_manual(values=cols)
+        if (facet == "row") {
+            if (free_y) {
+                p <- p + facet_grid(.id ~ ., scales = "free_y")
+            } else {
+                p <- p + facet_grid(.id ~ .)
+            }
+        } else if (facet == "column") {
+            if (free_y) {
+                p <-  p + facet_grid(. ~ .id, scales = "free_y")
+            } else {
+                p <-  p + facet_grid(. ~ .id)
+            }
+        }
     }
     p <- p+xlab(xlab)+ylab(ylab)
     p <- p + theme_bw() + theme(legend.title=element_blank())

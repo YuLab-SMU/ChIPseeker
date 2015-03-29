@@ -5,7 +5,7 @@
 \title{plotAvgProf}
 \usage{
 plotAvgProf(tagMatrix, xlim, xlab = "Genomic Region (5'->3')",
-  ylab = "Read Count Frequency", conf)
+  ylab = "Read Count Frequency", conf, facet = "none", free_y = TRUE)
 }
 \arguments{
 \item{tagMatrix}{tagMatrix or a list of tagMatrix}
@@ -17,6 +17,10 @@ plotAvgProf(tagMatrix, xlim, xlab = "Genomic Region (5'->3')",
 \item{ylab}{y label}
 
 \item{conf}{confidence interval}
+
+\item{facet}{one of 'none', 'row' and 'column'}
+
+\item{free_y}{if TRUE, y will be scaled by AvgProf}
 }
 \value{
 ggplot object
