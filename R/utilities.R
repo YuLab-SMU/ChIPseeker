@@ -46,8 +46,7 @@ getCols <- function(n) {
     colorRampPalette(col3)(n)  
 }
 
-##' 
-##
+
 getSgn <- function(data, idx){
     d <- data[idx, ]
     ss <- colSums(d)
@@ -61,7 +60,8 @@ parseBootCiPerc <- function(bootCiPerc){
     ciUp <- bootCiPerc[tmp]
     return(c(ciLo, ciUp))
 }
-##' estimate CI using bootstraping
+
+## estimate CI using bootstraping
 ##' @importFrom boot boot
 ##' @importFrom boot boot.ci
 getTagCiMatrix <- function(tagMatrix, conf = 0.95){
