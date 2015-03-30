@@ -64,22 +64,39 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
 ##' @param pAdjustMethod pvalue adjustment method
 ##' @param nShuffle shuffle numbers
 ##' @param chainFile chain file for liftOver
+##' @param pool logical, whether pool target peaks
+##' @param ... additional parameter
 ##' @return data.frame
 ##' @export
 ##' @importFrom rtracklayer import.chain
 ##' @importFrom rtracklayer liftOver
 ##' @author G Yu
-enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="BH", nShuffle=1000, chainFile=NULL) {
+enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="BH", nShuffle=1000, chainFile=NULL, pool=TRUE, ...) {
     targetFiles <- parse_targetPeak_Param(targetPeak)
     TxDb <- loadTxDb(TxDb)
     query.gr <- loadPeak(queryPeak)
     target.gr <- lapply(targetFiles, loadPeak)
-    if (!is.null(chainFile)) {
+     if (!is.null(chainFile)) {
         chain <- import.chain(chainFile)
         target.gr <- lapply(target.gr, liftOver, chain=chain)
     }
+
+    if (pool) {
+        p.ol <- enrichOverlap.peak.internal(query.gr, target.gr, TxDb, nShuffle, ...)
+    } else {
+        res_list <- lapply(1:length(targetFiles), function(i) {
+            enrichPeakOverlap(queryPeak = queryPeak,
+                              targetPeak = targetFiles[i],
+                              TxDb = TxDb,
+                              pAdjustMethod = pAdjustMethod,
+                              nShuffle = nShuffle,
+                              chainFile = chainFile,
+                              ...)
+        })
+        res <- do.call("rbind", res_list)
+        return(res)
+    }
     
-    p.ol <- enrichOverlap.peak.internal(query.gr, target.gr, TxDb, nShuffle)
     if (is.null(p.ol$pvalue)) {
         p <- padj <- NA
     } else {
@@ -133,9 +150,15 @@ shuffle <- function(peak.gr, TxDb) {
 
 ##' @importFrom GenomeInfoDb intersect
 ##' @importFrom GenomeInfoDb seqlengths
-enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000) {
-    idx <- sample(1:length(target.gr), nShuffle, replace=TRUE)
+##' @importFrom parallel mclapply
+##' @importFrom parallel detectCores
+enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000, mc.cores=detectCores()-1, verbose=TRUE) {    
+    if (verbose) {
+        cat(">> permutation test of peak overlap...\t\t",
+            format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    }
 
+    idx <- sample(1:length(target.gr), nShuffle, replace=TRUE)
     len <- unlist(lapply(target.gr, length))
 
     if(Sys.info()[1] == "Windows") {
@@ -145,7 +168,7 @@ enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000
     } else {
         qLen <- mclapply(target.gr, function(tt) {
             length(intersect(query.gr, tt))
-        }, mc.cores=detectCores()-1
+        }, mc.cores=mc.cores
                          )
     }
     qLen <- unlist(qLen)
@@ -157,23 +180,36 @@ enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000
         return(res)
     }
 
-    
+    if (verbose) {
+        pb <- txtProgressBar(min=0, max=nShuffle, style=3)
+    }
     if(Sys.info()[1] == "Windows") {
-        rr <- lapply(idx, function(i) {
+        rr <- lapply(seq_along(idx), function(j) {
+            if (verbose) {
+                setTxtProgressBar(pb, j)
+            }
+            i <- idx[j]
             tarShuffle <- shuffle(target.gr[[i]], TxDb)
             length(intersect(query.gr, tarShuffle))/len[i]
         })
     } else {
-        rr <- mclapply(idx, function(i) {
+        rr <- mclapply(seq_along(idx), function(j) {
+            if (verbose) {
+                setTxtProgressBar(pb, j)
+            }
+            i <- idx[j]
             tarShuffle <- shuffle(target.gr[[i]], TxDb)
             length(intersect(query.gr, tarShuffle))/len[i]
-        }, mc.cores=detectCores()-1
+        }, mc.cores=mc.cores
                        )
+    }
+
+    if (verbose) {
+        close(pb)
     }
     
     rr <- unlist(rr) ## random ratio
 
-    
     p <- lapply(qr, function(q) mean(rr>q))
     res <- list(pvalue=unlist(p), overlap=qLen)
     return(res)

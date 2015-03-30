@@ -1,7 +1,7 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.3.13
+Version: 1.3.14
 Authors@R: c(person(given = "Guangchuang", family = "Yu",
 	            email = "guangchuangyu@gmail.com",
 		    role  = c("aut", "cre")),
@@ -38,6 +38,7 @@ Imports:
     methods,
     plotrix,
     dplyr,
+    parallel,
     plyr,
     magrittr,
     RColorBrewer,
