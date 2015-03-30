@@ -5,7 +5,7 @@
 \title{enrichPeakOverlap}
 \usage{
 enrichPeakOverlap(queryPeak, targetPeak, TxDb = NULL, pAdjustMethod = "BH",
-  nShuffle = 1000, chainFile = NULL)
+  nShuffle = 1000, chainFile = NULL, pool = TRUE, ...)
 }
 \arguments{
 \item{queryPeak}{query bed file}
@@ -19,6 +19,10 @@ enrichPeakOverlap(queryPeak, targetPeak, TxDb = NULL, pAdjustMethod = "BH",
 \item{nShuffle}{shuffle numbers}
 
 \item{chainFile}{chain file for liftOver}
+
+\item{pool}{logical, whether pool target peaks}
+
+\item{...}{additional parameter}
 }
 \value{
 data.frame

@@ -67,16 +67,16 @@ getGenomicAnnotation <- function(peaks,
         downstream=flag,
         distal_intergenic=flag)
 
+    anno <- list(annotation=annotation,
+                 detailGenomicAnnotation=detailGenomicAnnotation)
+
     genomicAnnotationPriority <- rev(genomicAnnotationPriority)   
     for (AP in genomicAnnotationPriority) {
         if (AP == "Intergenic") {
             ## Intergenic
             annotation[is.na(annotation)] <- "Intergenic"
-
-            anno <- list(annotation=annotation,
-                         detailGenomicAnnotation=detailGenomicAnnotation)
-
-        } else if (AP == "Introns") {
+            anno[["annotation"]] <- annotation
+        } else if (AP == "Intron") {
             ## Introns
             if ( exists("intronList", envir=ChIPseekerEnv, inherits=FALSE) ) {
                 intronList <- get("intronList", envir=ChIPseekerEnv)
@@ -86,7 +86,7 @@ getGenomicAnnotation <- function(peaks,
             }
             anno <- updateGenomicAnnotation(peaks, intronList, "Intron", anno)
         } else if (AP == "Exon") {
-            ## Exon
+            ## Exons
             if ( exists("exonList", envir=ChIPseekerEnv, inherits=FALSE) ) {
                 exonList <- get("exonList", envir=ChIPseekerEnv)
             } else {
@@ -112,10 +112,12 @@ getGenomicAnnotation <- function(peaks,
                 assign("fiveUTRList", fiveUTRList, envir=ChIPseekerEnv)
             }
             anno <- updateGenomicAnnotation(peaks, fiveUTRList, "fiveUTR", anno)
-        } else if (AP == "Promoter") {
-            annotation <- anno[["annotation"]]
-            detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
-            
+        }
+
+        annotation <- anno[["annotation"]]
+        detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
+        
+        if (AP == "Promoter") {
             ## TSS
             tssIndex <- distance >= tssRegion[1] & distance <= tssRegion[2] 
             annotation[tssIndex] <- "Promoter"
@@ -142,9 +144,13 @@ getGenomicAnnotation <- function(peaks,
     }
 
 
-    genicIndex <- which(apply(anno[["detailGenomicAnnotation"]][, c("Exon", "Intron")], 1, any))
-    anno[["detailGenomicAnnotation"]][-genicIndex, "Intergenic"] <- TRUE
-    anno[["detailGenomicAnnotation"]][genicIndex, "genic"] <- TRUE
+    genicIndex <- which(apply(detailGenomicAnnotation[, c("Exon", "Intron")], 1, any))
+    detailGenomicAnnotation[-genicIndex, "Intergenic"] <- TRUE
+    detailGenomicAnnotation[genicIndex, "genic"] <- TRUE
+
+    ## intergenicIndex <- anno[["annotation"]] == "Intergenic"
+    ## anno[["detailGenomicAnnotation"]][intergenicIndex, "Intergenic"] <- TRUE
+    ## anno[["detailGenomicAnnotation"]][!intergenicIndex, "genic"] <- TRUE
 
 
     features <- getGene(TxDb, by=level)
@@ -152,12 +158,21 @@ getGenomicAnnotation <- function(peaks,
     ## nearest from gene end
     idx <- follow(peaks, features)
     na.idx <- which(is.na(idx))
-    peF <- features[idx[-na.idx]]
+    if (length(na.idx)) {
+        idx <- idx[-na.idx]
+        peaks <- peaks[-na.idx]
+    }
+    peF <- features[idx]
     dd <- ifelse(strand(peF) == "+",
-                 start(peaks[-na.idx]) - end(peF),
-                 end(peaks[-na.idx]) - start(peF))
-    dd2 <- numeric(length(idx))
-    dd2[-na.idx] <- dd
+                 start(peaks) - end(peF),
+                 end(peaks) - start(peF))
+    if (length(na.idx)) {
+        dd2 <- numeric(length(idx) + length(na.idx))
+        dd2[-na.idx] <- dd
+    } else {
+        dd2 <- dd
+    }
+    
     for (i in 1:3) { ## downstream within 3k
         j <- which(annotation == "Intergenic" & abs(dd2) <= i*1000 & dd2 != 0)
         if (length(j) > 0) {
