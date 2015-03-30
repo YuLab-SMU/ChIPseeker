@@ -8,19 +8,20 @@
 \documentclass[12pt]{article}
 
 <<knitr, echo=FALSE, result="hide">>=
-knitr::opts_chunk$set(tidy  = FALSE,
-               out.truncate = 80,
-               out.lines    = 6,
-               dev          = 'pdf',
-               include      = TRUE,
-               fig.width    = 6,
-               fig.height   = 6,
-               resolution   = 100,
-               warning      = FALSE,
-               message      = FALSE)
+knitr::opts_chunk$set(tidy         = FALSE,
+                      out.truncate = 80,
+                      out.lines    = 6,
+                      dev          = 'pdf',
+                      include      = TRUE,
+                      fig.width    = 6,
+                      fig.height   = 6,
+                      resolution   = 100,
+                      fig.show     = 'asis',
+                      warning      = FALSE,
+                      message      = FALSE)
 @
 
-<<style-Sweave, eval=TRUE, echo=FALSE, results="asis">>=
+<<style-knitr, eval=TRUE, echo=FALSE, results="asis">>=
 BiocStyle::latex()
 @ 
 
@@ -143,20 +144,23 @@ peakHeatmap(files[[4]], TxDb=txdb, upstream=3000, downstream=3000, color="red")
 @ 
 
 \subsubsection{Average Profile of ChIP peaks binding to TSS region}
-<<avgprof, eval=TRUE, fig.cap="Average Profile of ChIP peaks binding to TSS region", fig.align="center", fig.height=7, fig.width=7, out.width="0.8\\textwidth", fig.pos="h">>=
+<<avgprof, eval=TRUE, fig.cap="Average Profile of ChIP peaks binding to TSS region", fig.align="center", fig.height=4, fig.width=7, out.width="0.6\\textwidth", fig.pos="h">>=
 plotAvgProf(tagMatrix, xlim=c(-3000, 3000), 
-            xlab="Genomic Region (5'->3')", 
-            ylab = "Read Count Frequency")
+            xlab="Genomic Region (5'->3')", ylab = "Read Count Frequency")
 @ 
 
 
 The function \Rfunction{plotAvgProf2} provide a one step from bed file to average profile plot. The following command will generate the same figure as shown above.
 <<avgprof2, eval=FALSE>>=
 plotAvgProf2(files[[4]], TxDb=txdb, upstream=3000, downstream=3000, 
-             xlab="Genomic Region (5'->3')", 
-             ylab = "Read Count Frequency")
+             xlab="Genomic Region (5'->3')", ylab = "Read Count Frequency")
 @
 
+Confidence interval estimated by bootstrap method is also supported for characterizing ChIP binding profiles.
+
+<<avgprofCI, fig.cap="Average Profile of ChIP peaks binding to TSS region", fig.align="center", fig.height=4, fig.width=7, out.width="0.6\\textwidth", fig.pos="h">>=
+plotAvgProf(tagMatrix, xlim=c(-3000, 3000), conf = 0.95, sampleSize = 500)
+@ 
 
 \section{Peak Annotation}
 <<peak annotation>>=
@@ -168,7 +172,11 @@ peakAnno
 Peak Annotation is performed by \Rfunction{annotatePeak}. User can define TSS (transcription start site) region, by default TSS is defined from -3kb to +3kb. The output of \Rfunction{annotatePeak} is \Robject{csAnno} instance. \Biocpkg{ChIPseeker} provides \Rfunction{as.GRanges} to convert \Robject{csAnno} to \Robject{GRanges} instance, and \Rfunction{as.data.frame} to convert \Robject{csAnno} to \Robject{data.frame} which can be exported to file by \Rfunction{write.table}.
 \\
 \\
-\Robject{TxDb} object contained transcript-related features of a particular genome. Bioconductor provides several package that containing \Robject{TxDb} object of model organisms with multiple commonly used genome version, for instance \Biocannopkg{TxDb.Hsapiens.UCSC.hg38.knownGene}, \Biocannopkg{TxDb.Hsapiens.UCSC.hg19.knownGene} for human genome hg38 and hg19, \Biocannopkg{TxDb.Mmusculus.UCSC.mm10.knownGene} and \Biocannopkg{TxDb.Mmusculus.UCSC.mm9.knownGene} for mouse genome mm10 and mm9, etc. User can also prepare their own \Robject{TxDb} object by retrieving information from UCSC Genome Bioinformatics and BioMart data resources by R function \Rfunction{makeTranscriptDbFromBiomart} and \Rfunction{makeTranscriptDbFromUCSC}. \Robject{TxDb} object should be passed for peak annotation. 
+\Robject{TxDb} object contained transcript-related features of a particular genome. Bioconductor provides several package that containing \Robject{TxDb} object of model organisms with multiple commonly used genome version, for instance \Biocannopkg{TxDb.Hsapiens.UCSC.hg38.knownGene}, \Biocannopkg{TxDb.Hsapiens.UCSC.hg19.knownGene} for human genome hg38 and hg19, \Biocannopkg{TxDb.Mmusculus.UCSC.mm10.knownGene} and
+
+\Biocannopkg{TxDb.Mmusculus.UCSC.mm9.knownGene} for mouse genome mm10 and mm9, etc. User can also prepare their own \Robject{TxDb} object by retrieving information from UCSC Genome Bioinformatics and BioMart data resources by R function
+
+\Rfunction{makeTranscriptDbFromBiomart} and \Rfunction{makeTranscriptDbFromUCSC}. \Robject{TxDb} object should be passed for peak annotation. 
 \\
 \\
 All the peak information contained in peakfile will be retained in the output of \Rfunction{annotatePeak}. The position and strand information of nearest genes are reported. The distance from peak to the TSS of its nearest gene is also reported. The genomic region of the peak is reported in annotation column. Since some annotation may overlap, \Biocpkg{ChIPseeker} adopted the following priority in genomic annotation.
@@ -197,17 +205,17 @@ To annotate the location of a given peak in terms of genomic features, \Rfunctio
 \\
 \\
 Pie and Bar plot are supported to visualize the genomic annotation.
-<<pieplot, fig.cap="Genomic Annotation by pieplot", fig.align="center", fig.height=6, fig.width=8, out.width="0.8\\textwidth", fig.pos="h">>= 
+<<pieplot, fig.cap="Genomic Annotation by pieplot", fig.align="center", fig.height=6, fig.width=8, out.width="0.6\\textwidth", fig.pos="h">>= 
 plotAnnoPie(peakAnno)
 @ 
 
-<<barplot_anno, fig.cap="Genomic Annotation by barplot", fig.align="center", fig.height=4, fig.width=10, out.width="0.8\\textwidth", fig.pos="h">>= 
+<<barplot_anno, fig.cap="Genomic Annotation by barplot", fig.align="center", fig.height=4, fig.width=10, out.width="0.7\\textwidth", fig.pos="h">>= 
 plotAnnoBar(peakAnno)
 @ 
 
 Since some annotation overlap, user may interested to view the full annotation with their overlap, which can be partially resolved by \Rfunction{vennpie} function.
 
-<<vennpie, fig.cap="Genomic Annotation by vennpie", fig.align="center", fig.height=8, fig.width=10, out.width="0.8\\textwidth", fig.pos="h">>= 
+<<vennpie, fig.cap="Genomic Annotation by vennpie", fig.align="center", fig.height=8, fig.width=11, out.width="0.8\\textwidth", fig.pos="h">>= 
 vennpie(peakAnno)
 @ 
 
@@ -228,7 +236,7 @@ Enrichment analysis is a widely used approach to identify biological themes. I h
 <<enrichment>>= 
 require(clusterProfiler)
 bp <- enrichGO(as.data.frame(peakAnno)$geneId, ont="BP", readable=TRUE)
-head(summary(bp))
+head(summary(bp), n=3)
 @ 
 
 More information can be found in the vignettes of Bioconductor packages \Biocpkg{DOSE} \cite{yu_dose_2015}, \Biocpkg{ReactomePA}, \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler_2012}, which also provide several methods to visualize enrichment results. The \Biocpkg{clusterProfiler} \cite{yu_clusterprofiler_2012} is designed for comparing and visualizing functional profiles among gene clusters, and can directly applied to compare biological themes at GO, DO, KEGG, Reactome perspective.
@@ -239,7 +247,7 @@ More information can be found in the vignettes of Bioconductor packages \Biocpkg
 Function \Rfunction{plotAvgProf} and \Rfunction{tagHeatmap} can accept a list of \Robject{tagMatrix} and visualize profile or heatmap among several ChIP experiments, while \Rfunction{plotAvgProf2} and \Rfunction{peakHeatmap} can accept a list of bed files and perform the same task in one step.
 
 \subsubsection{Average profiles}
-<<avgprof3, eval=TRUE, fig.cap="Average Profiles of ChIP peaks among different experiments", fig.align="center", fig.height=7, fig.width=7, out.width="0.8\\textwidth", fig.pos="h">>=
+<<avgprof3, eval=TRUE, fig.cap="Average Profiles of ChIP peaks among different experiments", fig.align="center", fig.height=4, fig.width=6, out.width="0.7\\textwidth", fig.pos='H', fig.show='asis'>>=
 ## promoter <- getPromoters(TxDb=txdb, upstream=3000, downstream=3000)
 ## tagMatrixList <- lapply(files, getTagMatrix, windows=promoter)
 ## 
@@ -248,8 +256,13 @@ data("tagMatrixList")
 plotAvgProf(tagMatrixList, xlim=c(-3000, 3000))
 @ 
 
+<<avgprof4, eval=TRUE, fig.cap="Average Profiles of ChIP peaks among different experiments", fig.align="center", fig.height=7, fig.width=6, out.width="0.7\\textwidth", fig.pos='H', message=FALSE, fig.show='asis'>>=
+plotAvgProf(tagMatrixList, xlim=c(-3000, 3000), conf=0.95,sampleSize=100, facet="row")
+@ 
+
+
 \subsubsection{Peak heatmaps}
-<<heatmap3, eval=TRUE, fig.cap="Heatmap of ChIP peaks among different experiments", fig.align="center", fig.height=9, fig.width=7, out.width="0.8\\textwidth", fig.pos="h">>=
+<<heatmap3, eval=TRUE, fig.cap="Heatmap of ChIP peaks among different experiments", fig.align="center", fig.height=8, fig.width=7, out.width="0.8\\textwidth", fig.pos="h", fig.show='asis'>>=
 tagHeatmap(tagMatrixList, xlim=c(-3000, 3000), color=NULL)
 @ 
 
@@ -264,7 +277,7 @@ peakAnnoList <- lapply(files, annotatePeak, TxDb=txdb,
 @
 
 We can use \Rfunction{plotAnnoBar} to comparing their genomic annotation.
-<<barplot_anno_list, fig.cap="Genomic Annotation among different ChIPseq data", fig.align="center", fig.height=4, fig.width=6, out.width="0.6\\textwidth", fig.pos="h">>= 
+<<barplot_anno_list, fig.cap="Genomic Annotation among different ChIPseq data", fig.align="center", fig.height=4, fig.width=6, out.width="0.6\\textwidth", fig.pos="h", fig.show='asis'>>= 
 plotAnnoBar(peakAnnoList)
 @
 
@@ -291,7 +304,7 @@ compGO <- compareCluster(geneCluster   = genes,
 plot(compGO, showCategory = 20, title = "Molecular Function Enrichment")
 @
 
-\begin{figure}[htb]
+\begin{figure}[h]
   \begin{center}
     \includegraphics[width=.8\linewidth]{figures/mf.png}
     \caption{Compare Biological themes among different experiments}
@@ -306,7 +319,7 @@ User may want to compare the overlap peaks of replicate experiments or from diff
 \\
 \Rfunction{vennplot} accept a list of object, can be a list of GRanges or a list of vector. Here, I will demonstrate using \Rfunction{vennplot} to visualize the overlap of the nearest genes stored in peakAnnoList.
 
-<<vennplot, fig.cap="Overlap of annotated genes", fig.align="center", fig.height=7, fig.width=7, out.width="0.7\\textwidth", fig.pos="h">>= 
+<<vennplot, fig.cap="Overlap of annotated genes", fig.align="center", fig.height=7, fig.width=7, out.width="0.6\\textwidth", fig.pos="h">>= 
 genes= lapply(peakAnnoList, function(i) as.data.frame(i)$geneId)
 vennplot(genes)
 @ 
