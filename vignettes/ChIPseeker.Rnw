@@ -333,7 +333,8 @@ enrichPeakOverlap(queryPeak     = files[[5]],
                   TxDb          = txdb, 
                   pAdjustMethod = "BH", 
                   nShuffle      = 50, 
-                  chainFile     = NULL)
+                  chainFile     = NULL,
+                  verbose       = FALSE)
 @ 
 
 Parameter \Robject{queryPeak} is the query ChIP data, while \Robject{targetPeak} is bed file name or a vector of bed file names from comparison; \Robject{nShuffle} is the number to shuffle the peaks in \Robject{targetPeak}. To speed up the compilation of this vignettes, we only set \Robject{nShuffle} to 50 as an example for only demonstration. User should set the number to 1000 or above for more robust result. Parameter \Robject{chainFile} are chain file name for mapping the \Robject{targetPeak} to the genome version consistent with \Robject{queryPeak} when their genome version are different. This creat the possibility of comparison among different genome version and cross species.

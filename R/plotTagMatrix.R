@@ -326,6 +326,9 @@ plotAvgProf.internal <- function(tagMatrix, conf,
     }
     p <- p+xlab(xlab)+ylab(ylab)
     p <- p + theme_bw() + theme(legend.title=element_blank())
+    if(facet != "none") {
+        p <- p + theme(legend.position="none")
+    }
     return(p)
 }
 
