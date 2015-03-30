@@ -9,6 +9,7 @@
 ##' @param conf confidence interval
 ##' @param facet one of 'none', 'row' and 'column'
 ##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param ... additional parameter
 ##' @return ggplot object
 ##' @export
 ##' @author G Yu; Y Yan
@@ -16,7 +17,7 @@ plotAvgProf <- function(tagMatrix, xlim,
                         xlab="Genomic Region (5'->3')",
                         ylab = "Read Count Frequency",
                         conf,
-                        facet="none", free_y = TRUE) {
+                        facet="none", free_y = TRUE, ...) {
     conf <- ifelse(missingArg(conf), NA, conf)
     if (!(missingArg(conf) || is.na(conf))){
         p <- plotAvgProf.internal(tagMatrix, conf = conf, xlim = xlim, 
@@ -46,6 +47,7 @@ plotAvgProf <- function(tagMatrix, xlim,
 ##' @param facet one of 'none', 'row' and 'column'
 ##' @param free_y if TRUE, y will be scaled by AvgProf
 ##' @param verbose print message or not
+##' @param ... additional parameter
 ##' @return ggplot object
 ##' @export
 ##' @author G Yu
@@ -56,7 +58,7 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
                          conf,
                          facet = "none",
                          free_y = TRUE,
-                         verbose = TRUE) {
+                         verbose = TRUE, ...) {
     
     if (verbose) {
         cat(">> preparing promoter regions...\t",
@@ -252,7 +254,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
                                  xlim = c(-3000,3000),
                                  xlab = "Genomic Region (5'->3')",
                                  ylab = "Read Count Frequency",
-                                 facet="none", free_y = TRUE) {
+                                 facet="none", free_y = TRUE, ...) {
 
     listFlag <- FALSE
     if (is(tagMatrix, "list")) {
@@ -278,7 +280,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
     pos <- value <- .id <- Lower <- Upper <- NULL
     
     if ( listFlag ) {
-        tagCount <- lapply(tagMatrix, getTagCount, xlim = xlim, conf = conf)
+        tagCount <- lapply(tagMatrix, function(x) getTagCount(x, xlim = xlim, conf = conf, ...))
         tagCount <- ldply(tagCount)
         p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
         if (!(is.na(conf))) {
@@ -286,7 +288,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
                                 linetype = 0, alpha = 0.2)
         }  
     } else {
-        tagCount <- getTagCount(tagMatrix, xlim = xlim, conf = conf)
+        tagCount <- getTagCount(tagMatrix, xlim = xlim, conf = conf, ...)
         p <- ggplot(tagCount, aes(pos))
         if (!(is.na(conf))) {
             p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper), 

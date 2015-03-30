@@ -64,10 +64,16 @@ parseBootCiPerc <- function(bootCiPerc){
 ## estimate CI using bootstraping
 ##' @importFrom boot boot
 ##' @importFrom boot boot.ci
-getTagCiMatrix <- function(tagMatrix, conf = 0.95){
-    RESAMPLE_TIME <- 500
+##' @importFrom parallel detectCores
+getTagCiMatrix <- function(tagMatrix, conf = 0.95, sampleSize=500){
+    RESAMPLE_TIME <- sampleSize
     trackLen <- ncol(tagMatrix)
-    tagMxBoot <- boot(data = tagMatrix, statistic = getSgn, R = RESAMPLE_TIME)
+    if (Sys.info()[1] == "Windows") {
+        tagMxBoot <- boot(data = tagMatrix, statistic = getSgn, R = RESAMPLE_TIME)
+    } else {
+        tagMxBoot <- boot(data = tagMatrix, statistic = getSgn, R = RESAMPLE_TIME,
+                          parallel = "multicore", ncpus = detectCores()-1)
+    }
     cat(">> Running bootstrapping for tag matrix...\t\t",
         format(Sys.time(), "%Y-%m-%d %X"), "\n")
     tagMxBootCi <- sapply(seq_len(trackLen), function(i) {
@@ -80,14 +86,14 @@ getTagCiMatrix <- function(tagMatrix, conf = 0.95){
     return(tagMxBootCi)
 }
 
-getTagCount <- function(tagMatrix, xlim, conf) {
+getTagCount <- function(tagMatrix, xlim, conf, ...) {
     ss <- colSums(tagMatrix)
     ss <- ss/sum(ss)
     ## plot(1:length(ss), ss, type="l", xlab=xlab, ylab=ylab)
     pos <- value <- NULL
     dd <- data.frame(pos=c(xlim[1]:xlim[2]), value=ss)
     if (!(missingArg(conf) || is.na(conf))){
-        tagCiMx <- getTagCiMatrix(tagMatrix, conf = conf)
+        tagCiMx <- getTagCiMatrix(tagMatrix, conf = conf, ...)
         dd$Lower <- tagCiMx["Lower", ]
         dd$Upper <- tagCiMx["Upper", ]
     }
