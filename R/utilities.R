@@ -65,8 +65,8 @@ parseBootCiPerc <- function(bootCiPerc){
 ##' @importFrom boot boot
 ##' @importFrom boot boot.ci
 ##' @importFrom parallel detectCores
-getTagCiMatrix <- function(tagMatrix, conf = 0.95, sampleSize=500){
-    RESAMPLE_TIME <- sampleSize
+getTagCiMatrix <- function(tagMatrix, conf = 0.95, resample=500){
+    RESAMPLE_TIME <- resample
     trackLen <- ncol(tagMatrix)
     if (Sys.info()[1] == "Windows") {
         tagMxBoot <- boot(data = tagMatrix, statistic = getSgn, R = RESAMPLE_TIME)
