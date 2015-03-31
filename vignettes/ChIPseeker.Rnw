@@ -158,15 +158,14 @@ plotAvgProf2(files[[4]], TxDb=txdb, upstream=3000, downstream=3000,
 
 Confidence interval estimated by bootstrap method is also supported for characterizing ChIP binding profiles.
 
-<<avgprofCI, fig.cap="Average Profile of ChIP peaks binding to TSS region", fig.align="center", fig.height=4, fig.width=7, out.width="0.6\\textwidth", fig.pos="h">>=
-plotAvgProf(tagMatrix, xlim=c(-3000, 3000), conf = 0.95, sampleSize = 500)
+<<avgprofCI, fig.cap="Average Profile of ChIP peaks binding to TSS region", fig.align="center", fig.height=4, fig.width=7, out.width="0.6\\textwidth", results='hide', fig.pos="h">>=
+plotAvgProf(tagMatrix, xlim=c(-3000, 3000), conf = 0.95, resample = 500)
 @ 
 
 \section{Peak Annotation}
 <<peak annotation>>=
 peakAnno <- annotatePeak(files[[4]], tssRegion=c(-3000, 3000), 
                          TxDb=txdb, annoDb="org.Hs.eg.db")
-peakAnno
 @ 
 
 Peak Annotation is performed by \Rfunction{annotatePeak}. User can define TSS (transcription start site) region, by default TSS is defined from -3kb to +3kb. The output of \Rfunction{annotatePeak} is \Robject{csAnno} instance. \Biocpkg{ChIPseeker} provides \Rfunction{as.GRanges} to convert \Robject{csAnno} to \Robject{GRanges} instance, and \Rfunction{as.data.frame} to convert \Robject{csAnno} to \Robject{data.frame} which can be exported to file by \Rfunction{write.table}.
@@ -251,13 +250,14 @@ Function \Rfunction{plotAvgProf} and \Rfunction{tagHeatmap} can accept a list of
 ## promoter <- getPromoters(TxDb=txdb, upstream=3000, downstream=3000)
 ## tagMatrixList <- lapply(files, getTagMatrix, windows=promoter)
 ## 
-## to speed up the compilation of this vigenettes, we load a precaculated tagMatrixList
+## to speed up the compilation of this vigenette, we load a precaculated tagMatrixList
 data("tagMatrixList")
 plotAvgProf(tagMatrixList, xlim=c(-3000, 3000))
 @ 
 
-<<avgprof4, eval=TRUE, fig.cap="Average Profiles of ChIP peaks among different experiments", fig.align="center", fig.height=7, fig.width=6, out.width="0.7\\textwidth", fig.pos='H', message=FALSE, fig.show='asis'>>=
-plotAvgProf(tagMatrixList, xlim=c(-3000, 3000), conf=0.95,sampleSize=100, facet="row")
+<<avgprof4, eval=TRUE, fig.cap="Average Profiles of ChIP peaks among different experiments", fig.align="center", fig.height=7, fig.width=6, out.width="0.7\\textwidth", fig.pos='H', results='hide', message=FALSE, fig.show='asis'>>=
+## resample = 500 by default, here use 100 to speed up the compilation of this vignette.
+plotAvgProf(tagMatrixList, xlim=c(-3000, 3000), conf=0.95,resample=100, facet="row")
 @ 
 
 
