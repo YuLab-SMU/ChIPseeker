@@ -93,8 +93,10 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
     cov <- lapply(peak.cov, slice, lower=1)
 
     get.runValue <- function(x) {
-        value <- x@subject@values
-        value[value != 0]
+        y <- runValue(x)
+        sapply(y@listData, mean)
+        ## value <- x@subject@values
+        ## value[value != 0]
     }
 
     chr <- start <- end <- cnt <- NULL
