@@ -175,7 +175,7 @@ Peak Annotation is performed by \Rfunction{annotatePeak}. User can define TSS (t
 
 \Biocannopkg{TxDb.Mmusculus.UCSC.mm9.knownGene} for mouse genome mm10 and mm9, etc. User can also prepare their own \Robject{TxDb} object by retrieving information from UCSC Genome Bioinformatics and BioMart data resources by R function
 
-\Rfunction{makeTranscriptDbFromBiomart} and \Rfunction{makeTranscriptDbFromUCSC}. \Robject{TxDb} object should be passed for peak annotation. 
+\Rfunction{makeTxDbFromBiomart} and \Rfunction{makeTxDbFromUCSC}. \Robject{TxDb} object should be passed for peak annotation. 
 \\
 \\
 All the peak information contained in peakfile will be retained in the output of \Rfunction{annotatePeak}. The position and strand information of nearest genes are reported. The distance from peak to the TSS of its nearest gene is also reported. The genomic region of the peak is reported in annotation column. Since some annotation may overlap, \Biocpkg{ChIPseeker} adopted the following priority in genomic annotation.
