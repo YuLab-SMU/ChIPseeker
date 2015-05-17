@@ -1,7 +1,7 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.5.2
+Version: 1.5.3
 Authors@R: c(person(given = "Guangchuang", family = "Yu",
 	            email = "guangchuangyu@gmail.com",
 		    role  = c("aut", "cre")),
@@ -51,7 +51,8 @@ Suggests:
     ReactomePA,
     org.Hs.eg.db,
     knitr,
-    BiocStyle
+    BiocStyle,
+    rmarkdown
 URL: https://github.com/GuangchuangYu/ChIPseeker
 BugReports: https://github.com/GuangchuangYu/ChIPseeker/issues
 VignetteBuilder: knitr
