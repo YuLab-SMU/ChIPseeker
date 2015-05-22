@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.5.4
+------------------------
+ o add pseudocount in enrichPeakOverlap to prevent 0 pvalue <2015-05-22, Fri>
+ 
 CHANGES IN VERSION 1.5.3
 ------------------------
  o convert the vignette from Rnw to Rmd format <2015-05-17, Sun>
