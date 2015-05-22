@@ -1,5 +1,7 @@
 # ChIP peak Annotation, Comparison, and Visualization #
 
+[![Build Status](https://travis-ci.org/GuangchuangYu/ChIPseeker.svg?branch=master)](https://travis-ci.org/GuangchuangYu/ChIPseeker)
+
 This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare the own dataset with those deposited in database. The comparison can be used to infer cooperative regulation and thus can be used to generate hypotheses. Several visualization functions are implemented to summarize the coverage of the peak experiment, average profile and heatmap of peaks binding to TSS regions, genomic annotation, distance to TSS, and overlap of peaks or genes.
 
 ## Authors ##

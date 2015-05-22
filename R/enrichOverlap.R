@@ -210,7 +210,8 @@ enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000
     
     rr <- unlist(rr) ## random ratio
 
-    p <- lapply(qr, function(q) mean(rr>q))
+    ## p <- lapply(qr, function(q) mean(rr>q))
+    p <- lapply(qr, function(q) (sum(rr>q)+1)/(length(rr)+1))
     res <- list(pvalue=unlist(p), overlap=qLen)
     return(res)
 }

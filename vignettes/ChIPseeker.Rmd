@@ -43,13 +43,13 @@ ChIPseeker is an R package for annotating ChIP-seq data analysis. It supports an
 # Citation
 If you use `r Biocpkg("ChIPseeker")` in published research, please cite:
 
+```
 G Yu, LG Wang, QY He.
-
 ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization.
+Bioinformatics 2015.
+```
 
-__*Bioinformatics*__ 2015.
-
-[http://dx.doi.org/10.1093/bioinformatics/btv145](http://dx.doi.org/10.1093/bioinformatics/btv145)
+URL: [http://dx.doi.org/10.1093/bioinformatics/btv145](http://dx.doi.org/10.1093/bioinformatics/btv145)
 
 
 # Introduction
@@ -362,6 +362,9 @@ After download the bed files from GEO, we can pass them to `enrichPeakOverlap` f
 + [visualization methods in ChIPseeker](http://ygc.name/2014/04/30/visualization-methods-in-chipseeker/)
 + [multiple annotation in ChIPseeker](http://ygc.name/2014/10/01/multiple-annotation-in-chipseeker/)
 
+# Bugs/Feature Requests
+
+If you have any, [let me know](https://github.com/GuangchuangYu/ChIPseeker/issues).
     
 # Session Information
 
