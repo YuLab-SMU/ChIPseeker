@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.5.5
+------------------------
+ o seq2gene for linking genomic regions to genes by many-to-manying mapping. <2015-06-29, Mon>
+ 
 CHANGES IN VERSION 1.5.4
 ------------------------
  o add pseudocount in enrichPeakOverlap to prevent 0 pvalue <2015-05-22, Fri>

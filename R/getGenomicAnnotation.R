@@ -244,6 +244,6 @@ getGenomicAnnotation.internal <- function(peaks, genomicRegion, type){
     } else {
         anno <- type
     }
-    res <- list(queryIndex=queryIndex, annotation=anno)
+    res <- list(queryIndex=queryIndex, annotation=anno, gene=geneID)
     return(res)
 }
