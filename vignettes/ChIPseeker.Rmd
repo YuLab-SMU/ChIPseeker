@@ -192,6 +192,9 @@ plotDistToTSS(peakAnno,
 # Functional enrichment analysis
 Once we have obtained the annotated nearest genes, we can perform functional enrichment analysis to identify predominant biological themes among these genes by incorporating biological knowledge provided by biological ontologies. For instance, Gene Ontology (GO)[@ashburner_gene_2000] annotates genes to biological processes, molecular functions, and cellular components in a directed acyclic graph structure, Kyoto Encyclopedia of Genes and Genomes (KEGG)[@kanehisa_kegg_2004] annotates genes to pathways, Disease Ontology (DO)[@schriml_disease_2011] annotates genes with human disease association, and Reactome[@croft_reactome_2013] annotates gene to pathways and reactions. 
 
+`r Biocpkg("ChIPseeker")` also provides a function, __*seq2gene*__, for linking genomc regions to genes in a many-to-many mapping. It consider host gene (exon/intron), promoter region and flanking gene from intergenic region that may under control via cis-regulation. This function is designed to link both coding and non-coding genomic regions to coding genes and facilitate functional analysis.
+
+
 Enrichment analysis is a widely used approach to identify biological themes. I have developed several Bioconductor packages for investigating whether the number of selected genes associated with a particular biological term is larger than expected, including `r Biocpkg("DOSE")`[@yu_dose_2015] for Disease Ontology, `r Biocpkg("ReactomePA")` for reactome pathway, `r Biocpkg("clusterProfiler")`[@yu_clusterprofiler_2012] for Gene Ontology and KEGG enrichment analysis. 
 
 ```{r}
