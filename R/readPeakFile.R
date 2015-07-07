@@ -47,8 +47,11 @@ peak2DF <- function(peakfile, header) {
     peak.df <- read.delim(peakfile, header=header, comment.char="#")
     ## coordinate system in BED file is start at 0
     ## refer to http://asia.ensembl.org/info/website/upload/bed.html?redirect=no
+    ## The chromEnd base is not included in the display of the feature.
+    ## For example, the first 100 bases of a chromosome are defined as chromStart=0, chromEnd=100,
+    ## and span the bases numbered 0-99.
+    ## so chromEnd, peak.df[,3], is not needed to +1
     peak.df[,2] <- peak.df[,2] + 1
-    peak.df[,3] <- peak.df[,3] + 1
     return(peak.df)
 }
 
