@@ -81,7 +81,7 @@ peak
 
 ## ChIP peaks coverage plot
 After peak calling, we would like to know the peak locations over the whole genome, `covplot` function calculates the coverage of peak regions over chromosomes and generate a figure to visualize.
-```{r fig.height=8, fig.width=7}
+```{r fig.height=8, fig.width=10}
 covplot(peak, weightCol="V5")
 ```
 

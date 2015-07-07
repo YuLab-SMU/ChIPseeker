@@ -4,12 +4,14 @@
 \alias{readPeakFile}
 \title{readPeakFile}
 \usage{
-readPeakFile(peakfile, as = "GRanges")
+readPeakFile(peakfile, as = "GRanges", ...)
 }
 \arguments{
 \item{peakfile}{peak file}
 
 \item{as}{output format, one of GRanges or data.frame}
+
+\item{...}{additional parameter}
 }
 \value{
 peak information, in GRanges or data.frame object
