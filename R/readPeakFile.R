@@ -4,6 +4,7 @@
 ##' @title readPeakFile
 ##' @param peakfile peak file
 ##' @param as output format, one of GRanges or data.frame
+##' @param ... additional parameter
 ##' @return peak information, in GRanges or data.frame object
 ##' @importFrom IRanges IRanges
 ##' @importFrom GenomicRanges GRanges
@@ -13,9 +14,9 @@
 ##' peak.gr <- readPeakFile(peakfile, as="GRanges")
 ##' peak.gr
 ##' @author G Yu
-readPeakFile <- function(peakfile, as="GRanges") {
+readPeakFile <- function(peakfile, as="GRanges", ...) {
     as <- match.arg(as, c("GRanges", "data.frame"))
-    peak.df <- peak2DF(peakfile)
+    peak.df <- peak2DF(peakfile, ...)
     if (as == "data.frame")
         return(peak.df)
     peak.gr <- peakDF2GRanges(peak.df)
@@ -34,13 +35,20 @@ peakDF2GRanges <- function(peak.df) {
     return(peak.gr)
 }
 
-peak2DF <- function(peakfile) {
-    ## determine file format
-    if (isBedFile(peakfile)) {
-        peak.df <- read.delim(peakfile, header=FALSE, comment.char="#")        
-    } else {
-        peak.df <- read.delim(peakfile, header=TRUE, comment.char="#")
+peak2DF <- function(peakfile, header) {
+    if (missing(header)) {
+        ## determine file format
+        if (isBedFile(peakfile)) {
+            header <- FALSE
+        } else {
+            header <- TRUE
+        }
     }
+    peak.df <- read.delim(peakfile, header=header, comment.char="#")
+    ## coordinate system in BED file is start at 0
+    ## refer to http://asia.ensembl.org/info/website/upload/bed.html?redirect=no
+    peak.df[,2] <- peak.df[,2] + 1
+    peak.df[,3] <- peak.df[,3] + 1
     return(peak.df)
 }
 
