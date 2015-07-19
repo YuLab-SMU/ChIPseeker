@@ -22,7 +22,7 @@ Please cite the following article when using `ChIPseeker`:
 ```
 Yu G, Wang LG and He QY.
 ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization.
-Bioinformatics, 2015.
+Bioinformatics, 2015, 31(14):2382-2383.
 doi: 10.1093/bioinformatics/btv145
 ```
 
