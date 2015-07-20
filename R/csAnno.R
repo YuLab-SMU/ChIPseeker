@@ -6,7 +6,7 @@
 ##' @aliases csAnno-class
 ##' show,csAnno-method vennpie,csAnno-method
 ##' plotDistToTSS,csAnno-method plotAnnoBar,csAnno-method
-##' plotAnnoPie,csAnno-method
+##' plotAnnoPie,csAnno-method upsetplot,csAnno-method
 ##'
 ##' @docType class
 ##' @slot anno annotation
@@ -73,6 +73,24 @@ setMethod("vennpie", signature(x="csAnno"),
           )
 
 
+##' upsetplot method generics
+##'
+##' @name upsetplot
+##' @docType methods
+##' @rdname upsetplot-methods
+##'
+##' @title upsetplot method
+##' @param x A \code{csAnno} instance
+##' @param ... additional parameter
+##' @return plot
+##' @usage upsetplot(x, ...)
+##' @exportMethod upsetplot
+##' @author Guangchuang Yu \url{http://ygc.name}
+setMethod("upsetplot", signature(x="csAnno"),
+          function(x, ...) {
+              upsetplot.csAnno(x, ...)
+          }
+          )
 
 ##' @title as.data.frame.csAnno
 ##' @param x csAnno object

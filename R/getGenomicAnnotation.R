@@ -1,6 +1,6 @@
 updateGenomicAnnotation <- function(peaks, genomicRegion, type, anno) {
     hits <- getGenomicAnnotation.internal(peaks, genomicRegion, type)
-    if (length(hits) == 2) {
+    if (length(hits) > 1) {
         hitIndex <- hits$queryIndex
         anno[["annotation"]][hitIndex] <- hits$annotation
         anno[["detailGenomicAnnotation"]][hitIndex, type] <- TRUE

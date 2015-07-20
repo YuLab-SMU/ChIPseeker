@@ -5,6 +5,7 @@ vennpie.csAnno <- function(x, r=0.2) {
     distance <- as.data.frame(x)$distanceToTSS
     total <- nrow(detailGenomicAnnotation)
     Genic <- sum(detailGenomicAnnotation$genic)
+    
     Intergenic <- total-Genic
     Distal_Intergenic <- sum(detailGenomicAnnotation$distal_intergenic)
     Intron <- sum(detailGenomicAnnotation$Intron)

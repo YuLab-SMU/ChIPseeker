@@ -7,6 +7,7 @@
 \alias{plotAnnoPie,csAnno-method}
 \alias{plotDistToTSS,csAnno-method}
 \alias{show,csAnno-method}
+\alias{upsetplot,csAnno-method}
 \alias{vennpie,csAnno-method}
 \title{Class "csAnno"
 This class represents the output of ChIPseeker Annotation}
