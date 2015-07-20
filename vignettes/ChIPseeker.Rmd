@@ -181,6 +181,12 @@ Since some annotation overlap, user may interested to view the full annotation w
 vennpie(peakAnno)
 ```
 
+We extend `r CRANpkg("UpSetR")` to view full annotation overlap. User can user `upsetplot` function.
+
+```{r fig.cap="Genomic Annotation by upsetplot", fig.align="center", fig.height=8, fig.width=12}
+upsetplot(peakAnno)
+```
+
 
 ## Visualize distribution of TF-binding loci relative to TSS
 The distance from the peak (binding site) to the TSS of the nearest gene is calculated by \Rfunction{annotatePeak} and reported in the output. We provide `plotDistToTSS` to calculate the percentage of binding sites upstream and downstream from the TSS of the nearest genes, and visualize the distribution. 
@@ -262,13 +268,12 @@ The `r Biocpkg("clusterProfiler")`[@yu_clusterprofiler_2012] package provides `c
 ```{r eval=FALSE}
 genes = lapply(peakAnnoList, function(i) as.data.frame(i)$geneId)
 names(genes) = sub("_", "\n", names(genes))
-compGO <- compareCluster(geneCluster   = genes, 
-                         fun           = "enrichGO", 
-                         ont           = "MF", 
-                         organism      = "human", 
+compMF <- compareCluster(geneCluster   = genes, 
+                         fun           = "enrichGO",
+                         ont           = "MF",
                          pvalueCutoff  = 0.05, 
                          pAdjustMethod = "BH")
-plot(compGO, showCategory = 20, title = "Molecular Function Enrichment")
+plot(compMF, showCategory = 20, title = "Molecular Function Enrichment")
 ```
 
 ![](figures/mf.png)

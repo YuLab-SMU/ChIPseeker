@@ -7,6 +7,15 @@
 ##' @export
 setGeneric("vennpie", function(x, r=0.2, ...) standardGeneric("vennpie"))
 
+##' upsetplot method generics
+##'
+##'
+##' @docType methods
+##' @name upsetplot
+##' @rdname upsetplot-methods
+##' @export
+setGeneric("upsetplot", function(x, ...) standardGeneric("upsetplot"))
+
 ##' plotDistToTSS method generics
 ##'
 ##'
