@@ -187,6 +187,12 @@ We extend `r CRANpkg("UpSetR")` to view full annotation overlap. User can user `
 upsetplot(peakAnno)
 ```
 
+We can combine `vennpie` with `upsetplot` by setting *vennpie = TRUE*.
+```{r eval=F, fig.cap="Genomic Annotation by upsetplot", fig.align="center", fig.height=8, fig.width=12}
+upsetplot(peakAnno, vennpie=TRUE)
+```
+![](figures/upset_vennpie.png)
+
 
 ## Visualize distribution of TF-binding loci relative to TSS
 The distance from the peak (binding site) to the TSS of the nearest gene is calculated by \Rfunction{annotatePeak} and reported in the output. We provide `plotDistToTSS` to calculate the percentage of binding sites upstream and downstream from the TSS of the nearest genes, and visualize the distribution. 
