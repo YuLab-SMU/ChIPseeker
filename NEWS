@@ -1,5 +1,6 @@
 CHANGES IN VERSION 1.5.7
 ------------------------
+ o add vennpie parameter in upsetplot <2015-07-20, Mon>
  o upsetplot function for csAnno object <2015-07-20, Mon>
  
 CHANGES IN VERSION 1.5.6
