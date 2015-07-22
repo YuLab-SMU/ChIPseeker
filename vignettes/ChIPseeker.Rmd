@@ -183,9 +183,10 @@ vennpie(peakAnno)
 
 We extend `r CRANpkg("UpSetR")` to view full annotation overlap. User can user `upsetplot` function.
 
-```{r fig.cap="Genomic Annotation by upsetplot", fig.align="center", fig.height=8, fig.width=12}
+```{r eval=F, fig.cap="Genomic Annotation by upsetplot", fig.align="center", fig.height=8, fig.width=12}
 upsetplot(peakAnno)
 ```
+![](figures/upset.png)
 
 We can combine `vennpie` with `upsetplot` by setting *vennpie = TRUE*.
 ```{r eval=F, fig.cap="Genomic Annotation by upsetplot", fig.align="center", fig.height=8, fig.width=12}
