@@ -164,7 +164,7 @@ _Downstream_ is defined as the downstream of gene end.
 Parameter annoDb is optional, if provided, extra columns including SYMBOL, GENENAME, ENSEMBL/ENTREZID will be added. The geneId column in annotation output will be consistent with the geneID in TxDb. If it is ENTREZID, ENSEMBL will be added if annoDb is provided, while if it is ENSEMBL ID, ENTREZID will be added.
 
 ## Visualize Genomic Annotation
-To annotate the location of a given peak in terms of genomic features, `annotatePeak` assigns peaks to genomic annotation in "annotation" column of the output, which includes whether a peak is in the TSS, Exon, 5' UTR, 3' UTR, Intronic or Intergenic. Many researchers are very interesting in these annotations. TSS region can be defined by user and \Rfunction{annotatePeak} output in details of which exon/intron of which genes as illustrated in previous section.
+To annotate the location of a given peak in terms of genomic features, `annotatePeak` assigns peaks to genomic annotation in "annotation" column of the output, which includes whether a peak is in the TSS, Exon, 5' UTR, 3' UTR, Intronic or Intergenic. Many researchers are very interesting in these annotations. TSS region can be defined by user and `annotatePeak` output in details of which exon/intron of which genes as illustrated in previous section.
 
 Pie and Bar plot are supported to visualize the genomic annotation.
 ```{r fig.cap="Genomic Annotation by pieplot", fig.align="center", fig.height=6, fig.width=8}
@@ -196,7 +196,7 @@ upsetplot(peakAnno, vennpie=TRUE)
 
 
 ## Visualize distribution of TF-binding loci relative to TSS
-The distance from the peak (binding site) to the TSS of the nearest gene is calculated by \Rfunction{annotatePeak} and reported in the output. We provide `plotDistToTSS` to calculate the percentage of binding sites upstream and downstream from the TSS of the nearest genes, and visualize the distribution. 
+The distance from the peak (binding site) to the TSS of the nearest gene is calculated by `annotatePeak` and reported in the output. We provide `plotDistToTSS` to calculate the percentage of binding sites upstream and downstream from the TSS of the nearest genes, and visualize the distribution. 
 ```{r fig.cap="Distribution of Binding Sites", fig.align="center", fig.height=2, fig.width=6}
 plotDistToTSS(peakAnno, 
               title="Distribution of transcription factor-binding loci\nrelative to TSS")
@@ -221,7 +221,7 @@ More information can be found in the vignettes of Bioconductor packages `r Biocp
 
 # ChIP peak data set comparison
 ## Profile of several ChIP peak data binding to TSS region
-Function `plotAvgProf` and `tagHeatmap` can accept a list of \Robject{tagMatrix} and visualize profile or heatmap among several ChIP experiments, while `plotAvgProf2` and `peakHeatmap` can accept a list of bed files and perform the same task in one step.
+Function `plotAvgProf` and `tagHeatmap` can accept a list of `tagMatrix` and visualize profile or heatmap among several ChIP experiments, while `plotAvgProf2` and `peakHeatmap` can accept a list of bed files and perform the same task in one step.
 
 
 ### Average profiles
