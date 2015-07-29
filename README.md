@@ -43,9 +43,11 @@ To install:
 
 ## Documentation ##
 
++ [Bug of R package ChIPpeakAnno](http://ygc.name/2014/01/14/bug-of-r-package-chippeakanno/)
 + [Peak Annotation](http://ygc.name/2014/04/13/chipseeker-for-chip-peak-annotation/)
 + [Multiple Annotation](http://ygc.name/2014/10/01/multiple-annotation-in-chipseeker/)
 + [Visualization Methods](http://ygc.name/2014/04/30/visualization-methods-in-chipseeker/)
++ [upsetplot](http://ygc.name/2015/07/28/upsetplot-in-chipseeker/)
 
 Find out more at [http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html](http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) and check out the [vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/ChIPseeker/inst/doc/ChIPseeker.pdf).
 

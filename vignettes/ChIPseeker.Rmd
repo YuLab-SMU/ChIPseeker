@@ -374,8 +374,9 @@ After download the bed files from GEO, we can pass them to `enrichPeakOverlap` f
 
 + [Bug of R package ChIPpeakAnno](http://ygc.name/2014/01/14/bug-of-r-package-chippeakanno/)
 + [ChIPseeker for ChIP peak annotation](http://ygc.name/2014/04/13/chipseeker-for-chip-peak-annotation/)
-+ [visualization methods in ChIPseeker](http://ygc.name/2014/04/30/visualization-methods-in-chipseeker/)
-+ [multiple annotation in ChIPseeker](http://ygc.name/2014/10/01/multiple-annotation-in-chipseeker/)
++ [Multiple annotation in ChIPseeker](http://ygc.name/2014/10/01/multiple-annotation-in-chipseeker/)
++ [Visualization methods in ChIPseeker](http://ygc.name/2014/04/30/visualization-methods-in-chipseeker/)
++ [upsetplot](http://ygc.name/2015/07/28/upsetplot-in-chipseeker/)
 
 # Bugs/Feature Requests
 
