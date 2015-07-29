@@ -151,8 +151,11 @@ TXID2EGID <- function(txid) {
     return(as.character(txid2geneid[txid]))
 }
 
+## according to: https://support.bioconductor.org/p/70432/#70545
+## contributed by Herve Pages
 getFirstHitIndex <- function(x) {
-    sapply(unique(x), function(i) which(x == i)[1])
+    ## sapply(unique(x), function(i) which(x == i)[1])
+    which(!duplicated(x))
 }
 
 ##' calculate the overlap matrix, which is useful for vennplot

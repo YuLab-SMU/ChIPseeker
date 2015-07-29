@@ -1,3 +1,9 @@
+CHANGES IN VERSION 1.5.8
+------------------------
+ o better implementation of getFirstHitIndex.  <2015-07-29, Wed>
+   + contributed by Herve Pages.
+   + see https://support.bioconductor.org/p/70432/#70545.
+ 
 CHANGES IN VERSION 1.5.7
 ------------------------
  o add vennpie parameter in upsetplot <2015-07-20, Mon>
