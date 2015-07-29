@@ -1,15 +1,19 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.5.7
+Version: 1.5.8
 Authors@R: c(person(given = "Guangchuang", family = "Yu",
 	            email = "guangchuangyu@gmail.com",
 		    role  = c("aut", "cre")),
 	     person(given = "Yun", family = "Yan",
     	            email = "youryanyun@gmail.com",
-	             role = "ctb"))
+	            role = "ctb"),
+	     person(given = "Herve", family = "Pages",
+	            email = "hpages@fhcrc.org",
+	            role  = "ctb")
+	    )
 Author: Guangchuang Yu <guangchuangyu@gmail.com> with contributions from
-	Yun Yan.
+	Yun Yan and Herve Pages.
 Maintainer: Guangchuang Yu <guangchuangyu@gmail.com>
 Description: This package implements functions to retrieve the nearest genes
     around the peak, annotate genomic region of the peak, statstical methods
