@@ -1,4 +1,4 @@
-citHeader("To cite ChIPseeker in publications use:")
+citHeader("Please cite G. Yu (2015) for using ChIPseeker. In addition, please cite clusterProfiler/DOSE/ReactomePA when using functional enrichment analyses.")
 
 citEntry(entry  ="ARTICLE",
          title  = "ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization",
@@ -18,3 +18,45 @@ citEntry(entry  ="ARTICLE",
              "ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization.",
              "Bioinformatics 2015")
          )
+
+citEntry(entry  ="ARTICLE",
+         title  = "clusterProfiler: an R package for comparing biological themes among gene clusters",
+         author = personList(
+             as.person("Guangchuang Yu"),
+             as.person("Li-Gen Wang"),
+             as.person("Yanyan Han"),
+             as.person("Qing-Yu He")
+             ),
+         journal = "OMICS: A Journal of Integrative Biology",
+         year    = "2012",
+         volume  = "16",
+         number  = "5",
+         pages   = "284-287",
+         PMID    = "22455463",
+         doi     = "10.1089/omi.2011.0118",
+         textVersion = paste("Guangchuang Yu, Li-Gen Wang, Yanyan Han and Qing-Yu He.",
+             "clusterProfiler: an R package for comparing biological themes among gene clusters.",
+             "OMICS: A Journal of Integrative Biology 2012, 16(5):284-287")
+         )
+
+citEntry(entry  = "ARTICLE",
+         title  = "DOSE: an R/Bioconductor package for Disease Ontology Semantic and Enrichment analysis",
+         author = personList(
+             as.person("Guangchuang Yu"),
+             as.person("Li-Gen Wang"),
+             as.person("Guang-Rong Yan"),
+             as.person("Qing-Yu He")
+             ),
+         journal = "Bioinformatics",
+         year    = "2015",
+         volume  = "31",
+         number  = "4",
+         pages   = "608-609",
+         PMID    = "",
+         url     = "http://bioinformatics.oxfordjournals.org/content/31/4/608",
+         doi     = "10.1093/bioinformatics/btu684",
+         textVersion = paste("Guangchuang Yu, Li-Gen Wang, Guang-Rong Yan, Qing-Yu He.",
+             "DOSE: an R/Bioconductor package for Disease Ontology Semantic and Enrichment analysis.",
+             "Bioinformatics 2015 31(4):608-609")
+         )
+
