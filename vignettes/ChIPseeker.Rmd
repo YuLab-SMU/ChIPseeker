@@ -373,6 +373,7 @@ After download the bed files from GEO, we can pass them to `enrichPeakOverlap` f
 # External documents
 
 + [Bug of R package ChIPpeakAnno](http://ygc.name/2014/01/14/bug-of-r-package-chippeakanno/)
++ [parsing BED coordinates](http://ygc.name/2015/08/07/parsing-bed-coordinates/)
 + [ChIPseeker for ChIP peak annotation](http://ygc.name/2014/04/13/chipseeker-for-chip-peak-annotation/)
 + [Multiple annotation in ChIPseeker](http://ygc.name/2014/10/01/multiple-annotation-in-chipseeker/)
 + [Visualization methods in ChIPseeker](http://ygc.name/2014/04/30/visualization-methods-in-chipseeker/)

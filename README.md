@@ -44,6 +44,7 @@ To install:
 ## Documentation ##
 
 + [Bug of R package ChIPpeakAnno](http://ygc.name/2014/01/14/bug-of-r-package-chippeakanno/)
++ [parsing BED coordinates](http://ygc.name/2015/08/07/parsing-bed-coordinates/)
 + [Peak Annotation](http://ygc.name/2014/04/13/chipseeker-for-chip-peak-annotation/)
 + [Multiple Annotation](http://ygc.name/2014/10/01/multiple-annotation-in-chipseeker/)
 + [Visualization Methods](http://ygc.name/2014/04/30/visualization-methods-in-chipseeker/)
