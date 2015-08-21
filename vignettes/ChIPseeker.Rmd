@@ -378,6 +378,7 @@ After download the bed files from GEO, we can pass them to `enrichPeakOverlap` f
 + [Multiple annotation in ChIPseeker](http://ygc.name/2014/10/01/multiple-annotation-in-chipseeker/)
 + [Visualization methods in ChIPseeker](http://ygc.name/2014/04/30/visualization-methods-in-chipseeker/)
 + [upsetplot](http://ygc.name/2015/07/28/upsetplot-in-chipseeker/)
++ [functional enrichment analysis with NGS data](http://ygc.name/2015/08/21/functional-enrichment-analysis-with-ngs-data/)
 
 # Bugs/Feature Requests
 
