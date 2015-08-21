@@ -16,7 +16,7 @@ CHANGES IN VERSION 1.5.6
  
 CHANGES IN VERSION 1.5.5
 ------------------------
- o seq2gene for linking genomic regions to genes by many-to-manying mapping. <2015-06-29, Mon>
+ o seq2gene for linking genomic regions to genes by many-to-many mapping. <2015-06-29, Mon>
  
 CHANGES IN VERSION 1.5.4
 ------------------------
