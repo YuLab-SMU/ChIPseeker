@@ -189,14 +189,25 @@ annotatePeak <- function(peak,
         cat(">> done...\t\t\t\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
 
-    res <- new("csAnno",
-               anno = peak.gr,
-               tssRegion = tssRegion,
-               level=level,
-               detailGenomicAnnotation=detailGenomicAnnotation,
-               annoStat=getGenomicAnnoStat(peak.gr),
-               peakNum=peakNum
-               )
+    if (assignGenomicAnnotation) {
+        res <- new("csAnno",
+                   anno = peak.gr,
+                   tssRegion = tssRegion,
+                   level=level,
+                   hasGenomicAnnotation = TRUE,
+                   detailGenomicAnnotation=detailGenomicAnnotation,
+                   annoStat=getGenomicAnnoStat(peak.gr),
+                   peakNum=peakNum
+                   )
+    } else {
+        res <- new("csAnno",
+                   anno = peak.gr,
+                   tssRegion = tssRegion,
+                   level=level,
+                   hasGenomicAnnotation = FALSE,
+                   peakNum=peakNum
+                   )  
+    }
     return(res)
 }
 

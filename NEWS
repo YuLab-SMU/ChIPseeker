@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.5.9
+------------------------
+ o bug fixed of enrichAnnoOverlap <2015-08-26, Wed>
+ o change parameter order.matrix to order.by in upsetplot to meet the change of UpSetR pkg <2015-08-26, Wed>
+ 
 CHANGES IN VERSION 1.5.8
 ------------------------
  o better implementation of getFirstHitIndex.  <2015-07-29, Wed>

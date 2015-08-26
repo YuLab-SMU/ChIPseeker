@@ -5,7 +5,7 @@
 ##' @importFrom gridBase gridPLT
 ##' @importFrom graphics plot.new
 ##' @author Guangchuang Yu
-upsetplot.csAnno <- function(x, sets=NULL, order.matrix = "freq", sets.bar.color=NULL, vennpie=FALSE, ...) {
+upsetplot.csAnno <- function(x, sets=NULL, order.by = "freq", sets.bar.color=NULL, vennpie=FALSE, ...) {
     y <- x@detailGenomicAnnotation
     y <- as.matrix(y)
     y[y] <- 1
@@ -33,13 +33,13 @@ upsetplot.csAnno <- function(x, sets=NULL, order.matrix = "freq", sets.bar.color
         plot.new()
         # grid.rect(gp = gpar(fill="white"))
         upset(y, sets=sets, sets.bar.color=sets.bar.color,
-              order.matrix = order.matrix, ...)
+              order.by = order.by, ...)
         pushViewport(viewport(x=.6, y=.7, width=.6, height=.6))
         par(plt=gridPLT(), new=TRUE)
         vennpie(x)
         popViewport()
     } else {
         upset(y, sets=sets,sets.bar.color=sets.bar.color,
-              order.matrix = order.matrix, ...)
+              order.by = order.by, ...)
     }
 }
