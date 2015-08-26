@@ -24,6 +24,8 @@ This class represents the output of ChIPseeker Annotation
 
 \item{\code{level}}{transcript or gene}
 
+\item{\code{hasGenomicAnnotation}}{logical}
+
 \item{\code{detailGenomicAnnotation}}{Genomic Annotation in detail}
 
 \item{\code{annoStat}}{annotation statistics}

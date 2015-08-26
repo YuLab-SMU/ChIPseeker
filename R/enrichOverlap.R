@@ -30,24 +30,31 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
     
 
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
-    features <- get("features", envir=ChIPseekerEnv)
-    ol <- lapply(target.anno, function(i) unique(intersect(query.anno$geneId, i$geneId)))
+    if ( exists("Transcripts", envir=ChIPseekerEnv, inherits=FALSE) ) {
+        features <- get("Transcripts", envir=ChIPseekerEnv)
+    } else {
+        features <- transcriptsBy(TxDb)
+        features <- unlist(features)
+        assign("Transcripts", features, envir=ChIPseekerEnv)
+    }
+    
+    ol <- lapply(target.anno, function(i) unique(intersect(as.GRanges(query.anno)$geneId, as.GRanges(i)$geneId)))
     oln <- unlist(lapply(ol, length))
     N <- length(features)
     ## white ball
-    m <- length(unique(query.anno$geneId))
+    m <- length(unique(as.GRanges(query.anno)$geneId))
     ## black ball
     n <- N - m
     ## drawn
-    k <- unlist(lapply(target.anno, function(i) length(unique(i$geneId))))
+    k <- unlist(lapply(target.anno, function(i) length(unique(as.GRanges(i)$geneId))))
     p <- phyper(oln, m, n, k, lower.tail=FALSE)
     qSample <- sub(".+/", "", queryPeak)
     tSample <- sub(".+/", "", targetFiles)
     padj <- p.adjust(p, method=pAdjustMethod)
     res <- data.frame(qSample=qSample,
                       tSample=tSample,
-                      qLen=length(unique(query.anno$geneId)),
-                      tLen=unlist(lapply(target.anno, function(i) length(unique(i$geneId)))),
+                      qLen=length(unique(as.GRanges(query.anno)$geneId)),
+                      tLen=unlist(lapply(target.anno, function(i) length(unique(as.GRanges(i)$geneId)))),
                       N_OL=oln,
                       pvalue=p,
                       p.adjust=padj)
