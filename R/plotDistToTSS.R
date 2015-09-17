@@ -118,8 +118,8 @@ plotDistToTSS.data.frame <- function(peakDist,
         p <- ggplot(peakDist, aes_string(x=categoryColumn, fill="Feature"))
     }
     
-    p <- p + geom_bar(subset=.(sign==1), aes(y=freq), stat="identity") + 
-        geom_bar(subset=.(sign==-1), aes(y=-freq), stat="identity")
+    p <- p + geom_bar(data=subset(peakDist, sign==1), aes(y=freq), stat="identity") + 
+        geom_bar(data=subset(peakDist, sign==-1), aes(y=-freq), stat="identity")
     
     p <- p + geom_hline(yintercept = 0, colour = "black") +
         coord_flip() + theme_bw() +
