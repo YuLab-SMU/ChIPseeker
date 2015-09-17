@@ -212,3 +212,22 @@ annotatePeak <- function(peak,
 }
 
 
+##' dropAnno
+##'
+##' drop annotation exceeding distanceToTSS_cutoff
+##' @title dropAnno
+##' @param csAnno output of annotatePeak
+##' @param distanceToTSS_cutoff distance to TSS cutoff
+##' @return csAnno object
+##' @export
+##' @author Guangchuang Yu
+dropAnno <- function(csAnno, distanceToTSS_cutoff=10000) {
+    idx <- which(abs(mcols(csAnno@anno)[["distanceToTSS"]]) < distanceToTSS_cutoff)
+    csAnno@anno <- csAnno@anno[idx]
+    csAnno@annoStat <- getGenomicAnnoStat(csAnno@anno)
+    csAnno@peakNum <- length(idx)
+    if (hasGenomicAnnotation) {
+        detailGenomicAnnotation = detailGenomicAnnotation[idx,]
+    }
+    csAnno
+}
