@@ -4,3 +4,4 @@ inst/.DS_Store
 inst/extdata/.DS_Store
 inst/extdata/GEO_sample_data/.DS_Store
 .svn
+*~

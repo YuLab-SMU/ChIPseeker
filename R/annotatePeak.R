@@ -224,9 +224,9 @@ annotatePeak <- function(peak,
 dropAnno <- function(csAnno, distanceToTSS_cutoff=10000) {
     idx <- which(abs(mcols(csAnno@anno)[["distanceToTSS"]]) < distanceToTSS_cutoff)
     csAnno@anno <- csAnno@anno[idx]
-    csAnno@annoStat <- getGenomicAnnoStat(csAnno@anno)
     csAnno@peakNum <- length(idx)
-    if (hasGenomicAnnotation) {
+    if (csAnno@hasGenomicAnnotation) {
+        csAnno@annoStat <- getGenomicAnnoStat(csAnno@anno)
         detailGenomicAnnotation = detailGenomicAnnotation[idx,]
     }
     csAnno
