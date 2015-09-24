@@ -41,7 +41,7 @@ ChIPseeker is an R package for annotating ChIP-seq data analysis. It supports an
 
 
 # Citation
-If you use `r Biocpkg("ChIPseeker")`[@yu_chipseeker_2015] in published research, please cite:
+If you use `r Biocpkg("ChIPseeker")`[@yu_chipseeker_2015] in published research, please cite G. Yu (2015). In addition please cite G. Yu (2012) and G. Yu (2015) when performing enrichment analysis by using `r Biocpkg("clusterProfiler")` and `r Biocpkg("DOSE")`.
 
 ```
 G Yu, LG Wang, QY He.
@@ -50,6 +50,23 @@ Bioinformatics 2015, 31(14):2382-2383.
 ```
 
 URL: [http://dx.doi.org/10.1093/bioinformatics/btv145](http://dx.doi.org/10.1093/bioinformatics/btv145)
+
+```
+G Yu, LG Wang, Y Han, QY He.
+clusterProfiler: an R package for comparing biological themes among gene clusters.
+OMICS: A Journal of Integrative Biology 2012, 16(5):284-287.
+```
+
+URL: [http://dx.doi.org/10.1089/omi.2011.0118](http://dx.doi.org/10.1089/omi.2011.0118)
+
+```
+G Yu, LG Wang, GR Yan, QY He.
+DOSE: an R/Bioconductor package for Disease Ontology Semantic and Enrichment analysis.
+Bioinformatics 2015, 31(4):608-609.
+```
+
+URL: [http://dx.doi.org/10.1093/bioinformatics/btu684](http://dx.doi.org/10.1093/bioinformatics/btu684)
+
 
 
 # Introduction
