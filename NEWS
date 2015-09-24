@@ -1,3 +1,12 @@
+CHANGES IN VERSION 1.5.10
+------------------------
+ o dropAnno function, eg. drop nearest gene annotation that far from TSS (>10k). <2015-09-17, Thu>
+   + see https://github.com/GuangchuangYu/ChIPseeker/issues/9
+   + add parameter distanceToTSS_cutoff to enrichAnnoOverlap
+ o use base::subset in plotDistToTSS instead of subsetting data within geom_bar <2015-09-17, Thu>
+   + see https://github.com/hadley/ggplot2/issues/1295
+   + subset parameter in layer will be removed in next release of ggplot2.
+ 
 CHANGES IN VERSION 1.5.9
 ------------------------
  o bug fixed of enrichAnnoOverlap <2015-08-26, Wed>

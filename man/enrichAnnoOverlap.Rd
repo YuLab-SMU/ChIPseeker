@@ -5,7 +5,7 @@
 \title{enrichAnnoOverlap}
 \usage{
 enrichAnnoOverlap(queryPeak, targetPeak, TxDb = NULL, pAdjustMethod = "BH",
-  chainFile = NULL)
+  chainFile = NULL, distanceToTSS_cutoff = NULL)
 }
 \arguments{
 \item{queryPeak}{query bed file}
@@ -17,6 +17,8 @@ enrichAnnoOverlap(queryPeak, targetPeak, TxDb = NULL, pAdjustMethod = "BH",
 \item{pAdjustMethod}{pvalue adjustment method}
 
 \item{chainFile}{chain file for liftOver}
+
+\item{distanceToTSS_cutoff}{restrict nearest gene annotation by distance cutoff}
 }
 \value{
 data.frame

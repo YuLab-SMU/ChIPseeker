@@ -7,12 +7,13 @@
 ##' @param TxDb TxDb
 ##' @param pAdjustMethod pvalue adjustment method
 ##' @param chainFile chain file for liftOver
+##' @param distanceToTSS_cutoff restrict nearest gene annotation by distance cutoff
 ##' @return data.frame
 ##' @export
 ##' @importFrom rtracklayer import.chain
 ##' @importFrom rtracklayer liftOver
 ##' @author G Yu
-enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="BH", chainFile=NULL) {
+enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="BH", chainFile=NULL, distanceToTSS_cutoff=NULL) {
     targetFiles <- parse_targetPeak_Param(targetPeak)
     TxDb <- loadTxDb(TxDb)
  
@@ -29,6 +30,11 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
                           assignGenomicAnnotation=FALSE, annoDb=NULL, verbose=FALSE)
     
 
+    if (!is.null(distanceToTSS_cutoff)) {
+        query.anno <- dropAnno(query.anno, distanceToTSS_cutoff)
+        target.anno <- lapply(target.anno, dropAnno, distanceToTSS_cutoff = distanceToTSS_cutoff)
+    }
+    
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
     if ( exists("Transcripts", envir=ChIPseekerEnv, inherits=FALSE) ) {
         features <- get("Transcripts", envir=ChIPseekerEnv)
