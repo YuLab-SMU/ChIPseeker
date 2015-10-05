@@ -10,12 +10,16 @@
         assign("TXDB", TxDb, envir=ChIPseekerEnv)
     } else {
         TXDB <- get("TXDB", envir=ChIPseekerEnv)
-        m1 <- unlist(metadata(TXDB))
+        m1 <- tryCatch(unlist(metadata(TXDB)), error=function(e) NULL)
+        
         m2 <- unlist(metadata(TxDb))
-        m1 <- m1[!is.na(m1)]
+
+        if (!is.null(m1)) {
+            m1 <- m1[!is.na(m1)]
+        }
         m2 <- m2[!is.na(m2)]
 
-        if ( length(m1) != length(m2) || any(m1 != m2) ) {
+        if ( is.null(m1) || length(m1) != length(m2) || any(m1 != m2) ) {
             rm(ChIPseekerEnv)
             assign("ChIPseekerEnv", new.env(), .GlobalEnv)
             ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
@@ -246,6 +250,7 @@ loadPeak <- function(peak, verbose=FALSE) {
 ##' @importFrom TxDb.Hsapiens.UCSC.hg19.knownGene TxDb.Hsapiens.UCSC.hg19.knownGene
 loadTxDb <- function(TxDb) {
     if ( is.null(TxDb) ) {
+        warning(">> TxDb is not specified, use 'TxDb.Hsapiens.UCSC.hg19.knownGene' by default...")
         TxDb <- TxDb.Hsapiens.UCSC.hg19.knownGene
     }
     return(TxDb)
