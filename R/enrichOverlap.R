@@ -71,31 +71,39 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
 ##'
 ##' 
 ##' @title enrichPeakOverlap
-##' @param queryPeak query bed file
-##' @param targetPeak target bed file(s) or folder that containing bed files
+##' @param queryPeak query bed file or GRanges object
+##' @param targetPeak target bed file(s) or folder that containing bed files or a list of GRanges objects
 ##' @param TxDb TxDb
 ##' @param pAdjustMethod pvalue adjustment method
 ##' @param nShuffle shuffle numbers
 ##' @param chainFile chain file for liftOver
 ##' @param pool logical, whether pool target peaks
-##' @param ... additional parameter
+##' @param mc.cores number of cores, see \link[parallel]{mclapply}
+##' @param verbose logical
 ##' @return data.frame
 ##' @export
 ##' @importFrom rtracklayer import.chain
 ##' @importFrom rtracklayer liftOver
 ##' @author G Yu
-enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="BH", nShuffle=1000, chainFile=NULL, pool=TRUE, ...) {
-    targetFiles <- parse_targetPeak_Param(targetPeak)
+enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="BH", nShuffle=1000,
+                              chainFile=NULL, pool=TRUE, mc.cores=detectCores()-1, verbose=TRUE) {
     TxDb <- loadTxDb(TxDb)
     query.gr <- loadPeak(queryPeak)
-    target.gr <- lapply(targetFiles, loadPeak)
-     if (!is.null(chainFile)) {
+    if (!is(targetPeak[1], "GRanges")) {
+        targetFiles <- parse_targetPeak_Param(targetPeak)
+        target.gr <- lapply(targetFiles, loadPeak)
+    } else {
+        target.gr <- targetPeak
+    }
+
+    if (!is.null(chainFile)) {
         chain <- import.chain(chainFile)
         target.gr <- lapply(target.gr, liftOver, chain=chain)
     }
 
     if (pool) {
-        p.ol <- enrichOverlap.peak.internal(query.gr, target.gr, TxDb, nShuffle, ...)
+        p.ol <- enrichOverlap.peak.internal(query.gr, target.gr, TxDb, nShuffle,
+                                            mc.cores=mc.cores,verbose=verbose)
     } else {
         res_list <- lapply(1:length(targetFiles), function(i) {
             enrichPeakOverlap(queryPeak = queryPeak,
@@ -104,7 +112,8 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
                               pAdjustMethod = pAdjustMethod,
                               nShuffle = nShuffle,
                               chainFile = chainFile,
-                              ...)
+                              mc.cores = mc.cores,
+                              verbose = verbose)
         })
         res <- do.call("rbind", res_list)
         return(res)
