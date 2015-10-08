@@ -5,12 +5,13 @@
 \title{enrichPeakOverlap}
 \usage{
 enrichPeakOverlap(queryPeak, targetPeak, TxDb = NULL, pAdjustMethod = "BH",
-  nShuffle = 1000, chainFile = NULL, pool = TRUE, ...)
+  nShuffle = 1000, chainFile = NULL, pool = TRUE,
+  mc.cores = detectCores() - 1, verbose = TRUE)
 }
 \arguments{
-\item{queryPeak}{query bed file}
+\item{queryPeak}{query bed file or GRanges object}
 
-\item{targetPeak}{target bed file(s) or folder that containing bed files}
+\item{targetPeak}{target bed file(s) or folder that containing bed files or a list of GRanges objects}
 
 \item{TxDb}{TxDb}
 
@@ -22,7 +23,9 @@ enrichPeakOverlap(queryPeak, targetPeak, TxDb = NULL, pAdjustMethod = "BH",
 
 \item{pool}{logical, whether pool target peaks}
 
-\item{...}{additional parameter}
+\item{mc.cores}{number of cores, see \link[parallel]{mclapply}}
+
+\item{verbose}{logical}
 }
 \value{
 data.frame

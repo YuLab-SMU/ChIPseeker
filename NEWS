@@ -1,5 +1,7 @@
 CHANGES IN VERSION 1.5.11
 ------------------------
+ o remove ellipsis parameter in enrichPeakOverlap function and extend it to support GRanges objects <2015-10-08, Thu>
+    + see https://support.bioconductor.org/p/73069/
  o fixed the issue, https://github.com/GuangchuangYu/ChIPseeker/issues/13 <2015-10-05, Mon>
  o update GEO info, now contains >18,000 bed file information <2015-09-24, Thu>
  
