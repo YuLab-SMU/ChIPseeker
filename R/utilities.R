@@ -29,6 +29,32 @@
     
 }
 
+
+##' @importFrom GenomicFeatures exonsBy
+get_exonList <- function(ChIPseekerEnv) {
+    TxDb <- get("TXDB", envir=ChIPseekerEnv)
+    if ( exists("exonList", envir=ChIPseekerEnv, inherits=FALSE) ) {
+        exonList <- get("exonList", envir=ChIPseekerEnv)
+    } else {
+        exonList <- exonsBy(TxDb)
+        assign("exonList", exonList, envir=ChIPseekerEnv)
+    }
+    return(exonList)
+}
+
+##' @importFrom GenomicFeatures intronsByTranscript
+get_intronList <- function(ChIPseekerEnv) {
+    TxDb <- get("TXDB", envir=ChIPseekerEnv)
+    if ( exists("intronList", envir=ChIPseekerEnv, inherits=FALSE) ) {
+        intronList <- get("intronList", envir=ChIPseekerEnv)
+    } else {
+        intronList <- intronsByTranscript(TxDb)
+        assign("intronList", intronList, envir=ChIPseekerEnv)
+    }
+    return(intronList)
+}
+
+
 getCols <- function(n) {
     col <- c("#8dd3c7", "#ffffb3", "#bebada",
              "#fb8072", "#80b1d3", "#fdb462",

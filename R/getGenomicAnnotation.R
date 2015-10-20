@@ -19,10 +19,8 @@ updateGenomicAnnotation <- function(peaks, genomicRegion, type, anno) {
 ##' @param TxDb TxDb object
 ##' @param level one of gene or transcript
 ##' @param genomicAnnotationPriority genomic Annotation Priority
-##' @importFrom GenomicFeatures intronsByTranscript
 ##' @importFrom GenomicFeatures threeUTRsByTranscript
 ##' @importFrom GenomicFeatures fiveUTRsByTranscript
-##' @importFrom GenomicFeatures exonsBy
 ##' @return character vector
 ##' @author G Yu
 getGenomicAnnotation <- function(peaks,
@@ -78,21 +76,11 @@ getGenomicAnnotation <- function(peaks,
             anno[["annotation"]] <- annotation
         } else if (AP == "Intron") {
             ## Introns
-            if ( exists("intronList", envir=ChIPseekerEnv, inherits=FALSE) ) {
-                intronList <- get("intronList", envir=ChIPseekerEnv)
-            } else {
-                intronList <- intronsByTranscript(TxDb)
-                assign("intronList", intronList, envir=ChIPseekerEnv)
-            }
+            intronList <- get_intronList(ChIPseekerEnv)
             anno <- updateGenomicAnnotation(peaks, intronList, "Intron", anno)
         } else if (AP == "Exon") {
             ## Exons
-            if ( exists("exonList", envir=ChIPseekerEnv, inherits=FALSE) ) {
-                exonList <- get("exonList", envir=ChIPseekerEnv)
-            } else {
-                exonList <- exonsBy(TxDb)
-                assign("exonList", exonList, envir=ChIPseekerEnv)
-            }
+            exonList <- get_exonList(ChIPseekerEnv)
             anno <- updateGenomicAnnotation(peaks, exonList, "Exon", anno)
         } else if (AP == "3UTR") {
             ## 3' UTR Exons
@@ -195,8 +183,6 @@ getGenomicAnnotation <- function(peaks,
 
 ##' @importFrom IRanges elementLengths
 ##' @importFrom IRanges findOverlaps
-## @importFrom IRanges queryHits
-## @importFrom IRanges subjectHits
 ##' @importFrom S4Vectors queryHits
 ##' @importFrom S4Vectors subjectHits
 ##' @importMethodsFrom BiocGenerics unlist

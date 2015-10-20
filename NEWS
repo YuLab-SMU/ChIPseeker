@@ -1,3 +1,12 @@
+CHANGES IN VERSION 1.7.1
+------------------------
+ o getBioRegion function <2015-10-20, Tue>
+   + see https://github.com/GuangchuangYu/ChIPseeker/issues/16
+
+CHANGES IN VERSION 1.7.0
+------------------------
+ o BioC 3.3 branch
+ 
 CHANGES IN VERSION 1.5.11
 ------------------------
  o remove ellipsis parameter in enrichPeakOverlap function and extend it to support GRanges objects <2015-10-08, Thu>
