@@ -47,7 +47,6 @@
 ##' @importFrom GenomeInfoDb seqlengths
 ##' @importFrom GenomeInfoDb seqinfo
 ##' @importFrom GenomeInfoDb seqinfo<-
-## @importFrom GenomicFeatures getChromInfoFromUCSC
 ##' @importMethodsFrom BiocGenerics as.data.frame
 ##' @examples
 ##' \dontrun{
