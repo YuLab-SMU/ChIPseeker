@@ -153,7 +153,7 @@ plotAvgProf(tagMatrix, xlim=c(-3000, 3000), conf = 0.95, resample = 500)
 
 ## Profile of ChIP peaks binding to start site of Exon/Intron
 
-Referring to the [issue #16](https://github.com/GuangchuangYu/ChIPseeker/issues/16), we developed `getBioRegion` function to support centerring all peaks to the start region of Exon/Intron. Users can also create heatmap or average profile of ChIP peaks binding to these regions.
+Referring to the [issue #16](https://github.com/GuangchuangYu/ChIPseeker/issues/16), we developed `getBioRegion` function to support centering all peaks to the start region of Exon/Intron. Users can also create heatmap or average profile of ChIP peaks binding to these regions.
 
 
 # Peak Annotation
