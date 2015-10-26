@@ -1,5 +1,7 @@
 CHANGES IN VERSION 1.7.1
 ------------------------
+ o add vp parameter to set viewport of vennpie on top of upsetplot by user request <2015-10-26, Mon>
+   + see http://ygc.name/2015/07/28/upsetplot-in-chipseeker/#comment-19470
  o getBioRegion function <2015-10-20, Tue>
    + see https://github.com/GuangchuangYu/ChIPseeker/issues/16
 
