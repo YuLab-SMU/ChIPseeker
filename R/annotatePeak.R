@@ -152,15 +152,10 @@ annotatePeak <- function(peak,
         if (verbose)
             cat(">> adding gene annotation...\t\t\t",
                 format(Sys.time(), "%Y-%m-%d %X"), "\n")
-        IDType <- metadata(TxDb)[8,2]     
-        geneAnno <- addGeneAnno(annoDb, peak.gr$geneId, type=IDType)
-        if (! all(is.na(geneAnno))) {
-            for(cn in colnames(geneAnno)[-1]) {
-                mcols(peak.gr)[[cn]] <- geneAnno[, cn]
-            }
-        }
+        
+        peak.gr %<>% addGeneAnno(annoDb, IDType(TxDb))
     }
-
+    
     if (addFlankGeneInfo == TRUE) {
         if (verbose)
             cat(">> adding flank feature information from peaks...\t",

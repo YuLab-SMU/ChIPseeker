@@ -1,15 +1,15 @@
 
-##' add gene annotation, symbol, gene name etc.
+##' get gene annotation, symbol, gene name etc.
 ##'
 ##' 
-##' @title addGeneAnno 
+##' @title getGeneAnno 
 ##' @param annoDb annotation package
 ##' @param geneID query geneID
 ##' @param type gene ID type
 ##' @return data.frame
 ##' @importFrom AnnotationDbi select
 ##' @author G Yu
-addGeneAnno <- function(annoDb, geneID, type){
+getGeneAnno <- function(annoDb, geneID, type){
     kk <- unlist(geneID)
     require(annoDb, character.only = TRUE)
     annoDb <- eval(parse(text=annoDb))
@@ -18,7 +18,7 @@ addGeneAnno <- function(annoDb, geneID, type){
     } else if (type =="Ensembl gene ID" || type == "Ensembl Gene ID") {
         kt <- "ENSEMBL"
     } else {
-        warnings("geneID type is not supported...\tPlease report it to developer...\n")
+        message("geneID type is not supported...\tPlease report it to developer...\n")
         return(NA)
     }
 
@@ -32,5 +32,16 @@ addGeneAnno <- function(annoDb, geneID, type){
     idx <- unlist(sapply(kk, function(x) which(x==ann[,kt])))
     ann <- ann[idx,]
     return(ann)
+}
+
+
+addGeneAnno <- function(peak.gr, annoDb, type) {
+    geneAnno <- getGeneAnno(annoDb, peak.gr$geneId, type)
+    if (! all(is.na(geneAnno))) {
+        for(cn in colnames(geneAnno)[-1]) {
+            mcols(peak.gr)[[cn]] <- geneAnno[, cn]
+        }
+    }
+    return(peak.gr)
 }
 
