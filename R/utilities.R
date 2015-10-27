@@ -378,3 +378,18 @@ parse_targetPeak_Param <- function(targetPeak) {
     }
     return(res)
 }
+
+
+IDType <- function(TxDb) {
+    ##
+    ## IDType <- metadata(TxDb)[8,2]
+    ##
+    ## update: 2015-10-27
+    ## now IDType change from metadata(TxDb)[8,2] to metadata(TxDb)[9,2] 
+    ## it may change in future too
+    ##
+    ## it's safe to extract via grep
+    
+    md <- metadata(TxDb)
+    md[grep("Type of Gene ID", md[,1]), 2]
+}
