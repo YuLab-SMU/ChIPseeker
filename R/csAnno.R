@@ -94,6 +94,9 @@ setMethod("upsetplot", signature(x="csAnno"),
           }
           )
 
+##' convert csAnno object to data.frame
+##'
+##' 
 ##' @title as.data.frame.csAnno
 ##' @param x csAnno object
 ##' @param row.names row names
