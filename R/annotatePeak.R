@@ -161,13 +161,16 @@ annotatePeak <- function(peak,
             cat(">> adding flank feature information from peaks...\t",
                 format(Sys.time(), "%Y-%m-%d %X"), "\n")
  
-        flankInfo <- getAllFlankingGene(peak.gr, features, flankDistance)
+        flankInfo <- getAllFlankingGene(peak.gr, features, level, flankDistance)
+
+        if (level == "transcript") {
+            mcols(peak.gr)[["flank_txIds"]] <- NA
+            mcols(peak.gr)[["flank_txIds"]][flankInfo$peakIdx] <- flankInfo$flank_txIds
+        }
         
-        mcols(peak.gr)[["flank_txIds"]] <- NA
         mcols(peak.gr)[["flank_geneIds"]] <- NA
         mcols(peak.gr)[["flank_gene_distances"]] <- NA
         
-        mcols(peak.gr)[["flank_txIds"]][flankInfo$peakIdx] <- flankInfo$flank_txIds
         mcols(peak.gr)[["flank_geneIds"]][flankInfo$peakIdx] <- flankInfo$flank_geneIds
         mcols(peak.gr)[["flank_gene_distances"]][flankInfo$peakIdx] <- flankInfo$flank_gene_distances
 

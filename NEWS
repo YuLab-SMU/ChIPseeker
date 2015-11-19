@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.7.2
+------------------------
+ o addFlankGeneInfo now works with level="gene" <2015-11-19, Thu>
+   + see https://github.com/GuangchuangYu/ChIPseeker/issues/18
+ 
 CHANGES IN VERSION 1.7.1
 ------------------------
  o fixed extracting ID type from TxDb object, since the change of metadata(TxDb). now using grep to extract. <2015-10-27, Tue>
