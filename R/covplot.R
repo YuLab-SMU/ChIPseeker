@@ -105,6 +105,8 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
     
     ldf <- lapply(1:length(cov), function(i) {
         x <- cov[[i]]
+        if (length(x@ranges) == 0)
+            return(NA)
         data.frame(chr   = names(cov[i]),
                    start = start(x),
                    end   = end(x),
@@ -114,7 +116,8 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
                                         # sapply(x, runValue)
                    )
     })
-    
+
+    ldf <- ldf[!is.na(ldf)]
     df <- do.call("rbind", ldf)
     
     chr.sorted <- sortChrName(as.character(unique(df$chr)))
