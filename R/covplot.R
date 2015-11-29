@@ -30,6 +30,7 @@ plotChrCov <- function(peak, weightCol=NULL,
 ##' @param title title
 ##' @param chrs selected chromosomes to plot, all chromosomes by default
 ##' @param xlim ranges to plot, default is whole chromosome
+##' @param lower lower cutoff of coverage signal
 ##' @return ggplot2 object
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 geom_segment
@@ -45,11 +46,12 @@ plotChrCov <- function(peak, weightCol=NULL,
 ##' @export
 ##' @author G Yu
 covplot <- function(peak, weightCol=NULL,
-                    xlab = "Chromosome Size (bp)",
-                    ylab = "",
+                    xlab  = "Chromosome Size (bp)",
+                    ylab  = "",
                     title = "ChIP Peaks over Chromosomes",
-                    chrs = NULL,
-                    xlim = NULL) {
+                    chrs  = NULL,
+                    xlim  = NULL,
+                    lower = 1) {
     if (is(peak, "GRanges")) {
         peak.gr <- peak
     } else if (file.exists(peak)) {
@@ -58,7 +60,7 @@ covplot <- function(peak, weightCol=NULL,
         stop("peak should be a GRanges object or a peak file...")
     }
     
-    tm <- getChrCov(peak.gr=peak.gr, weightCol=weightCol, chrs, xlim)
+    tm <- getChrCov(peak.gr=peak.gr, weightCol=weightCol, chrs, xlim, lower=lower)
        
     chr <- start <- end <- value <- NULL
    
@@ -83,7 +85,7 @@ covplot <- function(peak, weightCol=NULL,
 ##' @importFrom dplyr group_by
 ##' @importFrom dplyr summarise
 ##' @importFrom magrittr %>%
-getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
+getChrCov <- function(peak.gr, weightCol, chrs, xlim, lower=1) {
 
     if ( is.null(weightCol)) {
         peak.cov <- coverage(peak.gr)
@@ -92,7 +94,7 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
         peak.cov <- coverage(peak.gr, weight=weight)
     }
 
-    cov <- lapply(peak.cov, slice, lower=1)
+    cov <- lapply(peak.cov, slice, lower=lower)
 
     get.runValue <- function(x) {
         y <- runValue(x)
@@ -105,8 +107,13 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim) {
     
     ldf <- lapply(1:length(cov), function(i) {
         x <- cov[[i]]
-        if (length(x@ranges) == 0)
+        if (length(x@ranges) == 0) {
+            msg <- paste0(names(cov[i]),
+                          " dosen't contains signal higher than ",
+                          lower)
+            message(msg)
             return(NA)
+        }
         data.frame(chr   = names(cov[i]),
                    start = start(x),
                    end   = end(x),

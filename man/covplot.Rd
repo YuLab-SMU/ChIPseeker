@@ -5,7 +5,8 @@
 \title{covplot}
 \usage{
 covplot(peak, weightCol = NULL, xlab = "Chromosome Size (bp)", ylab = "",
-  title = "ChIP Peaks over Chromosomes", chrs = NULL, xlim = NULL)
+  title = "ChIP Peaks over Chromosomes", chrs = NULL, xlim = NULL,
+  lower = 1)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}
@@ -21,6 +22,8 @@ covplot(peak, weightCol = NULL, xlab = "Chromosome Size (bp)", ylab = "",
 \item{chrs}{selected chromosomes to plot, all chromosomes by default}
 
 \item{xlim}{ranges to plot, default is whole chromosome}
+
+\item{lower}{lower cutoff of coverage signal}
 }
 \value{
 ggplot2 object
