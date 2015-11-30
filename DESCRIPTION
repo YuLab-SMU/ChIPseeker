@@ -66,4 +66,4 @@ BugReports: https://github.com/GuangchuangYu/ChIPseeker/issues
 VignetteBuilder: knitr
 License: Artistic-2.0
 biocViews: Annotation, ChIPSeq, Software, Visualization, MultipleComparison
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1

@@ -1,5 +1,6 @@
 CHANGES IN VERSION 1.7.2
 ------------------------
+ o use geom_rect instead of geom_segment in covplot <2015-11-30, Mon>
  o open lower parameter (by default =1) to specific lower cutoff of coverage signal <2015-11-29, Sun>
  o fixed covplot to work with None RleViews of specific chromosome <2015-11-29, Sun>
  o addFlankGeneInfo now works with level="gene" <2015-11-19, Thu>

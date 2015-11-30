@@ -65,8 +65,8 @@ covplot <- function(peak, weightCol=NULL,
     chr <- start <- end <- value <- NULL
    
     p <- ggplot(tm, aes(start, value))
-    p <- p + geom_segment(aes(x=start, y=0, xend=end, yend= value))
-    ## p <- p + geom_rect(aes(xmin=start, ymin=0, xmax=end, ymax=value))
+    ## p <- p + geom_segment(aes(x=start, y=0, xend=end, yend= value))
+    p <- p + geom_rect(aes(xmin=start, ymin=0, xmax=end, ymax=value), fill='black', color='black')
     if(length(unique(tm$chr)) > 1) {
         p <- p + facet_grid(chr ~., scales="free")
     }
@@ -109,7 +109,7 @@ getChrCov <- function(peak.gr, weightCol, chrs, xlim, lower=1) {
         x <- cov[[i]]
         if (length(x@ranges) == 0) {
             msg <- paste0(names(cov[i]),
-                          " dosen't contains signal higher than ",
+                          " dosen't contain signal higher than ",
                           lower)
             message(msg)
             return(NA)
