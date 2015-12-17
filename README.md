@@ -39,17 +39,17 @@ To install:
  * the latest released version:
    `biocLite("ChIPseeker")`
  * the latest development version:
-   `install_github("GuangchuangYu/ChIPseeker")`
+   `devtools::install_github("GuangchuangYu/ChIPseeker")`
 
 ## Documentation ##
 
-+ [parsing BED coordinates](http://ygc.name/2015/08/07/parsing-bed-coordinates/)
-+ [Peak Annotation](http://ygc.name/2014/04/13/chipseeker-for-chip-peak-annotation/)
-+ [Multiple Annotation](http://ygc.name/2014/10/01/multiple-annotation-in-chipseeker/)
-+ [Visualization Methods](http://ygc.name/2014/04/30/visualization-methods-in-chipseeker/)
-+ [upsetplot](http://ygc.name/2015/07/28/upsetplot-in-chipseeker/)
-+ [functional enrichment analysis with NGS data](http://ygc.name/2015/08/21/functional-enrichment-analysis-with-ngs-data/)
-+ [ChIPseq data mining with ChIPseeker](http://ygc.name/2015/10/01/chipseq-data-mining-with-chipseeker/)
++ [parsing BED coordinates](http://guangchuangyu.github.io/2015/08/parsing-bed-coordinates/)
++ [Peak Annotation](http://guangchuangyu.github.io/2014/04/chipseeker-for-chip-peak-annotation/)
++ [Multiple Annotation](http://guangchuangyu.github.io/2014/10/multiple-annotation-in-chipseeker/)
++ [Visualization Methods](http://guangchuangyu.github.io/2014/04/visualization-methods-in-chipseeker/)
++ [upsetplot](http://guangchuangyu.github.io/2015/07/upsetplot-in-chipseeker/)
++ [functional enrichment analysis with NGS data](http://guangchuangyu.github.io/2015/08/functional-enrichment-analysis-with-ngs-data/)
++ [ChIPseq data mining with ChIPseeker](http://guangchuangyu.github.io/2015/10/chipseq-data-mining-with-chipseeker/)
 
 Find out more at [http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html](http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) and check out the [vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/ChIPseeker/inst/doc/ChIPseeker.pdf).
 
