@@ -5,12 +5,7 @@
 ##' @param peaks peak in GRanges 
 ##' @param features features in GRanges
 ##' @return list
-##' @importFrom IRanges precede
-##' @importFrom IRanges follow
-##' @importFrom IRanges start
-##' @importFrom IRanges end
-##' @importFrom BiocGenerics strand
-## @importMethodsFrom GenomicRanges strand
+##' @import BiocGenerics IRanges GenomicRanges
 ##' @author G Yu
 getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     ## peaks only conatin all peak records, in GRanges object

@@ -41,13 +41,7 @@
 ##' SYMBOL: gene symbol
 ##' 
 ##' GENENAME: full gene name
-##' @importFrom S4Vectors metadata
-##' @importFrom S4Vectors mcols
-##' @importFrom S4Vectors mcols<-
-##' @importFrom GenomeInfoDb seqlengths
-##' @importFrom GenomeInfoDb seqinfo
-##' @importFrom GenomeInfoDb seqinfo<-
-##' @importMethodsFrom BiocGenerics as.data.frame
+##' @import BiocGenerics S4Vectors GenomeInfoDb 
 ##' @examples
 ##' \dontrun{
 ##' require(TxDb.Hsapiens.UCSC.hg19.knownGene)

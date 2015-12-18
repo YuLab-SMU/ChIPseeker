@@ -181,11 +181,7 @@ getGenomicAnnotation <- function(peaks,
 }
 
 
-##' @importFrom IRanges elementLengths
-##' @importFrom IRanges findOverlaps
-##' @importFrom S4Vectors queryHits
-##' @importFrom S4Vectors subjectHits
-##' @importMethodsFrom BiocGenerics unlist
+##' @import BiocGenerics S4Vectors IRanges
 getGenomicAnnotation.internal <- function(peaks, genomicRegion, type){
     GRegion <- unlist(genomicRegion)
     GRegionLen <- elementLengths(genomicRegion)
