@@ -221,8 +221,8 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
 }
 
 
+##' @import BiocGenerics
 ##' @importFrom grDevices colorRampPalette
-##' @importFrom BiocGenerics image
 peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", ylab="", title="") {
     tagMatrix <- t(apply(tagMatrix, 1, function(x) x/max(x)))
     ii <- order(rowSums(tagMatrix))

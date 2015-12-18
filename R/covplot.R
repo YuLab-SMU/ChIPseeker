@@ -32,6 +32,7 @@ plotChrCov <- function(peak, weightCol=NULL,
 ##' @param xlim ranges to plot, default is whole chromosome
 ##' @param lower lower cutoff of coverage signal
 ##' @return ggplot2 object
+##' @import GenomeInfoDb
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 geom_segment
 ##' @importFrom ggplot2 geom_rect
@@ -42,7 +43,6 @@ plotChrCov <- function(peak, weightCol=NULL,
 ##' @importFrom ggplot2 xlab
 ##' @importFrom ggplot2 ylab
 ##' @importFrom ggplot2 ggtitle
-##' @importFrom GenomeInfoDb seqlengths
 ##' @export
 ##' @author G Yu
 covplot <- function(peak, weightCol=NULL,
@@ -79,9 +79,7 @@ covplot <- function(peak, weightCol=NULL,
 }
 
 
-##' @importFrom S4Vectors mcols
-##' @importFrom IRanges slice
-##' @importFrom S4Vectors runValue
+##' @import S4Vectors IRanges
 ##' @importFrom dplyr group_by
 ##' @importFrom dplyr summarise
 ##' @importFrom magrittr %>%

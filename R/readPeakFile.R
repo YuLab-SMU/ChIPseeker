@@ -6,8 +6,7 @@
 ##' @param as output format, one of GRanges or data.frame
 ##' @param ... additional parameter
 ##' @return peak information, in GRanges or data.frame object
-##' @importFrom IRanges IRanges
-##' @importFrom GenomicRanges GRanges
+##' @import IRanges GenomicRanges
 ##' @export
 ##' @examples
 ##' peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")

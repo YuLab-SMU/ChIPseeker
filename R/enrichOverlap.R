@@ -170,8 +170,7 @@ shuffle <- function(peak.gr, TxDb) {
 
 
 
-##' @importFrom GenomeInfoDb intersect
-##' @importFrom GenomeInfoDb seqlengths
+##' @import GenomeInfoDb
 ##' @importFrom parallel mclapply
 ##' @importFrom parallel detectCores
 enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000, mc.cores=detectCores()-1, verbose=TRUE) {    

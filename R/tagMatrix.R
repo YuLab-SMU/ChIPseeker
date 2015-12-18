@@ -8,14 +8,8 @@
 ##' @param by one of gene or transcript
 ##' @return GRanges object
 ##' @export
-##' @importFrom BiocGenerics unique
-##' @importFrom GenomicRanges GRanges
-##' @importFrom GenomicRanges unlist
-##' @importFrom GenomicRanges strand
+##' @import BiocGenerics IRanges GenomicRanges
 ##' @importFrom GenomicFeatures transcriptsBy
-##' @importFrom IRanges start
-##' @importFrom IRanges end
-##' @importFrom IRanges IRanges
 getPromoters <- function(TxDb=NULL,
                          upstream=1000,
                          downstream=1000,
@@ -62,13 +56,7 @@ getPromoters <- function(TxDb=NULL,
 ##' @param downstream downstream from start site
 ##' @param by one of 'gene', 'transcript', 'exon', 'intron'
 ##' @return GRanges object
-##' @importFrom BiocGenerics unique
-##' @importFrom GenomicRanges GRanges
-##' @importFrom GenomicRanges unlist
-##' @importFrom GenomicRanges strand
-##' @importFrom IRanges start
-##' @importFrom IRanges end
-##' @importFrom IRanges IRanges
+##' @import BiocGenerics IRanges GenomicRanges
 ##' @export
 ##' @author Guangchuang Yu
 ##  https://github.com/GuangchuangYu/ChIPseeker/issues/16
@@ -118,20 +106,7 @@ getBioRegion <- function(TxDb=NULL,
 ##' @param windows a collection of region with equal size, eg. promoter region.
 ##' @return tagMatrix
 ##' @export
-##' @importFrom IRanges subsetByOverlaps
-##' @importFrom IRanges elementLengths
-##' @importFrom IRanges width
-##' @importFrom IRanges coverage
-##' @importFrom IRanges IRanges
-##' @importFrom IRanges Views
-##' @importFrom IRanges viewApply
-##' @importFrom IRanges as.vector
-##' @importFrom S4Vectors as.factor
-##' @importFrom S4Vectors mcols
-##' @importFrom GenomicRanges GRanges
-##' @importFrom GenomeInfoDb seqnames
-##' @importFrom BiocGenerics intersect
-##' @importFrom BiocGenerics unique
+##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
 getTagMatrix <- function(peak, weightCol=NULL, windows) {
     peak.gr <- loadPeak(peak)
     
