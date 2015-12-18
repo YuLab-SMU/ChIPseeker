@@ -85,7 +85,7 @@ getBioRegion <- function(TxDb=NULL,
         regions <- unlist(intronList)
     }
 
-    start_site <- ifelse(strand(regions) == "+", start(bioRegion), end(bioRegion))
+    start_site <- ifelse(strand(regions) == "+", start(regions), end(regions))
 
     bioRegion <- GRanges(seqnames=seqnames(regions),
                          ranges=IRanges(start_site-upstream, start_site+downstream),
