@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.7.3
+------------------------
+ o fixed R check <2015-12-29, Tue>
+ 
 CHANGES IN VERSION 1.7.2
 ------------------------
  o use geom_rect instead of geom_segment in covplot <2015-11-30, Mon>

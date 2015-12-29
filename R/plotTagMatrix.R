@@ -18,7 +18,13 @@ plotAvgProf <- function(tagMatrix, xlim,
                         ylab = "Read Count Frequency",
                         conf,
                         facet="none", free_y = TRUE, ...) {
-    conf <- ifelse(missingArg(conf), NA, conf)
+    ## S4Vectors change the behavior of ifelse
+    ## see https://support.bioconductor.org/p/70871/
+    ##
+    ## conf <- ifelse(missingArg(conf), NA, conf)
+    ##
+    conf <- if(missingArg(conf)) NA else conf
+    
     if (!(missingArg(conf) || is.na(conf))){
         p <- plotAvgProf.internal(tagMatrix, conf = conf, xlim = xlim, 
                                   xlab = xlab, ylab = ylab,
@@ -275,8 +281,13 @@ plotAvgProf.internal <- function(tagMatrix, conf,
         }
     }
 
-    conf <- ifelse(missingArg(conf), NA, conf)
-
+    ## S4Vectors change the behavior of ifelse
+    ## see https://support.bioconductor.org/p/70871/
+    ##
+    ## conf <- ifelse(missingArg(conf), NA, conf)
+    ##
+    conf <- if(missingArg(conf)) NA else conf
+    
     pos <- value <- .id <- Lower <- Upper <- NULL
     
     if ( listFlag ) {

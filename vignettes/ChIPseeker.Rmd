@@ -233,8 +233,8 @@ Once we have obtained the annotated nearest genes, we can perform functional enr
 Enrichment analysis is a widely used approach to identify biological themes. I have developed several Bioconductor packages for investigating whether the number of selected genes associated with a particular biological term is larger than expected, including `r Biocpkg("DOSE")`[@yu_dose_2015] for Disease Ontology, `r Biocpkg("ReactomePA")` for reactome pathway, `r Biocpkg("clusterProfiler")`[@yu_clusterprofiler_2012] for Gene Ontology and KEGG enrichment analysis. 
 
 ```{r}
-require(clusterProfiler)
-bp <- enrichGO(as.data.frame(peakAnno)$geneId, ont="BP", readable=TRUE)
+library(clusterProfiler)
+bp <- enrichGO(as.data.frame(peakAnno)$geneId, OrgDb='org.Hs.eg.db', ont="BP", readable=TRUE)
 head(summary(bp), n=3)
 ```
 
@@ -299,6 +299,7 @@ genes = lapply(peakAnnoList, function(i) as.data.frame(i)$geneId)
 names(genes) = sub("_", "\n", names(genes))
 compMF <- compareCluster(geneCluster   = genes, 
                          fun           = "enrichGO",
+                         OrgDb         = "org.Hs.eg.db",
                          ont           = "MF",
                          pvalueCutoff  = 0.05, 
                          pAdjustMethod = "BH")
