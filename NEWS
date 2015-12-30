@@ -1,6 +1,6 @@
 CHANGES IN VERSION 1.7.4
 ------------------------
- o xlim now not only restrict the window of data but also set the limit of the graphic object <2015-12-30, Wed>
+ o [covplot] xlim now not only restrict the window of data but also set the limit of the graphic object <2015-12-30, Wed>
    + see https://github.com/GuangchuangYu/ChIPseeker/issues/20
  
 CHANGES IN VERSION 1.7.3
