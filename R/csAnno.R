@@ -153,6 +153,9 @@ setMethod("plotAnnoBar", signature(x="list"),
                    ylab='Percentage(%)',
                    title="Feature Distribution",
                    ...) {
+              if (is.null(names(x))) {
+                  stop("input object should be a named list...")
+              }
               anno <- lapply(x, getAnnoStat)
               anno.df <- ldply(anno)
               categoryColumn <- ".id"
@@ -231,6 +234,10 @@ setMethod("plotDistToTSS", signature(x="list"),
           function(x, distanceColumn="distanceToTSS",
                                      xlab="", ylab="Binding sites (%) (5'->3')",
                                      title="Distribution of transcription factor-binding loci relative to TSS", ...) {
+              if (is.null(names(x))) {
+                  stop("input object should be a named list...")
+              }
+              
               peakAnno <- lapply(x, as.data.frame)
               peakDist <- ldply(peakAnno)
               categoryColumn <- ".id"
