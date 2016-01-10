@@ -15,10 +15,10 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     start(features) <- end(features) <- ifelse(strand(features) == "+", start(features), end(features))
     
     ## nearest from peak start
-    ps.idx <- precede(peaks, features)
+    ps.idx <- follow(peaks, features)
     
     ## nearest from peak end
-    pe.idx <- follow(peaks, features)
+    pe.idx <- precede(peaks, features)
     
     na.idx <- is.na(ps.idx) | is.na(pe.idx)
     ## if (sum(na.idx) > 1) {
@@ -31,17 +31,15 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     ## features from nearest peak start
     psF <- features[ps.idx]
     ## feature distances from peak start
-    psD <- ifelse(strand(psF) == "+",
-                 start(peaks) - start(psF),
-                 end(psF)-end(peaks))
-
+    psD <- ifelse(strand(psF) == "+", 1, -1) *
+        (start(peaks) - start(psF))
+    
     ## features from nearest peak end
     peF <- features[pe.idx]
     ## feature distances from peak end
-    peD <- ifelse(strand(peF) == "+",
-                  end(peaks) - start(peF),
-                  end(peF)-start(peaks))
-
+    peD <- ifelse(strand(peF) == "+", 1, -1) *
+        (end(peaks) - start(peF))
+    
     pse <- data.frame(ps=psD, pe=peD)
     j <- apply(pse, 1, function(i) which.min(abs(i)))
 

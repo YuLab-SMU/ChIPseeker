@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.7.5
+------------------------
+ o bug fixed in peak orientation <2016-01-10, Sun>
+   + see https://github.com/GuangchuangYu/ChIPseeker/issues/22
+
 CHANGES IN VERSION 1.7.4
 ------------------------
  o stop if input list of csAnno object has no name attribute 
