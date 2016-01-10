@@ -7,8 +7,9 @@
 annotatePeak(peak, tssRegion = c(-3000, 3000), TxDb = NULL,
   level = "transcript", assignGenomicAnnotation = TRUE,
   genomicAnnotationPriority = c("Promoter", "5UTR", "3UTR", "Exon", "Intron",
-  "Downstream", "Intergenic"), annoDb = NULL, addFlankGeneInfo = FALSE,
-  flankDistance = 5000, verbose = TRUE)
+  "Downstream", "Intergenic"), annoDb = NULL, sameStrand = FALSE,
+  ignoreOverlap = FALSE, ignoreUpstream = FALSE, ignoreDownstream = FALSE,
+  addFlankGeneInfo = FALSE, flankDistance = 5000, verbose = TRUE)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}
@@ -24,6 +25,14 @@ annotatePeak(peak, tssRegion = c(-3000, 3000), TxDb = NULL,
 \item{genomicAnnotationPriority}{genomic annotation priority}
 
 \item{annoDb}{annotation package}
+
+\item{sameStrand}{logical, whether find nearest gene in the same strand}
+
+\item{ignoreOverlap}{logical, whether ignore overlap of TSS with peak}
+
+\item{ignoreUpstream}{logical, if True only annotate gene in downstream of peak.}
+
+\item{ignoreDownstream}{logical, if True only annotate gene in upstream of peak.}
 
 \item{addFlankGeneInfo}{logical, add flanking gene information from the peaks}
 

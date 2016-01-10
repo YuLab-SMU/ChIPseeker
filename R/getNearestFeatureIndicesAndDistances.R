@@ -4,21 +4,38 @@
 ##' @title getNearestFeatureIndicesAndDistances 
 ##' @param peaks peak in GRanges 
 ##' @param features features in GRanges
+##' @param sameStrand logical, whether find nearest gene in the same strand
+##' @param ignoreOverlap logical, whether ignore overlap of TSS with peak
+##' @param ignoreUpstream logical, if True only annotate gene in downstream of peak.
+##' @param ignoreDownstream logical, if True only annotate gene in upstream of peak.
 ##' @return list
 ##' @import BiocGenerics IRanges GenomicRanges
+##' @importFrom IRanges resize
+##' @importFrom BiocGenerics unstrand
 ##' @author G Yu
-getNearestFeatureIndicesAndDistances <- function(peaks, features) {
+getNearestFeatureIndicesAndDistances <- function(peaks, features,
+                                                 sameStrand = FALSE,
+                                                 ignoreOverlap=FALSE,
+                                                 ignoreUpstream=FALSE,
+                                                 ignoreDownstream=FALSE) {
+    
     ## peaks only conatin all peak records, in GRanges object
     ## feature is the annotation in GRanges object
 
     ## only keep start position based on strand
-    start(features) <- end(features) <- ifelse(strand(features) == "+", start(features), end(features))
-    
-    ## nearest from peak start
-    ps.idx <- follow(peaks, features)
-    
-    ## nearest from peak end
-    pe.idx <- precede(peaks, features)
+    ## start(features) <- end(features) <- ifelse(strand(features) == "+", start(features), end(features))
+    features <- resize(features, width=1) # faster
+
+    if (sameStrand) {
+        ## nearest from peak start
+        ps.idx <- follow(peaks, features)
+        
+        ## nearest from peak end
+        pe.idx <- precede(peaks, features)
+    } else {
+        ps.idx <- follow(peaks, unstrand(features))
+        pe.idx <- precede(peaks, unstrand(features))
+    }
     
     na.idx <- is.na(ps.idx) | is.na(pe.idx)
     ## if (sum(na.idx) > 1) {
@@ -41,8 +58,14 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
         (end(peaks) - start(peF))
     
     pse <- data.frame(ps=psD, pe=peD)
-    j <- apply(pse, 1, function(i) which.min(abs(i)))
-
+    if (ignoreUpstream) {
+        j <- rep(2, nrow(pse))
+    } else if (ignoreDownstream) {
+        j <- rep(1, nrow(pse))
+    } else {
+        j <- apply(pse, 1, function(i) which.min(abs(i)))
+    }
+    
     ## index
     idx <- ps.idx
     idx[j==2] <- pe.idx[j==2]
@@ -51,17 +74,19 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features) {
     dd <- psD
     dd[j==2] <- peD[j==2]
 
-    
-    hit <- findOverlaps(peaks, features)
-    if ( length(hit) != 0 ) {
-        qh <- queryHits(hit)
-        hit.idx <- getFirstHitIndex(qh)
-        hit <- hit[hit.idx]
-        peakIdx <- queryHits(hit)
-        featureIdx <- subjectHits(hit)
 
-        idx[peakIdx] <- featureIdx
-        dd[peakIdx] <- 0
+    if (!ignoreOverlap) {
+        hit <- findOverlaps(peaks, features)
+        if ( length(hit) != 0 ) {
+            qh <- queryHits(hit)
+            hit.idx <- getFirstHitIndex(qh)
+            hit <- hit[hit.idx]
+            peakIdx <- queryHits(hit)
+            featureIdx <- subjectHits(hit)
+            
+            idx[peakIdx] <- featureIdx
+            dd[peakIdx] <- 0
+        }
     }
 
     ## pn.idx <- nearest(peaks, features)

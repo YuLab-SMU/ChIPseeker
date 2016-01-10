@@ -9,6 +9,10 @@
 ##' @param assignGenomicAnnotation logical, assign peak genomic annotation or not
 ##' @param genomicAnnotationPriority genomic annotation priority
 ##' @param annoDb annotation package
+##' @param sameStrand logical, whether find nearest gene in the same strand
+##' @param ignoreOverlap logical, whether ignore overlap of TSS with peak
+##' @param ignoreUpstream logical, if True only annotate gene in downstream of peak.
+##' @param ignoreDownstream logical, if True only annotate gene in upstream of peak.
 ##' @param addFlankGeneInfo logical, add flanking gene information from the peaks 
 ##' @param flankDistance distance of flanking sequence
 ##' @param verbose print message or not
@@ -62,6 +66,10 @@ annotatePeak <- function(peak,
                          annoDb=NULL,
                          addFlankGeneInfo=FALSE,
                          flankDistance=5000,
+                         sameStrand = FALSE,
+                         ignoreOverlap=FALSE,
+                         ignoreUpstream=FALSE,
+                         ignoreDownstream=FALSE,
                          verbose=TRUE) {
     
     level <- match.arg(level, c("transcript", "gene"))
@@ -96,8 +104,11 @@ annotatePeak <- function(peak,
     if (verbose)
         cat(">> identifying nearest features...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    
     ## nearest features
-    idx.dist <- getNearestFeatureIndicesAndDistances(peak.gr, features)
+    idx.dist <- getNearestFeatureIndicesAndDistances(peak.gr, features,
+                                                     sameStrand, ignoreOverlap,
+                                                     ignoreUpstream,ignoreDownstream)
     nearestFeatures <- features[idx.dist$index]
     if (verbose)
         cat(">> calculating distance from peak to TSS...\t",

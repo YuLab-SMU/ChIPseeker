@@ -1,5 +1,7 @@
 CHANGES IN VERSION 1.7.5
 ------------------------
+ o add paramters, sameStrand,ignoreOverlap, ignoreUpstream and ignoreDownstream in annotatePeak <2016-01-10, Sun>
+   + see https://github.com/GuangchuangYu/ChIPseeker/issues/17
  o bug fixed in peak orientation <2016-01-10, Sun>
    + see https://github.com/GuangchuangYu/ChIPseeker/issues/22
 
