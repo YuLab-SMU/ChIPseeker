@@ -1,5 +1,16 @@
+CHANGES IN VERSION 1.7.5
+------------------------
+ o add paramters, sameStrand,ignoreOverlap, ignoreUpstream and ignoreDownstream in annotatePeak <2016-01-10, Sun>
+   + see https://github.com/GuangchuangYu/ChIPseeker/issues/17
+ o bug fixed in peak orientation <2016-01-10, Sun>
+   + see https://github.com/GuangchuangYu/ChIPseeker/issues/22
+
 CHANGES IN VERSION 1.7.4
 ------------------------
+ o stop if input list of csAnno object has no name attribute 
+   + see https://github.com/GuangchuangYu/ChIPseeker/issues/21
+   + plotAnnoBar
+   + plotDistToTSS
  o [covplot] xlim now not only restrict the window of data but also set the limit of the graphic object <2015-12-30, Wed>
    + see https://github.com/GuangchuangYu/ChIPseeker/issues/20
  
