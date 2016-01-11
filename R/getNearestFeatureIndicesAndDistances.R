@@ -6,8 +6,8 @@
 ##' @param features features in GRanges
 ##' @param sameStrand logical, whether find nearest gene in the same strand
 ##' @param ignoreOverlap logical, whether ignore overlap of TSS with peak
-##' @param ignoreUpstream logical, if True only annotate gene in downstream of peak.
-##' @param ignoreDownstream logical, if True only annotate gene in upstream of peak.
+##' @param ignoreUpstream logical, if True only annotate gene at the 3' of the peak.
+##' @param ignoreDownstream logical, if True only annotate gene at the 5' of the peak.
 ##' @return list
 ##' @import BiocGenerics IRanges GenomicRanges
 ##' @importFrom IRanges resize

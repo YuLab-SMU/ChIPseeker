@@ -9,12 +9,12 @@
 ##' @param assignGenomicAnnotation logical, assign peak genomic annotation or not
 ##' @param genomicAnnotationPriority genomic annotation priority
 ##' @param annoDb annotation package
-##' @param sameStrand logical, whether find nearest gene in the same strand
-##' @param ignoreOverlap logical, whether ignore overlap of TSS with peak
-##' @param ignoreUpstream logical, if True only annotate gene in downstream of peak.
-##' @param ignoreDownstream logical, if True only annotate gene in upstream of peak.
 ##' @param addFlankGeneInfo logical, add flanking gene information from the peaks 
 ##' @param flankDistance distance of flanking sequence
+##' @param sameStrand logical, whether find nearest gene in the same strand
+##' @param ignoreOverlap logical, whether ignore overlap of TSS with peak
+##' @param ignoreUpstream logical, if True only annotate gene at the 3' of the peak.
+##' @param ignoreDownstream logical, if True only annotate gene at the 5' of the peak.
 ##' @param verbose print message or not
 ##' @return data.frame or GRanges object with columns of:
 ##' 

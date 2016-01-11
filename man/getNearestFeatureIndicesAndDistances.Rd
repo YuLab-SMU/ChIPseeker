@@ -16,9 +16,9 @@ getNearestFeatureIndicesAndDistances(peaks, features, sameStrand = FALSE,
 
 \item{ignoreOverlap}{logical, whether ignore overlap of TSS with peak}
 
-\item{ignoreUpstream}{logical, if True only annotate gene in downstream of peak.}
+\item{ignoreUpstream}{logical, if True only annotate gene at the 3' of the peak.}
 
-\item{ignoreDownstream}{logical, if True only annotate gene in upstream of peak.}
+\item{ignoreDownstream}{logical, if True only annotate gene at the 5' of the peak.}
 }
 \value{
 list
