@@ -200,7 +200,7 @@ getGenomicAnnotation.internal <- function(peaks, genomicRegion, type){
         GRegion$intron_rank <- intron_rank
     }
     ## find overlap
-    GRegionHit <- findOverlaps(peaks, GRegion)
+    GRegionHit <- findOverlaps(peaks, unstrand(GRegion))
     if (length(GRegionHit) == 0) {
         return(NA)
     }

@@ -76,7 +76,7 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
 
 
     if (!ignoreOverlap) {
-        hit <- findOverlaps(peaks, features)
+        hit <- findOverlaps(peaks, unstrand(features))
         if ( length(hit) != 0 ) {
             qh <- queryHits(hit)
             hit.idx <- getFirstHitIndex(qh)
