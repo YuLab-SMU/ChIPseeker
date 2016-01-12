@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.7.6
+------------------------
+ o bug fixed in find overlap with peaks have strand info. <2016-01-12, Tue>
+   + see https://github.com/GuangchuangYu/ChIPseeker/issues/23
+ 
 CHANGES IN VERSION 1.7.5
 ------------------------
  o add paramters, sameStrand,ignoreOverlap, ignoreUpstream and ignoreDownstream in annotatePeak <2016-01-10, Sun>

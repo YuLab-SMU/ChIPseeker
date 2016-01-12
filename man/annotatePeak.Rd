@@ -30,7 +30,7 @@ annotatePeak(peak, tssRegion = c(-3000, 3000), TxDb = NULL,
 
 \item{flankDistance}{distance of flanking sequence}
 
-\item{sameStrand}{logical, whether find nearest gene in the same strand}
+\item{sameStrand}{logical, whether find nearest/overlap gene in the same strand}
 
 \item{ignoreOverlap}{logical, whether ignore overlap of TSS with peak}
 

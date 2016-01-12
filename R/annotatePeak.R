@@ -11,7 +11,7 @@
 ##' @param annoDb annotation package
 ##' @param addFlankGeneInfo logical, add flanking gene information from the peaks 
 ##' @param flankDistance distance of flanking sequence
-##' @param sameStrand logical, whether find nearest gene in the same strand
+##' @param sameStrand logical, whether find nearest/overlap gene in the same strand
 ##' @param ignoreOverlap logical, whether ignore overlap of TSS with peak
 ##' @param ignoreUpstream logical, if True only annotate gene at the 3' of the peak.
 ##' @param ignoreDownstream logical, if True only annotate gene at the 5' of the peak.
@@ -124,7 +124,7 @@ annotatePeak <- function(peak,
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     ## annotation
     if (assignGenomicAnnotation == TRUE) {
-        anno <- getGenomicAnnotation(peak.gr, distance, tssRegion, TxDb, level, genomicAnnotationPriority)
+        anno <- getGenomicAnnotation(peak.gr, distance, tssRegion, TxDb, level, genomicAnnotationPriority, sameStrand=sameStrand)
         annotation <- anno[["annotation"]]
         detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
     } else {

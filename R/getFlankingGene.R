@@ -6,7 +6,7 @@ getAllFlankingGene <- function(peak.gr, features, level="transcript", distance=5
     peak.gr2 <- peak.gr
     start(ranges(peak.gr)) = start(ranges(peak.gr)) - distance
     end(ranges(peak.gr)) = end(ranges(peak.gr)) + distance
-    hit <- findOverlaps(peak.gr, features)
+    hit <- findOverlaps(peak.gr, unstrand(features))
     qh <- queryHits(hit)
     sh <- subjectHits(hit)
     
@@ -25,7 +25,7 @@ getAllFlankingGene <- function(peak.gr, features, level="transcript", distance=5
 
     hitInfo$peakIdx <- qh
 
-    overlapHit <- findOverlaps(peak.gr2, featureHit)
+    overlapHit <- findOverlaps(peak.gr2, unstrand(featureHit))
     hitInfo$distance <- NA
     hitInfo$distance[subjectHits(overlapHit)] <- 0
 
