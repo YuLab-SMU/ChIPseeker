@@ -4,7 +4,7 @@
 \alias{seq2gene}
 \title{seq2gene}
 \usage{
-seq2gene(seq, tssRegion, flankDistance, TxDb)
+seq2gene(seq, tssRegion, flankDistance, TxDb, sameStrand = FALSE)
 }
 \arguments{
 \item{seq}{genomic regions in GRanges object}
@@ -14,6 +14,8 @@ seq2gene(seq, tssRegion, flankDistance, TxDb)
 \item{flankDistance}{flanking search radius}
 
 \item{TxDb}{TranscriptDb object}
+
+\item{sameStrand}{logical whether find nearest/overlap gene in the same strand}
 }
 \value{
 gene vector

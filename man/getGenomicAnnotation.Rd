@@ -5,7 +5,7 @@
 \title{getGenomicAnnotation}
 \usage{
 getGenomicAnnotation(peaks, distance, tssRegion = c(-3000, 3000), TxDb, level,
-  genomicAnnotationPriority)
+  genomicAnnotationPriority, sameStrand = FALSE)
 }
 \arguments{
 \item{peaks}{peaks in GRanges object}

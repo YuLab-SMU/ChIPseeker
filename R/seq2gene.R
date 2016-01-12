@@ -6,10 +6,11 @@
 ##' @param tssRegion TSS region
 ##' @param flankDistance flanking search radius
 ##' @param TxDb TranscriptDb object
+##' @param sameStrand logical whether find nearest/overlap gene in the same strand
 ##' @return gene vector
 ##' @export
 ##' @author Guangchuang Yu
-seq2gene <- function(seq, tssRegion, flankDistance, TxDb) {
+seq2gene <- function(seq, tssRegion, flankDistance, TxDb, sameStrand=FALSE) {
     .ChIPseekerEnv(TxDb)
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
     
@@ -20,7 +21,7 @@ seq2gene <- function(seq, tssRegion, flankDistance, TxDb) {
         exonList <- exonsBy(TxDb)
         assign("exonList", exonList, envir=ChIPseekerEnv)
     }
-    exons <- getGenomicAnnotation.internal(seq, exonList, type = "Exon")
+    exons <- getGenomicAnnotation.internal(seq, exonList, type = "Exon", sameStrand=sameStrand)
     
     ## Introns
     if ( exists("intronList", envir=ChIPseekerEnv, inherits=FALSE) ) {
@@ -29,7 +30,7 @@ seq2gene <- function(seq, tssRegion, flankDistance, TxDb) {
         intronList <- intronsByTranscript(TxDb)
         assign("intronList", intronList, envir=ChIPseekerEnv)
     }
-    introns <- getGenomicAnnotation.internal(seq, intronList, type="Intron")
+    introns <- getGenomicAnnotation.internal(seq, intronList, type="Intron", sameStrand=sameStrand)
     
     genes <- c(exons$gene, introns$gene)
     ## > head(genes)
@@ -40,7 +41,7 @@ seq2gene <- function(seq, tssRegion, flankDistance, TxDb) {
     ## [1] "126789"    "440556"    "49856"     "100133612" "390992"    "79814"   
 
     features <- getGene(TxDb, by="gene")
-    idx.dist <- getNearestFeatureIndicesAndDistances(seq, features)
+    idx.dist <- getNearestFeatureIndicesAndDistances(seq, features, sameStrand=sameStrand)
     nearestFeatures <- features[idx.dist$index] 
     
     distance <- idx.dist$distance
