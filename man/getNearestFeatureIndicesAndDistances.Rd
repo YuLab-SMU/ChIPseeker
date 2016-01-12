@@ -5,7 +5,8 @@
 \title{getNearestFeatureIndicesAndDistances}
 \usage{
 getNearestFeatureIndicesAndDistances(peaks, features, sameStrand = FALSE,
-  ignoreOverlap = FALSE, ignoreUpstream = FALSE, ignoreDownstream = FALSE)
+  ignoreOverlap = FALSE, ignoreUpstream = FALSE, ignoreDownstream = FALSE,
+  overlap = "TSS")
 }
 \arguments{
 \item{peaks}{peak in GRanges}
@@ -19,6 +20,8 @@ getNearestFeatureIndicesAndDistances(peaks, features, sameStrand = FALSE,
 \item{ignoreUpstream}{logical, if True only annotate gene at the 3' of the peak.}
 
 \item{ignoreDownstream}{logical, if True only annotate gene at the 5' of the peak.}
+
+\item{overlap}{one of "TSS" or "all"}
 }
 \value{
 list

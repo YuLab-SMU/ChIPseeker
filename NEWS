@@ -1,5 +1,7 @@
 CHANGES IN VERSION 1.7.6
 ------------------------
+ o introduce 'overlap' parameter in annotatePeak, by default overlap="TSS" and only overlap with TSS will be reported as the nearest gene.
+   if overlap="all", then gene overlap with peak will be reported as nearest gene, no matter the overlap is at TSS region or not. <2016-01-12, Tue>
  o bug fixed in find overlap with peaks have strand info. <2016-01-12, Tue>
    + see https://github.com/GuangchuangYu/ChIPseeker/issues/23
  
