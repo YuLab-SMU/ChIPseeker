@@ -19,6 +19,7 @@ updateGenomicAnnotation <- function(peaks, genomicRegion, type, anno, sameStrand
 ##' @param TxDb TxDb object
 ##' @param level one of gene or transcript
 ##' @param genomicAnnotationPriority genomic Annotation Priority
+##' @param sameStrand whether annotate gene in same strand
 ##' @importFrom GenomicFeatures threeUTRsByTranscript
 ##' @importFrom GenomicFeatures fiveUTRsByTranscript
 ##' @return character vector

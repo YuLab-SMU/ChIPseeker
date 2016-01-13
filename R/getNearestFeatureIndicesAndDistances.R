@@ -11,8 +11,6 @@
 ##' @param overlap one of "TSS" or "all"
 ##' @return list
 ##' @import BiocGenerics IRanges GenomicRanges
-##' @importFrom IRanges resize
-##' @importFrom BiocGenerics unstrand
 ##' @author G Yu
 getNearestFeatureIndicesAndDistances <- function(peaks, features,
                                                  sameStrand = FALSE,
