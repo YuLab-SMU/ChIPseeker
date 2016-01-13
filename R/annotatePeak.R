@@ -15,6 +15,7 @@
 ##' @param ignoreOverlap logical, whether ignore overlap of TSS with peak
 ##' @param ignoreUpstream logical, if True only annotate gene at the 3' of the peak.
 ##' @param ignoreDownstream logical, if True only annotate gene at the 5' of the peak.
+##' @param overlap one of 'TSS' or 'all', if overlap="all", then gene overlap with peak will be reported as nearest gene, no matter the overlap is at TSS region or not.
 ##' @param verbose print message or not
 ##' @return data.frame or GRanges object with columns of:
 ##' 
@@ -70,6 +71,7 @@ annotatePeak <- function(peak,
                          ignoreOverlap=FALSE,
                          ignoreUpstream=FALSE,
                          ignoreDownstream=FALSE,
+                         overlap = "TSS",
                          verbose=TRUE) {
     
     level <- match.arg(level, c("transcript", "gene"))
@@ -108,7 +110,8 @@ annotatePeak <- function(peak,
     ## nearest features
     idx.dist <- getNearestFeatureIndicesAndDistances(peak.gr, features,
                                                      sameStrand, ignoreOverlap,
-                                                     ignoreUpstream,ignoreDownstream)
+                                                     ignoreUpstream,ignoreDownstream,
+                                                     overlap=overlap)
     nearestFeatures <- features[idx.dist$index]
     if (verbose)
         cat(">> calculating distance from peak to TSS...\t",

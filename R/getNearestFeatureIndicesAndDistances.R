@@ -8,16 +8,21 @@
 ##' @param ignoreOverlap logical, whether ignore overlap of TSS with peak
 ##' @param ignoreUpstream logical, if True only annotate gene at the 3' of the peak.
 ##' @param ignoreDownstream logical, if True only annotate gene at the 5' of the peak.
+##' @param overlap one of "TSS" or "all"
 ##' @return list
 ##' @import BiocGenerics IRanges GenomicRanges
-##' @importFrom IRanges resize
-##' @importFrom BiocGenerics unstrand
 ##' @author G Yu
 getNearestFeatureIndicesAndDistances <- function(peaks, features,
                                                  sameStrand = FALSE,
                                                  ignoreOverlap=FALSE,
                                                  ignoreUpstream=FALSE,
-                                                 ignoreDownstream=FALSE) {
+                                                 ignoreDownstream=FALSE,
+                                                 overlap = "TSS") {
+
+    overlap <- match.arg(overlap, c("TSS", "all"))
+    if (!ignoreOverlap && overlap == "all") {
+        overlap_hit <- findOverlaps(peaks, unstrand(features))
+    }
     
     ## peaks only conatin all peak records, in GRanges object
     ## feature is the annotation in GRanges object
@@ -26,6 +31,10 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
     ## start(features) <- end(features) <- ifelse(strand(features) == "+", start(features), end(features))
     features <- resize(features, width=1) # faster
 
+    if (!ignoreOverlap) {
+        overlap_hit_TSS <- findOverlaps(peaks, unstrand(features))
+    }
+    
     if (sameStrand) {
         ## nearest from peak start
         ps.idx <- follow(peaks, features)
@@ -76,7 +85,28 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
 
 
     if (!ignoreOverlap) {
-        hit <- findOverlaps(peaks, unstrand(features))
+        ## hit <- findOverlaps(peaks, unstrand(features))
+        if (overlap == "all") {
+            hit <- overlap_hit
+            if ( length(hit) != 0 ) {
+                qh <- queryHits(hit)
+                hit.idx <- getFirstHitIndex(qh)
+                hit <- hit[hit.idx]
+                peakIdx <- queryHits(hit)
+                featureIdx <- subjectHits(hit)
+                
+                idx[peakIdx] <- featureIdx
+                distance_both_end <- data.frame(start=start(peaks) - start(features[featureIdx]),
+                                          end = end(peaks) - start(features[featureIdx]))
+                distance_idx <- apply(distance_both_end, 1, function(i) which.min(abs(i)))
+                distance_minimal <- distance_both_end[,1]
+                distance_minimal[distance_idx == 2] <- distance_both_end[distance_idx==2, 2]
+
+                dd[peakIdx] <- distance_minimal
+            }
+        }
+        
+        hit <- overlap_hit_TSS
         if ( length(hit) != 0 ) {
             qh <- queryHits(hit)
             hit.idx <- getFirstHitIndex(qh)
@@ -87,8 +117,9 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
             idx[peakIdx] <- featureIdx
             dd[peakIdx] <- 0
         }
+        
     }
-
+    
     ## pn.idx <- nearest(peaks, features)
     ## isOverlap <- sapply(1:length(pn.idx), function(i) {
     ##     isPeakFeatureOverlap(peaks[i], features2[pn.idx[i]])

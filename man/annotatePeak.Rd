@@ -9,7 +9,8 @@ annotatePeak(peak, tssRegion = c(-3000, 3000), TxDb = NULL,
   genomicAnnotationPriority = c("Promoter", "5UTR", "3UTR", "Exon", "Intron",
   "Downstream", "Intergenic"), annoDb = NULL, addFlankGeneInfo = FALSE,
   flankDistance = 5000, sameStrand = FALSE, ignoreOverlap = FALSE,
-  ignoreUpstream = FALSE, ignoreDownstream = FALSE, verbose = TRUE)
+  ignoreUpstream = FALSE, ignoreDownstream = FALSE, overlap = "TSS",
+  verbose = TRUE)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}
@@ -37,6 +38,8 @@ annotatePeak(peak, tssRegion = c(-3000, 3000), TxDb = NULL,
 \item{ignoreUpstream}{logical, if True only annotate gene at the 3' of the peak.}
 
 \item{ignoreDownstream}{logical, if True only annotate gene at the 5' of the peak.}
+
+\item{overlap}{one of 'TSS' or 'all', if overlap="all", then gene overlap with peak will be reported as nearest gene, no matter the overlap is at TSS region or not.}
 
 \item{verbose}{print message or not}
 }
