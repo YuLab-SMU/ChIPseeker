@@ -20,20 +20,17 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
                                                  overlap = "TSS") {
 
     overlap <- match.arg(overlap, c("TSS", "all"))
+
     if (!ignoreOverlap && overlap == "all") {
         overlap_hit <- findOverlaps(peaks, unstrand(features))
     }
-    
+
     ## peaks only conatin all peak records, in GRanges object
     ## feature is the annotation in GRanges object
 
     ## only keep start position based on strand
     ## start(features) <- end(features) <- ifelse(strand(features) == "+", start(features), end(features))
     features <- resize(features, width=1) # faster
-
-    if (!ignoreOverlap) {
-        overlap_hit_TSS <- findOverlaps(peaks, unstrand(features))
-    }
     
     if (sameStrand) {
         ## nearest from peak start
@@ -51,20 +48,21 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
     if (sum(na.idx) > 0) { ## suggested by Thomas Schwarzl
         ps.idx <- ps.idx[!na.idx]
         pe.idx <- pe.idx[!na.idx]
-        peaks <- peaks[!na.idx]
+        ##peaks <- peaks[!na.idx]
     }
     
     ## features from nearest peak start
     psF <- features[ps.idx]
+    
     ## feature distances from peak start
     psD <- ifelse(strand(psF) == "+", 1, -1) *
-        (start(peaks) - start(psF))
+        (start(peaks[!na.idx]) - start(psF))
     
     ## features from nearest peak end
     peF <- features[pe.idx]
     ## feature distances from peak end
     peD <- ifelse(strand(peF) == "+", 1, -1) *
-        (end(peaks) - start(peF))
+        (end(peaks[!na.idx]) - start(peF))
     
     pse <- data.frame(ps=psD, pe=peD)
     if (ignoreUpstream) {
@@ -83,9 +81,13 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
     dd <- psD
     dd[j==2] <- peD[j==2]
 
-
+    index <- distanceToTSS <- rep(NA, length(peaks))
+    distanceToTSS[!na.idx] <- dd
+    index[!na.idx] <- idx
+    
     if (!ignoreOverlap) {
         ## hit <- findOverlaps(peaks, unstrand(features))
+
         if (overlap == "all") {
             hit <- overlap_hit
             if ( length(hit) != 0 ) {
@@ -95,18 +97,19 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
                 peakIdx <- queryHits(hit)
                 featureIdx <- subjectHits(hit)
                 
-                idx[peakIdx] <- featureIdx
-                distance_both_end <- data.frame(start=start(peaks) - start(features[featureIdx]),
-                                          end = end(peaks) - start(features[featureIdx]))
+                index[peakIdx] <- featureIdx
+                distance_both_end <- data.frame(start=start(peaks[peakIdx]) - start(features[featureIdx]),
+                                          end = end(peaks[peakIdx]) - start(features[featureIdx]))
                 distance_idx <- apply(distance_both_end, 1, function(i) which.min(abs(i)))
                 distance_minimal <- distance_both_end[,1]
                 distance_minimal[distance_idx == 2] <- distance_both_end[distance_idx==2, 2]
 
-                dd[peakIdx] <- distance_minimal
+                distanceToTSS[peakIdx] <- distance_minimal
             }
         }
         
-        hit <- overlap_hit_TSS
+        hit <- findOverlaps(peaks, unstrand(features))
+        
         if ( length(hit) != 0 ) {
             qh <- queryHits(hit)
             hit.idx <- getFirstHitIndex(qh)
@@ -114,24 +117,17 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
             peakIdx <- queryHits(hit)
             featureIdx <- subjectHits(hit)
             
-            idx[peakIdx] <- featureIdx
-            dd[peakIdx] <- 0
+            index[peakIdx] <- featureIdx
+            distanceToTSS[peakIdx] <- 0
         }
         
     }
-    
-    ## pn.idx <- nearest(peaks, features)
-    ## isOverlap <- sapply(1:length(pn.idx), function(i) {
-    ##     isPeakFeatureOverlap(peaks[i], features2[pn.idx[i]])
-    ## })
-    ## isOverlap <- unlist(isOverlap)
 
-    ## if(sum(isOverlap) > 0) {
-    ##     idx[isOverlap] <- pn.idx[isOverlap]
-    ##     dd[isOverlap] <- 0
-    ## }
-    
-    res <- list(index=idx, distance=dd, peak=peaks)
+    j <- is.na(distanceToTSS) | is.na(index)
+
+    res <- list(index=index[!j],
+                distance=distanceToTSS[!j],
+                peak=peaks[!j])
     
     return(res)
 }

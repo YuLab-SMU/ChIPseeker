@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.7.7
+------------------------
+ o bug fixed in newly introduced parameter 'overlap'. solve NA issue. <2016-01-13, Wed>
+ 
 CHANGES IN VERSION 1.7.6
 ------------------------
  o introduce 'overlap' parameter in annotatePeak, by default overlap="TSS" and only overlap with TSS will be reported as the nearest gene.
