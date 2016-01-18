@@ -31,6 +31,16 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
     ## only keep start position based on strand
     ## start(features) <- end(features) <- ifelse(strand(features) == "+", start(features), end(features))
     features <- resize(features, width=1) # faster
+
+    ## add dummy NA feature for peaks that are at the last or first feature 
+    ## suggested by Michael Kluge
+    features.bak <- features
+    seqlevels(features) <- c(seqlevels(features), "chrNA")
+    dummy <- GRanges("chrNA", IRanges(1,1))
+    dummy$tx_id <- -1
+    dummy$tx_name <- "NA"
+    features <- append(features, dummy)
+    dummyID <- length(features)
     
     if (sameStrand) {
         ## nearest from peak start
@@ -43,26 +53,34 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
         pe.idx <- precede(peaks, unstrand(features))
     }
     
-    na.idx <- is.na(ps.idx) | is.na(pe.idx)
-    ## if (sum(na.idx) > 1) {
+    na.idx <- is.na(ps.idx) & is.na(pe.idx)
     if (sum(na.idx) > 0) { ## suggested by Thomas Schwarzl
         ps.idx <- ps.idx[!na.idx]
         pe.idx <- pe.idx[!na.idx]
         ##peaks <- peaks[!na.idx]
     }
-    
+
+    # set NA values to dummy value if only one entry is affected
+    ps.idx[is.na(ps.idx)] <- dummyID
+    pe.idx[is.na(pe.idx)] <- dummyID
+
     ## features from nearest peak start
     psF <- features[ps.idx]
     
     ## feature distances from peak start
     psD <- ifelse(strand(psF) == "+", 1, -1) *
         (start(peaks[!na.idx]) - start(psF))
-    
+    psD[ps.idx == dummyID] <- Inf # ensure that there is even no match if a seq with name "chrNA" exists
+
     ## features from nearest peak end
     peF <- features[pe.idx]
     ## feature distances from peak end
     peD <- ifelse(strand(peF) == "+", 1, -1) *
         (end(peaks[!na.idx]) - start(peF))
+    peD[pe.idx == dummyID] <- Inf # ensure that there is even no match if a seq with name "chrNA" exists
+
+    ## restore the old feature object
+    features.bak <- features
     
     pse <- data.frame(ps=psD, pe=peD)
     if (ignoreUpstream) {
