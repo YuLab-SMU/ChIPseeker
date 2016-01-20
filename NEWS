@@ -1,3 +1,9 @@
+CHANGES IN VERSION 1.7.8
+------------------------
+ o fixed BUG of Peaks upstream first or downstream last gene not annotated <2016-01-20, Wed>
+   + contributed by Michael Kluge
+   + see https://github.com/GuangchuangYu/ChIPseeker/pull/24
+ 
 CHANGES IN VERSION 1.7.7
 ------------------------
  o bug fixed in newly introduced parameter 'overlap'. solve NA issue. <2016-01-13, Wed>
