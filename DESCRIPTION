@@ -15,7 +15,7 @@ Authors@R: c(person(given = "Guangchuang", family = "Yu",
 	            email = "schwarzl@embl.de",
 	            role  = "ctb"),
 	     person(given = "Michael", family = "Kluge",
-	            email = "",
+	            email = "michael.kluge@bio.ifi.lmu.de",
 	            role  = "ctb")		    
 	    )
 Author: Guangchuang Yu <guangchuangyu@gmail.com> with contributions from
