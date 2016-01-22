@@ -11,15 +11,15 @@ Authors@R: c(person(given = "Guangchuang", family = "Yu",
 	     person(given = "Herve", family = "Pages",
 	            email = "hpages@fhcrc.org",
 	            role  = "ctb"),
-	     person(given = "Thomas", family = "Schwarzl",
-	            email = "schwarzl@embl.de",
-	            role  = "ctb"),
 	     person(given = "Michael", family = "Kluge",
 	            email = "michael.kluge@bio.ifi.lmu.de",
+	            role  = "ctb"),
+	     person(given = "Thomas", family = "Schwarzl",
+	            email = "schwarzl@embl.de",
 	            role  = "ctb")		    
 	    )
 Author: Guangchuang Yu <guangchuangyu@gmail.com> with contributions from
-    Yun Yan and Herve Pages.
+    Yun Yan, Herve Pages, Michael Kluge and Thomas Schwarzl.
 Maintainer: Guangchuang Yu <guangchuangyu@gmail.com>
 Description: This package implements functions to retrieve the nearest genes
     around the peak, annotate genomic region of the peak, statstical methods
@@ -32,7 +32,7 @@ Description: This package implements functions to retrieve the nearest genes
     regions, genomic annotation, distance to TSS, and overlap of peaks or
     genes.
 Depends:
-    R (>= 3.1.0)
+    R (>= 3.2.0)
 Imports:
     BiocGenerics,
     boot,
