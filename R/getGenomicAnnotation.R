@@ -190,7 +190,7 @@ getGenomicAnnotation <- function(peaks,
 ##' @import BiocGenerics S4Vectors IRanges
 getGenomicAnnotation.internal <- function(peaks, genomicRegion, type, sameStrand=FALSE){
     GRegion <- unlist(genomicRegion)
-    GRegionLen <- elementLengths(genomicRegion)
+    GRegionLen <- elementNROWS(genomicRegion)
     if (type == "Intron" || type =="Exon") {
         nn <- TXID2EG(names(genomicRegion))
         names(GRegionLen) <- nn
