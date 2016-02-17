@@ -402,13 +402,7 @@ After download the bed files from GEO, we can pass them to `enrichPeakOverlap` f
 
 # External documents
 
-+ [parsing BED coordinates](http://guangchuangyu.github.io/2015/08/parsing-bed-coordinates/)
-+ [Peak Annotation](http://guangchuangyu.github.io/2014/04/chipseeker-for-chip-peak-annotation/)
-+ [Multiple Annotation](http://guangchuangyu.github.io/2014/10/multiple-annotation-in-chipseeker/)
-+ [Visualization Methods](http://guangchuangyu.github.io/2014/04/visualization-methods-in-chipseeker/)
-+ [upsetplot](http://guangchuangyu.github.io/2015/07/upsetplot-in-chipseeker/)
-+ [functional enrichment analysis with NGS data](http://guangchuangyu.github.io/2015/08/functional-enrichment-analysis-with-ngs-data/)
-+ [ChIPseq data mining with ChIPseeker](http://guangchuangyu.github.io/2015/10/chipseq-data-mining-with-chipseeker/)
+More documents can be found in <http://guangchuangyu.github.io/categories/chipseeker>.
 
 # Bugs/Feature Requests
 
