@@ -43,20 +43,14 @@ To install:
 
 ## Documentation ##
 
-+ [parsing BED coordinates](http://guangchuangyu.github.io/2015/08/parsing-bed-coordinates/)
-+ [Peak Annotation](http://guangchuangyu.github.io/2014/04/chipseeker-for-chip-peak-annotation/)
-+ [Multiple Annotation](http://guangchuangyu.github.io/2014/10/multiple-annotation-in-chipseeker/)
-+ [Visualization Methods](http://guangchuangyu.github.io/2014/04/visualization-methods-in-chipseeker/)
-+ [upsetplot](http://guangchuangyu.github.io/2015/07/upsetplot-in-chipseeker/)
-+ [functional enrichment analysis with NGS data](http://guangchuangyu.github.io/2015/08/functional-enrichment-analysis-with-ngs-data/)
-+ [ChIPseq data mining with ChIPseeker](http://guangchuangyu.github.io/2015/10/chipseq-data-mining-with-chipseeker/)
-
 Find out more at [http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html](http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) and check out the [vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/ChIPseeker/inst/doc/ChIPseeker.pdf).
 
 To view the vignette of `ChIPseeker` installed in your system, start R and enter:
 ```r
 vignette("ChIPseeker", "ChIPseeker")
 ```
+
+More documents can be found in <http://guangchuangyu.github.io/categories/chipseeker>.
 
 ## Bugs/Feature requests ##
 

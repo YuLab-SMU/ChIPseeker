@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.7.9
+------------------------
+ o update ReactomePA citation info <2016-02-17, Wed>
+
 CHANGES IN VERSION 1.7.8
 ------------------------
  o fixed BUG of Peaks upstream first or downstream last gene not annotated <2016-01-20, Wed>
