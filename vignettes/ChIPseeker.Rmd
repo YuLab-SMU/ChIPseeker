@@ -41,7 +41,7 @@ ChIPseeker is an R package for annotating ChIP-seq data analysis. It supports an
 
 
 # Citation
-If you use `r Biocpkg("ChIPseeker")`[@yu_chipseeker_2015] in published research, please cite G. Yu (2015). In addition please cite G. Yu (2012) and G. Yu (2015) when performing enrichment analysis by using `r Biocpkg("clusterProfiler")` and `r Biocpkg("DOSE")`.
+If you use `r Biocpkg("ChIPseeker")`[@yu_chipseeker_2015] in published research, please cite G. Yu (2015). In addition please cite G. Yu (2012), G. Yu (2015) and G. Yu (2016) when performing enrichment analysis by using `r Biocpkg("clusterProfiler")`, `r Biocpkg("DOSE")` and `r Biocpkg("ReactomePA")`.
 
 ```
 G Yu, LG Wang, QY He.
@@ -67,6 +67,13 @@ Bioinformatics 2015, 31(4):608-609.
 
 URL: [http://dx.doi.org/10.1093/bioinformatics/btu684](http://dx.doi.org/10.1093/bioinformatics/btu684)
 
+```
+G Yu, QY He,
+ReactomePA: an R/Bioconductor package for reactome pathway analysis and visualization.
+Molecular BioSystems 2016, 12(2):477-479.
+```
+
+URL: [http://dx.doi.org/10.1039/C5MB00663E](http://dx.doi.org/10.1039/C5MB00663E)
 
 
 # Introduction
@@ -76,7 +83,7 @@ ChIP peak data set comparison is also very important. We can use it as an index 
 
 Several visualization functions are implemented to visualize the coverage of the ChIP seq data, peak annotation, average profile and heatmap of peaks binding to TSS region. 
 
-Functional enrichment analysis of the peaks can be performed by my Bioconductor packages `r Biocpkg("DOSE")`[@yu_dose_2015], `r Biocpkg("ReactomePA")`, `r Biocpkg("clusterProfiler")`[@yu_clusterprofiler_2012]. 
+Functional enrichment analysis of the peaks can be performed by my Bioconductor packages `r Biocpkg("DOSE")`[@yu_dose_2015], `r Biocpkg("ReactomePA")`[@yu_reactomepa_2016], `r Biocpkg("clusterProfiler")`[@yu_clusterprofiler_2012]. 
 
 ```{r}
 ## loading packages
