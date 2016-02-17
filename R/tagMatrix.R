@@ -169,7 +169,7 @@ getTagMatrix <- function(peak, weightCol=NULL, windows) {
         weight <- mcols(peak.gr)[[weightCol]]
         peak.cov <- coverage(peak.gr, weight=weight)
     }
-    cov.len <- elementLengths(peak.cov)
+    cov.len <- elementNROWS(peak.cov)
     cov.width <- GRanges(seqnames=names(cov.len),
                          IRanges(start=rep(1, length(cov.len)),
                                  end=cov.len))

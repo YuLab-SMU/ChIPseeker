@@ -56,7 +56,7 @@ Imports:
     magrittr,
     RColorBrewer,
     rtracklayer,
-    S4Vectors,
+    S4Vectors (>= 0.9.25),
     TxDb.Hsapiens.UCSC.hg19.knownGene,
     UpSetR
 Suggests:
