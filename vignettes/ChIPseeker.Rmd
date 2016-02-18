@@ -402,7 +402,7 @@ After download the bed files from GEO, we can pass them to `enrichPeakOverlap` f
 
 # External documents
 
-More documents can be found in <http://guangchuangyu.github.io/categories/chipseeker>.
+More documents can be found in <http://guangchuangyu.github.io/tags/chipseeker>.
 
 # Bugs/Feature Requests
 

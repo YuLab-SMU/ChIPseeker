@@ -43,14 +43,14 @@ To install:
 
 ## Documentation ##
 
-Find out more at [http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html](http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) and check out the [vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/ChIPseeker/inst/doc/ChIPseeker.pdf).
+Find out more at [http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html](http://www.bioconductor.org/packages/release/bioc/html/ChIPseeker.html) and check out the [vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/ChIPseeker/inst/doc/ChIPseeker.html).
 
 To view the vignette of `ChIPseeker` installed in your system, start R and enter:
 ```r
 vignette("ChIPseeker", "ChIPseeker")
 ```
 
-More documents can be found in <http://guangchuangyu.github.io/categories/chipseeker>.
+More documents can be found in <http://guangchuangyu.github.io/tags/chipseeker>.
 
 ## Bugs/Feature requests ##
 
