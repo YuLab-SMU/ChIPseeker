@@ -393,3 +393,33 @@ IDType <- function(TxDb) {
     md <- metadata(TxDb)
     md[grep("Type of Gene ID", md[,1]), 2]
 }
+
+list_to_dataframe <- function(dataList) {
+    if (is.null(names(dataList)))
+        return(do.call('rbind', dataList))
+    
+    dataList2 <- lapply(seq_along(dataList), function(i) {
+        data = dataList[[i]]
+        data$.id = names(dataList)[i]
+        return(data)
+    })
+    do.call('rbind', dataList2)
+}
+
+
+## . function was from plyr package
+##' capture name of variable
+##'
+##' @rdname dotFun
+##' @export
+##' @title .
+##' @param ... expression
+##' @param .env environment
+##' @return expression
+##' @examples
+##' x <- 1
+##' eval(.(x)[[1]])
+. <- function (..., .env = parent.frame()) {
+    structure(as.list(match.call()[-1]), env = .env, class = "quoted")
+}
+

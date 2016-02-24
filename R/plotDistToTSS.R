@@ -12,7 +12,6 @@
 ##' @return bar plot that summarize distance from peak to
 ##' TSS of the nearest gene.
 ##' @importFrom magrittr %<>%
-##' @importFrom plyr .
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 aes
 ##' @importFrom ggplot2 aes_string

@@ -1,5 +1,6 @@
 CHANGES IN VERSION 1.7.9
 ------------------------
+ o covplot support GRangesList <2016-02-24, Wed>
  o update ReactomePA citation info <2016-02-17, Wed>
 
 CHANGES IN VERSION 1.7.8

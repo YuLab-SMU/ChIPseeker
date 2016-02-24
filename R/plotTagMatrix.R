@@ -243,7 +243,7 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
 }
 
 
-##' @importFrom plyr ldply
+
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 geom_line
 ##' @importFrom ggplot2 geom_vline
@@ -292,7 +292,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
     
     if ( listFlag ) {
         tagCount <- lapply(tagMatrix, function(x) getTagCount(x, xlim = xlim, conf = conf, ...))
-        tagCount <- ldply(tagCount)
+        tagCount <- list_to_dataframe(tagCount)
         p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
         if (!(is.na(conf))) {
             p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper, fill = .id), 

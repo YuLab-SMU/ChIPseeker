@@ -1,24 +1,4 @@
 
-##' plot the Peak Regions over Chromosomes
-##'
-##' 
-##' @title plotChrCov
-##' @param peak peak file or GRanges object
-##' @param weightCol weight column of peak
-##' @param xlab xlab
-##' @param ylab ylab
-##' @param title title
-##' @return ggplot2 object
-##' @export
-##' @author G Yu
-plotChrCov <- function(peak, weightCol=NULL,
-                    xlab = "Chromosome Size (bp)",
-                    ylab = "",
-                    title = "ChIP Peaks over Chromosomes"){
-    .Deprecated("covplot")
-}
-
-
 ##' plot peak coverage
 ##'
 ##' 
@@ -53,24 +33,32 @@ covplot <- function(peak, weightCol=NULL,
                     chrs  = NULL,
                     xlim  = NULL,
                     lower = 1) {
-    if (is(peak, "GRanges")) {
-        peak.gr <- peak
-    } else if (file.exists(peak)) {
-        peak.gr <- readPeakFile(peak, as="GRanges")
+
+    isList <- FALSE
+    if(length(peak) == 1) {
+        tm <- getChrCov(peak=peak, weightCol=weightCol, chrs, xlim, lower=lower)
     } else {
-        stop("peak should be a GRanges object or a peak file...")
+        isList <- TRUE
+        ltm <- lapply(peak, getChrCov, weightCol=weightCol, chrs=chrs, xlim=xlim, lower=lower)
+        if (is.null(names(ltm))) {
+            names(ltm) <- paste0("peak", seq_along(ltm))
+        }
+        tm <- list_to_dataframe(ltm)
     }
     
-    tm <- getChrCov(peak.gr=peak.gr, weightCol=weightCol, chrs, xlim, lower=lower)
-       
     chr <- start <- end <- value <- NULL
    
     p <- ggplot(tm, aes(start, value))
     ## p <- p + geom_segment(aes(x=start, y=0, xend=end, yend= value))
-    p <- p + geom_rect(aes(xmin=start, ymin=0, xmax=end, ymax=value), fill='black', color='black')
+    if (isList) {
+        p <- p + geom_rect(aes(xmin=start, ymin=0, xmax=end, ymax=value, fill=.id, color=.id)) 
+    } else {
+        p <- p + geom_rect(aes(xmin=start, ymin=0, xmax=end, ymax=value), fill='black', color='black')
+    }
     if(length(unique(tm$chr)) > 1) {
         p <- p + facet_grid(chr ~., scales="free")
     }
+    
     p <- p + theme_classic()
     p <- p + xlab(xlab) + ylab(ylab) + ggtitle(title)
     p <- p + scale_y_continuous(expand=c(0,0))
@@ -83,12 +71,18 @@ covplot <- function(peak, weightCol=NULL,
     return(p)
 }
 
-
 ##' @import S4Vectors IRanges
 ##' @importFrom dplyr group_by
 ##' @importFrom dplyr summarise
 ##' @importFrom magrittr %>%
-getChrCov <- function(peak.gr, weightCol, chrs, xlim, lower=1) {
+getChrCov <- function(peak, weightCol, chrs, xlim, lower=1) {
+    if (is(peak, "GRanges")) {
+        peak.gr <- peak
+    } else if (file.exists(peak)) {
+        peak.gr <- readPeakFile(peak, as="GRanges")
+    } else {
+        stop("peak should be a GRanges object or a peak file...")
+    }
 
     if ( is.null(weightCol)) {
         peak.cov <- coverage(peak.gr)
