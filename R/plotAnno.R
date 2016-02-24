@@ -8,7 +8,6 @@
 ##' @param title plot title
 ##' @param categoryColumn category column
 ##' @return bar plot that summarize genomic features of peaks
-##' @importFrom plyr ldply
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 aes_string
 ##' @importFrom ggplot2 geom_bar

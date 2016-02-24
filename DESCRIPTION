@@ -52,7 +52,6 @@ Imports:
     plotrix,
     dplyr,
     parallel,
-    plyr,
     magrittr,
     RColorBrewer,
     rtracklayer,
