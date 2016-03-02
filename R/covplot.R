@@ -35,7 +35,7 @@ covplot <- function(peak, weightCol=NULL,
                     lower = 1) {
 
     isList <- FALSE
-    if(length(peak) == 1) {
+    if(is(peak, "GRanges") || length(peak) == 1) {
         tm <- getChrCov(peak=peak, weightCol=weightCol, chrs, xlim, lower=lower)
     } else {
         isList <- TRUE
