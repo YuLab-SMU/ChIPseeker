@@ -46,7 +46,7 @@ covplot <- function(peak, weightCol=NULL,
         tm <- list_to_dataframe(ltm)
     }
     
-    chr <- start <- end <- value <- NULL
+    chr <- start <- end <- value <- .id <- NULL
    
     p <- ggplot(tm, aes(start, value))
     ## p <- p + geom_segment(aes(x=start, y=0, xend=end, yend= value))

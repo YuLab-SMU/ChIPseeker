@@ -9,6 +9,8 @@
 ##' @param chainFile chain file for liftOver
 ##' @param distanceToTSS_cutoff restrict nearest gene annotation by distance cutoff
 ##' @return data.frame
+##' @importFrom stats p.adjust
+##' @importFrom stats phyper
 ##' @export
 ##' @importFrom rtracklayer import.chain
 ##' @importFrom rtracklayer liftOver
@@ -171,6 +173,8 @@ shuffle <- function(peak.gr, TxDb) {
 
 
 ##' @import GenomeInfoDb
+##' @importFrom utils txtProgressBar
+##' @importFrom utils setTxtProgressBar
 ##' @importFrom parallel mclapply
 ##' @importFrom parallel detectCores
 enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000, mc.cores=detectCores()-1, verbose=TRUE) {    
