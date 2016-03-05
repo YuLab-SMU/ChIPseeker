@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.7.12
+------------------------
+ o fixed R check <2016-03-05, Sat>
+ o implement list_to_dataframe that mimic ldply and remove ldply dependency <2016-03-05, Sat>
+
 CHANGES IN VERSION 1.7.11
 ------------------------
  o fixed issue in testing list in covplot introduced in 1.7.9 <2016-03-02, Wed>

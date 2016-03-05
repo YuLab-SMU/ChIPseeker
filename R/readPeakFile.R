@@ -34,6 +34,7 @@ peakDF2GRanges <- function(peak.df) {
     return(peak.gr)
 }
 
+##' @importFrom utils read.delim
 peak2DF <- function(peakfile, header) {
     if (missing(header)) {
         ## determine file format

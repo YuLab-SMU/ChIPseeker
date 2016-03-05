@@ -88,6 +88,7 @@ downloadGSMbedFiles <- function(GSM, destDir=getwd()) {
     downloadGEO.internal(info, destDir)
 }
 
+##' @importFrom utils download.file
 downloadGEO.internal <- function(info, destDir) {
     fnames <- as.character(info$supplementary_file)
     destfiles <- sub(".*\\/", paste(destDir, "/", sep=""), fnames)
@@ -101,7 +102,7 @@ downloadGEO.internal <- function(info, destDir) {
     }
 }
 
-
+##' @importFrom utils data
 ## @importFrom GEOmetadb 
 ## @importFrom RSQLite dbConnect
 ## @importFrom RSQLite dbGetQuery

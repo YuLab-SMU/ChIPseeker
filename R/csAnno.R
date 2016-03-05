@@ -157,7 +157,8 @@ setMethod("plotAnnoBar", signature(x="list"),
                   stop("input object should be a named list...")
               }
               anno <- lapply(x, getAnnoStat)
-              anno.df <- ldply(anno)
+              ## anno.df <- ldply(anno)
+              anno.df <- list_to_dataframe(anno)
               categoryColumn <- ".id"
               plotAnnoBar.data.frame(anno.df, xlab, ylab, title, categoryColumn)
           })
@@ -229,7 +230,6 @@ setMethod("plotAnnoPie", signature(x="csAnno"),
 ##' @rdname plotDistToTSS-methods
 ##' @aliases plotDistToTSS,list-method
 ##' @exportMethod plotDistToTSS
-##' @importFrom plyr ldply
 setMethod("plotDistToTSS", signature(x="list"),
           function(x, distanceColumn="distanceToTSS",
                                      xlab="", ylab="Binding sites (%) (5'->3')",
@@ -239,7 +239,8 @@ setMethod("plotDistToTSS", signature(x="list"),
               }
               
               peakAnno <- lapply(x, as.data.frame)
-              peakDist <- ldply(peakAnno)
+              ## peakDist <- ldply(peakAnno)
+              peakDist <- list_to_dataframe(peakAnno)
               categoryColumn <- ".id"
               plotDistToTSS.data.frame(peakDist, distanceColumn,
                                        xlab, ylab, title, categoryColumn)

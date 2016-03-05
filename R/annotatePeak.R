@@ -164,7 +164,7 @@ annotatePeak <- function(peak,
         if (length(.idtype) == 0 || is.na(.idtype) || is.null(.idtype)) {
             if (grepl('ENSG', peak.gr$geneId[1])) {
                 .idtype <- "Ensemble Gene ID"
-            } else if (repl('^\\d+$',, peak.gr$geneId[1])) {
+            } else if (grepl('^\\d+$',, peak.gr$geneId[1])) {
                 .idtype <- "Entrez Gene ID"                
             } else {
                 warning("Unknown ID type, gene annotation will not be added...")
