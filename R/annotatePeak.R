@@ -73,10 +73,29 @@ annotatePeak <- function(peak,
                          ignoreDownstream=FALSE,
                          overlap = "TSS",
                          verbose=TRUE) {
-    
-    level <- match.arg(level, c("transcript", "gene"))
 
-    if (all(genomicAnnotationPriority %in% c("Promoter", "5UTR", "3UTR", "Exon", "Intron", "Downstream", "Intergenic")) == FALSE) {
+    is_GRanges_of_TxDb <- FALSE
+    if (is(TxDb, "GRanges")) {
+        is_GRanges_of_TxDb <- TRUE
+        assignGenomicAnnotation <- FALSE
+        annoDb <- NULL
+        addFlankGeneInfo <- FALSE
+        message("#\n#.. 'TxDb' is a self-defined 'GRanges' object...")
+        message("#.. Some parameters of 'annotatePeak' will be disable,")
+        message("#.. including:")
+        message("#..\tlevel, assignGenomicAnnotation, genomicAnnotationPriority,")
+        message("#..\tannoDb, addFlankGeneInfo and flankDistance.")
+        message("#\n#.. Some plotting functions are designed for visualizing genomic annotation")
+        message("#.. will not be available for the output object.\n#")
+    }
+
+    if (is_GRanges_of_TxDb) {
+        level <- "USER_DEFINED"
+    } else {
+        level <- match.arg(level, c("transcript", "gene"))
+    }
+
+    if (assignGenomicAnnotation && all(genomicAnnotationPriority %in% c("Promoter", "5UTR", "3UTR", "Exon", "Intron", "Downstream", "Intergenic")) == FALSE) {
         stop('genomicAnnotationPriority should be any order of c("Promoter", "5UTR", "3UTR", "Exon", "Intron", "Downstream", "Intergenic")')
     }
     
@@ -96,13 +115,17 @@ annotatePeak <- function(peak,
         cat(">> preparing features information...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
 
-    TxDb <- loadTxDb(TxDb)
-
-    if (level=="transcript") {
-        features <- getGene(TxDb, by="transcript")
+    if (is_GRanges_of_TxDb) {
+        features <- TxDb
     } else {
-         features <- getGene(TxDb, by="gene")
-    }
+        TxDb <- loadTxDb(TxDb)
+        
+        if (level=="transcript") {
+            features <- getGene(TxDb, by="transcript")
+        } else {
+            features <- getGene(TxDb, by="gene")
+        }
+    } 
     if (verbose)
         cat(">> identifying nearest features...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -121,12 +144,13 @@ annotatePeak <- function(peak,
 
     ## update peak, remove un-map peak if exists.
     peak.gr <- idx.dist$peak
-
-    if (verbose)
-        cat(">> assigning genomic annotation...\t\t",
-            format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    
     ## annotation
     if (assignGenomicAnnotation == TRUE) {
+        if (verbose)
+            cat(">> assigning genomic annotation...\t\t",
+                format(Sys.time(), "%Y-%m-%d %X"), "\n")
+        
         anno <- getGenomicAnnotation(peak.gr, distance, tssRegion, TxDb, level, genomicAnnotationPriority, sameStrand=sameStrand)
         annotation <- anno[["annotation"]]
         detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
@@ -137,7 +161,10 @@ annotatePeak <- function(peak,
     ## duplicated names since more than 1 peak may annotated by only 1 gene
     names(nearestFeatures) <- NULL
     nearestFeatures.df <- as.data.frame(nearestFeatures)
-    if (level == "transcript") {
+    if (is_GRanges_of_TxDb) {
+        colnames(nearestFeatures.df)[1:5] <- c("geneChr", "geneStart", "geneEnd",
+                                          "geneLength", "geneStrand")
+    } else if (level == "transcript") {
         colnames(nearestFeatures.df) <- c("geneChr", "geneStart", "geneEnd",
                                           "geneLength", "geneStrand", "geneId", "transcriptId")
         nearestFeatures.df$geneId <- TXID2EG(as.character(nearestFeatures.df$geneId), geneIdOnly=TRUE)
@@ -196,12 +223,14 @@ annotatePeak <- function(peak,
         mcols(peak.gr)[["flank_gene_distances"]][flankInfo$peakIdx] <- flankInfo$flank_gene_distances
 
     }
-    
-    if(verbose)
-        cat(">> assigning chromosome lengths\t\t\t",
-            format(Sys.time(), "%Y-%m-%d %X"), "\n")
 
-    peak.gr@seqinfo <- seqinfo(TxDb)[names(seqlengths(peak.gr))]
+    if (!is_GRanges_of_TxDb) {
+        if(verbose)
+            cat(">> assigning chromosome lengths\t\t\t",
+                format(Sys.time(), "%Y-%m-%d %X"), "\n")
+        
+        peak.gr@seqinfo <- seqinfo(TxDb)[names(seqlengths(peak.gr))]
+    }
     
     if(verbose)
         cat(">> done...\t\t\t\t\t",
