@@ -80,13 +80,13 @@ annotatePeak <- function(peak,
         assignGenomicAnnotation <- FALSE
         annoDb <- NULL
         addFlankGeneInfo <- FALSE
-        message("#\n#.. 'TxDb' is a self-defined 'GRanges' object...")
+        message("#\n#.. 'TxDb' is a self-defined 'GRanges' object...\n#")
         message("#.. Some parameters of 'annotatePeak' will be disable,")
         message("#.. including:")
         message("#..\tlevel, assignGenomicAnnotation, genomicAnnotationPriority,")
         message("#..\tannoDb, addFlankGeneInfo and flankDistance.")
         message("#\n#.. Some plotting functions are designed for visualizing genomic annotation")
-        message("#.. will not be available for the output object.\n#")
+        message("#.. and will not be available for the output object.\n#")
     }
 
     if (is_GRanges_of_TxDb) {
