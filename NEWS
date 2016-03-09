@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.7.13
+------------------------
+ o support annotate peaks with custom regions via passing TxDb=user_defined_GRanges to annotatePeak <2016-03-06, Sun>
+
 CHANGES IN VERSION 1.7.12
 ------------------------
  o fixed R check <2016-03-05, Sat>
