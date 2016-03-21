@@ -223,7 +223,8 @@ prepareGSMInfo <- function() {
         gsminfo[,i] = iconv(gsminfo[,i], "latin1", "ASCII", sub="")
     }
     gsminfo2 <- gsminfo
-
+    rm(gsminfo)
+    
     data(gsminfo, package="ChIPseeker")
     gsminfo <- get("gsminfo")
     gsminfo <- rbind(gsminfo, gsminfo2)
