@@ -301,19 +301,15 @@ As shown in section 4, the annotated genes can analyzed by `r Biocpkg("clusterPr
 
 The `r Biocpkg("clusterProfiler")`[@yu_clusterprofiler_2012] package provides `compareCluster` function for comparing biological themes among gene clusters, and can be easily adopted to compare different ChIP peak experiments.
 
-```{r eval=FALSE}
+```{r fig.width=8.5, fig.height=8.5}
 genes = lapply(peakAnnoList, function(i) as.data.frame(i)$geneId)
 names(genes) = sub("_", "\n", names(genes))
-compMF <- compareCluster(geneCluster   = genes, 
-                         fun           = "enrichGO",
-                         OrgDb         = "org.Hs.eg.db",
-                         ont           = "MF",
+compKEGG <- compareCluster(geneCluster   = genes, 
+                         fun           = "enrichKEGG",
                          pvalueCutoff  = 0.05, 
                          pAdjustMethod = "BH")
-plot(compMF, showCategory = 20, title = "Molecular Function Enrichment")
+plot(compKEGG, showCategory = 15, title = "KEGG Pathway Enrichment Analysis")
 ```
-
-![](figures/mf.png)
 
 
 ## Overlap of peaks and annotated genes
