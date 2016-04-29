@@ -68,7 +68,7 @@ Suggests:
     knitr,
     BiocStyle,
     rmarkdown
-URL: https://github.com/GuangchuangYu/ChIPseeker
+URL: http://guangchuangyu.github.io/ChIPseeker
 BugReports: https://github.com/GuangchuangYu/ChIPseeker/issues
 VignetteBuilder: knitr
 License: Artistic-2.0
