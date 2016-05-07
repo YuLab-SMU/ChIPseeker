@@ -241,7 +241,7 @@ Enrichment analysis is a widely used approach to identify biological themes. I h
 
 ```{r}
 library(clusterProfiler)
-bp <- enrichGO(as.data.frame(peakAnno)$geneId, OrgDb='org.Hs.eg.db', ont="BP", readable=TRUE)
+bp <- enrichGO(as.data.frame(peakAnno)$geneId, organism = "human", ont="BP", readable=TRUE)
 head(summary(bp), n=3)
 ```
 
