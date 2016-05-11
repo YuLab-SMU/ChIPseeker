@@ -37,8 +37,19 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
     features.bak <- features
     seqlevels(features) <- c(seqlevels(features), "chrNA")
     dummy <- GRanges("chrNA", IRanges(1,1))
-    dummy$tx_id <- -1
-    dummy$tx_name <- "NA"
+
+    ## dummy$tx_id <- -1
+    ## dummy$tx_name <- "NA"
+
+    cns <- names(mcols(features))
+    for (cn in cns) {
+        if (grepl('id', cn)) {
+            mcols(dummy)[[cn]] <- -1
+        } else {
+            mcols(dummy)[[cn]] <- NA
+        }
+    }
+    
     features <- append(features, dummy)
     dummyID <- length(features)
     
