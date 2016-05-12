@@ -1,5 +1,6 @@
 CHANGES IN VERSION 1.9.1
 ------------------------
+ o name tagMatrix in plotAvgProf automatically if missing <2016-05-12, Thu>
  o bug fixed in getNearestFeatureIndicesAndDistances <2016-05-11, Wed>
    + correct metadata in dummy NA feature
    
