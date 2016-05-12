@@ -265,7 +265,10 @@ plotAvgProf.internal <- function(tagMatrix, conf,
     listFlag <- FALSE
     if (is(tagMatrix, "list")) {
         if ( is.null(names(tagMatrix)) ) {
-            stop("tagMatrix should be a named list...")
+            nn <- paste0("peak", seq_along(tagMatrix))
+            warning("input is not a named list, set the name automatically to ", paste(nn, collapse=' '))
+            names(tagMatrix) <- nn
+            ## stop("tagMatrix should be a named list...")
         }
         listFlag <- TRUE
     } 

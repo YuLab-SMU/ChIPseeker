@@ -41,7 +41,9 @@ covplot <- function(peak, weightCol=NULL,
         isList <- TRUE
         ltm <- lapply(peak, getChrCov, weightCol=weightCol, chrs=chrs, xlim=xlim, lower=lower)
         if (is.null(names(ltm))) {
-            names(ltm) <- paste0("peak", seq_along(ltm))
+            nn <- paste0("peak", seq_along(ltm))
+            warning("input is not a named list, set the name automatically to ", paste(nn, collapse=' '))
+            names(ltm) <- nn
         }
         tm <- list_to_dataframe(ltm)
     }
