@@ -71,6 +71,7 @@ Suggests:
 URL: http://guangchuangyu.github.io/ChIPseeker
 BugReports: https://github.com/GuangchuangYu/ChIPseeker/issues
 VignetteBuilder: knitr
+ByteCompile: true
 License: Artistic-2.0
 biocViews: Annotation, ChIPSeq, Software, Visualization, MultipleComparison
 RoxygenNote: 5.0.1

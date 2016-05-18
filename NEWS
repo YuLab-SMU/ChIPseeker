@@ -1,5 +1,6 @@
 CHANGES IN VERSION 1.9.3
 ------------------------
+ o use byte compiler <2016-05-18, Wed>
  o https://github.com/Bioconductor-mirror/ChIPseeker/commit/f1ada57b9c66a1a44355bbbbdaf5b0a88e10cf7d
 
 CHANGES IN VERSION 1.9.2
