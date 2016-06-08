@@ -22,16 +22,20 @@ getGeneAnno <- function(annoDb, geneID, type){
         return(NA)
     }
 
+    i <- which(!is.na(kk))
     ann <- suppressWarnings(select(annoDb,
-                                   keys=kk,
+                                   keys=kk[i],
                                    keytype=kt,
                                    columns=c("ENTREZID", "ENSEMBL", "SYMBOL", "GENENAME")))
     idx <- getFirstHitIndex(ann[,kt])
     ann <- ann[idx,]
 
     idx <- unlist(sapply(kk, function(x) which(x==ann[,kt])))
-    ann <- ann[idx,]
-    return(ann)
+
+    res <- matrix(NA, ncol=ncol(ann), nrow=length(kk)) %>% as.data.frame
+    colnames(res) <- colnames(ann)
+    res[i,] <- ann[idx,]
+    return(res)
 }
 
 
