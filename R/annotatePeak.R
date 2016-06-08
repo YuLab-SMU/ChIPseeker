@@ -135,7 +135,7 @@ annotatePeak <- function(peak,
                                                      sameStrand, ignoreOverlap,
                                                      ignoreUpstream,ignoreDownstream,
                                                      overlap=overlap)
-    nearestFeatures <- features[idx.dist$index]
+    
     if (verbose)
         cat(">> calculating distance from peak to TSS...\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -158,6 +158,15 @@ annotatePeak <- function(peak,
         annotation <- NULL
         detailGenomicAnnotation <- NULL
     }
+
+    ## append annotation to peak.gr
+    if (!is.null(annotation))
+        mcols(peak.gr)[["annotation"]] <- annotation
+
+    
+    has_nearest_idx <- which(idx.dist$index <= length(features))
+    nearestFeatures <- features[idx.dist$index[has_nearest_idx]]
+
     ## duplicated names since more than 1 peak may annotated by only 1 gene
     names(nearestFeatures) <- NULL
     nearestFeatures.df <- as.data.frame(nearestFeatures)
@@ -173,12 +182,8 @@ annotatePeak <- function(peak,
                                           "geneLength", "geneStrand", "geneId")
     }
 
-    ## append annotation to peak.gr
-    if (!is.null(annotation))
-        mcols(peak.gr)[["annotation"]] <- annotation
-
     for(cn in colnames(nearestFeatures.df)) {
-        mcols(peak.gr)[[cn]] <- unlist(nearestFeatures.df[, cn])
+        mcols(peak.gr)[[cn]][has_nearest_idx] <- unlist(nearestFeatures.df[, cn])
     }
 
     mcols(peak.gr)[["distanceToTSS"]] <- distance
