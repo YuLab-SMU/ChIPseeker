@@ -1,7 +1,7 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.9.4
+Version: 1.9.5
 Authors@R: c(person(given = "Guangchuang", family = "Yu",
 	            email = "guangchuangyu@gmail.com",
 		    role  = c("aut", "cre")),
@@ -34,9 +34,10 @@ Description: This package implements functions to retrieve the nearest genes
 Depends:
     R (>= 3.2.0)
 Imports:
+    AnnotationDbi,
     BiocGenerics,
     boot,
-    AnnotationDbi,
+    DOSE,
     IRanges,
     GenomeInfoDb,
     GenomicRanges,
@@ -62,7 +63,6 @@ Imports:
     utils
 Suggests:
     clusterProfiler,
-    DOSE,
     ReactomePA,
     org.Hs.eg.db,
     knitr,
