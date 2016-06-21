@@ -37,6 +37,6 @@ plotAnnoBar method for list of \code{csAnno} instances
 plotAnnoBar method for \code{csAnno} instance
 }
 \author{
-Guangchuang Yu \url{http://ygc.name}
+Guangchuang Yu \url{https://guangchuangyu.github.io}
 }
 

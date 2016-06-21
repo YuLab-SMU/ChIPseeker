@@ -35,6 +35,6 @@ plotAnnoPie method generics
 plotAnnoPie method for \code{csAnno} instance
 }
 \author{
-Guangchuang Yu \url{http://ygc.name}
+Guangchuang Yu \url{https://guangchuangyu.github.io}
 }
 

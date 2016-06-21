@@ -22,6 +22,6 @@ data.frame
 convert csAnno object to data.frame
 }
 \author{
-Guangchuang Yu \url{http://ygc.name}
+Guangchuang Yu \url{https://guangchuangyu.github.io}
 }
 

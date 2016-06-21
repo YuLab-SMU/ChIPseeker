@@ -194,10 +194,15 @@ annotatePeak <- function(peak,
                 format(Sys.time(), "%Y-%m-%d %X"), "\n")
         .idtype <- IDType(TxDb)
         if (length(.idtype) == 0 || is.na(.idtype) || is.null(.idtype)) {
-            if (grepl('ENSG', peak.gr$geneId[1])) {
-                .idtype <- "Ensemble Gene ID"
-            } else if (grepl('^\\d+$',, peak.gr$geneId[1])) {
-                .idtype <- "Entrez Gene ID"                
+            n <- length(peak.gr)
+            if (n > 100)
+                n <- 100
+            sampleID <- peak.gr$geneId[1:n]
+  
+            if (all(grepl('^ENSG', sampleID))) {
+                .idtype <- "Ensembl Gene ID"
+            } else if (all(grepl('^\\d+$', sampleID))) {
+                .idtype <- "Entrez Gene ID"
             } else {
                 warning("Unknown ID type, gene annotation will not be added...")
                 .idtype <- NA
@@ -205,7 +210,7 @@ annotatePeak <- function(peak,
         }
 
         if (!is.na(.idtype)) {
-            peak.gr %<>% addGeneAnno(annoDb, IDType(TxDb))
+            peak.gr %<>% addGeneAnno(annoDb, .idtype)
         }
     }
     

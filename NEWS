@@ -1,5 +1,7 @@
 CHANGES IN VERSION 1.9.5
 ------------------------
+ o fixed typo in determine gene ID type <2016-06-21, Tue>
+   + https://github.com/GuangchuangYu/ChIPseeker/issues/28#issuecomment-227212519
  o move upsetplot generics to DOSE and import from DOSE to prevent function name conflict <2016-06-14, Tue>
  
 CHANGES IN VERSION 1.9.4

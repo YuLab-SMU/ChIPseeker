@@ -33,7 +33,7 @@ This class represents the output of ChIPseeker Annotation
 \item{\code{peakNum}}{number of peaks}
 }}
 \author{
-Guangchuang Yu \url{http://ygc.name}
+Guangchuang Yu \url{https://guangchuangyu.github.io}
 }
 \seealso{
 \code{\link{annotatePeak}}
