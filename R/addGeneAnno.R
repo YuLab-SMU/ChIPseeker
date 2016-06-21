@@ -13,6 +13,7 @@ getGeneAnno <- function(annoDb, geneID, type){
     kk <- unlist(geneID)
     require(annoDb, character.only = TRUE)
     annoDb <- eval(parse(text=annoDb))
+    
     if (type == "Entrez Gene ID") {
         kt <- "ENTREZID"
     } else if (type =="Ensembl gene ID" || type == "Ensembl Gene ID") {
@@ -23,6 +24,7 @@ getGeneAnno <- function(annoDb, geneID, type){
     }
 
     i <- which(!is.na(kk))
+    kk <- gsub("\\.\\d+$", "", kk)
     ann <- suppressWarnings(select(annoDb,
                                    keys=kk[i],
                                    keytype=kt,
