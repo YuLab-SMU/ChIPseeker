@@ -52,8 +52,11 @@ vignette("ChIPseeker", "ChIPseeker")
 
 More documents can be found in <https://guangchuangyu.github.io/ChIPseeker>.
 
-## Bugs/Feature requests ##
 
- - If you have any, [let me know](https://github.com/GuangchuangYu/ChIPseeker/issues). Thx!
+## Feedback ##
+
+ - For bugs or feature request, please post to [github issue](https://github.com/GuangchuangYu/ChIPseeker/issues).
+ - For user questions, please post to [Bioconductor support site](https://support.bioconductor.org/) or [Biostars](https://www.biostars.org/). We are following every post tagged with **ChIPseeker**.
+  
 
 
