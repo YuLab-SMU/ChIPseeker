@@ -23,6 +23,10 @@
 ##' @export
 ##' @author G Yu
 vennplot <- function(Sets, by="gplots") {
+    if (is.null(names(Sets))) {
+        stop("input object should be a named list...")
+    }
+    
     overlapDF <- overlap(Sets)
     if (by == "Vennerable") {
         ## setRepositories(ind=7)
