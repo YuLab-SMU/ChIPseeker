@@ -91,13 +91,13 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
                               chainFile=NULL, pool=TRUE, mc.cores=detectCores()-1, verbose=TRUE) {
     TxDb <- loadTxDb(TxDb)
     query.gr <- loadPeak(queryPeak)
-    if (!is(targetPeak[1], "GRanges")) {
+    if (is(targetPeak[1], "GRanges") || is(targetPeak[[1]], "GRanges")) {
+        target.gr <- targetPeak
+    } else {
         targetFiles <- parse_targetPeak_Param(targetPeak)
         target.gr <- lapply(targetFiles, loadPeak)
-    } else {
-        target.gr <- targetPeak
     }
-
+    
     if (!is.null(chainFile)) {
         chain <- import.chain(chainFile)
         target.gr <- lapply(target.gr, liftOver, chain=chain)
