@@ -68,7 +68,7 @@ Suggests:
     knitr,
     BiocStyle,
     rmarkdown
-URL: http://guangchuangyu.github.io/ChIPseeker
+URL: https://guangchuangyu.github.io/ChIPseeker
 BugReports: https://github.com/GuangchuangYu/ChIPseeker/issues
 VignetteBuilder: knitr
 ByteCompile: true

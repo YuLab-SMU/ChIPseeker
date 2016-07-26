@@ -1,6 +1,7 @@
 CHANGES IN VERSION 1.9.5
 ------------------------
- o bug fixed in testing targetPeak is GRanges object in enrichPeakOverlap function <2016-07-20, Wed>
+ o bug fixed if testing targetPeak is a list of GRanges objects in enrichPeakOverlap function <2016-07-20, Wed>
+   + https://github.com/GuangchuangYu/ChIPseeker/issues/37
    + https://github.com/GuangchuangYu/ChIPseeker/issues/36
  o fixed typo in determine gene ID type <2016-06-21, Tue>
    + https://github.com/GuangchuangYu/ChIPseeker/issues/28#issuecomment-227212519

@@ -16,13 +16,20 @@
 ##' @importFrom rtracklayer liftOver
 ##' @author G Yu
 enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="BH", chainFile=NULL, distanceToTSS_cutoff=NULL) {
-    targetFiles <- parse_targetPeak_Param(targetPeak)
     TxDb <- loadTxDb(TxDb)
- 
+
     query.anno <- annotatePeak(queryPeak, TxDb=TxDb,
                                assignGenomicAnnotation=FALSE, annoDb=NULL, verbose=FALSE)
 
-    target.gr <- lapply(targetFiles, loadPeak)
+    
+    if (is(targetPeak[1], "GRanges") || is(targetPeak[[1]], "GRanges")) {
+        target.gr <- targetPeak
+        targetFiles <- NULL
+    } else {
+        targetFiles <- parse_targetPeak_Param(targetPeak)
+        target.gr <- lapply(targetFiles, loadPeak)
+    }
+
     if (!is.null(chainFile)) {
         chain <- import.chain(chainFile)
         target.gr <- lapply(target.gr, liftOver, chain=chain)
@@ -56,8 +63,23 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
     ## drawn
     k <- unlist(lapply(target.anno, function(i) length(unique(as.GRanges(i)$geneId))))
     p <- phyper(oln, m, n, k, lower.tail=FALSE)
-    qSample <- sub(".+/", "", queryPeak)
-    tSample <- sub(".+/", "", targetFiles)
+
+    
+    if (is(queryPeak, "GRanges")) {
+        qSample <- "queryPeak"
+    } else {
+        qSample <- basename(queryPeak)  
+    }
+
+    if (is.null(targetFiles)) {
+        tSample <- names(target.gr)
+        if(is.null(tSample)) {
+            tSample <- paste0("targetPeak", seq_along(target.gr))
+        }
+    } else {
+        tSample <- basename(targetFiles)
+    }
+    
     padj <- p.adjust(p, method=pAdjustMethod)
     res <- data.frame(qSample=qSample,
                       tSample=tSample,
@@ -93,6 +115,7 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
     query.gr <- loadPeak(queryPeak)
     if (is(targetPeak[1], "GRanges") || is(targetPeak[[1]], "GRanges")) {
         target.gr <- targetPeak
+        targetFiles <- NULL
     } else {
         targetFiles <- parse_targetPeak_Param(targetPeak)
         target.gr <- lapply(targetFiles, loadPeak)
@@ -129,8 +152,23 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
     }
         
     ol <- p.ol$overlap
-    qSample <- sub(".+/", "", queryPeak)  ## remove path, only keep file name
-    tSample <- sub(".+/", "", targetFiles) 
+
+    
+    if (is(queryPeak, "GRanges")) {
+        qSample <- "queryPeak"
+    } else {
+        ## remove path, only keep file name
+        qSample <- basename(queryPeak)  
+    }
+
+    if (is.null(targetFiles)) {
+        tSample <- names(target.gr)
+        if(is.null(tSample)) {
+            tSample <- paste0("targetPeak", seq_along(target.gr))
+        }
+    } else {
+        tSample <- basename(targetFiles)
+    }
     
     res <- data.frame(qSample=qSample,
                       tSample=tSample,
