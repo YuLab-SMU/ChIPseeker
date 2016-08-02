@@ -1,5 +1,7 @@
 CHANGES IN VERSION 1.9.5
 ------------------------
+ o when TxDb doesn't have gene_id information, converting gene ID (ensembl/entrez and symbol) will be omitted instead of throw error. <2016-08-02, Tue>
+   + https://www.biostars.org/p/204142
  o bug fixed if testing targetPeak is a list of GRanges objects in enrichPeakOverlap function <2016-07-20, Wed>
    + https://github.com/GuangchuangYu/ChIPseeker/issues/37
    + https://github.com/GuangchuangYu/ChIPseeker/issues/36
