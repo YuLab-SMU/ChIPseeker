@@ -25,10 +25,17 @@ getGeneAnno <- function(annoDb, geneID, type){
 
     i <- which(!is.na(kk))
     kk <- gsub("\\.\\d+$", "", kk)
-    ann <- suppressWarnings(select(annoDb,
-                                   keys=kk[i],
-                                   keytype=kt,
-                                   columns=c("ENTREZID", "ENSEMBL", "SYMBOL", "GENENAME")))
+    ann <- tryCatch(
+        suppressWarnings(select(annoDb,
+                                keys=kk[i],
+                                keytype=kt,
+                                columns=c("ENTREZID", "ENSEMBL", "SYMBOL", "GENENAME"))),
+        error = function(e) NULL)
+
+    if (is.null(ann)) {
+        warning("ID type not matched, gene annotation will not be added...")
+        return(NA)
+    }
     idx <- getFirstHitIndex(ann[,kt])
     ann <- ann[idx,]
 

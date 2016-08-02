@@ -35,7 +35,7 @@ peakDF2GRanges <- function(peak.df) {
 }
 
 ##' @importFrom utils read.delim
-peak2DF <- function(peakfile, header) {
+peak2DF <- function(peakfile, header, ...) {
     if (missing(header)) {
         ## determine file format
         if (isBedFile(peakfile)) {
@@ -44,7 +44,7 @@ peak2DF <- function(peakfile, header) {
             header <- TRUE
         }
     }
-    peak.df <- read.delim(peakfile, header=header, comment.char="#")
+    peak.df <- read.delim(peakfile, header=header, comment.char="#", ...)
     ## coordinate system in BED file is start at 0
     ## refer to http://asia.ensembl.org/info/website/upload/bed.html?redirect=no
     ## The chromEnd base is not included in the display of the feature.
