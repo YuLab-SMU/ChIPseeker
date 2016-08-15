@@ -46,6 +46,8 @@ covplot <- function(peak, weightCol=NULL,
             names(ltm) <- nn
         }
         tm <- list_to_dataframe(ltm)
+        chr.sorted <- sortChrName(as.character(unique(tm$chr)))
+        tm$chr <- factor(tm$chr, levels = chr.sorted)
     }
     
     chr <- start <- end <- value <- .id <- NULL
