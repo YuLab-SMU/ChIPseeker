@@ -22,8 +22,8 @@ html_preview: false
 [![GitHub stars](https://img.shields.io/github/stars/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/stargazers) 
 
 
-[![releaseVersion](https://img.shields.io/badge/release%20version-`r url="https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html"; x=readLines(url); gsub("\\D+(\\d+\\.\\d+\\.\\d+)\\D+", "\\1", x[grep("Version", x) +1])`-green.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker)
-[![develVersion](https://img.shields.io/badge/devel%20version-`r x=readLines("DESCRIPTION"); y=x[grep("^Version", x)]; sub("Version: ", "", y)`-green.svg?style=flat)](https://github.com/GuangchuangYu/ChIPseeker)
+[![releaseVersion](https://img.shields.io/badge/release%20version-`r rvcheck::check_bioc("ChIPseeker")$latest_version`-green.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker)
+[![develVersion](https://img.shields.io/badge/devel%20version-`r rvcheck:::get_devel_version("GuangchuangYu/ChIPseeker")`-green.svg?style=flat)](https://github.com/GuangchuangYu/ChIPseeker)
 [![Bioc](http://www.bioconductor.org/shields/years-in-bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#since)
 [![post](http://www.bioconductor.org/shields/posts/ChIPseeker.svg)](https://support.bioconductor.org/t/ChIPseeker/)
 [![download](http://www.bioconductor.org/shields/downloads/ChIPseeker.svg)](https://bioconductor.org/packages/stats/bioc/ChIPseeker/)
