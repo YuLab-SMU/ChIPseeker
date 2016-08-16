@@ -1,4 +1,5 @@
 .travis.yml
 .svnignore
 .gitignore
+^.*\.DS_Store
 Makefile
