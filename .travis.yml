@@ -26,6 +26,8 @@ r_packages:
 bioc_packages:
     - DO.db
     - DOSE
+    - graphite
+    - ReactomePA
     - org.Hs.eg.db
     - TxDb.Hsapiens.UCSC.hg19.knownGene
     - GenomicRanges
