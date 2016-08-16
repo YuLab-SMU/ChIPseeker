@@ -24,7 +24,7 @@ install:
 # Adapt as necessary starting from here
 
 build_script:
-  - travis-tool.sh install_bioc BiocStyle AnnotationDbi DO.db DOSE org.Hs.eg.db TxDb.Hsapiens.UCSC.hg19.knownGene
+  - travis-tool.sh install_bioc BiocStyle IRanges AnnotationDbi DO.db DOSE org.Hs.eg.db TxDb.Hsapiens.UCSC.hg19.knownGene
   - travis-tool.sh install_deps
 
 test_script:
