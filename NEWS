@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.9.6
+------------------------
+ o unit test <2016-08-16, Tue>
+ o update vignette <2016-08-16, Tue>
+ 
 CHANGES IN VERSION 1.9.5
 ------------------------
  o when TxDb doesn't have gene_id information, converting gene ID (ensembl/entrez and symbol) will be omitted instead of throw error. <2016-08-02, Tue>
