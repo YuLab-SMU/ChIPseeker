@@ -1,7 +1,7 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.9.5
+Version: 1.9.6
 Authors@R: c(person(given = "Guangchuang", family = "Yu",
 	            email = "guangchuangyu@gmail.com",
 		    role  = c("aut", "cre")),
@@ -32,7 +32,7 @@ Description: This package implements functions to retrieve the nearest genes
     regions, genomic annotation, distance to TSS, and overlap of peaks or
     genes.
 Depends:
-    R (>= 3.2.0)
+    R (>= 3.3.0)
 Imports:
     AnnotationDbi,
     BiocGenerics,
@@ -67,7 +67,8 @@ Suggests:
     org.Hs.eg.db,
     knitr,
     BiocStyle,
-    rmarkdown
+    rmarkdown,
+    testthat
 URL: https://guangchuangyu.github.io/ChIPseeker
 BugReports: https://github.com/GuangchuangYu/ChIPseeker/issues
 VignetteBuilder: knitr
