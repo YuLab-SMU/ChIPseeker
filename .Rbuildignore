@@ -3,3 +3,6 @@
 .gitignore
 ^.*\.DS_Store
 Makefile
+README.Rmd
+.travis.yml
+appveyor.yml
