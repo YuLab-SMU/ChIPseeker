@@ -1,12 +1,7 @@
 environment:
   matrix:
     - R_VERSION: devel
-      GCC_PATH: mingw_32
-      USE_RTOOLS: true
-
-    - R_VERSION: devel
       R_ARCH: x64
-      GCC_PATH: mingw_64
       USE_RTOOLS: true
 
 
