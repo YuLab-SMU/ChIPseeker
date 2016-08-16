@@ -1,7 +1,9 @@
 ##' @importFrom AnnotationDbi get
 .ChIPseekerEnv <- function(TxDb) {
+    pos <- 1
+    envir <- as.environment(pos)
     if (!exists("ChIPseekerEnv", envir=.GlobalEnv)) {
-        assign("ChIPseekerEnv", new.env(), .GlobalEnv)
+        assign("ChIPseekerEnv", new.env(), envir = envir)
     }
     
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
@@ -21,7 +23,7 @@
 
         if ( is.null(m1) || length(m1) != length(m2) || any(m1 != m2) ) {
             rm(ChIPseekerEnv)
-            assign("ChIPseekerEnv", new.env(), .GlobalEnv)
+            assign("ChIPseekerEnv", new.env(), envir = envir)
             ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
             assign("TXDB", TxDb, envir=ChIPseekerEnv)
         }
