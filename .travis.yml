@@ -1,9 +1,7 @@
 ## reference: http://docs.travis-ci.com/user/languages/r/
 
 language: r
-r:
-  - devel
-  - bioc-devel
+r: bioc-devel
   
 cache: packages
 bioc_required: true
