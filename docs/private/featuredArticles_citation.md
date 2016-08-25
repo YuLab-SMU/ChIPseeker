@@ -12,6 +12,12 @@ Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://s
 
 ![](featured_img/journal.pcbi.1004751.g003.PNG)
 
+
+[Mouse MORC3 is a GHKL ATPase that localizes to H3K4me3 marked chromatin](http://dx.doi.org/10.1073/pnas.1609709113). **PNAS** Aug, 2016
+
+![](featured_img/F9.large.jpg)
+
+
 [TCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages](http://f1000research.com/articles/5-1542/v1). **F1000Research**. 2016, 5:1542.
 
 ![](featured_img/heatmap2016.gif)

@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://guangchuangyu.github.io/css/academicons.min.css">
 
 <br>
-Let [us know](https://github.com/GuangchuangYu/ChIPseeker/wiki/feature-articles) if you have published using `ChIPseeker` and your publication will be featured here.
+Let us know if you have published using `ChIPseeker` and your publication will be featured here.
 
 
 <link rel='stylesheet' href=https://guangchuangyu.github.io/resume/css/morris.css>
