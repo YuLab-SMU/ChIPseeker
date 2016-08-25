@@ -15,4 +15,4 @@ out <- file("../docs/index.md")
 writeLines(index, out)
 close(out)
 
-
+unlink("../private/doi_citation_badge.md")
