@@ -32,10 +32,10 @@ Let [us know](https://github.com/GuangchuangYu/ChIPseeker/wiki/feature-articles)
 
 [![citation](https://img.shields.io/badge/cited%20by-16-green.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 
-<div id = 'chart407071d4b997' class = 'rChart morris'></div>
+<div id = 'chart496e20ebe9e9' class = 'rChart morris'></div>
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart407071d4b997",
+ "element": "chart496e20ebe9e9",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -54,7 +54,7 @@ Let [us know](https://github.com/GuangchuangYu/ChIPseeker/wiki/feature-articles)
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart407071d4b997",
+"id": "chart496e20ebe9e9",
 "labels": "cites" 
 },
       chartType = "Bar"
@@ -72,7 +72,7 @@ Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://s
 
 [*metagene* Profiles Analyses Reveal Regulatory Element’s Factor-Specific Recruitment Patterns](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004751). **PLoS Comput Biol**.  2016, 12(8): e1004751. 
 
-![](journal.pcbi.1004751.g003.PNG)
+![](featured_img/journal.pcbi.1004751.g003.PNG)
 
 [TCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages](http://f1000research.com/articles/5-1542/v1). **F1000Research**. 2016, 5:1542.
 

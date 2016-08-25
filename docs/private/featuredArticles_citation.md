@@ -10,7 +10,7 @@ Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://s
 
 [*metagene* Profiles Analyses Reveal Regulatory Element’s Factor-Specific Recruitment Patterns](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004751). **PLoS Comput Biol**.  2016, 12(8): e1004751. 
 
-![](journal.pcbi.1004751.g003.PNG)
+![](featured_img/journal.pcbi.1004751.g003.PNG)
 
 [TCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages](http://f1000research.com/articles/5-1542/v1). **F1000Research**. 2016, 5:1542.
 
