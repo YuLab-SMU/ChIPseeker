@@ -40,7 +40,7 @@ get_devel_version <- rvcheck:::get_devel_version
 
 This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare their own dataset with those deposited in database. The comparison can be used to infer cooperative regulation and thus can be used to generate hypotheses. Several visualization functions are implemented to summarize the coverage of the peak experiment, average profile and heatmap of peaks binding to TSS regions, genomic annotation, distance to TSS, and overlap of peaks or genes.
 
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/GuangchuangYu/ChIPseeker.svg?style=social)](https://twitter.com/intent/tweet?hashtags=ChIPseeker&url=https://guangchuangyu.github.io/ChIPseeker)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/GuangchuangYu/ChIPseeker.svg?style=social)](https://twitter.com/intent/tweet?hashtags=ChIPseeker&url=http://bioinformatics.oxfordjournals.org/content/31/14/2382)
 
 ------------------------------------------------------------------------
 

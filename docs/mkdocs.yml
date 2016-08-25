@@ -7,4 +7,6 @@ pages:
 - Documentation: documentation.md
 - Featured Articles: featuredArticles.md
 
+theme: yeti
+
 copyright: Copyright &copy; 2016 <a href="http://guangchuangyu.github.io">Guangchuang Yu</a>.
