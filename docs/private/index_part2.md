@@ -1,8 +1,8 @@
-
+<!--
 <script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
 
 <div data-badge-popover="right" data-badge-type="4" data-doi="10.1093/bioinformatics/btv145" class="altmetric-embed"></div>
-
+-->
 
 ## <i class="fa fa-pencil"></i> Featured Articles
 

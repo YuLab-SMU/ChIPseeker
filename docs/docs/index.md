@@ -1,73 +1,77 @@
 <!-- AddToAny BEGIN -->
-<a class="a2a_dd" href="//www.addtoany.com/share"></a> <a class="a2a_button_facebook"></a> <a class="a2a_button_twitter"></a> <a class="a2a_button_google_plus"></a>
-
+<div class="a2a_kit a2a_kit_size_32 a2a_default_style">
+<a class="a2a_dd" href="//www.addtoany.com/share"></a>
+<a class="a2a_button_facebook"></a>
+<a class="a2a_button_twitter"></a>
+<a class="a2a_button_google_plus"></a>
+</div>
 <script async src="//static.addtoany.com/menu/page.js"></script>
 <!-- AddToAny END -->
+
 <br>
-
-[![releaseVersion](https://img.shields.io/badge/release%20version-1.8.9-blue.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker) [![develVersion](https://img.shields.io/badge/devel%20version-1.9.7-blue.svg?style=flat)](https://github.com/GuangchuangYu/ChIPseeker)
-
 This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare their own dataset with those deposited in database. The comparison can be used to infer cooperative regulation and thus can be used to generate hypotheses. Several visualization functions are implemented to summarize the coverage of the peak experiment, average profile and heatmap of peaks binding to TSS regions, genomic annotation, distance to TSS, and overlap of peaks or genes.
 
 `ChIPseeker` is released within the [Bioconductor](https://www.bioconductor.org/packages/ChIPseeker) project and the source code is hosted on <a href="https://github.com/GuangchuangYu/ChIPseeker"><i class="fa fa-github fa-lg"></i> GitHub</a>.
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 
-<i class="fa fa-user"></i> Author
----------------------------------
+## <i class="fa fa-user"></i> Author
 
 Guangchuang Yu, School of Public Health, The University of Hong Kong.
 
-<i class="fa fa-book"></i> Citation
------------------------------------
+## <i class="fa fa-book"></i> Citation
 
 Please cite the following article when using `ChIPseeker`:
 
-**Yu G**, Wang LG and He QY<sup>\*</sup>. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. ***Bioinformatics***, 2015, 31(14):2382-2383.
+__Yu G__, Wang LG and He QY<sup>*</sup>. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. **_Bioinformatics_**, 2015, 31(14):2382-2383. 
+[![doi](https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-blue.svg?style=flat)](http://dx.doi.org/10.1093/bioinformatics/btv145)
+[![citation](https://img.shields.io/badge/cited%20by-16-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![Altmetric](https://img.shields.io/badge/Altmetric-24-blue.svg?style=flat)](https://www.altmetric.com/details/3781087)
 
-[![doi](https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-blue.svg?style=flat)](http://dx.doi.org/10.1093/bioinformatics/btv145) [![citation](https://img.shields.io/badge/cited%20by-16-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488) [![Altmetric](https://img.shields.io/badge/Altmetric-24-blue.svg?style=flat)](https://www.altmetric.com/details/3781087)
-
+<!--
 <script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
 
-<i class="fa fa-pencil"></i> Featured Articles
-----------------------------------------------
+<div data-badge-popover="right" data-badge-type="4" data-doi="10.1093/bioinformatics/btv145" class="altmetric-embed"></div>
+-->
+
+## <i class="fa fa-pencil"></i> Featured Articles
 
 <img src="featured_img/heatmap2016.gif" width="650">
 
+
 <i class="fa fa-hand-o-right"></i> Find out more on <i class="fa fa-pencil"></i> [Featured Articles](https://guangchuangyu.github.io/ChIPseeker/featuredArticles/).
 
-<i class="fa fa-download"></i> Installation
--------------------------------------------
+## <i class="fa fa-download"></i> Installation
 
 Install `ChIPseeker` is easy, follow the guide on the [Bioconductor page](https://bioconductor.org/packages/ChIPseeker):
 
-``` r
+
+```r
 ## try http:// if https:// URLs are not supported
 source("https://bioconductor.org/biocLite.R")
 ## biocLite("BiocUpgrade") ## you may need this
 biocLite("ChIPseeker")
 ```
 
-<i class="fa fa-cogs"></i> Overview
------------------------------------
+## <i class="fa fa-cogs"></i> Overview
 
 #### <i class="fa fa-angle-double-right"></i> Annotation
 
--   retrieve the nearest genes around the peak
--   annotate genomic region of the peak
++ retrieve the nearest genes around the peak
++ annotate genomic region of the peak
 
 #### <i class="fa fa-angle-double-right"></i> Comparison
 
--   estimate the significance of overlap among ChIP peak data sets
--   incorporate GEO database for users to compare their own dataset with those deposited in the database
++ estimate the significance of overlap among ChIP peak data sets
++ incorporate GEO database for users to compare their own dataset with those deposited in the database
 
 #### <i class="fa fa-angle-double-right"></i> Visualization
 
--   summarize the coverage of the peak experiment
--   average profile and heatmap of peaks binding to TSS regions
--   genomic annotation
--   distance to TSS
--   overlap of peaks or genes
++ summarize the coverage of the peak experiment
++ average profile and heatmap of peaks binding to TSS regions
++ genomic annotation
++ distance to TSS
++ overlap of peaks or genes
 
 <!--
 
@@ -76,12 +80,13 @@ biocLite("ChIPseeker")
 
 <i class="fa fa-hand-o-right"></i> Find out <del>more</del> on <i class="fa fa-github-alt"></i> [github](http://scisoft-net-map.isri.cmu.edu/application/ChIPseeker/gitprojects).
 -->
-<i class="fa fa-comment"></i> Feedback
---------------------------------------
+
+## <i class="fa fa-comment"></i> Feedback
 
 <ul class="fa-ul">
-    <li><i class="fa-li fa fa-bug"></i> For bugs or feature requests, please post to <i class="fa fa-github-alt"></i> <a href="https://github.com/GuangchuangYu/ChIPseeker/issues">github issue</a></li>
-    <li><i class="fa-li fa fa-question"></i> For user questions, please post to <i class="fa fa-support"></i> <a href="https://support.bioconductor.org">Bioconductor support site</a> or <a href="https://www.biostars.org">Biostars</a></li>
-    <li><i class="fa-li fa fa-commenting"></i> Join the group chat in <a href="https://twitter.com/hashtag/ChIPseeker"><i class="fa fa-twitter fa-lg"></i></a> and <a href="http://huati.weibo.com/k/ChIPseeker"><i class="fa fa-weibo fa-lg"></i></a></li>
-
+	<li><i class="fa-li fa fa-bug"></i> For bugs or feature requests, please post to <i class="fa fa-github-alt"></i> <a href="https://github.com/GuangchuangYu/ChIPseeker/issues">github issue</a></li>
+	<li><i class="fa-li fa fa-question"></i> For user questions, please post to <i class="fa fa-support"></i> <a href="https://support.bioconductor.org">Bioconductor support site</a> or <a href="https://www.biostars.org">Biostars</a></li>
+	<li><i class="fa-li fa fa-commenting"></i> Join the group chat in <a href="https://twitter.com/hashtag/ChIPseeker"><i class="fa fa-twitter fa-lg"></i></a> and <a href="http://huati.weibo.com/k/ChIPseeker"><i class="fa fa-weibo fa-lg"></i></a></li>
 </ul>
+
+
