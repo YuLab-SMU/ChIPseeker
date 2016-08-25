@@ -32,10 +32,10 @@ Let [us know](https://github.com/GuangchuangYu/ChIPseeker/wiki/feature-articles)
 
 [![citation](https://img.shields.io/badge/cited%20by-16-green.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 
-<div id = 'chart3c1d440f6d77' class = 'rChart morris'></div>
+<div id = 'chart46bc74b13b9e' class = 'rChart morris'></div>
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart3c1d440f6d77",
+ "element": "chart46bc74b13b9e",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -54,7 +54,7 @@ Let [us know](https://github.com/GuangchuangYu/ChIPseeker/wiki/feature-articles)
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart3c1d440f6d77",
+"id": "chart46bc74b13b9e",
 "labels": "cites" 
 },
       chartType = "Bar"
