@@ -1,0 +1,10 @@
+site_name: "ChIPseeker"
+site_url: https://guangchuangyu.github.io/ChIPseeker
+site_author: Guangchuang Yu
+repo_url: https://github.com/GuangchuangYu/ChIPseeker
+pages:
+- Home: index.md
+- Documentation: documentation.md
+- Featured Articles: featuredArticles.md
+
+copyright: Copyright &copy; 2016 <a href="http://guangchuangyu.github.io">Guangchuang Yu</a>.
