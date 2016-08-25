@@ -8,3 +8,4 @@ README.Rmd
 appveyor.yml
 GEODATA
 docs
+mkdocs

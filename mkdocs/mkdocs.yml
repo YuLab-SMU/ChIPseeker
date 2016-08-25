@@ -2,6 +2,7 @@ site_name: "ChIPseeker"
 site_url: https://guangchuangyu.github.io/ChIPseeker
 site_author: Guangchuang Yu
 repo_url: https://github.com/GuangchuangYu/ChIPseeker
+site_dir: ../docs
 pages:
 - Home: index.md
 - Documentation: documentation.md

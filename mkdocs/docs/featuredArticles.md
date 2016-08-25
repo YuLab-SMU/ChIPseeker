@@ -32,10 +32,10 @@ Let us know if you have published using `ChIPseeker` and your publication will b
 
 [![citation](https://img.shields.io/badge/cited%20by-16-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 
-<div id = 'chart41097365a22d' class = 'rChart morris'></div>
+<div id = 'chart7a7d2d03a613' class = 'rChart morris'></div>
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart41097365a22d",
+ "element": "chart7a7d2d03a613",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -54,7 +54,7 @@ Let us know if you have published using `ChIPseeker` and your publication will b
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart41097365a22d",
+"id": "chart7a7d2d03a613",
 "labels": "cites" 
 },
       chartType = "Bar"

@@ -34,6 +34,18 @@ clean:
 	cd ..;\
 	$(RM) -r $(PKGNAME).Rcheck/
 
+mkdocs: featuredArticles.md index.md
+	cd mkdocs;\
+	mkdocs build
+
+index.md:
+	cd mkdocs/scripts;\
+	Rscript make_index.R
+
+featuredArticles.md:
+	cd mkdocs/scripts;\
+	Rscript featured_article.R
+
 svnignore:
 	svn propset svn:ignore -F .svnignore .
 

@@ -5,3 +5,5 @@ inst/extdata/.DS_Store
 inst/extdata/GEO_sample_data/.DS_Store
 .svn
 *~
+docs/__init__.py
+docs/__pycache__
