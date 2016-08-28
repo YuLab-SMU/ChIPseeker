@@ -8,11 +8,11 @@
 <script async src="//static.addtoany.com/menu/page.js"></script>
 <!-- AddToAny END -->
 
+
 <link rel="stylesheet" href="https://guangchuangyu.github.io/css/academicons.min.css">
 
 <br>
 Let us know if you have published using `ChIPseeker` and your publication will be featured here.
-
 
 <link rel='stylesheet' href=https://guangchuangyu.github.io/resume/css/morris.css>
 <script src='https://guangchuangyu.github.io/resume/css/jquery.min.js' type='text/javascript'></script>
@@ -32,10 +32,11 @@ Let us know if you have published using `ChIPseeker` and your publication will b
 
 [![citation](https://img.shields.io/badge/cited%20by-16-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 
-<div id = 'chart7a7d2d03a613' class = 'rChart morris'></div>
+
+<div id = 'chart1e7472675835' class = 'rChart morris'></div>
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart7a7d2d03a613",
+ "element": "chart1e7472675835",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -54,12 +55,16 @@ Let us know if you have published using `ChIPseeker` and your publication will b
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart7a7d2d03a613",
+"id": "chart1e7472675835",
 "labels": "cites" 
 },
       chartType = "Bar"
     new Morris[chartType](chartParams)
 </script>
+
+
+
+
 Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488).
 
 

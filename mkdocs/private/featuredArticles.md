@@ -1,3 +1,19 @@
+<!-- addtoany:= -->
+
+<link rel="stylesheet" href="https://guangchuangyu.github.io/css/academicons.min.css">
+
+<br>
+Let us know if you have published using `ChIPseeker` and your publication will be featured here.
+
+<!-- citation_script:= -->
+
+<!-- citation:=9pM33mqn1YgC:=12053363057899219488 -->
+
+<!-- article_citation:=9pM33mqn1YgC -->
+
+
+
+
 Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488).
 
 

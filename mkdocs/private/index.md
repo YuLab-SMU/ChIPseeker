@@ -1,8 +1,29 @@
-<!--
-<script type="text/javascript" src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+<!-- addtoany:= -->
 
-<div data-badge-popover="right" data-badge-type="4" data-doi="10.1093/bioinformatics/btv145" class="altmetric-embed"></div>
--->
+<!-- release:=ChIPseeker -->
+<!-- devel:=ChIPseeker -->
+<!-- download:=ChIPseeker:=total -->
+<!-- download:=ChIPseeker:=month -->
+
+This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare their own dataset with those deposited in database. The comparison can be used to infer cooperative regulation and thus can be used to generate hypotheses. Several visualization functions are implemented to summarize the coverage of the peak experiment, average profile and heatmap of peaks binding to TSS regions, genomic annotation, distance to TSS, and overlap of peaks or genes.
+
+`ChIPseeker` is released within the [Bioconductor](https://www.bioconductor.org/packages/ChIPseeker) project and the source code is hosted on <a href="https://github.com/GuangchuangYu/ChIPseeker"><i class="fa fa-github fa-lg"></i> GitHub</a>.
+
+## <i class="fa fa-user"></i> Author
+
+Guangchuang Yu, School of Public Health, The University of Hong Kong.
+
+## <i class="fa fa-book"></i> Citation
+
+<!-- doi:=10.1093/bioinformatics/btv145 -->
+<!-- citation:=9pM33mqn1YgC:=12053363057899219488 -->
+<!-- altmetric:=3781087 -->
+
+
+Please cite the following article when using `ChIPseeker`:
+
+__Yu G__, Wang LG and He QY<sup>*</sup>. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. **_Bioinformatics_**, 2015, 31(14):2382-2383.
+
 
 ## <i class="fa fa-pencil"></i> Featured Articles
 
