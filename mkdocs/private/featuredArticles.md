@@ -5,7 +5,6 @@
 <br>
 Let us know if you have published using `ChIPseeker` and your publication will be featured here.
 
-<!-- citation_script:= -->
 
 <!-- citation:=9pM33mqn1YgC:=12053363057899219488 -->
 
