@@ -1,8 +1,9 @@
 <!-- addtoany:= -->
 
 <link rel="stylesheet" href="https://guangchuangyu.github.io/css/academicons.min.css">
+<link rel="stylesheet" href="https://guangchuangyu.github.io/css/font-awesome.min.css">
 
-<br>
+
 Let us know if you have published using `ChIPseeker` and your publication will be featured here.
 
 

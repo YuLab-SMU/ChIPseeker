@@ -1,5 +1,8 @@
 <!-- addtoany:= -->
 
+<link rel="stylesheet" href="https://guangchuangyu.github.io/css/font-awesome.min.css">
+
+
 ## <i class="fa fa-book"></i> Vignettes
 
 + [ChIPseeker: an R package for ChIP peak Annotation, Comparison and Visualization](https://bioconductor.org/packages/release/bioc/vignettes/ChIPseeker/inst/doc/ChIPseeker.html)

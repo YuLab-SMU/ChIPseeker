@@ -4,18 +4,23 @@
 <a class="a2a_button_facebook"></a>
 <a class="a2a_button_twitter"></a>
 <a class="a2a_button_google_plus"></a>
+<a class="a2a_button_pinterest"></a>
+<a class="a2a_button_reddit"></a>
+<a class="a2a_button_sina_weibo"></a>
+<a class="a2a_button_wechat"></a>
+<a class="a2a_button_douban"></a>
 </div>
 <script async src="//static.addtoany.com/menu/page.js"></script>
 <!-- AddToAny END -->
 
-
 <link rel="stylesheet" href="https://guangchuangyu.github.io/css/academicons.min.css">
+<link rel="stylesheet" href="https://guangchuangyu.github.io/css/font-awesome.min.css">
 
-<br>
+
 Let us know if you have published using `ChIPseeker` and your publication will be featured here.
 
 
-[![citation](https://img.shields.io/badge/cited%20by-16-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-17-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 
 <link rel='stylesheet' href=https://guangchuangyu.github.io/resume/css/morris.css>
 <script src='https://guangchuangyu.github.io/resume/css/jquery.min.js' type='text/javascript'></script>
@@ -33,10 +38,10 @@ Let us know if you have published using `ChIPseeker` and your publication will b
   }  
   </style>
 
-<div id = 'chart487213ab8f3f' class = 'rChart morris'></div>
+<div id = 'chart240f51d2a7d4' class = 'rChart morris'></div>
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart487213ab8f3f",
+ "element": "chart240f51d2a7d4",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -51,11 +56,11 @@ Let us know if you have published using `ChIPseeker` and your publication will b
 },
 {
  "year": 2016,
-"cites":             12,
+"cites":             13,
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart487213ab8f3f",
+"id": "chart240f51d2a7d4",
 "labels": "cites" 
 },
       chartType = "Bar"
