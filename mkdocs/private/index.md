@@ -17,12 +17,11 @@ Guangchuang Yu, School of Public Health, The University of Hong Kong.
 
 ## <i class="fa fa-book"></i> Citation
 
+Please cite the following article when using `ChIPseeker`:
+
 <!-- doi:=10.1093/bioinformatics/btv145 -->
 <!-- citation:=9pM33mqn1YgC:=12053363057899219488 -->
 <!-- altmetric:=3781087 -->
-
-
-Please cite the following article when using `ChIPseeker`:
 
 __Yu G__, Wang LG and He QY<sup>*</sup>. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. **_Bioinformatics_**, 2015, 31(14):2382-2383.
 
@@ -68,11 +67,10 @@ biocLite("ChIPseeker")
 
 <!--
 
-## <i class="fa fa-code-fork"></i> Projects that depend on ChIPseeker
+## <i class="fa fa-code-fork"></i> Projects that depend on _ChIPseeker_
 
-
-<i class="fa fa-hand-o-right"></i> Find out <del>more</del> on <i class="fa fa-github-alt"></i> [github](http://scisoft-net-map.isri.cmu.edu/application/ChIPseeker/gitprojects).
 -->
+
 
 ## <i class="fa fa-comment"></i> Feedback
 
