@@ -17,7 +17,7 @@
 
 [![releaseVersion](https://img.shields.io/badge/release%20version-1.8.9-blue.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker)
 [![develVersion](https://img.shields.io/badge/devel%20version-1.9.7-blue.svg?style=flat)](https://github.com/GuangchuangYu/ChIPseeker)
-[![total](https://img.shields.io/badge/downloads-17278/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
+[![total](https://img.shields.io/badge/downloads-17418/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 [![month](https://img.shields.io/badge/downloads-931/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 
 This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare their own dataset with those deposited in database. The comparison can be used to infer cooperative regulation and thus can be used to generate hypotheses. Several visualization functions are implemented to summarize the coverage of the peak experiment, average profile and heatmap of peaks binding to TSS regions, genomic annotation, distance to TSS, and overlap of peaks or genes.
