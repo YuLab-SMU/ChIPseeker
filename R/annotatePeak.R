@@ -1,15 +1,15 @@
 ##' Annotate peaks
 ##'
-##' 
+##'
 ##' @title annotatePeak
 ##' @param peak peak file or GRanges object
-##' @param tssRegion Region Range of TSS 
+##' @param tssRegion Region Range of TSS
 ##' @param TxDb TxDb object
 ##' @param level one of transcript and gene
 ##' @param assignGenomicAnnotation logical, assign peak genomic annotation or not
 ##' @param genomicAnnotationPriority genomic annotation priority
 ##' @param annoDb annotation package
-##' @param addFlankGeneInfo logical, add flanking gene information from the peaks 
+##' @param addFlankGeneInfo logical, add flanking gene information from the peaks
 ##' @param flankDistance distance of flanking sequence
 ##' @param sameStrand logical, whether find nearest/overlap gene in the same strand
 ##' @param ignoreOverlap logical, whether ignore overlap of TSS with peak
@@ -18,35 +18,35 @@
 ##' @param overlap one of 'TSS' or 'all', if overlap="all", then gene overlap with peak will be reported as nearest gene, no matter the overlap is at TSS region or not.
 ##' @param verbose print message or not
 ##' @return data.frame or GRanges object with columns of:
-##' 
+##'
 ##' all columns provided by input.
-##' 
+##'
 ##' annotation: genomic feature of the peak, for instance if the peak is
 ##' located in 5'UTR, it will annotated by 5'UTR. Possible annotation is
 ##' Promoter-TSS, Exon, 5' UTR, 3' UTR, Intron, and Intergenic.
-##' 
+##'
 ##' geneChr: Chromosome of the nearest gene
-##' 
+##'
 ##' geneStart: gene start
-##' 
+##'
 ##' geneEnd: gene end
-##' 
+##'
 ##' geneLength: gene length
-##' 
+##'
 ##' geneStrand: gene strand
-##' 
+##'
 ##' geneId: entrezgene ID
-##' 
+##'
 ##' distanceToTSS: distance from peak to gene TSS
-##' 
+##'
 ##' if annoDb is provided, extra column will be included:
-##' 
+##'
 ##' ENSEMBL: ensembl ID of the nearest gene
-##' 
+##'
 ##' SYMBOL: gene symbol
-##' 
+##'
 ##' GENENAME: full gene name
-##' @import BiocGenerics S4Vectors GenomeInfoDb 
+##' @import BiocGenerics S4Vectors GenomeInfoDb
 ##' @examples
 ##' \dontrun{
 ##' require(TxDb.Hsapiens.UCSC.hg19.knownGene)
@@ -57,7 +57,7 @@
 ##' }
 ##' @seealso \code{\link{plotAnnoBar}} \code{\link{plotAnnoPie}} \code{\link{plotDistToTSS}}
 ##' @export
-##' @author G Yu 
+##' @author G Yu
 annotatePeak <- function(peak,
                          tssRegion=c(-3000, 3000),
                          TxDb=NULL,
@@ -98,7 +98,7 @@ annotatePeak <- function(peak,
     if (assignGenomicAnnotation && all(genomicAnnotationPriority %in% c("Promoter", "5UTR", "3UTR", "Exon", "Intron", "Downstream", "Intergenic")) == FALSE) {
         stop('genomicAnnotationPriority should be any order of c("Promoter", "5UTR", "3UTR", "Exon", "Intron", "Downstream", "Intergenic")')
     }
-    
+
     if ( is(peak, "GRanges") ){
         ## this test will be TRUE
         ## when peak is an instance of class/subclass of "GRanges"
@@ -110,7 +110,7 @@ annotatePeak <- function(peak,
     }
 
     peakNum <- length(peak.gr)
-    
+
     if (verbose)
         cat(">> preparing features information...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -119,23 +119,23 @@ annotatePeak <- function(peak,
         features <- TxDb
     } else {
         TxDb <- loadTxDb(TxDb)
-        
+
         if (level=="transcript") {
             features <- getGene(TxDb, by="transcript")
         } else {
             features <- getGene(TxDb, by="gene")
         }
-    } 
+    }
     if (verbose)
         cat(">> identifying nearest features...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
-    
+
     ## nearest features
     idx.dist <- getNearestFeatureIndicesAndDistances(peak.gr, features,
                                                      sameStrand, ignoreOverlap,
                                                      ignoreUpstream,ignoreDownstream,
                                                      overlap=overlap)
-    
+
     if (verbose)
         cat(">> calculating distance from peak to TSS...\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -144,13 +144,13 @@ annotatePeak <- function(peak,
 
     ## update peak, remove un-map peak if exists.
     peak.gr <- idx.dist$peak
-    
+
     ## annotation
     if (assignGenomicAnnotation == TRUE) {
         if (verbose)
             cat(">> assigning genomic annotation...\t\t",
                 format(Sys.time(), "%Y-%m-%d %X"), "\n")
-        
+
         anno <- getGenomicAnnotation(peak.gr, distance, tssRegion, TxDb, level, genomicAnnotationPriority, sameStrand=sameStrand)
         annotation <- anno[["annotation"]]
         detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
@@ -163,7 +163,7 @@ annotatePeak <- function(peak,
     if (!is.null(annotation))
         mcols(peak.gr)[["annotation"]] <- annotation
 
-    
+
     has_nearest_idx <- which(idx.dist$index <= length(features))
     nearestFeatures <- features[idx.dist$index[has_nearest_idx]]
 
@@ -187,7 +187,7 @@ annotatePeak <- function(peak,
     }
 
     mcols(peak.gr)[["distanceToTSS"]] <- distance
- 
+
     if (!is.null(annoDb)) {
         if (verbose)
             cat(">> adding gene annotation...\t\t\t",
@@ -198,8 +198,8 @@ annotatePeak <- function(peak,
             if (n > 100)
                 n <- 100
             sampleID <- peak.gr$geneId[1:n]
-  
-            if (all(grepl('^ENSG', sampleID))) {
+
+            if (all(grepl('^ENS', sampleID))) {
                 .idtype <- "Ensembl Gene ID"
             } else if (all(grepl('^\\d+$', sampleID))) {
                 .idtype <- "Entrez Gene ID"
@@ -213,22 +213,22 @@ annotatePeak <- function(peak,
             peak.gr %<>% addGeneAnno(annoDb, .idtype)
         }
     }
-    
+
     if (addFlankGeneInfo == TRUE) {
         if (verbose)
             cat(">> adding flank feature information from peaks...\t",
                 format(Sys.time(), "%Y-%m-%d %X"), "\n")
- 
+
         flankInfo <- getAllFlankingGene(peak.gr, features, level, flankDistance)
 
         if (level == "transcript") {
             mcols(peak.gr)[["flank_txIds"]] <- NA
             mcols(peak.gr)[["flank_txIds"]][flankInfo$peakIdx] <- flankInfo$flank_txIds
         }
-        
+
         mcols(peak.gr)[["flank_geneIds"]] <- NA
         mcols(peak.gr)[["flank_gene_distances"]] <- NA
-        
+
         mcols(peak.gr)[["flank_geneIds"]][flankInfo$peakIdx] <- flankInfo$flank_geneIds
         mcols(peak.gr)[["flank_gene_distances"]][flankInfo$peakIdx] <- flankInfo$flank_gene_distances
 
@@ -238,10 +238,10 @@ annotatePeak <- function(peak,
         if(verbose)
             cat(">> assigning chromosome lengths\t\t\t",
                 format(Sys.time(), "%Y-%m-%d %X"), "\n")
-        
+
         peak.gr@seqinfo <- seqinfo(TxDb)[names(seqlengths(peak.gr))]
     }
-    
+
     if(verbose)
         cat(">> done...\t\t\t\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -263,7 +263,7 @@ annotatePeak <- function(peak,
                    level=level,
                    hasGenomicAnnotation = FALSE,
                    peakNum=peakNum
-                   )  
+                   )
     }
     return(res)
 }

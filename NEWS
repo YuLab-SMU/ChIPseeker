@@ -1,11 +1,16 @@
+CHANGES IN VERSION 1.9.8
+------------------------
+ o test ENSEMBL ID using '^ENS' instead of '^ENSG' <2016-09-20, Tue>
+   + https://github.com/GuangchuangYu/ChIPseeker/issues/41
+
 CHANGES IN VERSION 1.9.7
 ------------------------
  o unit test <2016-08-16, Tue>
- 
+
 CHANGES IN VERSION 1.9.6
 ------------------------
  o update vignette <2016-08-16, Tue>
- 
+
 CHANGES IN VERSION 1.9.5
 ------------------------
  o when TxDb doesn't have gene_id information, converting gene ID (ensembl/entrez and symbol) will be omitted instead of throw error. <2016-08-02, Tue>
@@ -16,13 +21,13 @@ CHANGES IN VERSION 1.9.5
  o fixed typo in determine gene ID type <2016-06-21, Tue>
    + https://github.com/GuangchuangYu/ChIPseeker/issues/28#issuecomment-227212519
  o move upsetplot generics to DOSE and import from DOSE to prevent function name conflict <2016-06-14, Tue>
- 
+
 CHANGES IN VERSION 1.9.4
 ------------------------
  o bug fixed <2016-06-08, Wed>
    + https://github.com/GuangchuangYu/ChIPseeker/issues/17#issuecomment-224407402
    + https://github.com/GuangchuangYu/ChIPseeker/pull/24/files
-   
+
 CHANGES IN VERSION 1.9.3
 ------------------------
  o use byte compiler <2016-05-18, Wed>
@@ -34,18 +39,18 @@ CHANGES IN VERSION 1.9.2
  o https://github.com/Bioconductor-mirror/ChIPseeker/commit/d5f16b2bc01725e30282c3acb33007ef521a514c
 
 CHANGES IN VERSION 1.9.1
------------------------- 
+------------------------
  o bug fixed in getNearestFeatureIndicesAndDistances <2016-05-11, Wed>
    + correct metadata in dummy NA feature
-   
+
 CHANGES IN VERSION 1.8.0
 ------------------------
  o BioC 3.3 released <2016-05-05, Thu>
- 
+
 CHANGES IN VERSION 1.7.15
 ------------------------
  o update GEO data <2016-03-21, Mon>
- 
+
 CHANGES IN VERSION 1.7.14
 ------------------------
  o list_to_dataframe works with data frames that have different colnames <2016-03-10, Thu>
@@ -67,7 +72,7 @@ CHANGES IN VERSION 1.7.10
 ------------------------
  o determined gene ID type if TxDb doesn't contain corresponding metadata <2016-03-01, Tue>
    + fixed https://github.com/GuangchuangYu/ChIPseeker/issues/28
- 
+
 CHANGES IN VERSION 1.7.9
 ------------------------
  o covplot support GRangesList <2016-02-24, Wed>
@@ -78,18 +83,18 @@ CHANGES IN VERSION 1.7.8
  o fixed BUG of Peaks upstream first or downstream last gene not annotated <2016-01-20, Wed>
    + contributed by Michael Kluge
    + see https://github.com/GuangchuangYu/ChIPseeker/pull/24
- 
+
 CHANGES IN VERSION 1.7.7
 ------------------------
  o bug fixed in newly introduced parameter 'overlap'. solve NA issue. <2016-01-13, Wed>
- 
+
 CHANGES IN VERSION 1.7.6
 ------------------------
  o introduce 'overlap' parameter in annotatePeak, by default overlap="TSS" and only overlap with TSS will be reported as the nearest gene.
    if overlap="all", then gene overlap with peak will be reported as nearest gene, no matter the overlap is at TSS region or not. <2016-01-12, Tue>
  o bug fixed in find overlap with peaks have strand info. <2016-01-12, Tue>
    + see https://github.com/GuangchuangYu/ChIPseeker/issues/23
- 
+
 CHANGES IN VERSION 1.7.5
 ------------------------
  o add paramters, sameStrand,ignoreOverlap, ignoreUpstream and ignoreDownstream in annotatePeak <2016-01-10, Sun>
@@ -99,17 +104,17 @@ CHANGES IN VERSION 1.7.5
 
 CHANGES IN VERSION 1.7.4
 ------------------------
- o stop if input list of csAnno object has no name attribute 
+ o stop if input list of csAnno object has no name attribute
    + see https://github.com/GuangchuangYu/ChIPseeker/issues/21
    + plotAnnoBar
    + plotDistToTSS
  o [covplot] xlim now not only restrict the window of data but also set the limit of the graphic object <2015-12-30, Wed>
    + see https://github.com/GuangchuangYu/ChIPseeker/issues/20
- 
+
 CHANGES IN VERSION 1.7.3
 ------------------------
  o fixed R check <2015-12-29, Tue>
- 
+
 CHANGES IN VERSION 1.7.2
 ------------------------
  o use geom_rect instead of geom_segment in covplot <2015-11-30, Mon>
@@ -117,7 +122,7 @@ CHANGES IN VERSION 1.7.2
  o fixed covplot to work with None RleViews of specific chromosome <2015-11-29, Sun>
  o addFlankGeneInfo now works with level="gene" <2015-11-19, Thu>
    + see https://github.com/GuangchuangYu/ChIPseeker/issues/18
- 
+
 CHANGES IN VERSION 1.7.1
 ------------------------
  o fixed extracting ID type from TxDb object, since the change of metadata(TxDb). now using grep to extract. <2015-10-27, Tue>
@@ -129,14 +134,14 @@ CHANGES IN VERSION 1.7.1
 CHANGES IN VERSION 1.7.0
 ------------------------
  o BioC 3.3 branch
- 
+
 CHANGES IN VERSION 1.5.11
 ------------------------
  o remove ellipsis parameter in enrichPeakOverlap function and extend it to support GRanges objects <2015-10-08, Thu>
     + see https://support.bioconductor.org/p/73069/
  o fixed the issue, https://github.com/GuangchuangYu/ChIPseeker/issues/13 <2015-10-05, Mon>
  o update GEO info, now contains >18,000 bed file information <2015-09-24, Thu>
- 
+
 CHANGES IN VERSION 1.5.10
 ------------------------
  o dropAnno function, eg. drop nearest gene annotation that far from TSS (>10k). <2015-09-17, Thu>
@@ -145,40 +150,40 @@ CHANGES IN VERSION 1.5.10
  o use base::subset in plotDistToTSS instead of subsetting data within geom_bar <2015-09-17, Thu>
    + see https://github.com/hadley/ggplot2/issues/1295
    + subset parameter in layer will be removed in next release of ggplot2.
- 
+
 CHANGES IN VERSION 1.5.9
 ------------------------
  o bug fixed of enrichAnnoOverlap <2015-08-26, Wed>
  o change parameter order.matrix to order.by in upsetplot to meet the change of UpSetR pkg <2015-08-26, Wed>
- 
+
 CHANGES IN VERSION 1.5.8
 ------------------------
  o better implementation of getFirstHitIndex.  <2015-07-29, Wed>
    + contributed by Herve Pages.
    + see https://support.bioconductor.org/p/70432/#70545.
- 
+
 CHANGES IN VERSION 1.5.7
 ------------------------
  o add vennpie parameter in upsetplot <2015-07-20, Mon>
  o upsetplot function for csAnno object <2015-07-20, Mon>
- 
+
 CHANGES IN VERSION 1.5.6
 ------------------------
  o update citation info <2015-07-09, Thu>
  o BED file +1 shift for BED coordinate system start at 0 <2015-07-07, Tue>
- 
+
 CHANGES IN VERSION 1.5.5
 ------------------------
  o seq2gene for linking genomic regions to genes by many-to-many mapping. <2015-06-29, Mon>
- 
+
 CHANGES IN VERSION 1.5.4
 ------------------------
  o add pseudocount in enrichPeakOverlap to prevent 0 pvalue <2015-05-22, Fri>
- 
+
 CHANGES IN VERSION 1.5.3
 ------------------------
  o convert the vignette from Rnw to Rmd format <2015-05-17, Sun>
- 
+
 CHANGES IN VERSION 1.5.1
 ------------------------
  o minor bug fixed in getChrCov <2015-04-27, Mon>
@@ -190,7 +195,7 @@ CHANGES IN VERSION 1.3.15
 CHANGES IN VERSION 1.3.14
 ------------------------
  o add pool parameter in enrichPeakOverlap <2015-03-30, Mon>
- 
+
 CHANGES IN VERSION 1.3.13
 ------------------------
  o update enrichPeakOverlap to support nShuffle = 0, which now will report only overlay with pvalue = NA <2015-03-29, Sun>
@@ -198,19 +203,19 @@ CHANGES IN VERSION 1.3.13
  o update docs <2015-03-29, Sun>
  o update plotAvgProf and plotAvgProf2 to fully supporting confidence interval,
    see https://github.com/GuangchuangYu/ChIPseeker/pull/6 <2015-03-29, Sun>
- 
+
 CHANGES IN VERSION 1.3.12
 ------------------------
  o add confidence interval for plotAvgProf, see https://github.com/GuangchuangYu/ChIPseeker/issues/3 <2015-03-26, Thu>
- 
+
 CHANGES IN VERSION 1.3.11
 ------------------------
  o add citation <2015-03-16, Mon>
- 
+
 CHANGES IN VERSION 1.3.10
 ------------------------
  o update GEO data <2015-03-03, Tue>
- 
+
 CHANGES IN VERSION 1.3.9
 ------------------------
  o add parameter *genomicAnnotationPriority* for annotatePeak function <2015-02-27, Fri>
@@ -218,22 +223,22 @@ CHANGES IN VERSION 1.3.9
 CHANGES IN VERSION 1.3.8
 ------------------------
  o add DOSE citation <2015-02-13, Fri>
- 
+
 CHANGES IN VERSION 1.3.7
 ------------------------
  o bug fixed in plotDistToTSS <2015-02-06, Fri>
- 
+
 CHANGES IN VERSION 1.3.6
 ------------------------
  o when peak is exactly located at gene end and near the end of chromosome,
-   NA will be generated and throw error when assigning downstream of gene end. 
+   NA will be generated and throw error when assigning downstream of gene end.
    This bug has been fixed <2015-02-03, Tue>
- 
+
 CHANGES IN VERSION 1.3.5
 ------------------------
  o bug fixed in getNearestFeatureIndicesAndDistances when peak in the
    very begining or end of the chromosome <2015-01-30, Fri>
- 
+
 CHANGES IN VERSION 1.3.4
 ------------------------
  o bug fixed for introducing dplyr in plotDistToTSS <2015-01-28, Wed>
@@ -241,7 +246,7 @@ CHANGES IN VERSION 1.3.4
 CHANGES IN VERSION 1.3.3
 ------------------------
  o update vignette to use BiocStyle::latex() <2015-01-26, Mon>
- 
+
 CHANGES IN VERSION 1.3.2
 ------------------------
  o fixed import issue to meet the changes of AnnotationDbi and S4Vectors <2015-01-22, Thu>
@@ -292,10 +297,10 @@ CHANGES IN VERSION 1.1.10
 
 CHANGES IN VERSION 1.1.9
 ------------------------
- o add level parameter to annotatePeak, and set it to "transcript" by default. 
-   Now annotatePeak will annotate peaks in transcript level 
+ o add level parameter to annotatePeak, and set it to "transcript" by default.
+   Now annotatePeak will annotate peaks in transcript level
    except user specify level = "gene" <2014-06-16, Mon>
- o add addFlankGeneInfo parameter to annotatePeak. 
+ o add addFlankGeneInfo parameter to annotatePeak.
    If it set to true, all features within the flankDistance will be annotated. <2014-06-16, Mon>
 
 CHANGES IN VERSION 1.1.8
@@ -331,13 +336,13 @@ CHANGES IN VERSION 1.1.5
 
 CHANGES IN VERSION 1.1.4
 ------------------------
- o in the annotation column of output of annotatePeak function, 
+ o in the annotation column of output of annotatePeak function,
 	if Exon/Intron, the output change to 'Transcript_Name/GeneID, Exon no. of total_no.' <2014-05-14, Wed>
 
 CHANGES IN VERSION 1.1.3
 ------------------------
  o bug fixed when metadata(TranscriptDb) contained NA <2014-04-30, Wed>
- o support ID type of Ensembl in annotatePeak (Entrez was supported) <2014-04-30, Wed> 
+ o support ID type of Ensembl in annotatePeak (Entrez was supported) <2014-04-30, Wed>
 
 CHANGES IN VERSION 1.1.2
 ------------------------
