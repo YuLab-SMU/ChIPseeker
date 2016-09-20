@@ -1,7 +1,7 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.9.7
+Version: 1.9.8
 Authors@R: c(person(given = "Guangchuang", family = "Yu",
 	            email = "guangchuangyu@gmail.com",
 		    role  = c("aut", "cre")),
@@ -16,7 +16,7 @@ Authors@R: c(person(given = "Guangchuang", family = "Yu",
 	            role  = "ctb"),
 	     person(given = "Thomas", family = "Schwarzl",
 	            email = "schwarzl@embl.de",
-	            role  = "ctb")		    
+	            role  = "ctb")
 	    )
 Author: Guangchuang Yu <guangchuangyu@gmail.com> with contributions from
     Yun Yan, Herve Pages, Michael Kluge and Thomas Schwarzl.
