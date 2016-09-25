@@ -20,7 +20,7 @@
 Let us know if you have published using `ChIPseeker` and your publication will be featured here.
 
 
-[![citation](https://img.shields.io/badge/cited%20by-17-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-18-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 
 <link rel='stylesheet' href=https://guangchuangyu.github.io/resume/css/morris.css>
 <script src='https://guangchuangyu.github.io/resume/css/jquery.min.js' type='text/javascript'></script>
@@ -38,10 +38,10 @@ Let us know if you have published using `ChIPseeker` and your publication will b
   }  
   </style>
 
-<div id = 'chart851914a32e6f' class = 'rChart morris'></div>
+<div id = 'chart3af26a9ab1d3' class = 'rChart morris'></div>
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart851914a32e6f",
+ "element": "chart3af26a9ab1d3",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -56,11 +56,11 @@ Let us know if you have published using `ChIPseeker` and your publication will b
 },
 {
  "year": 2016,
-"cites":             13,
+"cites":             14,
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart851914a32e6f",
+"id": "chart3af26a9ab1d3",
 "labels": "cites" 
 },
       chartType = "Bar"
@@ -75,6 +75,7 @@ Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://s
 
 ## <i class="fa fa-calendar"></i> 2016
 
+[Dpy30 is critical for maintaining the identity and function of adult hematopoietic stem cells](http://jem.rupress.org/content/early/2016/09/14/jem.20160185.full). ***The Journal of Experimental Medicine***. 2016.
 
 [Comprehensive genome and epigenome characterization of CHO cells in response to evolutionary pressures and over time](http://dx.doi.org/10.1002/bit.25990). **Biotechnology and Bioengineering** Apr. 2016 
 

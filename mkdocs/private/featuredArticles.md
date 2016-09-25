@@ -19,6 +19,7 @@ Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://s
 
 ## <i class="fa fa-calendar"></i> 2016
 
+[Dpy30 is critical for maintaining the identity and function of adult hematopoietic stem cells](http://jem.rupress.org/content/early/2016/09/14/jem.20160185.full). ***The Journal of Experimental Medicine***. 2016.
 
 [Comprehensive genome and epigenome characterization of CHO cells in response to evolutionary pressures and over time](http://dx.doi.org/10.1002/bit.25990). **Biotechnology and Bioengineering** Apr. 2016 
 
