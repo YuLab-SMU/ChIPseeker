@@ -38,10 +38,10 @@ Let us know if you have published using `ChIPseeker` and your publication will b
   }  
   </style>
 
-<div id = 'chart189d432b6117' class = 'rChart morris'></div>
+<div id = 'chart235c9cc8c3a' class = 'rChart morris'></div>
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart189d432b6117",
+ "element": "chart235c9cc8c3a",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -60,7 +60,7 @@ Let us know if you have published using `ChIPseeker` and your publication will b
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart189d432b6117",
+"id": "chart235c9cc8c3a",
 "labels": "cites" 
 },
       chartType = "Bar"
