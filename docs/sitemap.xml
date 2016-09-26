@@ -4,7 +4,7 @@
     
     <url>
      <loc>https://guangchuangyu.github.io/ChIPseeker/</loc>
-     <lastmod>2016-09-25</lastmod>
+     <lastmod>2016-09-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,7 +12,7 @@
     
     <url>
      <loc>https://guangchuangyu.github.io/ChIPseeker/documentation/</loc>
-     <lastmod>2016-09-25</lastmod>
+     <lastmod>2016-09-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -20,9 +20,49 @@
     
     <url>
      <loc>https://guangchuangyu.github.io/ChIPseeker/featuredArticles/</loc>
-     <lastmod>2016-09-25</lastmod>
+     <lastmod>2016-09-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
+    
+
+    
+        
+    <url>
+     <loc>https://guangchuangyu.github.io/ChIPseeker/../mysoftware/ChIPseeker/</loc>
+     <lastmod>2016-09-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://guangchuangyu.github.io/ChIPseeker/../mysoftware/clusterProfiler/</loc>
+     <lastmod>2016-09-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://guangchuangyu.github.io/ChIPseeker/../mysoftware/DOSE/</loc>
+     <lastmod>2016-09-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://guangchuangyu.github.io/ChIPseeker/../mysoftware/ggtree/</loc>
+     <lastmod>2016-09-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://guangchuangyu.github.io/ChIPseeker/../mysoftware/GOSemSim/</loc>
+     <lastmod>2016-09-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://guangchuangyu.github.io/ChIPseeker/../mysoftware/ReactomePA/</loc>
+     <lastmod>2016-09-26</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
     
 
 </urlset>
