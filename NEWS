@@ -1,5 +1,6 @@
 CHANGES IN VERSION 1.9.8
 ------------------------
+ o plotAvgProf/plotAvgProf2 order of panel by names of input tagMatrix List <2016-09-25, Sun>
  o test ENSEMBL ID using '^ENS' instead of '^ENSG' <2016-09-20, Tue>
    + https://github.com/GuangchuangYu/ChIPseeker/issues/41
 

@@ -296,6 +296,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
     if ( listFlag ) {
         tagCount <- lapply(tagMatrix, function(x) getTagCount(x, xlim = xlim, conf = conf, ...))
         tagCount <- list_to_dataframe(tagCount)
+        tagCount$.id <- factor(tagCount$.id, levels=names(tagMatrix))
         p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
         if (!(is.na(conf))) {
             p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper, fill = .id), 
