@@ -36,6 +36,7 @@
 
 + [ChIPseeker for ChIP peak annotation](https://guangchuangyu.github.io/2014/04/chipseeker-for-chip-peak-annotation)
 + [multiple annotation in ChIPseeker](https://guangchuangyu.github.io/2014/10/multiple-annotation-in-chipseeker)
++ [annotate lncRNA](https://www.biostars.org/p/215069) <i class="fa fa-arrow-left"></i> Biostars
 
 ### <i class="fa fa-angle-double-right"></i> Visualization
 
