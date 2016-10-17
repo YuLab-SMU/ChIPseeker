@@ -28,7 +28,7 @@ __Yu G__, Wang LG and He QY<sup>*</sup>. ChIPseeker: an R/Bioconductor package f
 
 ## <i class="fa fa-pencil"></i> Featured Articles
 
-<img src="featured_img/heatmap2016.gif" width="650">
+<img src="https://guangchuangyu.github.io/featured_img/ChIPseeker/heatmap2016.gif" width="650">
 
 
 <i class="fa fa-hand-o-right"></i> Find out more on <i class="fa fa-pencil"></i> [Featured Articles](https://guangchuangyu.github.io/ChIPseeker/featuredArticles/).

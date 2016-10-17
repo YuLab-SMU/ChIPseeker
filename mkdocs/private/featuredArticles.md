@@ -21,26 +21,26 @@ Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://s
 
 [Dpy30 is critical for maintaining the identity and function of adult hematopoietic stem cells](http://jem.rupress.org/content/early/2016/09/14/jem.20160185.full). ***The Journal of Experimental Medicine***. 2016.
 
-[Comprehensive genome and epigenome characterization of CHO cells in response to evolutionary pressures and over time](http://dx.doi.org/10.1002/bit.25990). **Biotechnology and Bioengineering** Apr. 2016 
+[Comprehensive genome and epigenome characterization of CHO cells in response to evolutionary pressures and over time](http://dx.doi.org/10.1002/bit.25990). **Biotechnology and Bioengineering** Apr. 2016
 
-[A comprehensive comparison of tools for differential ChIP-seq analysis](http://dx.doi.org/10.1093/bib/bbv110). **_Briefings in Bioinformatics_** Jan. 2016 
+[A comprehensive comparison of tools for differential ChIP-seq analysis](http://dx.doi.org/10.1093/bib/bbv110). **_Briefings in Bioinformatics_** Jan. 2016
 
-[*metagene* Profiles Analyses Reveal Regulatory Element’s Factor-Specific Recruitment Patterns](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004751). **PLoS Comput Biol**.  2016, 12(8): e1004751. 
+[*metagene* Profiles Analyses Reveal Regulatory Element’s Factor-Specific Recruitment Patterns](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004751). **PLoS Comput Biol**.  2016, 12(8): e1004751.
 
-![](featured_img/journal.pcbi.1004751.g003.PNG)
+![](https://guangchuangyu.github.io/featured_img/ChIPseeker/journal.pcbi.1004751.g003.PNG)
 
 
 [Mouse MORC3 is a GHKL ATPase that localizes to H3K4me3 marked chromatin](http://dx.doi.org/10.1073/pnas.1609709113). **PNAS** Aug, 2016
 
-![](featured_img/F9.large.jpg)
+![](https://guangchuangyu.github.io/featured_img/ChIPseeker/F9.large.jpg)
 
 
 [TCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages](http://f1000research.com/articles/5-1542/v1). **F1000Research**. 2016, 5:1542.
 
-![](featured_img/heatmap2016.gif)
+![](https://guangchuangyu.github.io/featured_img/ChIPseeker/heatmap2016.gif)
 
 
-[Cistrome-based Cooperation between Airway Epithelial Glucocorticoid Receptor and NF-κB Orchestrates Anti-inflammatory Effects](http://dx.doi.org/10.1074/jbc.M116.721217). **The Journal of Biological Chemistry** 2016, 291:12673-12687. 
+[Cistrome-based Cooperation between Airway Epithelial Glucocorticoid Receptor and NF-κB Orchestrates Anti-inflammatory Effects](http://dx.doi.org/10.1074/jbc.M116.721217). **The Journal of Biological Chemistry** 2016, 291:12673-12687.
 
 [Obesity and Bariatric Surgery Drive Epigenetic Variation of Spermatozoa in Humans](http://dx.doi.org/10.1016/j.cmet.2015.11.004). **Cell Metabolism** 2016, 23(2):369-378.
 
