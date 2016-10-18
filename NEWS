@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.10.0
+------------------------
+ o BioC 3.4 released <2016-10-18, Tue>
+
 CHANGES IN VERSION 1.9.8
 ------------------------
  o plotAvgProf/plotAvgProf2 order of panel by names of input tagMatrix List <2016-09-25, Sun>
