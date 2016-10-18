@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="https://guangchuangyu.github.io/css/font-awesome.min.css">
 
 [![releaseVersion](https://img.shields.io/badge/release%20version-1.8.9-blue.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker)
-[![develVersion](https://img.shields.io/badge/devel%20version-1.9.8-blue.svg?style=flat)](https://github.com/GuangchuangYu/ChIPseeker)
+[![develVersion](https://img.shields.io/badge/devel%20version-1.11.0-blue.svg?style=flat)](https://github.com/GuangchuangYu/ChIPseeker)
 [![total](https://img.shields.io/badge/downloads-17954/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 [![month](https://img.shields.io/badge/downloads-555/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 
