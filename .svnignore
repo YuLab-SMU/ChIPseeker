@@ -1,7 +1,5 @@
 .git
 *.Rhistory
-Makefile
-README.Rmd
 .travis.yml
 appveyor.yml
 docs

@@ -28,6 +28,7 @@
 + [BioC 3.1: NEWS of my BioC packages](https://guangchuangyu.github.io/2015/04/news-of-my-bioc-packages)
 + [BioC 3.2: NEWS of my BioC packages](https://guangchuangyu.github.io/2015/10/news-of-my-bioc-packages)
 + [BioC 3.3: NEWS of my BioC packages](https://guangchuangyu.github.io/2016/05/news-of-my-bioc-packages)
++ [BioC 3.4: NEWS of my BioC packages](https://guangchuangyu.github.io/2016/10/bioc-34-news-of-my-bioc-packages)
 + [parsing BED coordinates](https://guangchuangyu.github.io/2015/08/parsing-bed-coordinates)
 + [ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization](https://guangchuangyu.github.io/2015/07/chipseeker-an-r/bioconductor-package-for-chip-peak-annotation-comparison-and-visualization)
 
