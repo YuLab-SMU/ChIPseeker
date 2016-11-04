@@ -24,7 +24,7 @@
 
 + [ChIPseeker for ChIP peak annotation](https://guangchuangyu.github.io/2014/04/chipseeker-for-chip-peak-annotation)
 + [multiple annotation in ChIPseeker](https://guangchuangyu.github.io/2014/10/multiple-annotation-in-chipseeker)
-+ [annotate lncRNA](https://www.biostars.org/p/215069) <i class="fa fa-arrow-left"></i> Biostars
+
 
 ### <i class="fa fa-angle-double-right"></i> Visualization
 
@@ -41,6 +41,11 @@
 + [ChIPseq data mining with ChIPseeker](https://guangchuangyu.github.io/2015/10/chipseq-data-mining-with-chipseeker)
 
 <i class="fa fa-hand-o-right"></i> Find out more on <https://guangchuangyu.github.io/tags/chipseeker/>.
+
+## <i class="fa fa-support"></i> Q&A
+
++ [how to read multiple peak files](https://www.biostars.org/p/214557/#214623)
++ [annotate lncRNA](https://www.biostars.org/p/215069)
 
 
 ## <i class="fa fa-gift"></i> Workflow
