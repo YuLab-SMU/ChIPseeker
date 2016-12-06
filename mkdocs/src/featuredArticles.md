@@ -19,6 +19,13 @@ Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://s
 
 ## <i class="fa fa-calendar"></i> 2016
 
+[Satb2 determines miRNA expression and long-term memory in the adult central nervous system](https://elifesciences.org/content/5/e17361). ***eLife***. 2016.
+
+[m<sup>6</sup>A modulates neuronal functions and sex determination in Drosophila](http://www.nature.com/nature/journal/vaop/ncurrent/full/nature20568.html). ***Nature***. 2016
+
+[Combining ATAC-seq with nuclei sorting for discovery of cis-regulatory regions in plant genomes](http://dx.doi.org/10.1093/nar/gkw1179). ***Necleic
+Acids Research***. 2016
+
 [Regulation of transcriptional elongation in pluripotency and cell differentiation by the PHD-finger protein Phf5a](http://www.nature.com/ncb/journal/vaop/ncurrent/full/ncb3424.html). ***Nature Cell Biology***. 2016.
 
 [Dpy30 is critical for maintaining the identity and function of adult hematopoietic stem cells](http://jem.rupress.org/content/early/2016/09/14/jem.20160185.full). ***The Journal of Experimental Medicine***. 2016.
