@@ -5,7 +5,7 @@
     if (!exists("ChIPseekerEnv", envir=.GlobalEnv)) {
         assign("ChIPseekerEnv", new.env(), envir = envir)
     }
-    
+
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
     if (!exists("TXDB", envir=ChIPseekerEnv, inherits=FALSE)) {
         ## first run
@@ -13,7 +13,7 @@
     } else {
         TXDB <- get("TXDB", envir=ChIPseekerEnv)
         m1 <- tryCatch(unlist(metadata(TXDB)), error=function(e) NULL)
-        
+
         m2 <- unlist(metadata(TxDb))
 
         if (!is.null(m1)) {
@@ -28,7 +28,7 @@
             assign("TXDB", TxDb, envir=ChIPseekerEnv)
         }
     }
-    
+
 }
 
 
@@ -62,20 +62,20 @@ getCols <- function(n) {
              "#fb8072", "#80b1d3", "#fdb462",
              "#b3de69", "#fccde5", "#d9d9d9",
              "#bc80bd", "#ccebc5", "#ffed6f")
-             
+
     col2 <- c("#1f78b4", "#ffff33", "#c2a5cf",
              "#ff7f00", "#810f7c", "#a6cee3",
              "#006d2c", "#4d4d4d", "#8c510a",
              "#d73027", "#78c679", "#7f0000",
              "#41b6c4", "#e7298a", "#54278f")
-    
+
     col3 <- c("#a6cee3", "#1f78b4", "#b2df8a",
               "#33a02c", "#fb9a99", "#e31a1c",
               "#fdbf6f", "#ff7f00", "#cab2d6",
               "#6a3d9a", "#ffff99", "#b15928")
-    
+
     ## colorRampPalette(brewer.pal(12, "Set3"))(n)
-    colorRampPalette(col3)(n)  
+    colorRampPalette(col3)(n)
 }
 
 
@@ -109,7 +109,7 @@ getTagCiMatrix <- function(tagMatrix, conf = 0.95, resample=500){
     cat(">> Running bootstrapping for tag matrix...\t\t",
         format(Sys.time(), "%Y-%m-%d %X"), "\n")
     tagMxBootCi <- sapply(seq_len(trackLen), function(i) {
-                        bootCiToken <- boot.ci(tagMxBoot, type = "perc", index = i) 
+                        bootCiToken <- boot.ci(tagMxBoot, type = "perc", index = i)
                         ## parse boot.ci results
                         return(parseBootCiPerc(bootCiToken))
                         }
@@ -146,7 +146,7 @@ TXID2EG <- function(txid, geneIdOnly=FALSE) {
 ##' @importFrom GenomicFeatures transcripts
 TXID2TXEG <- function(txid) {
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
-    
+
     if (exists("txid2geneid", envir=ChIPseekerEnv, inherits=FALSE)) {
         txid2geneid <- get("txid2geneid", envir=ChIPseekerEnv)
     } else {
@@ -158,7 +158,7 @@ TXID2TXEG <- function(txid) {
                              mcols(txidinfo)[["gene_id"]],
                              sep="/")
         txid2geneid <- sub("/NA", "", txid2geneid)
-        
+
         names(txid2geneid) <- mcols(txidinfo)[["tx_id"]]
         assign("txid2geneid", txid2geneid, envir=ChIPseekerEnv)
     }
@@ -167,7 +167,7 @@ TXID2TXEG <- function(txid) {
 
 TXID2EGID <- function(txid) {
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
-    
+
     if (exists("txid2eg", envir=ChIPseekerEnv, inherits=FALSE)) {
         txid2geneid <- get("txid2eg", envir=ChIPseekerEnv)
     } else {
@@ -176,7 +176,7 @@ TXID2EGID <- function(txid) {
         idx <- which(sapply(txidinfo$gene_id, length) == 0)
         txidinfo[idx,]$gene_id <- txidinfo[idx,]$tx_name
         txid2geneid <- as.character(mcols(txidinfo)[["gene_id"]])
-                
+
         names(txid2geneid) <- mcols(txidinfo)[["tx_id"]]
         assign("txid2eg", txid2geneid, envir=ChIPseekerEnv)
     }
@@ -192,8 +192,8 @@ getFirstHitIndex <- function(x) {
 
 ##' calculate the overlap matrix, which is useful for vennplot
 ##'
-##' 
-##' @title overlap 
+##'
+##' @title overlap
 ##' @param Sets a list of objects
 ##' @return data.frame
 ##' @importFrom gtools permutations
@@ -204,7 +204,7 @@ overlap <- function(Sets) {
     ## it call the getIntersectLength function to calculate
     ## the number of the intersection.
     ## if it fail, take a look at the object type were supported by getIntersectLength function.
-    
+
     nn <- names(Sets)
     w <- t(apply(permutations(2,length(Sets),0:1, repeats.allowed=TRUE), 1 , rev))
     rs <- rowSums(w)
@@ -224,7 +224,7 @@ overlap <- function(Sets) {
                 ww = w[ii,]
                 jj <- which(ww == 0)
                 pp <- permutations(2, length(jj), 0:1, repeats.allowed=TRUE)
-                
+
                 for (aa in 2:nrow(pp)) {
                     ## 1st row is all 0, abondoned
                     xx <- jj[as.logical(pp[aa,])]
@@ -250,11 +250,11 @@ getIntersectLength <- function(Sets, idx) {
     ## and easy to extend to other objects.
     ss= Sets[idx]
     ol <- ss[[1]]
-    
+
     if (sum(idx) == 1) {
         return(length(ol))
     }
-    
+
     for (j in 2:length(ss)) {
         ol <-  intersect(ol, ss[[j]])
     }
@@ -292,7 +292,7 @@ getGene <- function(TxDb, by="gene") {
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
 
     by <- match.arg(by, c("gene", "transcript"))
-    
+
     if (by == "gene") {
         if ( exists("features", envir=ChIPseekerEnv, inherits=FALSE) ) {
             features <- get("features", envir=ChIPseekerEnv)
@@ -309,15 +309,15 @@ getGene <- function(TxDb, by="gene") {
             assign("Transcripts", features, envir=ChIPseekerEnv)
         }
     }
-    
+
     return(features)
 }
 
 
 ##' get filenames of sample files
 ##'
-##' 
-##' @title getSampleFiles 
+##'
+##' @title getSampleFiles
 ##' @return list of file names
 ##' @export
 ##' @author G Yu
@@ -387,11 +387,11 @@ IDType <- function(TxDb) {
     ## IDType <- metadata(TxDb)[8,2]
     ##
     ## update: 2015-10-27
-    ## now IDType change from metadata(TxDb)[8,2] to metadata(TxDb)[9,2] 
+    ## now IDType change from metadata(TxDb)[8,2] to metadata(TxDb)[9,2]
     ## it may change in future too
     ##
     ## it's safe to extract via grep
-    
+
     md <- metadata(TxDb)
     md[grep("Type of Gene ID", md[,1]), 2]
 }
@@ -416,6 +416,9 @@ list_to_dataframe <- function(dataList) {
     do.call('rbind', dataList2)
 }
 
+##' @importFrom GenomicRanges GRangesList
+##' @export
+GenomicRanges::GRangesList
 
 ## . function was from plyr package
 ##' capture name of variable

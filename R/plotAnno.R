@@ -18,6 +18,7 @@
 ##' @importFrom ggplot2 xlab
 ##' @importFrom ggplot2 ylab
 ##' @importFrom ggplot2 ggtitle
+##' @importFrom ggplot2 guide_legend
 ##' @seealso \code{\link{annotatePeak}} \code{\link{plotAnnoPie}}
 ##' @author Guangchuang Yu \url{http://ygc.name}
 plotAnnoBar.data.frame <- function(anno.df,
@@ -26,27 +27,29 @@ plotAnnoBar.data.frame <- function(anno.df,
                                    title="Feature Distribution",
                                    categoryColumn) {
 
-    
+
+    anno.df$Feature <- factor(anno.df$Feature, levels = rev(levels(anno.df$Feature)))
+
     p <- ggplot(anno.df, aes_string(x = categoryColumn,
                                     fill = "Feature",
                                     y = "Frequency"))
-    
+
     p <- p + geom_bar(stat="identity") + coord_flip() + theme_bw()
     p <- p + ylab(ylab) + xlab(xlab) + ggtitle(title)
 
     if (categoryColumn == 1) {
         p <- p + scale_x_continuous(breaks=NULL)
-        p <- p+scale_fill_manual(values=getCols(nrow(anno.df)))
+        p <- p+scale_fill_manual(values=rev(getCols(nrow(anno.df))), guide=guide_legend(reverse=TRUE))
     } else {
-        p <- p+scale_fill_manual(values=getCols(length(unique(anno.df$Feature))))
+        p <- p+scale_fill_manual(values=rev(getCols(length(unique(anno.df$Feature)))), guide=guide_legend(reverse=TRUE))
     }
-    
+
     return(p)
 }
 
 ##' pieplot from peak genomic annotation
 ##'
-##' 
+##'
 ##' @title plotAnnoPie
 ##' @param x csAnno object
 ##' @param ndigit number of digit to round
@@ -74,15 +77,15 @@ plotAnnoPie.csAnno <- function(x,
                         legend.position="rightside",
                         pie3D=FALSE,
                         ...){
-    
+
     anno.df <- getAnnoStat(x)
     if (is.na(col)) {
         col <- getCols(nrow(anno.df))
     }
-    
+
     if (pie3D)
         annoPie3D(anno.df, ndigit=ndigit, cex=cex, col=col, ...)
-    
+
     annoPie(anno.df, ndigit=ndigit, cex=cex, col=col, legend.position=legend.position, ...)
  }
 
@@ -101,7 +104,7 @@ annoPie <- function(anno.df, ndigit=2, cex=0.9, col=NA, legend.position, ...) {
         labels=paste(anno.df$Feature, " (",
             round(anno.df$Frequency/sum(anno.df$Frequency)*100, ndigit),
             "%)", sep="")
-    
+
         par(mai = c(0,0,0,0))
         layout(matrix(c(1,2), ncol=2), widths=c(0.6,0.4))
         pie(anno.df$Frequency, labels=NA, cex=cex, col=col, ...)
@@ -129,7 +132,7 @@ annoPie3D <- function(anno.df,
                       ndigit=2,
                       cex=1,
                       ...){
-                  
+
     ## anno.df <- getGenomicAnnoStat(peakAnno)
 
     pkg <- "plotrix"
@@ -158,10 +161,10 @@ getGenomicAnnoStat <- function(peakAnno) {
     anno[grep("Exon \\(", anno)] <- "Other Exon"
     anno[grep("Intron \\(", anno)] <- "Other Intron"
     anno[grep("Downstream", anno)] <- "Downstream (<=3kb)"
-    
+
     ## count frequency
     anno.table <- table(anno)
-    
+
     ## calculate ratio
     anno.ratio <- anno.table/ sum(anno.table) * 100
     anno.df <- as.data.frame(anno.ratio)
@@ -184,7 +187,7 @@ getGenomicAnnoStat <- function(peakAnno) {
         promoter <- sort(as.character(anno.df$Feature[promoter.idx]))
         lvs <- c(promoter, lvs)
     }
-    
+
     anno.df$Feature <- factor(anno.df$Feature, levels=lvs[lvs %in% anno.df$Feature])
     anno.df <- anno.df[order(anno.df$Feature),]
     return(anno.df)
