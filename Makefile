@@ -26,6 +26,10 @@ install:
 
 check: build
 	cd ..;\
+	Rscript -e 'rcmdcheck::rcmdcheck("$(PKGNAME)_$(PKGVERS).tar.gz")'
+
+check2: build
+	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz
 
 bioccheck:
@@ -43,7 +47,8 @@ mkdocs: mdfiles
 	mkdocs build;\
 	cd ../docs;\
 	rm -rf fonts;\
-	rm -rf css/font-awesome*
+	rm -rf css/font-awesome*;\
+	Rscript -e 'library(ypages); add_biobabble("index.html")'
 
 mdfiles:
 	cd mkdocs;\

@@ -1,7 +1,7 @@
 
 ##' plot feature distribution based on the distances to the TSS
 ##'
-##' 
+##'
 ##' @title plotDistToTSS.data.frame
 ##' @param peakDist peak annotation
 ##' @param distanceColumn column name of the distance from peak to nearest gene
@@ -40,7 +40,7 @@
 ##' @seealso \code{\link{annotatePeak}}
 ##' @author Guangchuang Yu \url{http://ygc.name}
 plotDistToTSS.data.frame <- function(peakDist,
-                                     distanceColumn="distanceToTSS", 
+                                     distanceColumn="distanceToTSS",
                                      xlab="",
                                      ylab="Binding sites (%) (5'->3')",
                                      title="Distribution of transcription factor-binding loci relative to TSS",
@@ -68,8 +68,8 @@ plotDistToTSS.data.frame <- function(peakDist,
     ## count frequencies
     if (categoryColumn == 1) {
         peakDist %<>% group_by(Feature, sign) %>%
-            summarise(freq = length(Feature)) 
-        
+            summarise(freq = length(Feature))
+
         peakDist$freq = peakDist$freq/sum(peakDist$freq)
         peakDist$freq = peakDist$freq * 100
     } else {
@@ -85,13 +85,13 @@ plotDistToTSS.data.frame <- function(peakDist,
         zeroDist$sign <- -1
         peakDist[peakDist$sign == 0,] <- zeroDist
         zeroDist$sign <- 1
-        peakDist <- rbind(peakDist, zeroDist)        
+        peakDist <- rbind(peakDist, zeroDist)
     }
-    
+
     if (categoryColumn == 1) {
         peakDist %<>% group_by(Feature, sign) %>%
             summarise(freq = sum(freq))
-        
+
         totalFreq <- peakDist %>% group_by(sign) %>%
             summarise(total = sum(freq))
     } else {
@@ -100,7 +100,7 @@ plotDistToTSS.data.frame <- function(peakDist,
         totalFreq <- peakDist %>% group_by(.id, sign) %>%
             summarise(total = sum(freq))
     }
-    
+
 
     ## preparing ylim and y tick labels
     ds = max(totalFreq$total[totalFreq$sign == 1])
@@ -110,22 +110,23 @@ plotDistToTSS.data.frame <- function(peakDist,
     ybreaks <- seq(-uslim, dslim, by=10)
     ylbs <- abs(ybreaks)
     ylbs[ylbs == 0] <- "TSS"
-    
+
+    peakDist$Feature <- factor(peakDist$Feature, levels=rev(levels(peakDist$Feature)))
     if (categoryColumn == 1) {
         p <- ggplot(peakDist, aes(x=1, fill=Feature))
     } else {
         p <- ggplot(peakDist, aes_string(x=categoryColumn, fill="Feature"))
     }
-    
-    p <- p + geom_bar(data=subset(peakDist, sign==1), aes(y=freq), stat="identity") + 
+
+    p <- p + geom_bar(data=subset(peakDist, sign==1), aes(y=freq), stat="identity") +
         geom_bar(data=subset(peakDist, sign==-1), aes(y=-freq), stat="identity")
-    
+
     p <- p + geom_hline(yintercept = 0, colour = "black") +
         coord_flip() + theme_bw() +
             scale_y_continuous(breaks=ybreaks,labels=ylbs)
-    
-    p <- p + ylab(ylab) + xlab(xlab) + ggtitle(title) 
-    
+
+    p <- p + ylab(ylab) + xlab(xlab) + ggtitle(title)
+
     if (categoryColumn == 1) {
         p <- p + scale_x_continuous(breaks=NULL)
     }
@@ -133,8 +134,8 @@ plotDistToTSS.data.frame <- function(peakDist,
     cols <- c("#9ecae1", "#3182bd", "#C7A76C", "#86B875", "#39BEB1", "#CD99D8")
     ## p <- p + scale_fill_hue("Feature", breaks=lbs, labels=lbs)
     ## p <- p + scale_fill_manual(values=getCols(length(lbs)), breaks=lbs, labels=lbs)
-    p <- p + scale_fill_manual(values=cols, breaks=lbs, labels=lbs)
-    
+    p <- p + scale_fill_manual(values=rev(cols), breaks=rev(lbs), labels=rev(lbs), guide=guide_legend(reverse=TRUE))
+
     return(p)
 }
 
