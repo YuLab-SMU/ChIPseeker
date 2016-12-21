@@ -1,5 +1,6 @@
 CHANGES IN VERSION 1.11.2
 ------------------------
+ o optimize getGeneAnno <2016-12-21, Wed>
  o change plotAnnoBar and plotDistToTSS according to stacking bar order change in ggplot2 (v2.2.0) <2016-12-16, Fri>
    + https://github.com/GuangchuangYu/ChIPseeker/issues/47
    + https://blog.rstudio.org/2016/11/14/ggplot2-2-2-0/
