@@ -1,8 +1,8 @@
 
 ##' get gene annotation, symbol, gene name etc.
 ##'
-##' 
-##' @title getGeneAnno 
+##'
+##' @title getGeneAnno
 ##' @param annoDb annotation package
 ##' @param geneID query geneID
 ##' @param type gene ID type
@@ -13,7 +13,7 @@ getGeneAnno <- function(annoDb, geneID, type){
     kk <- unlist(geneID)
     require(annoDb, character.only = TRUE)
     annoDb <- eval(parse(text=annoDb))
-    
+
     if (type == "Entrez Gene ID") {
         kt <- "ENTREZID"
     } else if (type =="Ensembl gene ID" || type == "Ensembl Gene ID") {
@@ -27,7 +27,7 @@ getGeneAnno <- function(annoDb, geneID, type){
     kk <- gsub("\\.\\d+$", "", kk)
     ann <- tryCatch(
         suppressWarnings(select(annoDb,
-                                keys=kk[i],
+                                keys=unique(kk[i]),
                                 keytype=kt,
                                 columns=c("ENTREZID", "ENSEMBL", "SYMBOL", "GENENAME"))),
         error = function(e) NULL)
@@ -39,11 +39,14 @@ getGeneAnno <- function(annoDb, geneID, type){
     idx <- getFirstHitIndex(ann[,kt])
     ann <- ann[idx,]
 
-    idx <- unlist(sapply(kk, function(x) which(x==ann[,kt])))
+    ## idx <- unlist(sapply(kk, function(x) which(x==ann[,kt])))
+    ## res <- matrix(NA, ncol=ncol(ann), nrow=length(kk)) %>% as.data.frame
+    ## colnames(res) <- colnames(ann)
+    ## res[i,] <- ann[idx,]
 
-    res <- matrix(NA, ncol=ncol(ann), nrow=length(kk)) %>% as.data.frame
-    colnames(res) <- colnames(ann)
-    res[i,] <- ann[idx,]
+    rownames(ann) <- ann[, kt]
+    res <- ann[as.character(kk),]
+
     return(res)
 }
 
