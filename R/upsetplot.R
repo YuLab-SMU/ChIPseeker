@@ -31,6 +31,7 @@ upsetplot.csAnno <- function(x, sets=NULL, order.by = "freq", sets.bar.color=NUL
 
     if (vennpie) {
         plot.new()
+        
         # grid.rect(gp = gpar(fill="white"))
         upset(y, sets=sets, sets.bar.color=sets.bar.color,
               order.by = order.by, ...)

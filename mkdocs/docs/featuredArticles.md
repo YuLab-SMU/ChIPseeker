@@ -20,7 +20,7 @@
 [Let us know](https://github.com/GuangchuangYu/featured_img) if you have published using `ChIPseeker` and your publication will be featured here.
 
 
-[![citation](https://img.shields.io/badge/cited%20by-29-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-35-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 
 <link rel='stylesheet' href=https://guangchuangyu.github.io/resume/css/morris.css>
 <script src='https://guangchuangyu.github.io/resume/css/jquery.min.js' type='text/javascript'></script>
@@ -38,10 +38,10 @@
   }  
   </style>
 
-<div id = 'chart4e25441f6211' class = 'rChart morris'></div>
+<div id = 'chart2dde16b807c1' class = 'rChart morris'></div>
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart4e25441f6211",
+ "element": "chart2dde16b807c1",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -51,16 +51,21 @@
 "data": [
  {
  "year": 2015,
-"cites":              4,
+"cites":              5,
 "pubid": "9pM33mqn1YgC" 
 },
 {
  "year": 2016,
-"cites":             25,
+"cites":             28,
+"pubid": "9pM33mqn1YgC" 
+},
+{
+ "year": 2017,
+"cites":              2,
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart4e25441f6211",
+"id": "chart2dde16b807c1",
 "labels": "cites" 
 },
       chartType = "Bar"
@@ -68,27 +73,27 @@
 </script>
 
 
-
-
 Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488).
 
+## <i class="fa fa-calendar"></i> 2017
+
+[Identification of quiescent and spatially restricted mammary stem cells that are hormone responsive](http://www.nature.com/ncb/journal/vaop/ncurrent/full/ncb3471.html). ***Nature Cell Biology***. 2017.
 
 ## <i class="fa fa-calendar"></i> 2016
 
-[Satb2 determines miRNA expression and long-term memory in the adult central nervous system](https://elifesciences.org/content/5/e17361). ***eLife***. 2016.
-
-[m<sup>6</sup>A modulates neuronal functions and sex determination in Drosophila](http://www.nature.com/nature/journal/vaop/ncurrent/full/nature20568.html). ***Nature***. 2016
-
-[Combining ATAC-seq with nuclei sorting for discovery of cis-regulatory regions in plant genomes](http://dx.doi.org/10.1093/nar/gkw1179). ***Necleic
-Acids Research***. 2016
-
-[Regulation of transcriptional elongation in pluripotency and cell differentiation by the PHD-finger protein Phf5a](http://www.nature.com/ncb/journal/vaop/ncurrent/full/ncb3424.html). ***Nature Cell Biology***. 2016.
-
 [Dpy30 is critical for maintaining the identity and function of adult hematopoietic stem cells](http://jem.rupress.org/content/early/2016/09/14/jem.20160185.full). ***The Journal of Experimental Medicine***. 2016.
 
-[Comprehensive genome and epigenome characterization of CHO cells in response to evolutionary pressures and over time](http://dx.doi.org/10.1002/bit.25990). **Biotechnology and Bioengineering** Apr. 2016
+[Combining ATAC-seq with nuclei sorting for discovery of cis-regulatory regions in plant genomes](http://dx.doi.org/10.1093/nar/gkw1179). ***Necleic Acids Research***. 2016
 
-[A comprehensive comparison of tools for differential ChIP-seq analysis](http://dx.doi.org/10.1093/bib/bbv110). **_Briefings in Bioinformatics_** Jan. 2016
+[Satb2 determines miRNA expression and long-term memory in the adult central nervous system](https://elifesciences.org/content/5/e17361). ***eLife***. 2016, 5:e17361
+
+[m<sup>6</sup>A modulates neuronal functions and sex determination in Drosophila](http://www.nature.com/nature/journal/vaop/ncurrent/full/nature20568.html). ***Nature***. 2016, 540:242–247.
+
+[Regulation of transcriptional elongation in pluripotency and cell differentiation by the PHD-finger protein Phf5a](http://www.nature.com/ncb/journal/vaop/ncurrent/full/ncb3424.html). ***Nature Cell Biology***. 2016, 18(11):1127–1138
+
+[Comprehensive genome and epigenome characterization of CHO cells in response to evolutionary pressures and over time](http://dx.doi.org/10.1002/bit.25990). **Biotechnology and Bioengineering**. 2016, 113(10):2241-2253.
+
+[A comprehensive comparison of tools for differential ChIP-seq analysis](http://dx.doi.org/10.1093/bib/bbv110). **_Briefings in Bioinformatics_**. 2016, 17(6): 953-966.
 
 [*metagene* Profiles Analyses Reveal Regulatory Element’s Factor-Specific Recruitment Patterns](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004751). **PLoS Comput Biol**.  2016, 12(8): e1004751.
 
