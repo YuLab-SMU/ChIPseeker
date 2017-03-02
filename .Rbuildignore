@@ -9,3 +9,4 @@ appveyor.yml
 GEODATA
 docs
 mkdocs
+.github
