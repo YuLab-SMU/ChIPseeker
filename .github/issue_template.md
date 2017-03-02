@@ -2,7 +2,7 @@
 
 + [ ] Have you read [Feedback](https://guangchuangyu.github.io/chipseeker/#feedback) and follow the [guide](https://guangchuangyu.github.io/2016/07/how-to-bug-author/)?
 	* [ ] make sure your are using the latest release version
-	* [ ] read the [documents](https://guangchuangyu.github.io/ggtree/documentation/)
+	* [ ] read the [documents](https://guangchuangyu.github.io/chipseeker/documentation/)
 	* [ ] google your quesion/issue
 
 ### Describe you issue
