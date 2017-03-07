@@ -20,7 +20,7 @@
 [Let us know](https://github.com/GuangchuangYu/featured_img) if you have published using `ChIPseeker` and your publication will be featured here.
 
 
-[![citation](https://img.shields.io/badge/cited%20by-35-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-38-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 
 <link rel='stylesheet' href=https://guangchuangyu.github.io/resume/css/morris.css>
 <script src='https://guangchuangyu.github.io/resume/css/jquery.min.js' type='text/javascript'></script>
@@ -38,10 +38,10 @@
   }  
   </style>
 
-<div id = 'chart2dde16b807c1' class = 'rChart morris'></div>
+<div id = 'chart110d76f84025' class = 'rChart morris'></div>
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart2dde16b807c1",
+ "element": "chart110d76f84025",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -61,11 +61,11 @@
 },
 {
  "year": 2017,
-"cites":              2,
+"cites":              5,
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart2dde16b807c1",
+"id": "chart110d76f84025",
 "labels": "cites" 
 },
       chartType = "Bar"
@@ -76,6 +76,8 @@
 Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488).
 
 ## <i class="fa fa-calendar"></i> 2017
+
+[Maintenance of macrophage transcriptional programs and intestinal homeostasis by epigenetic reader SP140](http://immunology.sciencemag.org/content/2/9/eaag3160). ***Science Immunology***. 2017, 2(9):eaag3160
 
 [Identification of quiescent and spatially restricted mammary stem cells that are hormone responsive](http://www.nature.com/ncb/journal/vaop/ncurrent/full/ncb3471.html). ***Nature Cell Biology***. 2017.
 

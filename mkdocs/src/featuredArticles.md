@@ -16,6 +16,8 @@ Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://s
 
 ## <i class="fa fa-calendar"></i> 2017
 
+[Maintenance of macrophage transcriptional programs and intestinal homeostasis by epigenetic reader SP140](http://immunology.sciencemag.org/content/2/9/eaag3160). ***Science Immunology***. 2017, 2(9):eaag3160
+
 [Identification of quiescent and spatially restricted mammary stem cells that are hormone responsive](http://www.nature.com/ncb/journal/vaop/ncurrent/full/ncb3471.html). ***Nature Cell Biology***. 2017.
 
 ## <i class="fa fa-calendar"></i> 2016

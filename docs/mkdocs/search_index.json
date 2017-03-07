@@ -1,168 +1,168 @@
 {
     "docs": [
         {
-            "location": "/",
-            "text": "This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare their own dataset with those deposited in database. The comparison can be used to infer cooperative regulation and thus can be used to generate hypotheses. Several visualization functions are implemented to summarize the coverage of the peak experiment, average profile and heatmap of peaks binding to TSS regions, genomic annotation, distance to TSS, and overlap of peaks or genes.\n\n\nChIPseeker\n is released within the \nBioconductor\n project and the source code is hosted on \n GitHub\n.\n\n\n Author\n\n\nGuangchuang Yu, School of Public Health, The University of Hong Kong.\n\n\n Citation\n\n\nPlease cite the following article when using \nChIPseeker\n:\n\n\n\n\n\n\n\n\nYu G\n, Wang LG and He QY\n*\n. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. \nBioinformatics\n, 2015, 31(14):2382-2383.\n\n\n Featured Articles\n\n\n\n\n Find out more on \n \nFeatured Articles\n.\n\n\n Installation\n\n\nInstall \nChIPseeker\n is easy, follow the guide on the \nBioconductor page\n:\n\n\n## try http:// if https:// URLs are not supported\nsource(\"https://bioconductor.org/biocLite.R\")\n## biocLite(\"BiocUpgrade\") ## you may need this\nbiocLite(\"ChIPseeker\")\n\n\n\n\n Overview\n\n\n Annotation\n\n\n\n\nretrieve the nearest genes around the peak\n\n\nannotate genomic region of the peak\n\n\n\n\n Comparison\n\n\n\n\nestimate the significance of overlap among ChIP peak data sets\n\n\nincorporate GEO database for users to compare their own dataset with those deposited in the database\n\n\n\n\n Visualization\n\n\n\n\nsummarize the coverage of the peak experiment\n\n\naverage profile and heatmap of peaks binding to TSS regions\n\n\ngenomic annotation\n\n\ndistance to TSS\n\n\noverlap of peaks or genes\n\n\n\n\n\n\n\n Feedback\n\n\n\n    \n Please make sure you \nfollow the guide\n before posting any issue/question\n\n    \n For bugs or feature requests, please post to \n \ngithub issue\n\n    \n For user questions, please post to \n \nBioconductor support site\n or \nBiostars\n\n    \n Join the group chat in \n and",
+            "location": "/", 
+            "text": "This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare their own dataset with those deposited in database. The comparison can be used to infer cooperative regulation and thus can be used to generate hypotheses. Several visualization functions are implemented to summarize the coverage of the peak experiment, average profile and heatmap of peaks binding to TSS regions, genomic annotation, distance to TSS, and overlap of peaks or genes.\n\n\nChIPseeker\n is released within the \nBioconductor\n project and the source code is hosted on \n GitHub\n.\n\n\n Author\n\n\nGuangchuang Yu, School of Public Health, The University of Hong Kong.\n\n\n Citation\n\n\nPlease cite the following article when using \nChIPseeker\n:\n\n\n\n\n\n\n\n\nYu G\n, Wang LG and He QY\n*\n. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. \nBioinformatics\n, 2015, 31(14):2382-2383.\n\n\n Featured Articles\n\n\n\n\n Find out more on \n \nFeatured Articles\n.\n\n\n Installation\n\n\nInstall \nChIPseeker\n is easy, follow the guide on the \nBioconductor page\n:\n\n\n## try http:// if https:// URLs are not supported\nsource(\nhttps://bioconductor.org/biocLite.R\n)\n## biocLite(\nBiocUpgrade\n) ## you may need this\nbiocLite(\nChIPseeker\n)\n\n\n\n\n Overview\n\n\n Annotation\n\n\n\n\nretrieve the nearest genes around the peak\n\n\nannotate genomic region of the peak\n\n\n\n\n Comparison\n\n\n\n\nestimate the significance of overlap among ChIP peak data sets\n\n\nincorporate GEO database for users to compare their own dataset with those deposited in the database\n\n\n\n\n Visualization\n\n\n\n\nsummarize the coverage of the peak experiment\n\n\naverage profile and heatmap of peaks binding to TSS regions\n\n\ngenomic annotation\n\n\ndistance to TSS\n\n\noverlap of peaks or genes\n\n\n\n\n\n\n\n Feedback\n\n\n\n    \n Please make sure you have followed \nthe important guide\n before posting any issue/question\n\n    \n For bugs or feature requests, please post to \n \ngithub issue\n\n    \n For user questions, please post to \n \nBioconductor support site\n or \nBiostars\n\n    \n Join the group chat in \n and", 
             "title": "Home"
-        },
+        }, 
         {
-            "location": "/#author",
-            "text": "Guangchuang Yu, School of Public Health, The University of Hong Kong.",
+            "location": "/#author", 
+            "text": "Guangchuang Yu, School of Public Health, The University of Hong Kong.", 
             "title": " Author"
-        },
+        }, 
         {
-            "location": "/#citation",
-            "text": "Please cite the following article when using  ChIPseeker :     Yu G , Wang LG and He QY * . ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization.  Bioinformatics , 2015, 31(14):2382-2383.",
+            "location": "/#citation", 
+            "text": "Please cite the following article when using  ChIPseeker :     Yu G , Wang LG and He QY * . ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization.  Bioinformatics , 2015, 31(14):2382-2383.", 
             "title": " Citation"
-        },
+        }, 
         {
-            "location": "/#featured-articles",
-            "text": "Find out more on    Featured Articles .",
+            "location": "/#featured-articles", 
+            "text": "Find out more on    Featured Articles .", 
             "title": " Featured Articles"
-        },
+        }, 
         {
-            "location": "/#installation",
-            "text": "Install  ChIPseeker  is easy, follow the guide on the  Bioconductor page :  ## try http:// if https:// URLs are not supported\nsource(\"https://bioconductor.org/biocLite.R\")\n## biocLite(\"BiocUpgrade\") ## you may need this\nbiocLite(\"ChIPseeker\")",
+            "location": "/#installation", 
+            "text": "Install  ChIPseeker  is easy, follow the guide on the  Bioconductor page :  ## try http:// if https:// URLs are not supported\nsource( https://bioconductor.org/biocLite.R )\n## biocLite( BiocUpgrade ) ## you may need this\nbiocLite( ChIPseeker )", 
             "title": " Installation"
-        },
+        }, 
         {
-            "location": "/#overview",
-            "text": "",
+            "location": "/#overview", 
+            "text": "", 
             "title": " Overview"
-        },
+        }, 
         {
-            "location": "/#annotation",
-            "text": "retrieve the nearest genes around the peak  annotate genomic region of the peak",
+            "location": "/#annotation", 
+            "text": "retrieve the nearest genes around the peak  annotate genomic region of the peak", 
             "title": " Annotation"
-        },
+        }, 
         {
-            "location": "/#comparison",
-            "text": "estimate the significance of overlap among ChIP peak data sets  incorporate GEO database for users to compare their own dataset with those deposited in the database",
+            "location": "/#comparison", 
+            "text": "estimate the significance of overlap among ChIP peak data sets  incorporate GEO database for users to compare their own dataset with those deposited in the database", 
             "title": " Comparison"
-        },
+        }, 
         {
-            "location": "/#visualization",
-            "text": "summarize the coverage of the peak experiment  average profile and heatmap of peaks binding to TSS regions  genomic annotation  distance to TSS  overlap of peaks or genes",
+            "location": "/#visualization", 
+            "text": "summarize the coverage of the peak experiment  average profile and heatmap of peaks binding to TSS regions  genomic annotation  distance to TSS  overlap of peaks or genes", 
             "title": " Visualization"
-        },
+        }, 
         {
-            "location": "/#feedback",
-            "text": "Please make sure you  follow the guide  before posting any issue/question \n      For bugs or feature requests, please post to    github issue \n      For user questions, please post to    Bioconductor support site  or  Biostars \n      Join the group chat in   and",
+            "location": "/#feedback", 
+            "text": "Please make sure you have followed  the important guide  before posting any issue/question \n      For bugs or feature requests, please post to    github issue \n      For user questions, please post to    Bioconductor support site  or  Biostars \n      Join the group chat in   and", 
             "title": " Feedback"
-        },
+        }, 
         {
-            "location": "/documentation/",
-            "text": "Vignettes\n\n\n\n\nChIPseeker: an R package for ChIP peak Annotation, Comparison and Visualization\n\n\n\n\n Blog posts\n\n\n News and updates\n\n\n\n\nBioC 3.1: NEWS of my BioC packages\n\n\nBioC 3.2: NEWS of my BioC packages\n\n\nBioC 3.3: NEWS of my BioC packages\n\n\nBioC 3.4: NEWS of my BioC packages\n\n\nparsing BED coordinates\n\n\nChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization\n\n\n\n\n Annotation\n\n\n\n\nChIPseeker for ChIP peak annotation\n\n\nmultiple annotation in ChIPseeker\n\n\n\n\n Visualization\n\n\n\n\nvisualization methods in ChIPseeker\n\n\nupsetplot in ChIPseeker\n\n\ncovplot supports GRangesList\n\n\n\n\n Functional Enrichment Analysis\n\n\n\n\nfunctional enrichment analysis with NGS data\n\n\n\n\n Comparison\n\n\n\n\nChIPseq data mining with ChIPseeker\n\n\n\n\n Find out more on \nhttps://guangchuangyu.github.io/tags/chipseeker/\n.\n\n\n Q&A\n\n\n\n\nhow to read multiple peak files\n\n\nannotate lncRNA\n\n\n\n\n Workflow\n\n\n\n\nChIPseq Analysis\n\n\nNGS data analysis with R / Bioconductor: ChIP-Seq workflow\n\n\nTCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages",
+            "location": "/documentation/", 
+            "text": "Vignettes\n\n\n\n\nChIPseeker: an R package for ChIP peak Annotation, Comparison and Visualization\n\n\n\n\n Blog posts\n\n\n News and updates\n\n\n\n\nBioC 3.1: NEWS of my BioC packages\n\n\nBioC 3.2: NEWS of my BioC packages\n\n\nBioC 3.3: NEWS of my BioC packages\n\n\nBioC 3.4: NEWS of my BioC packages\n\n\nparsing BED coordinates\n\n\nChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization\n\n\n\n\n Annotation\n\n\n\n\nChIPseeker for ChIP peak annotation\n\n\nmultiple annotation in ChIPseeker\n\n\n\n\n Visualization\n\n\n\n\nvisualization methods in ChIPseeker\n\n\nupsetplot in ChIPseeker\n\n\ncovplot supports GRangesList\n\n\n\n\n Functional Enrichment Analysis\n\n\n\n\nfunctional enrichment analysis with NGS data\n\n\n\n\n Comparison\n\n\n\n\nChIPseq data mining with ChIPseeker\n\n\n\n\n Find out more on \nhttps://guangchuangyu.github.io/tags/chipseeker/\n.\n\n\n Q\nA\n\n\n\n\nhow to read multiple peak files\n\n\nannotate lncRNA\n\n\n\n\n Workflow\n\n\n\n\nChIPseq Analysis\n\n\nNGS data analysis with R / Bioconductor: ChIP-Seq workflow\n\n\nTCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages", 
             "title": "Documentation"
-        },
+        }, 
         {
-            "location": "/documentation/#vignettes",
-            "text": "ChIPseeker: an R package for ChIP peak Annotation, Comparison and Visualization",
+            "location": "/documentation/#vignettes", 
+            "text": "ChIPseeker: an R package for ChIP peak Annotation, Comparison and Visualization", 
             "title": " Vignettes"
-        },
+        }, 
         {
-            "location": "/documentation/#blog-posts",
-            "text": "",
+            "location": "/documentation/#blog-posts", 
+            "text": "", 
             "title": " Blog posts"
-        },
+        }, 
         {
-            "location": "/documentation/#news-and-updates",
-            "text": "BioC 3.1: NEWS of my BioC packages  BioC 3.2: NEWS of my BioC packages  BioC 3.3: NEWS of my BioC packages  BioC 3.4: NEWS of my BioC packages  parsing BED coordinates  ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization",
+            "location": "/documentation/#news-and-updates", 
+            "text": "BioC 3.1: NEWS of my BioC packages  BioC 3.2: NEWS of my BioC packages  BioC 3.3: NEWS of my BioC packages  BioC 3.4: NEWS of my BioC packages  parsing BED coordinates  ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization", 
             "title": " News and updates"
-        },
+        }, 
         {
-            "location": "/documentation/#annotation",
-            "text": "ChIPseeker for ChIP peak annotation  multiple annotation in ChIPseeker",
+            "location": "/documentation/#annotation", 
+            "text": "ChIPseeker for ChIP peak annotation  multiple annotation in ChIPseeker", 
             "title": " Annotation"
-        },
+        }, 
         {
-            "location": "/documentation/#visualization",
-            "text": "visualization methods in ChIPseeker  upsetplot in ChIPseeker  covplot supports GRangesList",
+            "location": "/documentation/#visualization", 
+            "text": "visualization methods in ChIPseeker  upsetplot in ChIPseeker  covplot supports GRangesList", 
             "title": " Visualization"
-        },
+        }, 
         {
-            "location": "/documentation/#functional-enrichment-analysis",
-            "text": "functional enrichment analysis with NGS data",
+            "location": "/documentation/#functional-enrichment-analysis", 
+            "text": "functional enrichment analysis with NGS data", 
             "title": " Functional Enrichment Analysis"
-        },
+        }, 
         {
-            "location": "/documentation/#comparison",
-            "text": "ChIPseq data mining with ChIPseeker    Find out more on  https://guangchuangyu.github.io/tags/chipseeker/ .",
+            "location": "/documentation/#comparison", 
+            "text": "ChIPseq data mining with ChIPseeker    Find out more on  https://guangchuangyu.github.io/tags/chipseeker/ .", 
             "title": " Comparison"
-        },
+        }, 
         {
-            "location": "/documentation/#qa",
-            "text": "how to read multiple peak files  annotate lncRNA",
+            "location": "/documentation/#qa", 
+            "text": "how to read multiple peak files  annotate lncRNA", 
             "title": " Q&amp;A"
-        },
+        }, 
         {
-            "location": "/documentation/#workflow",
-            "text": "ChIPseq Analysis  NGS data analysis with R / Bioconductor: ChIP-Seq workflow  TCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages",
+            "location": "/documentation/#workflow", 
+            "text": "ChIPseq Analysis  NGS data analysis with R / Bioconductor: ChIP-Seq workflow  TCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages", 
             "title": " Workflow"
-        },
+        }, 
         {
-            "location": "/featuredArticles/",
-            "text": "Let us know\n if you have published using \nChIPseeker\n and your publication will be featured here.\n\n\n\n\n\n\n\n\n\n\n\n\n\n  .rChart {\n    display: block;\n    margin-left: auto; \n    margin-right: auto;\n    width: 800px;\n    height: 300px;\n  }  \n  \n\n\n\n\n\n\n\n    var chartParams = {\n \"element\": \"chart2dde16b807c1\",\n\"width\":            800,\n\"height\":            400,\n\"xkey\": \"year\",\n\"ykeys\": [\n \"cites\" \n],\n\"data\": [\n {\n \"year\": 2015,\n\"cites\":              5,\n\"pubid\": \"9pM33mqn1YgC\" \n},\n{\n \"year\": 2016,\n\"cites\":             28,\n\"pubid\": \"9pM33mqn1YgC\" \n},\n{\n \"year\": 2017,\n\"cites\":              2,\n\"pubid\": \"9pM33mqn1YgC\" \n} \n],\n\"id\": \"chart2dde16b807c1\",\n\"labels\": \"cites\" \n},\n      chartType = \"Bar\"\n    new Morris[chartType](chartParams)\n\n\n\n\nFind out more on \n google scholar\n.\n\n\n 2017\n\n\nIdentification of quiescent and spatially restricted mammary stem cells that are hormone responsive\n. \nNature Cell Biology\n. 2017.\n\n\n 2016\n\n\nDpy30 is critical for maintaining the identity and function of adult hematopoietic stem cells\n. \nThe Journal of Experimental Medicine\n. 2016.\n\n\nCombining ATAC-seq with nuclei sorting for discovery of cis-regulatory regions in plant genomes\n. \nNecleic Acids Research\n. 2016\n\n\nSatb2 determines miRNA expression and long-term memory in the adult central nervous system\n. \neLife\n. 2016, 5:e17361\n\n\nm\n6\nA modulates neuronal functions and sex determination in Drosophila\n. \nNature\n. 2016, 540:242\u2013247.\n\n\nRegulation of transcriptional elongation in pluripotency and cell differentiation by the PHD-finger protein Phf5a\n. \nNature Cell Biology\n. 2016, 18(11):1127\u20131138\n\n\nComprehensive genome and epigenome characterization of CHO cells in response to evolutionary pressures and over time\n. \nBiotechnology and Bioengineering\n. 2016, 113(10):2241-2253.\n\n\nA comprehensive comparison of tools for differential ChIP-seq analysis\n. \nBriefings in Bioinformatics\n. 2016, 17(6): 953-966.\n\n\nmetagene\n Profiles Analyses Reveal Regulatory Element\u2019s Factor-Specific Recruitment Patterns\n. \nPLoS Comput Biol\n.  2016, 12(8): e1004751.\n\n\n\n\nMouse MORC3 is a GHKL ATPase that localizes to H3K4me3 marked chromatin\n. \nPNAS\n Aug, 2016\n\n\n\n\nTCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages\n. \nF1000Research\n. 2016, 5:1542.\n\n\n\n\nCistrome-based Cooperation between Airway Epithelial Glucocorticoid Receptor and NF-\u03baB Orchestrates Anti-inflammatory Effects\n. \nThe Journal of Biological Chemistry\n 2016, 291:12673-12687.\n\n\nObesity and Bariatric Surgery Drive Epigenetic Variation of Spermatozoa in Humans\n. \nCell Metabolism\n 2016, 23(2):369-378.\n\n\nReactomePA: an R/Bioconductor package for reactome pathway analysis and visualization\n. \nMolecular BioSystems\n. 2016, 12(2):477-479.\n\n\n 2015\n\n\nElf5-centered transcription factor hub controls trophoblast stem cell self-renewal and differentiation through stoichiometry-sensitive shifts in target gene networks\n. \nGenes & Development\n 2015, 29:2435-2448.\n\n\nResponse Element Composition Governs Correlations between Binding Site Affinity and Transcription in Glucocorticoid Receptor Feed-forward Loops\n. \nThe Journal of Biological Chemistry\n 2015, 290:19756-19769.\n\n\nCommon binding by redundant group B Sox proteins is evolutionarily conserved in Drosophila\n. \nBMC Genomics\n 2015, 16:292.",
+            "location": "/featuredArticles/", 
+            "text": "Let us know\n if you have published using \nChIPseeker\n and your publication will be featured here.\n\n\n\n\n\n\n\n\n\n\n\n\n\n  .rChart {\n    display: block;\n    margin-left: auto; \n    margin-right: auto;\n    width: 800px;\n    height: 300px;\n  }  \n  \n\n\n\n\n\n\n\n    var chartParams = {\n \"element\": \"chart110d76f84025\",\n\"width\":            800,\n\"height\":            400,\n\"xkey\": \"year\",\n\"ykeys\": [\n \"cites\" \n],\n\"data\": [\n {\n \"year\": 2015,\n\"cites\":              5,\n\"pubid\": \"9pM33mqn1YgC\" \n},\n{\n \"year\": 2016,\n\"cites\":             28,\n\"pubid\": \"9pM33mqn1YgC\" \n},\n{\n \"year\": 2017,\n\"cites\":              5,\n\"pubid\": \"9pM33mqn1YgC\" \n} \n],\n\"id\": \"chart110d76f84025\",\n\"labels\": \"cites\" \n},\n      chartType = \"Bar\"\n    new Morris[chartType](chartParams)\n\n\n\n\nFind out more on \n google scholar\n.\n\n\n 2017\n\n\nMaintenance of macrophage transcriptional programs and intestinal homeostasis by epigenetic reader SP140\n. \nScience Immunology\n. 2017, 2(9):eaag3160\n\n\nIdentification of quiescent and spatially restricted mammary stem cells that are hormone responsive\n. \nNature Cell Biology\n. 2017.\n\n\n 2016\n\n\nDpy30 is critical for maintaining the identity and function of adult hematopoietic stem cells\n. \nThe Journal of Experimental Medicine\n. 2016.\n\n\nCombining ATAC-seq with nuclei sorting for discovery of cis-regulatory regions in plant genomes\n. \nNecleic Acids Research\n. 2016\n\n\nSatb2 determines miRNA expression and long-term memory in the adult central nervous system\n. \neLife\n. 2016, 5:e17361\n\n\nm\n6\nA modulates neuronal functions and sex determination in Drosophila\n. \nNature\n. 2016, 540:242\u2013247.\n\n\nRegulation of transcriptional elongation in pluripotency and cell differentiation by the PHD-finger protein Phf5a\n. \nNature Cell Biology\n. 2016, 18(11):1127\u20131138\n\n\nComprehensive genome and epigenome characterization of CHO cells in response to evolutionary pressures and over time\n. \nBiotechnology and Bioengineering\n. 2016, 113(10):2241-2253.\n\n\nA comprehensive comparison of tools for differential ChIP-seq analysis\n. \nBriefings in Bioinformatics\n. 2016, 17(6): 953-966.\n\n\nmetagene\n Profiles Analyses Reveal Regulatory Element\u2019s Factor-Specific Recruitment Patterns\n. \nPLoS Comput Biol\n.  2016, 12(8): e1004751.\n\n\n\n\nMouse MORC3 is a GHKL ATPase that localizes to H3K4me3 marked chromatin\n. \nPNAS\n Aug, 2016\n\n\n\n\nTCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages\n. \nF1000Research\n. 2016, 5:1542.\n\n\n\n\nCistrome-based Cooperation between Airway Epithelial Glucocorticoid Receptor and NF-\u03baB Orchestrates Anti-inflammatory Effects\n. \nThe Journal of Biological Chemistry\n 2016, 291:12673-12687.\n\n\nObesity and Bariatric Surgery Drive Epigenetic Variation of Spermatozoa in Humans\n. \nCell Metabolism\n 2016, 23(2):369-378.\n\n\nReactomePA: an R/Bioconductor package for reactome pathway analysis and visualization\n. \nMolecular BioSystems\n. 2016, 12(2):477-479.\n\n\n 2015\n\n\nElf5-centered transcription factor hub controls trophoblast stem cell self-renewal and differentiation through stoichiometry-sensitive shifts in target gene networks\n. \nGenes \n Development\n 2015, 29:2435-2448.\n\n\nResponse Element Composition Governs Correlations between Binding Site Affinity and Transcription in Glucocorticoid Receptor Feed-forward Loops\n. \nThe Journal of Biological Chemistry\n 2015, 290:19756-19769.\n\n\nCommon binding by redundant group B Sox proteins is evolutionarily conserved in Drosophila\n. \nBMC Genomics\n 2015, 16:292.", 
             "title": "Featured Articles"
-        },
+        }, 
         {
-            "location": "/featuredArticles/#2017",
-            "text": "Identification of quiescent and spatially restricted mammary stem cells that are hormone responsive .  Nature Cell Biology . 2017.",
+            "location": "/featuredArticles/#2017", 
+            "text": "Maintenance of macrophage transcriptional programs and intestinal homeostasis by epigenetic reader SP140 .  Science Immunology . 2017, 2(9):eaag3160  Identification of quiescent and spatially restricted mammary stem cells that are hormone responsive .  Nature Cell Biology . 2017.", 
             "title": " 2017"
-        },
+        }, 
         {
-            "location": "/featuredArticles/#2016",
-            "text": "Dpy30 is critical for maintaining the identity and function of adult hematopoietic stem cells .  The Journal of Experimental Medicine . 2016.  Combining ATAC-seq with nuclei sorting for discovery of cis-regulatory regions in plant genomes .  Necleic Acids Research . 2016  Satb2 determines miRNA expression and long-term memory in the adult central nervous system .  eLife . 2016, 5:e17361  m 6 A modulates neuronal functions and sex determination in Drosophila .  Nature . 2016, 540:242\u2013247.  Regulation of transcriptional elongation in pluripotency and cell differentiation by the PHD-finger protein Phf5a .  Nature Cell Biology . 2016, 18(11):1127\u20131138  Comprehensive genome and epigenome characterization of CHO cells in response to evolutionary pressures and over time .  Biotechnology and Bioengineering . 2016, 113(10):2241-2253.  A comprehensive comparison of tools for differential ChIP-seq analysis .  Briefings in Bioinformatics . 2016, 17(6): 953-966.  metagene  Profiles Analyses Reveal Regulatory Element\u2019s Factor-Specific Recruitment Patterns .  PLoS Comput Biol .  2016, 12(8): e1004751.   Mouse MORC3 is a GHKL ATPase that localizes to H3K4me3 marked chromatin .  PNAS  Aug, 2016   TCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages .  F1000Research . 2016, 5:1542.   Cistrome-based Cooperation between Airway Epithelial Glucocorticoid Receptor and NF-\u03baB Orchestrates Anti-inflammatory Effects .  The Journal of Biological Chemistry  2016, 291:12673-12687.  Obesity and Bariatric Surgery Drive Epigenetic Variation of Spermatozoa in Humans .  Cell Metabolism  2016, 23(2):369-378.  ReactomePA: an R/Bioconductor package for reactome pathway analysis and visualization .  Molecular BioSystems . 2016, 12(2):477-479.",
+            "location": "/featuredArticles/#2016", 
+            "text": "Dpy30 is critical for maintaining the identity and function of adult hematopoietic stem cells .  The Journal of Experimental Medicine . 2016.  Combining ATAC-seq with nuclei sorting for discovery of cis-regulatory regions in plant genomes .  Necleic Acids Research . 2016  Satb2 determines miRNA expression and long-term memory in the adult central nervous system .  eLife . 2016, 5:e17361  m 6 A modulates neuronal functions and sex determination in Drosophila .  Nature . 2016, 540:242\u2013247.  Regulation of transcriptional elongation in pluripotency and cell differentiation by the PHD-finger protein Phf5a .  Nature Cell Biology . 2016, 18(11):1127\u20131138  Comprehensive genome and epigenome characterization of CHO cells in response to evolutionary pressures and over time .  Biotechnology and Bioengineering . 2016, 113(10):2241-2253.  A comprehensive comparison of tools for differential ChIP-seq analysis .  Briefings in Bioinformatics . 2016, 17(6): 953-966.  metagene  Profiles Analyses Reveal Regulatory Element\u2019s Factor-Specific Recruitment Patterns .  PLoS Comput Biol .  2016, 12(8): e1004751.   Mouse MORC3 is a GHKL ATPase that localizes to H3K4me3 marked chromatin .  PNAS  Aug, 2016   TCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages .  F1000Research . 2016, 5:1542.   Cistrome-based Cooperation between Airway Epithelial Glucocorticoid Receptor and NF-\u03baB Orchestrates Anti-inflammatory Effects .  The Journal of Biological Chemistry  2016, 291:12673-12687.  Obesity and Bariatric Surgery Drive Epigenetic Variation of Spermatozoa in Humans .  Cell Metabolism  2016, 23(2):369-378.  ReactomePA: an R/Bioconductor package for reactome pathway analysis and visualization .  Molecular BioSystems . 2016, 12(2):477-479.", 
             "title": " 2016"
-        },
+        }, 
         {
-            "location": "/featuredArticles/#2015",
-            "text": "Elf5-centered transcription factor hub controls trophoblast stem cell self-renewal and differentiation through stoichiometry-sensitive shifts in target gene networks .  Genes & Development  2015, 29:2435-2448.  Response Element Composition Governs Correlations between Binding Site Affinity and Transcription in Glucocorticoid Receptor Feed-forward Loops .  The Journal of Biological Chemistry  2015, 290:19756-19769.  Common binding by redundant group B Sox proteins is evolutionarily conserved in Drosophila .  BMC Genomics  2015, 16:292.",
+            "location": "/featuredArticles/#2015", 
+            "text": "Elf5-centered transcription factor hub controls trophoblast stem cell self-renewal and differentiation through stoichiometry-sensitive shifts in target gene networks .  Genes   Development  2015, 29:2435-2448.  Response Element Composition Governs Correlations between Binding Site Affinity and Transcription in Glucocorticoid Receptor Feed-forward Loops .  The Journal of Biological Chemistry  2015, 290:19756-19769.  Common binding by redundant group B Sox proteins is evolutionarily conserved in Drosophila .  BMC Genomics  2015, 16:292.", 
             "title": " 2015"
-        },
+        }, 
         {
-            "location": "/ChIPseeker/",
-            "text": "",
+            "location": "/ChIPseeker/", 
+            "text": "", 
             "title": "ChIPseeker"
-        },
+        }, 
         {
-            "location": "/clusterProfiler/",
-            "text": "",
+            "location": "/clusterProfiler/", 
+            "text": "", 
             "title": "clusterProfiler"
-        },
+        }, 
         {
-            "location": "/DOSE/",
-            "text": "",
+            "location": "/DOSE/", 
+            "text": "", 
             "title": "DOSE"
-        },
+        }, 
         {
-            "location": "/emojifont/",
-            "text": "",
+            "location": "/emojifont/", 
+            "text": "", 
             "title": "emojifont"
-        },
+        }, 
         {
-            "location": "/ggtree/",
-            "text": "",
+            "location": "/ggtree/", 
+            "text": "", 
             "title": "ggtree"
-        },
+        }, 
         {
-            "location": "/GOSemSim/",
-            "text": "",
+            "location": "/GOSemSim/", 
+            "text": "", 
             "title": "GOSemSim"
-        },
+        }, 
         {
-            "location": "/meshes/",
-            "text": "",
+            "location": "/meshes/", 
+            "text": "", 
             "title": "meshes"
-        },
+        }, 
         {
-            "location": "/ReactomePA/",
-            "text": "",
+            "location": "/ReactomePA/", 
+            "text": "", 
             "title": "ReactomePA"
-        },
+        }, 
         {
-            "location": "/treeio/",
-            "text": "",
+            "location": "/treeio/", 
+            "text": "", 
             "title": "treeio"
         }
     ]
