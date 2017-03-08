@@ -14,11 +14,11 @@ library("ypages")
 
 # ChIPseeker: ChIP peak Annotation, Comparison, and Visualization
 
-`r badge_release("ChIPseeker", "green")`
+`r badge_bioc_release("ChIPseeker", "green")`
 `r badge_devel("ChIPseeker", "green")`
 [![Bioc](http://www.bioconductor.org/shields/years-in-bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#since)
-`r badge_download("ChIPseeker", "total", "blue")`
-`r badge_download("ChIPseeker", "month", "blue")`
+`r badge_bioc_download("ChIPseeker", "total", "blue")`
+`r badge_bioc_download("ChIPseeker", "month", "blue")`
 
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![codecov](https://codecov.io/gh/GuangchuangYu/ChIPseeker/branch/master/graph/badge.svg)](https://codecov.io/gh/GuangchuangYu/ChIPseeker/)
@@ -70,8 +70,8 @@ txtplot(d$year, d$cites)
 ### Download stats
 
 [![download](http://www.bioconductor.org/shields/downloads/ChIPseeker.svg)](https://bioconductor.org/packages/stats/bioc/ChIPseeker/)
-`r badge_download("ChIPseeker", "total", "blue")`
-`r badge_download("ChIPseeker", "month", "blue")`
+`r badge_bioc_download("ChIPseeker", "total", "blue")`
+`r badge_bioc_download("ChIPseeker", "month", "blue")`
 
 ```{r echo=F, comment=NA}
 x <- dlstats::bioc_stats("ChIPseeker")
