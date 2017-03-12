@@ -20,4 +20,3 @@ get subset of GEO information by genome version keyword
 \author{
 G Yu
 }
-

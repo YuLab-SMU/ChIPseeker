@@ -31,4 +31,3 @@ get Genomic Annotation of peaks
 \author{
 G Yu
 }
-
