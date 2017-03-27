@@ -27,10 +27,9 @@ plot feature distribution based on their chromosome region
 \details{
 plot chromosome region features
 }
-\author{
-Guangchuang Yu \url{http://ygc.name}
-}
 \seealso{
 \code{\link{annotatePeak}} \code{\link{plotAnnoPie}}
 }
-
+\author{
+Guangchuang Yu \url{http://ygc.name}
+}

@@ -29,4 +29,3 @@ plot the heatmap of tagMatrix
 \author{
 G Yu
 }
-

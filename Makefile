@@ -47,17 +47,13 @@ mkdocs: mdfiles
 	mkdocs build;\
 	cd ../docs;\
 	rm -rf fonts;\
-	rm -rf css/font-awesome*;\
-	Rscript -e 'library(ypages); add_biobabble("index.html")'
+	rm -rf css/font-awesome*
 
 mdfiles:
 	cd mkdocs;\
-	Rscript -e 'library(ypages); gendoc("src/index.md", "blue", "docs/index.md")';\
-	Rscript -e 'library(ypages); gendoc("src/documentation.md", "blue", "docs/documentation.md")';\
-	Rscript -e 'library(ypages); gendoc("src/featuredArticles.md", "blue", "docs/featuredArticles.md")';\
+	Rscript -e 'source("render.R")';\
 	cd docs;\
 	ln -f -s ../mysoftware/* ./
 
 svnignore:
 	svn propset svn:ignore -F .svnignore .
-

@@ -18,4 +18,3 @@ convert csAnno object to GRanges
 \author{
 Guangchuang Yu \url{https://guangchuangyu.github.io}
 }
-
