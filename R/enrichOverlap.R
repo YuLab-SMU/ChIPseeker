@@ -1,6 +1,6 @@
 ##' calcuate overlap significant of ChIP experiments based on their nearest gene annotation
 ##'
-##' 
+##'
 ##' @title enrichAnnoOverlap
 ##' @param queryPeak query bed file
 ##' @param targetPeak target bed file(s) or folder containing bed files
@@ -21,7 +21,7 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
     query.anno <- annotatePeak(queryPeak, TxDb=TxDb,
                                assignGenomicAnnotation=FALSE, annoDb=NULL, verbose=FALSE)
 
-    
+
     if (is(targetPeak[1], "GRanges") || is(targetPeak[[1]], "GRanges")) {
         target.gr <- targetPeak
         targetFiles <- NULL
@@ -34,16 +34,16 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
         chain <- import.chain(chainFile)
         target.gr <- lapply(target.gr, liftOver, chain=chain)
     }
-     
+
     target.anno <- lapply(target.gr, annotatePeak, TxDb=TxDb,
                           assignGenomicAnnotation=FALSE, annoDb=NULL, verbose=FALSE)
-    
+
 
     if (!is.null(distanceToTSS_cutoff)) {
         query.anno <- dropAnno(query.anno, distanceToTSS_cutoff)
         target.anno <- lapply(target.anno, dropAnno, distanceToTSS_cutoff = distanceToTSS_cutoff)
     }
-    
+
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
     if ( exists("Transcripts", envir=ChIPseekerEnv, inherits=FALSE) ) {
         features <- get("Transcripts", envir=ChIPseekerEnv)
@@ -52,7 +52,7 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
         features <- unlist(features)
         assign("Transcripts", features, envir=ChIPseekerEnv)
     }
-    
+
     ol <- lapply(target.anno, function(i) unique(intersect(as.GRanges(query.anno)$geneId, as.GRanges(i)$geneId)))
     oln <- unlist(lapply(ol, length))
     N <- length(features)
@@ -64,11 +64,11 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
     k <- unlist(lapply(target.anno, function(i) length(unique(as.GRanges(i)$geneId))))
     p <- phyper(oln, m, n, k, lower.tail=FALSE)
 
-    
+
     if (is(queryPeak, "GRanges")) {
         qSample <- "queryPeak"
     } else {
-        qSample <- basename(queryPeak)  
+        qSample <- basename(queryPeak)
     }
 
     if (is.null(targetFiles)) {
@@ -79,7 +79,7 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
     } else {
         tSample <- basename(targetFiles)
     }
-    
+
     padj <- p.adjust(p, method=pAdjustMethod)
     res <- data.frame(qSample=qSample,
                       tSample=tSample,
@@ -93,7 +93,7 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
 
 ##' calculate overlap significant of ChIP experiments based on the genome coordinations
 ##'
-##' 
+##'
 ##' @title enrichPeakOverlap
 ##' @param queryPeak query bed file or GRanges object
 ##' @param targetPeak target bed file(s) or folder that containing bed files or a list of GRanges objects
@@ -120,7 +120,7 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
         targetFiles <- parse_targetPeak_Param(targetPeak)
         target.gr <- lapply(targetFiles, loadPeak)
     }
-    
+
     if (!is.null(chainFile)) {
         chain <- import.chain(chainFile)
         target.gr <- lapply(target.gr, liftOver, chain=chain)
@@ -143,22 +143,22 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
         res <- do.call("rbind", res_list)
         return(res)
     }
-    
+
     if (is.null(p.ol$pvalue)) {
         p <- padj <- NA
     } else {
         p <- p.ol$pvalue
         padj <- p.adjust(p, method=pAdjustMethod)
     }
-        
+
     ol <- p.ol$overlap
 
-    
+
     if (is(queryPeak, "GRanges")) {
         qSample <- "queryPeak"
     } else {
         ## remove path, only keep file name
-        qSample <- basename(queryPeak)  
+        qSample <- basename(queryPeak)
     }
 
     if (is.null(targetFiles)) {
@@ -169,7 +169,7 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
     } else {
         tSample <- basename(targetFiles)
     }
-    
+
     res <- data.frame(qSample=qSample,
                       tSample=tSample,
                       qLen=length(query.gr),
@@ -177,7 +177,7 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
                       N_OL=ol,
                       pvalue=p,
                       p.adjust=padj)
-    
+
     return(res)
 }
 
@@ -185,7 +185,7 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
 
 ##' shuffle the position of peak
 ##'
-##' 
+##'
 ##' @title shuffle
 ##' @param peak.gr GRanges object
 ##' @param TxDb TxDb
@@ -203,8 +203,8 @@ shuffle <- function(peak.gr, TxDb) {
     chrLens <- chrLens[jj]
     ss <- unlist(sapply(1:length(nnt), function(i) sample(chrLens[i],nnt[i])))
 
-    res <- GRanges(seqnames=nn[ii], ranges=IRanges(ss, ss+w[ii]), strand="*")
-    return(res)   
+    res <- GRanges(seqnames=nn[ii], ranges=IRanges(ss, width=w[ii]), strand="*")
+    return(res)
 }
 
 
@@ -215,7 +215,7 @@ shuffle <- function(peak.gr, TxDb) {
 ##' @importFrom utils setTxtProgressBar
 ##' @importFrom parallel mclapply
 ##' @importFrom parallel detectCores
-enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000, mc.cores=detectCores()-1, verbose=TRUE) {    
+enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000, mc.cores=detectCores()-1, verbose=TRUE) {
     if (verbose) {
         cat(">> permutation test of peak overlap...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -237,7 +237,7 @@ enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000
     qLen <- unlist(qLen)
     ## query ratio
     qr <- qLen/len
-    
+
     if (nShuffle < 1) {
         res <- list(pvalue=NULL, overlap=qLen)
         return(res)
@@ -270,7 +270,7 @@ enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000
     if (verbose) {
         close(pb)
     }
-    
+
     rr <- unlist(rr) ## random ratio
 
     ## p <- lapply(qr, function(q) mean(rr>q))

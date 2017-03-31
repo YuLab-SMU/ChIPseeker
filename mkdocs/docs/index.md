@@ -25,10 +25,10 @@ ChIPseeker: ChIP peak Annotation, Comparison, and Visualization
 <link rel="stylesheet" href="https://guangchuangyu.github.io/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://guangchuangyu.github.io/css/academicons.min.css">
 
-[![releaseVersion](https://img.shields.io/badge/release%20version-1.10.3-blue.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker)
-[![develVersion](https://img.shields.io/badge/devel%20version-1.11.2-blue.svg?style=flat)](https://github.com/guangchuangyu/ChIPseeker)
-[![total](https://img.shields.io/badge/downloads-12836/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
-[![month](https://img.shields.io/badge/downloads-384/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
+[![](https://img.shields.io/badge/release%20version-1.10.3-blue.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker)
+[![](https://img.shields.io/badge/devel%20version-1.11.2-blue.svg?style=flat)](https://github.com/guangchuangyu/ChIPseeker)
+[![](https://img.shields.io/badge/download-13180/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
+[![](https://img.shields.io/badge/download-390/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 
 This package implements functions to retrieve the nearest genes around
 the peak, annotate genomic region of the peak, statstical methods for
@@ -64,9 +64,9 @@ Guangchuang Yu, School of Public Health, The University of Hong Kong.
 
 Please cite the following article when using `ChIPseeker`:
 
-[![doi](https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-blue.svg?style=flat)](http://dx.doi.org/10.1093/bioinformatics/btv145)
-[![citation](https://img.shields.io/badge/cited%20by-38-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
-[![Altmetric](https://img.shields.io/badge/Altmetric-32-blue.svg?style=flat)](https://www.altmetric.com/details/3781087)
+[![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-blue.svg?style=flat)](http://dx.doi.org/10.1093/bioinformatics/btv145)
+[![citation](https://img.shields.io/badge/cited%20by-42-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![](https://img.shields.io/badge/Altmetric-32-blue.svg?style=flat)](https://www.altmetric.com/details/3781087)
 
 **Yu G**, Wang LG and He QY<sup>\*</sup>. ChIPseeker: an R/Bioconductor
 package for ChIP peak annotation, comparison and visualization.

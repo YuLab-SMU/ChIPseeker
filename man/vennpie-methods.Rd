@@ -3,7 +3,6 @@
 \docType{methods}
 \name{vennpie}
 \alias{vennpie}
-\alias{vennpie}
 \title{vennpie method generics}
 \usage{
 vennpie(x, r = 0.2, ...)
@@ -28,3 +27,4 @@ vennpie method generics
 \author{
 Guangchuang Yu \url{https://guangchuangyu.github.io}
 }
+

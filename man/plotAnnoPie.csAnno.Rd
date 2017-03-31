@@ -37,9 +37,10 @@ peakAnno <- annotatePeak(peakfile, TxDb=txdb)
 plotAnnoPie(peakAnno)
 }
 }
-\seealso{
-\code{\link{annotatePeak}} \code{\link{plotAnnoBar}}
-}
 \author{
 G Yu
 }
+\seealso{
+\code{\link{annotatePeak}} \code{\link{plotAnnoBar}}
+}
+

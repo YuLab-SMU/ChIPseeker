@@ -3,12 +3,12 @@
 \docType{class}
 \name{csAnno-class}
 \alias{csAnno-class}
-\alias{show,csAnno-method}
-\alias{vennpie,csAnno-method}
-\alias{plotDistToTSS,csAnno-method}
 \alias{plotAnnoBar,csAnno-method}
 \alias{plotAnnoPie,csAnno-method}
+\alias{plotDistToTSS,csAnno-method}
+\alias{show,csAnno-method}
 \alias{upsetplot,csAnno-method}
+\alias{vennpie,csAnno-method}
 \title{Class "csAnno"
 This class represents the output of ChIPseeker Annotation}
 \description{
@@ -32,11 +32,11 @@ This class represents the output of ChIPseeker Annotation
 
 \item{\code{peakNum}}{number of peaks}
 }}
-
-\seealso{
-\code{\link{annotatePeak}}
-}
 \author{
 Guangchuang Yu \url{https://guangchuangyu.github.io}
 }
+\seealso{
+\code{\link{annotatePeak}}
+}
 \keyword{classes}
+

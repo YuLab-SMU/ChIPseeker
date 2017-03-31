@@ -25,7 +25,7 @@ output:
 [Let us know](https://github.com/GuangchuangYu/featured_img) if you have
 published using `ChIPseeker` and your publication will be featured here.
 
-[![citation](https://img.shields.io/badge/cited%20by-38-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-42-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 
 <link rel='stylesheet' href=https://guangchuangyu.github.io/resume/css/morris.css>
 <script src='https://guangchuangyu.github.io/resume/css/jquery.min.js' type='text/javascript'></script>
@@ -40,13 +40,13 @@ published using `ChIPseeker` and your publication will be featured here.
     height: 300px;
   }  
   </style>
-<div id="chart8ce3556215b4" class="rChart morris">
+<div id="chart4c5771a2197" class="rChart morris">
 
 </div>
 
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart8ce3556215b4",
+ "element": "chart4c5771a2197",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -66,11 +66,11 @@ published using `ChIPseeker` and your publication will be featured here.
 },
 {
  "year": 2017,
-"cites":              5,
+"cites":              9,
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart8ce3556215b4",
+"id": "chart4c5771a2197",
 "labels": "cites" 
 },
       chartType = "Bar"
@@ -82,6 +82,10 @@ scholar](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=1205336305789
 <i class="fa fa-calendar"></i> 2017
 -----------------------------------
 
+[Human Nup98 regulates the localization and activity of DExH/D-box
+helicase DHX9](https://elifesciences.org/content/6/e18825). ***eLife***.
+2017
+
 [Maintenance of macrophage transcriptional programs and intestinal
 homeostasis by epigenetic reader
 SP140](http://immunology.sciencemag.org/content/2/9/eaag3160).
@@ -90,7 +94,7 @@ SP140](http://immunology.sciencemag.org/content/2/9/eaag3160).
 [Identification of quiescent and spatially restricted mammary stem cells
 that are hormone
 responsive](http://www.nature.com/ncb/journal/vaop/ncurrent/full/ncb3471.html).
-***Nature Cell Biology***. 2017.
+***Nature Cell Biology***. 2017, 19:164–176
 
 <i class="fa fa-calendar"></i> 2016
 -----------------------------------
