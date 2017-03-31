@@ -15,7 +15,7 @@ library("ypages")
 # ChIPseeker: ChIP peak Annotation, Comparison, and Visualization
 
 `r badge_bioc_release("ChIPseeker", "green")`
-`r badge_devel("ChIPseeker", "green")`
+`r badge_devel("guangchuangyu/ChIPseeker", "green")`
 [![Bioc](http://www.bioconductor.org/shields/years-in-bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#since)
 `r badge_bioc_download("ChIPseeker", "total", "blue")`
 `r badge_bioc_download("ChIPseeker", "month", "blue")`
@@ -24,8 +24,8 @@ library("ypages")
 [![codecov](https://codecov.io/gh/GuangchuangYu/ChIPseeker/branch/master/graph/badge.svg)](https://codecov.io/gh/GuangchuangYu/ChIPseeker/)
 [![Last-changedate](https://img.shields.io/badge/last%20change-`r gsub('-', '--', Sys.Date())`-green.svg)](https://github.com/GuangchuangYu/ChIPseeker/commits/master)
 [![commit](http://www.bioconductor.org/shields/commits/bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#svn_source)
-[![GitHub forks](https://img.shields.io/github/forks/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/network) 
-[![GitHub stars](https://img.shields.io/github/stars/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/stargazers) 
+[![GitHub forks](https://img.shields.io/github/forks/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/network)
+[![GitHub stars](https://img.shields.io/github/stars/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/stargazers)
 
 
 [![platform](http://www.bioconductor.org/shields/availability/devel/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#archives)
@@ -41,7 +41,7 @@ This package implements functions to retrieve the nearest genes around the peak,
 
 ------------------------------------------------------------------------
 
-Please cite the following article when using `ChIPseeker`: 
+Please cite the following article when using `ChIPseeker`:
 
 __*Yu G*__, Wang LG and He QY^\*^. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. ***Bioinformatics*** 2015, 31(14):2382-2383.
 
@@ -57,7 +57,7 @@ For details, please visit our project website, <https://guangchuangyu.github.io/
 + [Featured Articles](https://guangchuangyu.github.io/ChIPseeker/featuredArticles/)
 + [Feedback](https://guangchuangyu.github.io/ChIPseeker/#feedback)
 
-### Citation 
+### Citation
 
 `r badge_citation("9pM33mqn1YgC", "12053363057899219488", "green")`
 

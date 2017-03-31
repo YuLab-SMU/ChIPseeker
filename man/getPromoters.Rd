@@ -22,3 +22,4 @@ GRanges object
 \description{
 prepare the promoter regions
 }
+
