@@ -22,16 +22,16 @@ upsetplot.csAnno <- function(x, sets=NULL, order.by = "freq", sets.bar.color=NUL
         if (vennpie && is.null(sets.bar.color)) {
             sets.bar.color <- c("#d95f0e", "#fee0d2", "#98D277",
                                 "#6F9E4C", "#fc9272", "#9ecae1", "#ffeda0")
-        } 
+        }
     }
-    
+
     if (is.null(sets.bar.color)) {
         sets.bar.color <- "black"
     }
 
     if (vennpie) {
         plot.new()
-        
+
         # grid.rect(gp = gpar(fill="white"))
         upset(y, sets=sets, sets.bar.color=sets.bar.color,
               order.by = order.by, ...)
