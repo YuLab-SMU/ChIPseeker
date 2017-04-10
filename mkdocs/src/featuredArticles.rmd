@@ -23,18 +23,20 @@ Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://s
 
 ## <i class="fa fa-calendar"></i> 2017
 
-[Human Nup98 regulates the localization and activity of DExH/D-box helicase DHX9](https://elifesciences.org/content/6/e18825). ***eLife***. 2017
+[A cytosolic Ezh1 isoform modulates a PRC2–Ezh1 epigenetic adaptive response in postmitotic cells](http://www.nature.com/nsmb/journal/vaop/ncurrent/full/nsmb.3392.html). ***Nature Structural & Molecular Biology***. 2017
 
+[Human Nup98 regulates the localization and activity of DExH/D-box helicase DHX9](https://elifesciences.org/content/6/e18825). ***eLife***. 2017, 6:e18825
 
 [Maintenance of macrophage transcriptional programs and intestinal homeostasis by epigenetic reader SP140](http://immunology.sciencemag.org/content/2/9/eaag3160). ***Science Immunology***. 2017, 2(9):eaag3160
 
 [Identification of quiescent and spatially restricted mammary stem cells that are hormone responsive](http://www.nature.com/ncb/journal/vaop/ncurrent/full/ncb3471.html). ***Nature Cell Biology***. 2017, 19:164–176
 
+[Combining ATAC-seq with nuclei sorting for discovery of cis-regulatory regions in plant genomes](http://dx.doi.org/10.1093/nar/gkw1179). ***Necleic Acids Research***. 2017, 45(6):e41
+
+
 ## <i class="fa fa-calendar"></i> 2016
 
 [Dpy30 is critical for maintaining the identity and function of adult hematopoietic stem cells](http://jem.rupress.org/content/early/2016/09/14/jem.20160185.full). ***The Journal of Experimental Medicine***. 2016.
-
-[Combining ATAC-seq with nuclei sorting for discovery of cis-regulatory regions in plant genomes](http://dx.doi.org/10.1093/nar/gkw1179). ***Necleic Acids Research***. 2016
 
 [Satb2 determines miRNA expression and long-term memory in the adult central nervous system](https://elifesciences.org/content/5/e17361). ***eLife***. 2016, 5:e17361
 
