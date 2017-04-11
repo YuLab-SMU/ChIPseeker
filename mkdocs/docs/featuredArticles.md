@@ -25,7 +25,7 @@ output:
 [Let us know](https://github.com/GuangchuangYu/featured_img) if you have
 published using `ChIPseeker` and your publication will be featured here.
 
-[![citation](https://img.shields.io/badge/cited%20by-42-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-45-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 
 <link rel='stylesheet' href=https://guangchuangyu.github.io/resume/css/morris.css>
 <script src='https://guangchuangyu.github.io/resume/css/jquery.min.js' type='text/javascript'></script>
@@ -40,13 +40,13 @@ published using `ChIPseeker` and your publication will be featured here.
     height: 300px;
   }  
   </style>
-<div id="chart4c5771a2197" class="rChart morris">
+<div id="chart3ed103d2150" class="rChart morris">
 
 </div>
 
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart4c5771a2197",
+ "element": "chart3ed103d2150",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -61,16 +61,16 @@ published using `ChIPseeker` and your publication will be featured here.
 },
 {
  "year": 2016,
-"cites":             28,
+"cites":             30,
 "pubid": "9pM33mqn1YgC" 
 },
 {
  "year": 2017,
-"cites":              9,
+"cites":             10,
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart4c5771a2197",
+"id": "chart3ed103d2150",
 "labels": "cites" 
 },
       chartType = "Bar"
@@ -82,9 +82,14 @@ scholar](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=1205336305789
 <i class="fa fa-calendar"></i> 2017
 -----------------------------------
 
+[A cytosolic Ezh1 isoform modulates a PRC2–Ezh1 epigenetic adaptive
+response in postmitotic
+cells](http://www.nature.com/nsmb/journal/vaop/ncurrent/full/nsmb.3392.html).
+***Nature Structural & Molecular Biology***. 2017
+
 [Human Nup98 regulates the localization and activity of DExH/D-box
 helicase DHX9](https://elifesciences.org/content/6/e18825). ***eLife***.
-2017
+2017, 6:e18825
 
 [Maintenance of macrophage transcriptional programs and intestinal
 homeostasis by epigenetic reader
@@ -96,6 +101,10 @@ that are hormone
 responsive](http://www.nature.com/ncb/journal/vaop/ncurrent/full/ncb3471.html).
 ***Nature Cell Biology***. 2017, 19:164–176
 
+[Combining ATAC-seq with nuclei sorting for discovery of cis-regulatory
+regions in plant genomes](http://dx.doi.org/10.1093/nar/gkw1179).
+***Necleic Acids Research***. 2017, 45(6):e41
+
 <i class="fa fa-calendar"></i> 2016
 -----------------------------------
 
@@ -103,10 +112,6 @@ responsive](http://www.nature.com/ncb/journal/vaop/ncurrent/full/ncb3471.html).
 hematopoietic stem
 cells](http://jem.rupress.org/content/early/2016/09/14/jem.20160185.full).
 ***The Journal of Experimental Medicine***. 2016.
-
-[Combining ATAC-seq with nuclei sorting for discovery of cis-regulatory
-regions in plant genomes](http://dx.doi.org/10.1093/nar/gkw1179).
-***Necleic Acids Research***. 2016
 
 [Satb2 determines miRNA expression and long-term memory in the adult
 central nervous system](https://elifesciences.org/content/5/e17361).
