@@ -284,7 +284,7 @@ dropAnno <- function(csAnno, distanceToTSS_cutoff=10000) {
     csAnno@peakNum <- length(idx)
     if (csAnno@hasGenomicAnnotation) {
         csAnno@annoStat <- getGenomicAnnoStat(csAnno@anno)
-        detailGenomicAnnotation = detailGenomicAnnotation[idx,]
+        csAnno@detailGenomicAnnotation = csAnno@detailGenomicAnnotation[idx,]
     }
     csAnno
 }
