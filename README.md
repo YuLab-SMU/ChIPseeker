@@ -17,7 +17,7 @@ Please cite the following article when using `ChIPseeker`:
 
 ***Yu G***, Wang LG and He QY<sup>\*</sup>. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. ***Bioinformatics*** 2015, 31(14):2382-2383.
 
-[![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-green.svg?style=flat)](http://dx.doi.org/10.1093/bioinformatics/btv145) [![citation](https://img.shields.io/badge/cited%20by-51-green.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488) [![](https://img.shields.io/badge/Altmetric-31-green.svg?style=flat)](https://www.altmetric.com/details/3781087)
+[![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-green.svg?style=flat)](http://dx.doi.org/10.1093/bioinformatics/btv145) [![](https://img.shields.io/badge/Altmetric-31-green.svg?style=flat)](https://www.altmetric.com/details/3781087) [![citation](https://img.shields.io/badge/cited%20by-51-green.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488) [![](https://img.shields.io/badge/ESI-Highly%20Cited%20Paper-green.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022)
 
 ------------------------------------------------------------------------
 

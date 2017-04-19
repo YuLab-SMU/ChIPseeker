@@ -47,8 +47,10 @@ Please cite the following article when using `ChIPseeker`:
 __*Yu G*__, Wang LG and He QY^\*^. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. ***Bioinformatics*** 2015, 31(14):2382-2383.
 
 `r badge_doi("10.1093/bioinformatics/btv145", "green")`
-`r badge_citation("9pM33mqn1YgC", "12053363057899219488", "green")`
 `r badge_altmetric("3781087", "green")`
+`r badge_citation("9pM33mqn1YgC", "12053363057899219488", "green")`
+`r badge_custom("ESI", "Highly Cited Paper", "green",
+"http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022")`
 
 ------------------------------------------------------------------------
 
