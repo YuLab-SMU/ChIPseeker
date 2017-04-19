@@ -27,7 +27,7 @@ ChIPseeker: ChIP peak Annotation, Comparison, and Visualization
 
 [![](https://img.shields.io/badge/release%20version-1.10.3-blue.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker)
 [![](https://img.shields.io/badge/devel%20version-1.11.3-blue.svg?style=flat)](https://github.com/guangchuangyu/ChIPseeker)
-[![](https://img.shields.io/badge/download-13340/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
+[![](https://img.shields.io/badge/download-13514/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 [![](https://img.shields.io/badge/download-423/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 
 This package implements functions to retrieve the nearest genes around
@@ -65,7 +65,7 @@ Guangchuang Yu, School of Public Health, The University of Hong Kong.
 Please cite the following article when using `ChIPseeker`:
 
 [![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-blue.svg?style=flat)](http://dx.doi.org/10.1093/bioinformatics/btv145)
-[![citation](https://img.shields.io/badge/cited%20by-45-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-51-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 [![](https://img.shields.io/badge/Altmetric-31-blue.svg?style=flat)](https://www.altmetric.com/details/3781087)
 
 **Yu G**, Wang LG and He QY<sup>\*</sup>. ChIPseeker: an R/Bioconductor

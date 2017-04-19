@@ -15,6 +15,8 @@ html_preview: false
 
 
 `r badge_citation("9pM33mqn1YgC", "12053363057899219488", "blue")`
+`r badge_custom("ESI", "Highly Cited Paper", "blue", "http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022")`
+
 
 `r article_citation_trend("9pM33mqn1YgC")`
 
@@ -24,6 +26,9 @@ Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://s
 ## <i class="fa fa-calendar"></i> 2017
 
 [A cytosolic Ezh1 isoform modulates a PRC2–Ezh1 epigenetic adaptive response in postmitotic cells](http://www.nature.com/nsmb/journal/vaop/ncurrent/full/nsmb.3392.html). ***Nature Structural & Molecular Biology***. 2017
+
+[H2A monoubiquitination in Arabidopsis thaliana is generally independent of LHP1 and PRC2 activity](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-017-1197-z).
+***Genome Biology***. 2017, 18:69
 
 [Human Nup98 regulates the localization and activity of DExH/D-box helicase DHX9](https://elifesciences.org/content/6/e18825). ***eLife***. 2017, 6:e18825
 
@@ -36,7 +41,7 @@ Find out more on [<i class="ai ai-google-scholar"></i> google scholar](https://s
 
 ## <i class="fa fa-calendar"></i> 2016
 
-[Dpy30 is critical for maintaining the identity and function of adult hematopoietic stem cells](http://jem.rupress.org/content/early/2016/09/14/jem.20160185.full). ***The Journal of Experimental Medicine***. 2016.
+[Dpy30 is critical for maintaining the identity and function of adult hematopoietic stem cells](http://jem.rupress.org/content/early/2016/09/14/jem.20160185.full). ***The Journal of Experimental Medicine***. 2016, 213(11):2349-2364
 
 [Satb2 determines miRNA expression and long-term memory in the adult central nervous system](https://elifesciences.org/content/5/e17361). ***eLife***. 2016, 5:e17361
 

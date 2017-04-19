@@ -25,7 +25,8 @@ output:
 [Let us know](https://github.com/GuangchuangYu/featured_img) if you have
 published using `ChIPseeker` and your publication will be featured here.
 
-[![citation](https://img.shields.io/badge/cited%20by-45-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-51-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![](https://img.shields.io/badge/ESI-Highly%20Cited%20Paper-blue.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022)
 
 <link rel='stylesheet' href=https://guangchuangyu.github.io/resume/css/morris.css>
 <script src='https://guangchuangyu.github.io/resume/css/jquery.min.js' type='text/javascript'></script>
@@ -40,13 +41,13 @@ published using `ChIPseeker` and your publication will be featured here.
     height: 300px;
   }  
   </style>
-<div id="chart3ed103d2150" class="rChart morris">
+<div id="chart53818f0715e" class="rChart morris">
 
 </div>
 
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart3ed103d2150",
+ "element": "chart53818f0715e",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -61,16 +62,16 @@ published using `ChIPseeker` and your publication will be featured here.
 },
 {
  "year": 2016,
-"cites":             30,
+"cites":             32,
 "pubid": "9pM33mqn1YgC" 
 },
 {
  "year": 2017,
-"cites":             10,
+"cites":             14,
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart3ed103d2150",
+"id": "chart53818f0715e",
 "labels": "cites" 
 },
       chartType = "Bar"
@@ -86,6 +87,11 @@ scholar](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=1205336305789
 response in postmitotic
 cells](http://www.nature.com/nsmb/journal/vaop/ncurrent/full/nsmb.3392.html).
 ***Nature Structural & Molecular Biology***. 2017
+
+[H2A monoubiquitination in Arabidopsis thaliana is generally independent
+of LHP1 and PRC2
+activity](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-017-1197-z).
+***Genome Biology***. 2017, 18:69
 
 [Human Nup98 regulates the localization and activity of DExH/D-box
 helicase DHX9](https://elifesciences.org/content/6/e18825). ***eLife***.
@@ -111,7 +117,7 @@ regions in plant genomes](http://dx.doi.org/10.1093/nar/gkw1179).
 [Dpy30 is critical for maintaining the identity and function of adult
 hematopoietic stem
 cells](http://jem.rupress.org/content/early/2016/09/14/jem.20160185.full).
-***The Journal of Experimental Medicine***. 2016.
+***The Journal of Experimental Medicine***. 2016, 213(11):2349-2364
 
 [Satb2 determines miRNA expression and long-term memory in the adult
 central nervous system](https://elifesciences.org/content/5/e17361).
