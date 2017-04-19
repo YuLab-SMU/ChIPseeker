@@ -6,12 +6,12 @@ updateGenomicAnnotation <- function(peaks, genomicRegion, type, anno, sameStrand
         anno[["detailGenomicAnnotation"]][hitIndex, type] <- TRUE
     }
     return(anno)
-}         
+}
 
 
 ##' get Genomic Annotation of peaks
 ##'
-##' 
+##'
 ##' @title getGenomicAnnotation
 ##' @param peaks peaks in GRanges object
 ##' @param distance distance of peak to TSS
@@ -32,7 +32,7 @@ getGenomicAnnotation <- function(peaks,
                                  genomicAnnotationPriority,
                                  sameStrand = FALSE
                                  ) {
-    
+
     ##
     ## since some annotation overlap,
     ## a priority is assign based on *genomicAnnotationPriority*
@@ -51,8 +51,8 @@ getGenomicAnnotation <- function(peaks,
 
     .ChIPseekerEnv(TxDb)
     ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
-    
-            
+
+
     annotation <- rep(NA, length(distance))
 
     flag <- rep(FALSE, length(distance))
@@ -70,7 +70,7 @@ getGenomicAnnotation <- function(peaks,
     anno <- list(annotation=annotation,
                  detailGenomicAnnotation=detailGenomicAnnotation)
 
-    genomicAnnotationPriority <- rev(genomicAnnotationPriority)   
+    genomicAnnotationPriority <- rev(genomicAnnotationPriority)
     for (AP in genomicAnnotationPriority) {
         if (AP == "Intergenic") {
             ## Intergenic
@@ -106,13 +106,13 @@ getGenomicAnnotation <- function(peaks,
 
         annotation <- anno[["annotation"]]
         detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
-        
+
         if (AP == "Promoter") {
             ## TSS
-            tssIndex <- distance >= tssRegion[1] & distance <= tssRegion[2] 
+            tssIndex <- distance >= tssRegion[1] & distance <= tssRegion[2]
             annotation[tssIndex] <- "Promoter"
             detailGenomicAnnotation[tssIndex, "Promoter"] <- TRUE
-    
+
             pm <- max(abs(tssRegion))
             if (pm/1000 >= 2) {
                 dd <- seq(1:ceiling(pm/1000))*1000
@@ -166,7 +166,7 @@ getGenomicAnnotation <- function(peaks,
     } else {
         dd2 <- dd
     }
-    
+
     for (i in 1:3) { ## downstream within 3k
         j <- which(annotation == "Intergenic" & abs(dd2) <= i*1000 & dd2 != 0)
         if (length(j) > 0) {
@@ -201,17 +201,25 @@ getGenomicAnnotation.internal <- function(peaks, genomicRegion, type, sameStrand
     }
 
     if (type == "Intron") {
-        intron_rank <- unlist(sapply(GRegionLen, function(i) seq(0, i)))
-        intron_rank <- intron_rank[intron_rank != 0]
-        GRegion$intron_rank <- intron_rank
+        gr2 <- GRegion[!duplicated(GRegion$gene_id)]
+        strd <- as.character(strand(gr2))
+        len <- GRegionLen[GRegionLen != 0]
+
+        GRegion$intron_rank <- lapply(seq_along(strd), function(i) {
+            rank <- seq(1, len[i])
+            if (strd[i] == '-')
+                rank <- rev(rank)
+            return(rank)
+        }) %>% unlist
     }
+
     ## find overlap
     if (sameStrand) {
         GRegionHit <- findOverlaps(peaks, GRegion)
     } else {
         GRegionHit <- findOverlaps(peaks, unstrand(GRegion))
     }
-    
+
     if (length(GRegionHit) == 0) {
         return(NA)
     }

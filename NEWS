@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.11.4
+------------------------
+ o bug fixed of intron rank <2017-04-19, Wed>
+   + https://github.com/GuangchuangYu/ChIPseeker/issues/54
+
 CHANGES IN VERSION 1.11.3
 ------------------------
  o bug fixed of dropAnno <2017-04-10, Mon>
