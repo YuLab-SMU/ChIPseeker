@@ -68,7 +68,7 @@ Please cite the following article when using `ChIPseeker`:
 [![](https://img.shields.io/badge/Altmetric-31-blue.svg?style=flat)](https://www.altmetric.com/details/3781087)
 [![citation](https://img.shields.io/badge/cited%20by-51-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 [![](https://img.shields.io/badge/ESI-Highly%20Cited%20Paper-blue.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022)
-[![](https://img.shields.io/badge/cited%20in%20Web%20of%20Science%20Core%20Collection-29-green.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022)
+[![](https://img.shields.io/badge/cited%20in%20Web%20of%20Science%20Core%20Collection-29-blue.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022)
 
 **Yu G**, Wang LG and He QY<sup>\*</sup>. ChIPseeker: an R/Bioconductor
 package for ChIP peak annotation, comparison and visualization.
