@@ -41,13 +41,13 @@ published using `ChIPseeker` and your publication will be featured here.
     height: 300px;
   }  
   </style>
-<div id="chart53818f0715e" class="rChart morris">
+<div id="chart90462803cf3" class="rChart morris">
 
 </div>
 
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart53818f0715e",
+ "element": "chart90462803cf3",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -71,7 +71,7 @@ published using `ChIPseeker` and your publication will be featured here.
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart53818f0715e",
+"id": "chart90462803cf3",
 "labels": "cites" 
 },
       chartType = "Bar"
