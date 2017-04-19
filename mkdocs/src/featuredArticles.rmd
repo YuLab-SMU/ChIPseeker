@@ -16,6 +16,7 @@ html_preview: false
 
 `r badge_citation("9pM33mqn1YgC", "12053363057899219488", "blue")`
 `r badge_custom("ESI", "Highly Cited Paper", "blue", "http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022")`
+`r badge_sci_citation("http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022", "green")`
 
 
 `r article_citation_trend("9pM33mqn1YgC")`
