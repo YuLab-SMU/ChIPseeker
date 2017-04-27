@@ -42,8 +42,9 @@ Please cite the following article when using `ChIPseeker`:
 `r badge_doi("10.1093/bioinformatics/btv145", "blue")`
 `r badge_altmetric("3781087", "blue")`
 `r badge_citation("9pM33mqn1YgC", "12053363057899219488", "blue")`
+`r badge_sci_citation("http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=T2TqQabyevZvWQ4YHvJ&UT=WOS%3A000358173500022", "blue")`
 `r badge_custom("ESI", "Highly Cited Paper", "blue", "http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022")`
-`r badge_sci_citation("http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022", "blue")`
+
 
 
 __Yu G__, Wang LG and He QY<sup>*</sup>. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. **_Bioinformatics_**, 2015, 31(14):2382-2383.

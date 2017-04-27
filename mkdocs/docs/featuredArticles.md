@@ -25,9 +25,8 @@ output:
 [Let us know](https://github.com/GuangchuangYu/featured_img) if you have
 published using `ChIPseeker` and your publication will be featured here.
 
-[![citation](https://img.shields.io/badge/cited%20by-51-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-54-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 [![](https://img.shields.io/badge/ESI-Highly%20Cited%20Paper-blue.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022)
-[![](https://img.shields.io/badge/cited%20in%20Web%20of%20Science%20Core%20Collection-29-blue.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022)
 
 <link rel='stylesheet' href=https://guangchuangyu.github.io/resume/css/morris.css>
 <script src='https://guangchuangyu.github.io/resume/css/jquery.min.js' type='text/javascript'></script>
@@ -42,13 +41,13 @@ published using `ChIPseeker` and your publication will be featured here.
     height: 300px;
   }  
   </style>
-<div id="chart17f22369a319" class="rChart morris">
+<div id="chart14bf65bb4b6c" class="rChart morris">
 
 </div>
 
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart17f22369a319",
+ "element": "chart14bf65bb4b6c",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -68,11 +67,11 @@ published using `ChIPseeker` and your publication will be featured here.
 },
 {
  "year": 2017,
-"cites":             14,
+"cites":             17,
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart17f22369a319",
+"id": "chart14bf65bb4b6c",
 "labels": "cites" 
 },
       chartType = "Bar"
