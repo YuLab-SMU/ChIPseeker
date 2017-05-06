@@ -25,7 +25,7 @@ output:
 [Let us know](https://github.com/GuangchuangYu/featured_img) if you have
 published using `ChIPseeker` and your publication will be featured here.
 
-[![citation](https://img.shields.io/badge/cited%20by-54-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-56-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 [![](https://img.shields.io/badge/ESI-Highly%20Cited%20Paper-blue.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022)
 
 <link rel='stylesheet' href=https://guangchuangyu.github.io/resume/css/morris.css>
@@ -41,13 +41,13 @@ published using `ChIPseeker` and your publication will be featured here.
     height: 300px;
   }  
   </style>
-<div id="chart14bf65bb4b6c" class="rChart morris">
+<div id="chart46493614bebe" class="rChart morris">
 
 </div>
 
 <script type='text/javascript'>
     var chartParams = {
- "element": "chart14bf65bb4b6c",
+ "element": "chart46493614bebe",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -56,6 +56,11 @@ published using `ChIPseeker` and your publication will be featured here.
 ],
 "data": [
  {
+ "year": 2014,
+"cites":              1,
+"pubid": "9pM33mqn1YgC" 
+},
+{
  "year": 2015,
 "cites":              5,
 "pubid": "9pM33mqn1YgC" 
@@ -67,11 +72,11 @@ published using `ChIPseeker` and your publication will be featured here.
 },
 {
  "year": 2017,
-"cites":             17,
+"cites":             18,
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chart14bf65bb4b6c",
+"id": "chart46493614bebe",
 "labels": "cites" 
 },
       chartType = "Bar"
@@ -82,6 +87,11 @@ scholar](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=1205336305789
 
 <i class="fa fa-calendar"></i> 2017
 -----------------------------------
+
+[Conserved roles of mouse DUX and human DUX4 in activating
+cleavage-stage genes and MERVL/HERVL
+retrotransposons](http://www.nature.com/ng/journal/vaop/ncurrent/full/ng.3844.html).
+***Nature Genetics***. 2017
 
 [A cytosolic Ezh1 isoform modulates a PRC2–Ezh1 epigenetic adaptive
 response in postmitotic

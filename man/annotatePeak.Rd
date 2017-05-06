@@ -86,10 +86,9 @@ peakAnno <- annotatePeak(peakfile, tssRegion=c(-3000, 3000), TxDb=txdb)
 peakAnno
 }
 }
-\author{
-G Yu
-}
 \seealso{
 \code{\link{plotAnnoBar}} \code{\link{plotAnnoPie}} \code{\link{plotDistToTSS}}
 }
-
+\author{
+G Yu
+}

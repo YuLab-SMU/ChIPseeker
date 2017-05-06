@@ -15,4 +15,3 @@ get filenames of sample files
 \author{
 G Yu
 }
-

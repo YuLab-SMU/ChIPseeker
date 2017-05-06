@@ -2,13 +2,12 @@
 % Please edit documentation in R/ChIPseeker-package.R
 \docType{data}
 \name{info}
-\alias{gsminfo}
 \alias{info}
-\alias{tagMatrixList}
 \alias{ucsc_release}
+\alias{gsminfo}
+\alias{tagMatrixList}
 \title{Information Datasets}
 \description{
 ucsc genome version, precalcuated data and gsm information
 }
 \keyword{datasets}
-

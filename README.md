@@ -1,9 +1,9 @@
 ChIPseeker: ChIP peak Annotation, Comparison, and Visualization
 ===============================================================
 
-[![](https://img.shields.io/badge/release%20version-1.12.0-green.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker) [![](https://img.shields.io/badge/devel%20version-1.11.4-green.svg?style=flat)](https://github.com/guangchuangyu/ChIPseeker) [![Bioc](http://www.bioconductor.org/shields/years-in-bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#since) [![](https://img.shields.io/badge/download-13632/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker) [![](https://img.shields.io/badge/download-423/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
+[![](https://img.shields.io/badge/release%20version-1.12.0-green.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker) [![](https://img.shields.io/badge/devel%20version-1.13.0-green.svg?style=flat)](https://github.com/guangchuangyu/ChIPseeker) [![Bioc](http://www.bioconductor.org/shields/years-in-bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#since) [![](https://img.shields.io/badge/download-13855/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker) [![](https://img.shields.io/badge/download-518/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 
-[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![codecov](https://codecov.io/gh/GuangchuangYu/ChIPseeker/branch/master/graph/badge.svg)](https://codecov.io/gh/GuangchuangYu/ChIPseeker/) [![Last-changedate](https://img.shields.io/badge/last%20change-2017--04--27-green.svg)](https://github.com/GuangchuangYu/ChIPseeker/commits/master) [![commit](http://www.bioconductor.org/shields/commits/bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#svn_source) [![GitHub forks](https://img.shields.io/github/forks/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/network) [![GitHub stars](https://img.shields.io/github/stars/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/stargazers)
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![codecov](https://codecov.io/gh/GuangchuangYu/ChIPseeker/branch/master/graph/badge.svg)](https://codecov.io/gh/GuangchuangYu/ChIPseeker/) [![Last-changedate](https://img.shields.io/badge/last%20change-2017--05--06-green.svg)](https://github.com/GuangchuangYu/ChIPseeker/commits/master) [![commit](http://www.bioconductor.org/shields/commits/bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#svn_source) [![GitHub forks](https://img.shields.io/github/forks/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/network) [![GitHub stars](https://img.shields.io/github/stars/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/stargazers)
 
 [![platform](http://www.bioconductor.org/shields/availability/devel/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#archives) [![Build Status](http://www.bioconductor.org/shields/build/devel/bioc/ChIPseeker.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/ChIPseeker/) [![Linux/Mac Travis Build Status](https://img.shields.io/travis/GuangchuangYu/ChIPseeker/master.svg?label=Mac%20OSX%20%26%20Linux)](https://travis-ci.org/GuangchuangYu/ChIPseeker) [![AppVeyor Build Status](https://img.shields.io/appveyor/ci/Guangchuangyu/ChIPseeker/master.svg?label=Windows)](https://ci.appveyor.com/project/GuangchuangYu/ChIPseeker)
 
@@ -29,11 +29,10 @@ Please cite the following article when using `ChIPseeker`:
 
 ### Citation
 
-[![citation](https://img.shields.io/badge/cited%20by-54-green.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488) [![](https://img.shields.io/badge/cited%20in%20Web%20of%20Science%20Core%20Collection-29-green.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=T2TqQabyevZvWQ4YHvJ&UT=WOS%3A000358173500022) [![](https://img.shields.io/badge/ESI-Highly%20Cited%20Paper-green.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022)
+[![citation](https://img.shields.io/badge/cited%20by-56-green.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488) [![](https://img.shields.io/badge/cited%20in%20Web%20of%20Science%20Core%20Collection--green.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=T2TqQabyevZvWQ4YHvJ&UT=WOS%3A000358173500022) [![](https://img.shields.io/badge/ESI-Highly%20Cited%20Paper-green.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022)
 
-       +-+------------+-----------+------------+-----------+---+
-    30 +                          *                            +
-       |                                                       |
+       +-+--------+-------+-------+--------+-------+-------+---+
+    30 +                                   *                   +
        |                                                       |
     25 +                                                       +
        |                                                       |
@@ -43,36 +42,37 @@ Please cite the following article when using `ChIPseeker`:
        |                                                       |
     10 +                                                       +
        |                                                       |
-     5 + *                                                     +
-       +-+------------+-----------+------------+-----------+---+
-       2015        2015.5       2016        2016.5       2017   
+     5 +                  *                                    +
+       | *                                                     |
+     0 +-+--------+-------+-------+--------+-------+-------+---+
+       2014    2014.5   2015   2015.5    2016   2016.5   2017   
 
 ### Download stats
 
-[![download](http://www.bioconductor.org/shields/downloads/ChIPseeker.svg)](https://bioconductor.org/packages/stats/bioc/ChIPseeker) [![](https://img.shields.io/badge/download-13632/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker) [![](https://img.shields.io/badge/download-423/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
+[![download](http://www.bioconductor.org/shields/downloads/ChIPseeker.svg)](https://bioconductor.org/packages/stats/bioc/ChIPseeker) [![](https://img.shields.io/badge/download-13855/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker) [![](https://img.shields.io/badge/download-518/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 
-         +--------+--------------+-------------+--------------+-------------+--------------+-----------+
-         |                                                                              *              |
-    1000 +                                                                  *                          +
+         +--------+-------------+-------------+-------------+-------------+-------------+--------------+
+    1200 +                                                                                        *    +
          |                                                                                             |
-         |                                                                       *                     |
          |                                                                                             |
-         |                                                           *    *   *                        |
+         |                                                                            *                |
+         |                                                                *                            |
+    1000 +                                                                                             +
+         |                                                                     *                       |
+         |                                                              *    *                         |
+         |                                                         *                                   |
      800 +                                                                                             +
-         |                                                                                   *         |
-         |                                               *             *                   *      *    |
-         |                                                 *    * *                                    |
-         |                                       *  * *       *                       *        *       |
-     600 +                                                                                             +
-         |                           *  * *  *                                     *                   |
-         |        *                                                                                    |
-         |               *         *                                                                   |
+         |                                              *             *                 *  *   *       |
+         |                                                *    * *                                     |
+         |                                      *  * *      *                       *        *         |
+     600 +                             * *                                                             +
+         |        *                  *      *                                    *                     |
+         |               *        *                                                                    |
          |                                                                                             |
-     400 +      *      *                       *                                                       +
-         |                  * *                                                                        |
-         |           *                                                                                 |
-         |                       *                                                                     |
+     400 +      *      *   *                  *                                                        +
+         |          *         *                                                                        |
+         |                      *                                                                      |
          |                                                                                             |
      200 +   *                                                                                         +
-         +--------+--------------+-------------+--------------+-------------+--------------+-----------+
-               2014.5          2015         2015.5          2016         2016.5          2017
+         +--------+-------------+-------------+-------------+-------------+-------------+--------------+
+               2014.5         2015         2015.5         2016         2016.5         2017

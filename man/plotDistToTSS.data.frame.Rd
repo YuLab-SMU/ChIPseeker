@@ -38,10 +38,9 @@ peakAnno <- annotatePeak(peakfile, TxDb=txdb)
 plotDistToTSS(peakAnno)
 }
 }
-\author{
-Guangchuang Yu \url{http://ygc.name}
-}
 \seealso{
 \code{\link{annotatePeak}}
 }
-
+\author{
+Guangchuang Yu \url{http://ygc.name}
+}
