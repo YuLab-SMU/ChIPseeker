@@ -15,4 +15,3 @@ get genome version statistics collecting from GEO ChIPseq data
 \author{
 G Yu
 }
-

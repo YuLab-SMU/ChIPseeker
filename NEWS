@@ -1,3 +1,12 @@
+CHANGES IN VERSION 1.13.1
+------------------------
+ o fixed issue of naming intronList <2017-07-06, Thu>
+   + https://github.com/GuangchuangYu/ChIPseeker/issues/57#issuecomment-313342399
+
+CHANGES IN VERSION 1.12.0
+------------------------
+ o BioC 3.5 release <2017-04-26, Wed>
+
 CHANGES IN VERSION 1.11.4
 ------------------------
  o bug fixed of intron rank <2017-04-19, Wed>

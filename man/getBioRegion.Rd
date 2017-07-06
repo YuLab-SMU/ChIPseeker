@@ -25,4 +25,3 @@ prepare a region center on start site of selected feature
 \author{
 Guangchuang Yu
 }
-

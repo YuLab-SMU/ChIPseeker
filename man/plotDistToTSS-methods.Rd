@@ -3,8 +3,10 @@
 \docType{methods}
 \name{plotDistToTSS}
 \alias{plotDistToTSS}
-\alias{plotDistToTSS,csAnno,ANY-method}
+\alias{plotDistToTSS}
 \alias{plotDistToTSS,list-method}
+\alias{plotDistToTSS}
+\alias{plotDistToTSS,csAnno,ANY-method}
 \title{plotDistToTSS method generics}
 \usage{
 plotDistToTSS(x, distanceColumn = "distanceToTSS", xlab = "",
@@ -47,4 +49,3 @@ plotDistToTSS method for \code{csAnno} instance
 \author{
 Guangchuang Yu \url{https://guangchuangyu.github.io}
 }
-
