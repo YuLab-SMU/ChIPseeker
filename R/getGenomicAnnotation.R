@@ -191,14 +191,10 @@ getGenomicAnnotation <- function(peaks,
 getGenomicAnnotation.internal <- function(peaks, genomicRegion, type, sameStrand=FALSE){
     GRegion <- unlist(genomicRegion)
     GRegionLen <- elementNROWS(genomicRegion)
-    if (type == "Intron" || type =="Exon") {
-        nn <- TXID2EG(names(genomicRegion))
-        names(GRegionLen) <- nn
-        GRegion$gene_id <- rep(nn, times=GRegionLen)
-    } else {
-        names(GRegionLen) <- names(genomicRegion)
-        GRegion$gene_id <- rep(names(genomicRegion), times=GRegionLen)
-    }
+
+    names(GRegionLen) <- names(genomicRegion)
+    GRegion$gene_id <- rep(names(genomicRegion), times=GRegionLen)
+
 
     if (type == "Intron") {
         gr2 <- GRegion[!duplicated(GRegion$gene_id)]
@@ -211,6 +207,12 @@ getGenomicAnnotation.internal <- function(peaks, genomicRegion, type, sameStrand
                 rank <- rev(rank)
             return(rank)
         }) %>% unlist
+    }
+
+    if (type == "Intron" || type =="Exon") {
+        nn <- TXID2EG(names(genomicRegion))
+        names(GRegionLen) <- nn
+        GRegion$gene_id <- rep(nn, times=GRegionLen)
     }
 
     ## find overlap
