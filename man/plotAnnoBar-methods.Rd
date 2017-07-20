@@ -3,10 +3,8 @@
 \docType{methods}
 \name{plotAnnoBar}
 \alias{plotAnnoBar}
-\alias{plotAnnoBar}
-\alias{plotAnnoBar,list-method}
-\alias{plotAnnoBar}
 \alias{plotAnnoBar,csAnno,ANY-method}
+\alias{plotAnnoBar,list-method}
 \title{plotAnnoBar method generics}
 \usage{
 plotAnnoBar(x, xlab = "", ylab = "Percentage(\%)",
@@ -41,3 +39,4 @@ plotAnnoBar method for \code{csAnno} instance
 \author{
 Guangchuang Yu \url{https://guangchuangyu.github.io}
 }
+

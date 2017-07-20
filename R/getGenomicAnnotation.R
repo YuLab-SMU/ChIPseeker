@@ -209,6 +209,7 @@ getGenomicAnnotation.internal <- function(peaks, genomicRegion, type, sameStrand
         }) %>% unlist
     }
 
+
     if (type == "Intron" || type =="Exon") {
         nn <- TXID2EG(names(genomicRegion))
         names(GRegionLen) <- nn

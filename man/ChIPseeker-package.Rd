@@ -2,8 +2,8 @@
 % Please edit documentation in R/ChIPseeker-package.R
 \docType{package}
 \name{ChIPseeker-package}
-\alias{ChIPseeker-package}
 \alias{ChIPseeker}
+\alias{ChIPseeker-package}
 \title{ChIP-SEQ Annotation, Visualization and Comparison}
 \description{
 This package is designed for chip-seq data analysis
@@ -21,3 +21,4 @@ Guangchuang Yu
 Maintainer: Guangchuang Yu \email{guangchuangyu@gmail.com}
 }
 \keyword{package}
+

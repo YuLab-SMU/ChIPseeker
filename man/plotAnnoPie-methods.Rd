@@ -3,7 +3,6 @@
 \docType{methods}
 \name{plotAnnoPie}
 \alias{plotAnnoPie}
-\alias{plotAnnoPie}
 \alias{plotAnnoPie,csAnno,ANY-method}
 \title{plotAnnoPie method generics}
 \usage{
@@ -38,3 +37,4 @@ plotAnnoPie method for \code{csAnno} instance
 \author{
 Guangchuang Yu \url{https://guangchuangyu.github.io}
 }
+
