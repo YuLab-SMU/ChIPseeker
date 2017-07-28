@@ -25,10 +25,10 @@ ChIPseeker: ChIP peak Annotation, Comparison, and Visualization
 <link rel="stylesheet" href="https://guangchuangyu.github.io/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://guangchuangyu.github.io/css/academicons.min.css">
 
-[![](https://img.shields.io/badge/release%20version-1.12.0-blue.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker)
-[![](https://img.shields.io/badge/devel%20version-1.13.0-blue.svg?style=flat)](https://github.com/guangchuangyu/ChIPseeker)
-[![](https://img.shields.io/badge/download-14143/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
-[![](https://img.shields.io/badge/download-518/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
+[![](https://img.shields.io/badge/release%20version-1.12.1-blue.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker)
+[![](https://img.shields.io/badge/devel%20version-1.13.1-blue.svg?style=flat)](https://github.com/guangchuangyu/ChIPseeker)
+[![](https://img.shields.io/badge/download-15239/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
+[![](https://img.shields.io/badge/download-568/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 
 This package implements functions to retrieve the nearest genes around
 the peak, annotate genomic region of the peak, statstical methods for
@@ -66,7 +66,7 @@ Please cite the following article when using `ChIPseeker`:
 
 [![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-blue.svg?style=flat)](http://dx.doi.org/10.1093/bioinformatics/btv145)
 [![](https://img.shields.io/badge/Altmetric-31-blue.svg?style=flat)](https://www.altmetric.com/details/3781087)
-[![citation](https://img.shields.io/badge/cited%20by-60-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-67-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 [![](https://img.shields.io/badge/cited%20in%20Web%20of%20Science%20Core%20Collection--blue.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=T2TqQabyevZvWQ4YHvJ&UT=WOS%3A000358173500022)
 [![](https://img.shields.io/badge/ESI-Highly%20Cited%20Paper-blue.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022)
 

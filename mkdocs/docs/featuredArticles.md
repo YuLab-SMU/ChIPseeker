@@ -25,7 +25,7 @@ output:
 [Let us know](https://github.com/GuangchuangYu/featured_img) if you have
 published using `ChIPseeker` and your publication will be featured here.
 
-[![citation](https://img.shields.io/badge/cited%20by-60-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-67-blue.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 [![](https://img.shields.io/badge/ESI-Highly%20Cited%20Paper-blue.svg?style=flat)](http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&customersID=RID&IsProductCode=Yes&product=WOS&Init=Yes&Func=Frame&DestFail=http%3A%2F%2Fwww.webofknowledge.com&action=retrieve&SrcApp=RID&SrcAuth=RID&SID=Y2CXu6nry8nDQZcUy1w&UT=WOS%3A000358173500022)
 
 <link rel='stylesheet' href=https://guangchuangyu.github.io/resume/css/morris.css>
@@ -41,13 +41,13 @@ published using `ChIPseeker` and your publication will be featured here.
     height: 300px;
   }  
   </style>
-<div id="chartfb315bb38d" class="rChart morris">
+<div id="chart3d96962e0c2" class="rChart morris">
 
 </div>
 
 <script type='text/javascript'>
     var chartParams = {
- "element": "chartfb315bb38d",
+ "element": "chart3d96962e0c2",
 "width":            800,
 "height":            400,
 "xkey": "year",
@@ -62,7 +62,7 @@ published using `ChIPseeker` and your publication will be featured here.
 },
 {
  "year": 2015,
-"cites":              5,
+"cites":              4,
 "pubid": "9pM33mqn1YgC" 
 },
 {
@@ -72,11 +72,11 @@ published using `ChIPseeker` and your publication will be featured here.
 },
 {
  "year": 2017,
-"cites":             24,
+"cites":             32,
 "pubid": "9pM33mqn1YgC" 
 } 
 ],
-"id": "chartfb315bb38d",
+"id": "chart3d96962e0c2",
 "labels": "cites" 
 },
       chartType = "Bar"
@@ -88,19 +88,24 @@ scholar](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=1205336305789
 <i class="fa fa-calendar"></i> 2017
 -----------------------------------
 
-[Lineage-specific functions of TET1 in the postimplantation mouse
-embryo](http://www.nature.com/ng/journal/vaop/ncurrent/full/ng.3868.html).
-***Nature Genetics***. 2017
+[BRG1-SWI/SNF-dependent regulation of the Wt1 transcriptional landscape
+mediates epicardial activity during heart development and
+disease](https://doi.org/10.1038/ncomms16034). ***Nature
+Communications***. 2017, 8:16034.
 
 [Conserved roles of mouse DUX and human DUX4 in activating
 cleavage-stage genes and MERVL/HERVL
 retrotransposons](http://www.nature.com/ng/journal/vaop/ncurrent/full/ng.3844.html).
-***Nature Genetics***. 2017
+***Nature Genetics***. 2017, 49:925-934.
+
+[Lineage-specific functions of TET1 in the postimplantation mouse
+embryo](http://www.nature.com/ng/journal/vaop/ncurrent/full/ng.3868.html).
+***Nature Genetics***. 2017, 49:1061-1072.
 
 [A cytosolic Ezh1 isoform modulates a PRC2–Ezh1 epigenetic adaptive
 response in postmitotic
 cells](http://www.nature.com/nsmb/journal/vaop/ncurrent/full/nsmb.3392.html).
-***Nature Structural & Molecular Biology***. 2017
+***Nature Structural & Molecular Biology***. 2017, 24:444-452.
 
 [H2A monoubiquitination in Arabidopsis thaliana is generally independent
 of LHP1 and PRC2
