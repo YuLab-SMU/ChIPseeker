@@ -63,5 +63,9 @@ VignetteBuilder: knitr
 ByteCompile: true
 License: Artistic-2.0
 biocViews: Annotation, ChIPSeq, Software, Visualization, MultipleComparison
+<<<<<<< HEAD
 RoxygenNote: 5.0.1
 
+=======
+RoxygenNote: 6.0.1
+>>>>>>> upstream/master

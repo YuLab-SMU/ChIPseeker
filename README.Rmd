@@ -50,7 +50,6 @@ For details, please visit our project website, <https://guangchuangyu.github.io/
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/GuangchuangYu/ChIPseeker.svg?style=social)](https://twitter.com/intent/tweet?hashtags=ChIPseeker&url=http://bioinformatics.oxfordjournals.org/content/31/14/2382&screen_name=guangchuangyu)
 
 
-
 ------------------------------------------------------------------------
 
 Please cite the following article when using `ChIPseeker`:
@@ -67,8 +66,8 @@ __*Yu G*__, Wang LG and He QY^\*^. ChIPseeker: an R/Bioconductor package for ChI
 
 `r badge_citation("9pM33mqn1YgC", "12053363057899219488", "green")`
 
-`r badge_custom("ESI", "Highly Cited Paper", "green")`
 
+`r badge_custom("ESI", "Highly Cited Paper", "green")`
 
 
 ```{r echo=F, comment=NA}
