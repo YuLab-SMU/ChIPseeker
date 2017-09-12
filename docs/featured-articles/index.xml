@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Featured-articles on ChIPseeker</title>
+    <link>https://guangchuangyu.github.io/ChIPseeker/featured-articles/</link>
+    <description>Recent content in Featured-articles on ChIPseeker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Released under the Artistic-2.0 license</copyright>
+    <lastBuildDate>Mon, 24 Jul 2017 00:11:02 +0100</lastBuildDate>
+    
+	<atom:link href="https://guangchuangyu.github.io/ChIPseeker/featured-articles/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Featured Articles</title>
+      <link>https://guangchuangyu.github.io/ChIPseeker/featured-articles/</link>
+      <pubDate>Mon, 24 Jul 2017 00:11:02 +0100</pubDate>
+      
+      <guid>https://guangchuangyu.github.io/ChIPseeker/featured-articles/</guid>
+      <description>Let us know if you have published using ChIPseeker and your publication will be featured here.
+ 2017 An NF-κB Transcription-Factor-Dependent Lineage-Specific Transcriptional Program Promotes Regulatory T Cell Identity and Function. Immunity. 2017
+BRG1-SWI/SNF-dependent regulation of the Wt1 transcriptional landscape mediates epicardial activity during heart development and disease. Nature Communications. 2017, 8:16034.
+Conserved roles of mouse DUX and human DUX4 in activating cleavage-stage genes and MERVL/HERVL retrotransposons. Nature Genetics. 2017, 49:925-934.</description>
+    </item>
+    
+  </channel>
+</rss>

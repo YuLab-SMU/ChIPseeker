@@ -1,276 +1,339 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <meta name="author" content="Guangchuang Yu">
-        <link rel="canonical" href="https://guangchuangyu.github.io/ChIPseeker/">
-        <link rel="shortcut icon" href="./img/favicon.ico">
+  
+  
+  
+  
+   <html class="no-js"> 
 
-	<title>ChIPseeker</title>
+  <head lang="en-us">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <title>ChIPseeker</title>
+    <meta name="generator" content="Hugo 0.24.1" />
 
-        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link rel="stylesheet" href="./css/highlight.css">
-        <link href="./css/base.css" rel="stylesheet">
+    
+    <meta name="description" content="ChIP peak Annotation, Comparison and Visualization.">
+    
+    <link rel="canonical" href="https://guangchuangyu.github.io/ChIPseeker/">
+    
+    <meta name="author" content="Guangchuang Yu">
+    
 
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
+    <meta property="og:url" content="https://guangchuangyu.github.io/ChIPseeker/">
+    <meta property="og:title" content="ChIPseeker">
+    <meta property="og:image" content="https://guangchuangyu.github.io/ChIPseeker/images/gc.png">
+    <meta name="apple-mobile-web-app-title" content="ChIPseeker">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-        
-    </head>
+    <link rel="shortcut icon" type="image/x-icon" href="https://guangchuangyu.github.io/ChIPseeker/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://guangchuangyu.github.io/ChIPseeker/images/favicon.ico">
 
-    <body>
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('https://guangchuangyu.github.io/ChIPseeker/fonts/icon.eot');
+        src: url('https://guangchuangyu.github.io/ChIPseeker/fonts/icon.eot')
+               format('embedded-opentype'),
+             url('https://guangchuangyu.github.io/ChIPseeker/fonts/icon.woff')
+               format('woff'),
+             url('https://guangchuangyu.github.io/ChIPseeker/fonts/icon.ttf')
+               format('truetype'),
+             url('https://guangchuangyu.github.io/ChIPseeker/fonts/icon.svg')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
 
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
+    <link rel="stylesheet" href="https://guangchuangyu.github.io/ChIPseeker/stylesheets/application.css">
+    <link rel="stylesheet" href="https://guangchuangyu.github.io/ChIPseeker/stylesheets/temporary.css">
+    <link rel="stylesheet" href="https://guangchuangyu.github.io/ChIPseeker/stylesheets/palettes.css">
+    <link rel="stylesheet" href="https://guangchuangyu.github.io/ChIPseeker/stylesheets/highlight/highlight.css">
 
-        <!-- Collapsed navigation -->
-        <div class="navbar-header">
-            <!-- Expander button -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+    
+    
+    
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ubuntu:400,700|Ubuntu&#43;Mono">
+    <style>
+      body, input {
+        font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: 'Ubuntu Mono', 'Courier New', 'Courier', monospace;
+      }
+    </style>
 
-            <!-- Main title -->
-            <a class="navbar-brand" href=".">ChIPseeker</a>
-        </div>
+    
+    <script src="https://guangchuangyu.github.io/ChIPseeker/javascripts/modernizr.js"></script>
 
-        <!-- Expanded navigation -->
-        <div class="navbar-collapse collapse">
-            <!-- Main navigation -->
-            <ul class="nav navbar-nav">
-            
-            
-                <li class="active">
-                    <a href=".">Home</a>
-                </li>
-            
-            
-            
-                <li >
-                    <a href="documentation/">Documentation</a>
-                </li>
-            
-            
-            
-                <li >
-                    <a href="featuredArticles/">Featured Articles</a>
-                </li>
-            
-            
-            
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Software <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    
-                        
-<li >
-    <a href="ChIPseeker/">ChIPseeker</a>
-</li>
+    
+    <link href="https://guangchuangyu.github.io/ChIPseeker/index.xml" rel="alternate" type="application/rss+xml" title="ChIPseeker" />
+    <link href="https://guangchuangyu.github.io/ChIPseeker/index.xml" rel="feed" type="application/rss+xml" title="ChIPseeker" />
+    
 
-                    
-                        
-<li >
-    <a href="clusterProfiler/">clusterProfiler</a>
-</li>
+  </head>
+  <body class="palette-primary-teal palette-accent-teal">
 
-                    
-                        
-<li >
-    <a href="DOSE/">DOSE</a>
-</li>
 
-                    
-                        
-<li >
-    <a href="emojifont/">emojifont</a>
-</li>
 
-                    
-                        
-<li >
-    <a href="ggtree/">ggtree</a>
-</li>
+	
+	
 
-                    
-                        
-<li >
-    <a href="GOSemSim/">GOSemSim</a>
-</li>
 
-                    
-                        
-<li >
-    <a href="meshes/">meshes</a>
-</li>
+<div class="backdrop">
+	<div class="backdrop-paper"></div>
+</div>
 
-                    
-                        
-<li >
-    <a href="ReactomePA/">ReactomePA</a>
-</li>
+<input class="toggle" type="checkbox" id="toggle-drawer">
+<input class="toggle" type="checkbox" id="toggle-search">
+<label class="toggle-button overlay" for="toggle-drawer"></label>
 
-                    
-                        
-<li >
-    <a href="treeio/">treeio</a>
-</li>
-
-                    
-                    </ul>
-                </li>
-            
-            
-            </ul>
-
-            <!-- Search, Navigation and Repo links -->
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
-                        <i class="fa fa-search"></i> Search
-                    </a>
-                </li>
-                <li class="disabled">
-                    <a rel="next" >
-                        <i class="fa fa-arrow-left"></i> Previous
-                    </a>
-                </li>
-                <li >
-                    <a rel="prev" href="documentation/">
-                        Next <i class="fa fa-arrow-right"></i>
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="https://github.com/GuangchuangYu/ChIPseeker">
-                        
-                            <i class="fa fa-github"></i>
-                        
-                        GitHub
-                    </a>
-                </li>
-                
-            </ul>
-        </div>
+<header class="header">
+	<nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
     </div>
-</div>
+    <div class="stretch">
+      <div class="title">
+        ChIPseeker
+      </div>
+    </div>
 
-        <div class="container">
-            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#chipseeker-chip-peak-annotation-comparison-and-visualization">ChIPseeker: ChIP peak Annotation, Comparison, and Visualization</a></li>
-        
-            <li><a href="#author"> Author</a></li>
-        
-            <li><a href="#citation"> Citation</a></li>
-        
-            <li><a href="#featured-articles"> Featured Articles</a></li>
-        
-            <li><a href="#installation"> Installation</a></li>
-        
-            <li><a href="#overview"> Overview</a></li>
-        
-            <li><a href="#feedback"> Feedback</a></li>
-        
+    <div class="button button-twitter" role="button" aria-label="Twitter">
+       <a href="https://twitter.com/guangchuangyu" title="@guangchuangyu on Twitter" target="_blank" class="toggle-button icon icon-twitter"></a>
+    </div>
     
-    </ul>
-</div></div>
-            <div class="col-md-9" role="main">
 
-<h1 id="chipseeker-chip-peak-annotation-comparison-and-visualization">ChIPseeker: ChIP peak Annotation, Comparison, and Visualization</h1>
-<!-- AddToAny BEGIN -->
+    
+    <div class="button button-github" role="button" aria-label="GitHub">
+      <a href="https://github.com/GuangchuangYu" title="@GuangchuangYu on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+    </div>
+    
+    
+        
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+</header>
 
-<div class="a2a_kit a2a_kit_size_32 a2a_default_style">
+<main class="main">
+	<div class="drawer">
+		<nav aria-label="Navigation">
+  <a href="https://github.com/GuangchuangYu/ChIPseeker" class="project">
+    <div class="banner">
+      
+        <div class="logo">
+          <img src="https://guangchuangyu.github.io/ChIPseeker/images/gc.png">
+        </div>
+      
+      <div class="name">
+        <strong>ChIPseeker </strong>
+        
+          <br>
+          GuangchuangYu/ChIPseeker
+        
+      </div>
+    </div>
+  </a>
 
-<a class="a2a_dd" href="//www.addtoany.com/share"></a>
-<a class="a2a_button_facebook"></a> <a class="a2a_button_twitter"></a>
-<a class="a2a_button_google_plus"></a>
-<a class="a2a_button_pinterest"></a> <a class="a2a_button_reddit"></a>
-<a class="a2a_button_sina_weibo"></a> <a class="a2a_button_wechat"></a>
-<a class="a2a_button_douban"></a>
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://github.com/GuangchuangYu/ChIPseeker/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/GuangchuangYu/ChIPseeker/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      
 
-</div>
+      <div class="toc">
+        
+        <ul>
+          
 
-<script async src="//static.addtoany.com/menu/page.js"></script>
 
-<!-- AddToAny END -->
 
-<p><link rel="stylesheet" href="https://guangchuangyu.github.io/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://guangchuangyu.github.io/css/academicons.min.css"></p>
-<p><a href="https://bioconductor.org/packages/ChIPseeker"><img alt="" src="https://img.shields.io/badge/release%20version-1.12.1-blue.svg?style=flat" /></a>
-<a href="https://github.com/guangchuangyu/ChIPseeker"><img alt="" src="https://img.shields.io/badge/devel%20version-1.13.1-blue.svg?style=flat" /></a>
-<a href="https://bioconductor.org/packages/stats/bioc/ChIPseeker"><img alt="" src="https://img.shields.io/badge/download-15239/total-blue.svg?style=flat" /></a>
-<a href="https://bioconductor.org/packages/stats/bioc/ChIPseeker"><img alt="" src="https://img.shields.io/badge/download-568/month-blue.svg?style=flat" /></a></p>
-<p>This package implements functions to retrieve the nearest genes around
-the peak, annotate genomic region of the peak, statstical methods for
-estimate the significance of overlap among ChIP peak data sets, and
-incorporate GEO database for user to compare their own dataset with
-those deposited in database. The comparison can be used to infer
-cooperative regulation and thus can be used to generate hypotheses.
-Several visualization functions are implemented to summarize the
-coverage of the peak experiment, average profile and heatmap of peaks
-binding to TSS regions, genomic annotation, distance to TSS, and overlap
-of peaks or genes.</p>
-<p><code>ChIPseeker</code> is released within the
-<a href="https://www.bioconductor.org/packages/ChIPseeker">Bioconductor</a> project
-and the source code is hosted on
-<a href="https://github.com/GuangchuangYu/ChIPseeker"><i class="fa fa-github fa-lg"></i>
-GitHub</a>.</p>
-<h2 id="author"><i class="fa fa-user"></i> Author</h2>
+
+<li>
+  
+    
+
+
+
+<a  title="ChIPseeker" href="./">
+	
+	ChIPseeker
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Documentation" href="./documentation/">
+	
+	Documentation
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Featured Articles" href="./featured-articles/">
+	
+	Featured Articles
+</a>
+
+
+
+  
+</li>
+
+
+        </ul>
+        
+
+        
+        <hr>
+        <span class="section">The author</span>
+
+        <ul>
+          
+          <li>
+            <a href="https://twitter.com/guangchuangyu" target="_blank" title="@guangchuangyu on Twitter">
+              @guangchuangyu on Twitter
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://github.com/GuangchuangYu" target="_blank" title="@GuangchuangYu on GitHub">
+              @GuangchuangYu on GitHub
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://guangchuangyu.github.io/blog_images/biobabble.jpg" title="关注公众号: biobabble">
+              @biobabble on WeChat
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="mailto:guangchuangyu@gmail.com" title="Email of guangchuangyu@gmail.com">
+              Contact via email
+            </a>
+          </li>
+          
+        </ul>
+        
+        <center><span class="zaln"><a href="https://mp.weixin.qq.com/s?__biz=MzI5NjUyNzkxMg==&mid=2247484170&idx=1&sn=ce5f7eb6df66d79661276a64bf25b4bc&chksm=ec43b24ddb343b5b2877574153aeccd049a6824716063883edb35c2338bd32c067caf3885f53#rd" class="zb">赞赏</a></span></center>
+<div style="width:250px;margin:auto;"><script type="text/javascript" src="//rf.revolvermaps.com/0/0/7.js?i=5qpvv5zz7fp&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;sx=0" async="async"></script></div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+	</div>
+
+	<article class="article">
+		<div class="wrapper">
+			
+				<h1>ChIPseeker: ChIP peak Annotation, Comparison, and Visualization </h1>
+
+				<p><link rel="stylesheet" href="https://guangchuangyu.github.io/css/font-awesome.min.css"> <link rel="stylesheet" href="https://guangchuangyu.github.io/css/academicons.min.css"></p>
+<p><a href="https://bioconductor.org/packages/ChIPseeker"><img src="https://img.shields.io/badge/release%20version-1.12.1-blue.svg?style=flat" alt="releaseVersion" /></a> <a href="https://github.com/guangchuangyu/ChIPseeker"><img src="https://img.shields.io/badge/devel%20version-1.13.1-blue.svg?style=flat" alt="develVersion" /></a> <a href="https://bioconductor.org/packages/stats/bioc/ChIPseeker"><img src="https://img.shields.io/badge/downloads-16177/total-blue.svg?style=flat" alt="total" /></a> <a href="https://bioconductor.org/packages/stats/bioc/ChIPseeker"><img src="https://img.shields.io/badge/downloads-593/month-blue.svg?style=flat" alt="month" /></a></p>
+<p>This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare their own dataset with those deposited in database. The comparison can be used to infer cooperative regulation and thus can be used to generate hypotheses. Several visualization functions are implemented to summarize the coverage of the peak experiment, average profile and heatmap of peaks binding to TSS regions, genomic annotation, distance to TSS, and overlap of peaks or genes.</p>
+<p><code>ChIPseeker</code> is released within the <a href="https://www.bioconductor.org/packages/ChIPseeker">Bioconductor</a> project and the source code is hosted on <a href="https://github.com/GuangchuangYu/ChIPseeker"><i class="fa fa-github fa-lg"></i> GitHub</a>.</p>
+<div id="author" class="section level2">
+<h2><i class="fa fa-user"></i> Author</h2>
 <p>Guangchuang Yu, School of Public Health, The University of Hong Kong.</p>
-<p><a href="https://twitter.com/guangchuangyu"><i class="fa fa-twitter fa-3x"></i></a>
-<a href="https://guangchuangyu.github.io/blog_images/biobabble.jpg"><i class="fa fa-wechat fa-3x"></i></a>
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/?term=Guangchuang+Yu[Author+-+Full]"><i class="ai ai-pubmed ai-3x"></i></a>
-<a href="https://scholar.google.com.hk/citations?user=DO5oG40AAAAJ&hl=en"><i class="ai ai-google-scholar ai-3x"></i></a>
-<a href="https://orcid.org/0000-0002-6485-8781"><i class="ai ai-orcid ai-3x"></i></a>
-<a href="https://impactstory.org/u/0000-0002-6485-8781"><i class="ai ai-impactstory ai-3x"></i></a></p>
-<h2 id="citation"><i class="fa fa-book"></i> Citation</h2>
+</div>
+<div id="citation" class="section level2">
+<h2><i class="fa fa-book"></i> Citation</h2>
 <p>Please cite the following article when using <code>ChIPseeker</code>:</p>
-<p><a href="http://dx.doi.org/10.1093/bioinformatics/btv145"><img alt="" src="https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-blue.svg?style=flat" /></a>
-<a href="https://www.altmetric.com/details/3781087"><img alt="" src="https://img.shields.io/badge/Altmetric-31-blue.svg?style=flat" /></a>
-<a href="https://scholar.google.com.hk/scholar?oi=bibs&amp;hl=en&amp;cites=12053363057899219488"><img alt="citation" src="https://img.shields.io/badge/cited%20by-67-blue.svg?style=flat" /></a>
-<a href="http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&amp;customersID=RID&amp;IsProductCode=Yes&amp;product=WOS&amp;Init=Yes&amp;Func=Frame&amp;DestFail=http%3A%2F%2Fwww.webofknowledge.com&amp;action=retrieve&amp;SrcApp=RID&amp;SrcAuth=RID&amp;SID=T2TqQabyevZvWQ4YHvJ&amp;UT=WOS%3A000358173500022"><img alt="" src="https://img.shields.io/badge/cited%20in%20Web%20of%20Science%20Core%20Collection--blue.svg?style=flat" /></a>
-<a href="http://apps.webofknowledge.com/InboundService.do?mode=FullRecord&amp;customersID=RID&amp;IsProductCode=Yes&amp;product=WOS&amp;Init=Yes&amp;Func=Frame&amp;DestFail=http%3A%2F%2Fwww.webofknowledge.com&amp;action=retrieve&amp;SrcApp=RID&amp;SrcAuth=RID&amp;SID=Y2CXu6nry8nDQZcUy1w&amp;UT=WOS%3A000358173500022"><img alt="" src="https://img.shields.io/badge/ESI-Highly%20Cited%20Paper-blue.svg?style=flat" /></a></p>
-<p><strong>Yu G</strong>, Wang LG and He QY<sup>*</sup>. ChIPseeker: an R/Bioconductor
-package for ChIP peak annotation, comparison and visualization.
-<strong><em>Bioinformatics</em></strong>, 2015, 31(14):2382-2383.</p>
-<h2 id="featured-articles"><i class="fa fa-pencil"></i> Featured Articles</h2>
+<p><a href="http://dx.doi.org/10.1093/bioinformatics/btv145"><img src="https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-blue.svg?style=flat" alt="doi" /></a> <a href="https://www.altmetric.com/details/3781087"><img src="https://img.shields.io/badge/Altmetric-31-blue.svg?style=flat" alt="Altmetric" /></a> <a href="https://scholar.google.com.hk/scholar?oi=bibs&amp;hl=en&amp;cites=12053363057899219488"><img src="https://img.shields.io/badge/cited%20by-73-blue.svg?style=flat" alt="citation" /></a></p>
+<p><strong>Yu G</strong>, Wang LG and He QY<sup>*</sup>. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. <strong><em>Bioinformatics</em></strong>, 2015, 31(14):2382-2383.</p>
+</div>
+<div id="featured-articles" class="section level2">
+<h2><i class="fa fa-pencil"></i> Featured Articles</h2>
 <p><img src="https://guangchuangyu.github.io/featured_img/ChIPseeker/heatmap2016.gif" width="650"></p>
-<p><i class="fa fa-hand-o-right"></i> Find out more on
-<i class="fa fa-pencil"></i> <a href="https://guangchuangyu.github.io/ChIPseeker/featuredArticles/">Featured
-Articles</a>.</p>
-<h2 id="installation"><i class="fa fa-download"></i> Installation</h2>
-<p>Install <code>ChIPseeker</code> is easy, follow the guide on the <a href="https://bioconductor.org/packages/ChIPseeker">Bioconductor
-page</a>:</p>
-<pre><code class="r">## try http:// if https:// URLs are not supported
+<p><i class="fa fa-hand-o-right"></i> Find out more on <i class="fa fa-pencil"></i> <a href="https://guangchuangyu.github.io/ChIPseeker/featuredArticles/">Featured Articles</a>.</p>
+</div>
+<div id="installation" class="section level2">
+<h2><i class="fa fa-download"></i> Installation</h2>
+<p>Install <code>ChIPseeker</code> is easy, follow the guide on the <a href="https://bioconductor.org/packages/ChIPseeker">Bioconductor page</a>:</p>
+<pre class="r"><code>## try http:// if https:// URLs are not supported
 source(&quot;https://bioconductor.org/biocLite.R&quot;)
 ## biocLite(&quot;BiocUpgrade&quot;) ## you may need this
-biocLite(&quot;ChIPseeker&quot;)
-</code></pre>
-
-<h2 id="overview"><i class="fa fa-cogs"></i> Overview</h2>
-<h4 id="annotation"><i class="fa fa-angle-double-right"></i> Annotation</h4>
+biocLite(&quot;ChIPseeker&quot;)</code></pre>
+</div>
+<div id="overview" class="section level2">
+<h2><i class="fa fa-cogs"></i> Overview</h2>
+<div id="annotation" class="section level4">
+<h4><i class="fa fa-angle-double-right"></i> Annotation</h4>
 <ul>
 <li>retrieve the nearest genes around the peak</li>
 <li>annotate genomic region of the peak</li>
 </ul>
-<h4 id="comparison"><i class="fa fa-angle-double-right"></i> Comparison</h4>
+</div>
+<div id="comparison" class="section level4">
+<h4><i class="fa fa-angle-double-right"></i> Comparison</h4>
 <ul>
 <li>estimate the significance of overlap among ChIP peak data sets</li>
-<li>incorporate GEO database for users to compare their own dataset with
-    those deposited in the database</li>
+<li>incorporate GEO database for users to compare their own dataset with those deposited in the database</li>
 </ul>
-<h4 id="visualization"><i class="fa fa-angle-double-right"></i> Visualization</h4>
+</div>
+<div id="visualization" class="section level4">
+<h4><i class="fa fa-angle-double-right"></i> Visualization</h4>
 <ul>
 <li>summarize the coverage of the peak experiment</li>
 <li>average profile and heatmap of peaks binding to TSS regions</li>
@@ -283,55 +346,169 @@ biocLite(&quot;ChIPseeker&quot;)
 ## <i class="fa fa-code-fork"></i> Projects that depend on _ChIPseeker_
 
 -->
-
-<h2 id="feedback"><i class="fa fa-comment"></i> Feedback</h2>
+</div>
+</div>
+<div id="feedback" class="section level2">
+<h2><i class="fa fa-comment"></i> Feedback</h2>
 <ul class="fa-ul">
-    <li><i class="fa-li fa fa-hand-o-right"></i> Please make sure you have followed <a href="https://guangchuangyu.github.io/2016/07/how-to-bug-author/"><strong>the important guide</strong></a> before posting any issue/question</li>
-    <li><i class="fa-li fa fa-bug"></i> For bugs or feature requests, please post to <i class="fa fa-github-alt"></i> <a href="https://github.com/GuangchuangYu/ChIPseeker/issues">github issue</a></li>
-    <li><i class="fa-li fa fa-question"></i> For user questions, please post to <i class="fa fa-support"></i> <a href="https://support.bioconductor.org">Bioconductor support site</a> or <a href="https://www.biostars.org">Biostars</a></li>
-    <li><i class="fa-li fa fa-commenting"></i> Join the group chat in <a href="https://twitter.com/hashtag/ChIPseeker"><i class="fa fa-twitter fa-lg"></i></a> and <a href="http://huati.weibo.com/k/ChIPseeker"><i class="fa fa-weibo fa-lg"></i></a></li>
+<li>
+<i class="fa-li fa fa-hand-o-right"></i> Please make sure you have followed <a href="https://guangchuangyu.github.io/2016/07/how-to-bug-author/"><strong>the important guide</strong></a> before posting any issue/question
+</li>
+<li>
+<i class="fa-li fa fa-bug"></i> For bugs or feature requests, please post to <i class="fa fa-github-alt"></i> <a href="https://github.com/GuangchuangYu/ChIPseeker/issues">github issue</a>
+</li>
+<li>
+<i class="fa-li fa fa-question"></i> For user questions, please post to <i class="fa fa-support"></i> <a href="https://support.bioconductor.org">Bioconductor support site</a> or <a href="https://www.biostars.org">Biostars</a>
+</li>
+<li>
+<i class="fa-li fa fa-commenting"></i> Join the group chat in <a href="https://twitter.com/hashtag/ChIPseeker"><i class="fa fa-twitter fa-lg"></i></a> and <a href="http://huati.weibo.com/k/ChIPseeker"><i class="fa fa-weibo fa-lg"></i></a>
+</li>
+</ul>
+</div>
 
-</ul></div>
-        </div>
+			
 
-        <footer class="col-md-12">
-            <hr>
-            
-                <center>Copyright &copy; 2016 <a href="https://guangchuangyu.github.io">Guangchuang Yu</a>.<div style="width:250px;margin:auto;"><script type="text/javascript" src="//rf.revolvermaps.com/0/0/7.js?i=5qpvv5zz7fp&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;sx=0" async="async"></script></div></center>
-            
-            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
-        </footer>
+			<aside class="copyright" role="note">
+				
+				&copy; 2017 Released under the Artistic-2.0 license &ndash;
+				
+				Documentation built with
+				<a href="https://www.gohugo.io" target="_blank">Hugo</a>
+				using the
+				<a href="http://github.com/digitalcraftsman/hugo-material-docs" target="_blank">Material</a> theme.
+			</aside>
 
-        <script src="./js/jquery-1.10.2.min.js"></script>
-        <script src="./js/bootstrap-3.0.3.min.js"></script>
-        <script src="./js/highlight.pack.js"></script>
-        <script>var base_url = '.';</script>
-        <script data-main="./mkdocs/js/search.js" src="./mkdocs/js/require.js"></script>
-        <script src="./js/base.js"></script>
+			<footer class="footer">
+				
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>
-                            From here you can search these documents. Enter
-                            your search terms below.
-                        </p>
-                        <form role="form">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
-                            </div>
-                        </form>
-                        <div id="mkdocs-search-results"></div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </div>
+
+
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  </div>
+
+  
+  
+
+  <div class="next">
+      <a href="https://guangchuangyu.github.io/ChIPseeker/documentation/" title="Documentation">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Documentation
             </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
         </div>
-    </body>
+      </a>
+  </div>
+</nav>
+
+
+
+			</footer>
+		</div>
+	</article>
+
+	<div class="results" role="status" aria-live="polite">
+		<div class="scrollable">
+			<div class="wrapper">
+				<div class="meta"></div>
+				<div class="list"></div>
+			</div>
+		</div>
+	</div>
+</main>
+
+    <script>
+    
+      var base_url = 'https:\/\/guangchuangyu.github.io\/ChIPseeker\/';
+      var repo_id  = 'GuangchuangYu\/ChIPseeker';
+    
+    </script>
+
+    <script src="https://guangchuangyu.github.io/ChIPseeker/javascripts/application.js"></script>
+    
+
+    <script>
+      /* Add headers to scrollspy */
+      var headers   = document.getElementsByTagName("h2");
+      var scrollspy = document.getElementById('scrollspy');
+
+      if(scrollspy) {
+        if(headers.length > 0) {
+          for(var i = 0; i < headers.length; i++) {
+            var li = document.createElement("li");
+            li.setAttribute("class", "anchor");
+
+            var a  = document.createElement("a");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", headers[i].innerHTML);
+            a.innerHTML = headers[i].innerHTML;
+
+            li.appendChild(a)
+            scrollspy.appendChild(li);
+          }
+        } else {
+          scrollspy.parentElement.removeChild(scrollspy)
+        }
+
+
+        /* Add permanent link next to the headers */
+        var headers = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+        for(var i = 0; i < headers.length; i++) {
+            var a = document.createElement("a");
+            a.setAttribute("class", "headerlink");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", "Permanent link")
+            a.innerHTML = " ";
+            headers[i].appendChild(a);
+        }
+      }
+    </script>
+
+    
+      <script>
+        (function(i,s,o,g,r,a,m){
+          i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||
+          []).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;
+          m.parentNode.insertBefore(a,m)
+        })(window, document,
+          'script', '//www.google-analytics.com/analytics.js', 'ga');
+         
+        ga('create', 'UA-77901140-1', 'auto');
+        ga('set', 'anonymizeIp', true);
+        ga('send', 'pageview');
+         
+        var buttons = document.querySelectorAll('a');
+        Array.prototype.map.call(buttons, function(item) {
+          if (item.host != document.location.host) {
+            item.addEventListener('click', function() {
+              var action = item.getAttribute('data-action') || 'follow';
+              ga('send', 'event', 'outbound', action, item.href);
+            });
+          }
+        });
+         
+        var query = document.querySelector('.query');
+        query.addEventListener('blur', function() {
+          if (this.value) {
+            var path = document.location.pathname;
+            ga('send', 'pageview', path + '?q=' + this.value);
+          }
+        });
+      </script>
+    
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
 </html>
+
