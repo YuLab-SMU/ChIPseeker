@@ -23,7 +23,7 @@ ignoreFiles = ["\\.Rmd$", "\\.rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 	repo_url = "https://github.com/GuangchuangYu/ChIPseeker"
 
 	# version = "1.0.0"
-	logo = "images/gc.png"
+	logo = "images/vennpie.png"
 	favicon = ""
 
 	permalink = " "
