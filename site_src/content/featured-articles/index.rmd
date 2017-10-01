@@ -17,6 +17,9 @@ weight: 30
 
 ## <i class="fa fa-calendar"></i> 2017
 
+[ZNF516 suppresses EGFR by targeting the CtBP/LSD1/CoREST complex to chromatin](https://www.nature.com/articles/s41467-017-00702-5).
+Nature Communications. 2017, 8:691.
+
 
 [An NF-κB Transcription-Factor-Dependent Lineage-Specific Transcriptional Program Promotes Regulatory T Cell Identity and Function](http://www.sciencedirect.com/science/article/pii/S1074761317303680). ***Immunity***. 2017
 
