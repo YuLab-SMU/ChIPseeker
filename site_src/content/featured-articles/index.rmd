@@ -17,8 +17,16 @@ weight: 30
 
 ## <i class="fa fa-calendar"></i> 2017
 
+[Global DNA methylation analysis reveals miR-214-3p contributes to cisplatin resistance in pediatric intracranial nongerminomatous malignant germ cell tumors](https://doi.org/10.1093/neuonc/nox186).
+***Neuro-Oncology***. 2017.
+
+
+[Identification of the direct regulon of NtcA during early acclimation to nitrogen starvation in the cyanobacterium *Synechocystis* sp. PCC 6803](https://doi.org/10.1093/nar/gkx860).
+***Nucleic Acids Research***. 2017.
+
+
 [ZNF516 suppresses EGFR by targeting the CtBP/LSD1/CoREST complex to chromatin](https://www.nature.com/articles/s41467-017-00702-5).
-Nature Communications. 2017, 8:691.
+***Nature Communications***. 2017, 8:691.
 
 
 [An NF-κB Transcription-Factor-Dependent Lineage-Specific Transcriptional Program Promotes Regulatory T Cell Identity and Function](http://www.sciencedirect.com/science/article/pii/S1074761317303680). ***Immunity***. 2017
