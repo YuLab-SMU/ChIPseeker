@@ -17,6 +17,10 @@ weight: 30
 
 ## <i class="fa fa-calendar"></i> 2017
 
+[Regeneration of the entire human epidermis using transgenic stem cells](https://www.nature.com/articles/nature24487).
+***Nature***. 2017.
+
+
 [Global DNA methylation analysis reveals miR-214-3p contributes to cisplatin resistance in pediatric intracranial nongerminomatous malignant germ cell tumors](https://doi.org/10.1093/neuonc/nox186).
 ***Neuro-Oncology***. 2017.
 
@@ -29,7 +33,8 @@ weight: 30
 ***Nature Communications***. 2017, 8:691.
 
 
-[An NF-κB Transcription-Factor-Dependent Lineage-Specific Transcriptional Program Promotes Regulatory T Cell Identity and Function](http://www.sciencedirect.com/science/article/pii/S1074761317303680). ***Immunity***. 2017
+[An NF-κB Transcription-Factor-Dependent Lineage-Specific Transcriptional Program Promotes Regulatory T Cell Identity and Function](http://www.sciencedirect.com/science/article/pii/S1074761317303680).
+***Immunity***. 2017, 47(3):450-465.
 
 [BRG1-SWI/SNF-dependent regulation of the Wt1 transcriptional landscape mediates epicardial activity during heart development and disease](https://doi.org/10.1038/ncomms16034).
 ***Nature Communications***. 2017, 8:16034.
