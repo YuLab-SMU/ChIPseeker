@@ -18,9 +18,7 @@
       <pubDate>Thu, 06 Jul 2017 12:08:13 +0100</pubDate>
       
       <guid>https://guangchuangyu.github.io/ChIPseeker/</guid>
-      <description>Plea to against BMC BMC journal protects paper of plagiarism https://t.co/FfSv7dPFXV @RetractionWatch @C0PE
-&amp;mdash; Guangchuang Yu (@guangchuangyu) November 10, 2017     
-This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare their own dataset with those deposited in database.</description>
+      <description>This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare their own dataset with those deposited in database. The comparison can be used to infer cooperative regulation and thus can be used to generate hypotheses. Several visualization functions are implemented to summarize the coverage of the peak experiment, average profile and heatmap of peaks binding to TSS regions, genomic annotation, distance to TSS, and overlap of peaks or genes.</description>
     </item>
     
     <item>

@@ -7,56 +7,51 @@ weight: 1
 
 
 
-<div id="plea-to-against-bmc" class="section level2">
-<h2>Plea to against BMC</h2>
-{{% tweet "928836702998638592" %}}
-<hr />
 <p><img src="https://raw.githubusercontent.com/Bioconductor/BiocStickers/master/ChIPseeker/ChIPseeker.png" height="200" align="right" /></p>
 <p><link rel="stylesheet" href="https://guangchuangyu.github.io/css/font-awesome.min.css"> <link rel="stylesheet" href="https://guangchuangyu.github.io/css/academicons.min.css"></p>
-<p><a href="https://bioconductor.org/packages/ChIPseeker"><img src="https://img.shields.io/badge/release%20version-1.14.0-blue.svg?style=flat" alt="releaseVersion" /></a> <a href="https://github.com/guangchuangyu/ChIPseeker"><img src="https://img.shields.io/badge/devel%20version-1.15.0-blue.svg?style=flat" alt="develVersion" /></a> <a href="https://bioconductor.org/packages/stats/bioc/ChIPseeker"><img src="https://img.shields.io/badge/downloads-17449/total-blue.svg?style=flat" alt="total" /></a> <a href="https://bioconductor.org/packages/stats/bioc/ChIPseeker"><img src="https://img.shields.io/badge/downloads-546/month-blue.svg?style=flat" alt="month" /></a></p>
+<p><a href="https://bioconductor.org/packages/ChIPseeker"><img src="https://img.shields.io/badge/release%20version-1.14.0-blue.svg?style=flat" alt="releaseVersion" /></a> <a href="https://github.com/guangchuangyu/ChIPseeker"><img src="https://img.shields.io/badge/devel%20version-1.15.0-blue.svg?style=flat" alt="develVersion" /></a> <a href="https://bioconductor.org/packages/stats/bioc/ChIPseeker"><img src="https://img.shields.io/badge/downloads-17545/total-blue.svg?style=flat" alt="total" /></a> <a href="https://bioconductor.org/packages/stats/bioc/ChIPseeker"><img src="https://img.shields.io/badge/downloads-546/month-blue.svg?style=flat" alt="month" /></a></p>
 <p>This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare their own dataset with those deposited in database. The comparison can be used to infer cooperative regulation and thus can be used to generate hypotheses. Several visualization functions are implemented to summarize the coverage of the peak experiment, average profile and heatmap of peaks binding to TSS regions, genomic annotation, distance to TSS, and overlap of peaks or genes.</p>
 <p><code>ChIPseeker</code> is released within the <a href="https://www.bioconductor.org/packages/ChIPseeker">Bioconductor</a> project and the source code is hosted on <a href="https://github.com/GuangchuangYu/ChIPseeker"><i class="fa fa-github fa-lg"></i> GitHub</a>.</p>
-</div>
-<div id="author" class="section level2">
+<section id="author" class="level2">
 <h2><i class="fa fa-user"></i> Author</h2>
 <p>Guangchuang Yu, School of Public Health, The University of Hong Kong.</p>
-</div>
-<div id="citation" class="section level2">
+</section>
+<section id="citation" class="level2">
 <h2><i class="fa fa-book"></i> Citation</h2>
 <p>Please cite the following article when using <code>ChIPseeker</code>:</p>
 <p><a href="http://dx.doi.org/10.1093/bioinformatics/btv145"><img src="https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-blue.svg?style=flat" alt="doi" /></a> <a href="https://www.altmetric.com/details/3781087"><img src="https://img.shields.io/badge/Altmetric-30-blue.svg?style=flat" alt="Altmetric" /></a> <a href="https://scholar.google.com.hk/scholar?oi=bibs&amp;hl=en&amp;cites=12053363057899219488"><img src="https://img.shields.io/badge/cited%20by-86-blue.svg?style=flat" alt="citation" /></a></p>
 <p><strong>Yu G</strong>, Wang LG and He QY<sup>*</sup>. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. <strong><em>Bioinformatics</em></strong>, 2015, 31(14):2382-2383.</p>
-</div>
-<div id="featured-articles" class="section level2">
+</section>
+<section id="featured-articles" class="level2">
 <h2><i class="fa fa-pencil"></i> Featured Articles</h2>
 <p><img src="https://guangchuangyu.github.io/featured_img/ChIPseeker/heatmap2016.gif" width="650"></p>
 <p><i class="fa fa-hand-o-right"></i> Find out more on <i class="fa fa-pencil"></i> <a href="https://guangchuangyu.github.io/ChIPseeker/featuredArticles/">Featured Articles</a>.</p>
-</div>
-<div id="installation" class="section level2">
+</section>
+<section id="installation" class="level2">
 <h2><i class="fa fa-download"></i> Installation</h2>
 <p>Install <code>ChIPseeker</code> is easy, follow the guide on the <a href="https://bioconductor.org/packages/ChIPseeker">Bioconductor page</a>:</p>
 <pre class="r"><code>## try http:// if https:// URLs are not supported
 source(&quot;https://bioconductor.org/biocLite.R&quot;)
 ## biocLite(&quot;BiocUpgrade&quot;) ## you may need this
 biocLite(&quot;ChIPseeker&quot;)</code></pre>
-</div>
-<div id="overview" class="section level2">
+</section>
+<section id="overview" class="level2">
 <h2><i class="fa fa-cogs"></i> Overview</h2>
-<div id="annotation" class="section level4">
+<section id="annotation" class="level4">
 <h4><i class="fa fa-angle-double-right"></i> Annotation</h4>
 <ul>
 <li>retrieve the nearest genes around the peak</li>
 <li>annotate genomic region of the peak</li>
 </ul>
-</div>
-<div id="comparison" class="section level4">
+</section>
+<section id="comparison" class="level4">
 <h4><i class="fa fa-angle-double-right"></i> Comparison</h4>
 <ul>
 <li>estimate the significance of overlap among ChIP peak data sets</li>
 <li>incorporate GEO database for users to compare their own dataset with those deposited in the database</li>
 </ul>
-</div>
-<div id="visualization" class="section level4">
+</section>
+<section id="visualization" class="level4">
 <h4><i class="fa fa-angle-double-right"></i> Visualization</h4>
 <ul>
 <li>summarize the coverage of the peak experiment</li>
@@ -70,9 +65,9 @@ biocLite(&quot;ChIPseeker&quot;)</code></pre>
 ## <i class="fa fa-code-fork"></i> Projects that depend on _ChIPseeker_
 
 -->
-</div>
-</div>
-<div id="feedback" class="section level2">
+</section>
+</section>
+<section id="feedback" class="level2">
 <h2><i class="fa fa-comment"></i> Feedback</h2>
 <ul class="fa-ul">
 <li>
@@ -88,4 +83,4 @@ biocLite(&quot;ChIPseeker&quot;)</code></pre>
 <i class="fa-li fa fa-commenting"></i> Join the group chat in <a href="https://twitter.com/hashtag/ChIPseeker"><i class="fa fa-twitter fa-lg"></i></a> and <a href="http://huati.weibo.com/k/ChIPseeker"><i class="fa fa-weibo fa-lg"></i></a>
 </li>
 </ul>
-</div>
+</section>
