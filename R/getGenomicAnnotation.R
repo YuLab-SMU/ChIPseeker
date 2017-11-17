@@ -180,7 +180,11 @@ getGenomicAnnotation <- function(peaks,
     }
     annotation[which(annotation == "Intergenic")] = "Distal Intergenic"
 
-    downstreamIndex <- dd2 > 0 & dd2 < 3000 ## downstream 3k
+    dsd <- getOption("ChIPseeker.downstreamDistance")
+    if (is.null(dsd))
+        dsd <- 3000 ## downstream 3k by default
+
+    downstreamIndex <- dd2 > 0 & dd2 < dsd
     detailGenomicAnnotation[downstreamIndex, "downstream"] <- TRUE
     detailGenomicAnnotation[which(annotation == "Distal Intergenic"), "distal_intergenic"] <- TRUE
     return(list(annotation=annotation, detailGenomicAnnotation=detailGenomicAnnotation))

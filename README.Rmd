@@ -103,6 +103,3 @@ ggsave(p, file="docs/images/dlstats.png", width=8, height=4)
 ```
 
 <img src="docs/images/dlstats.png" width="890"/>
-
-
-

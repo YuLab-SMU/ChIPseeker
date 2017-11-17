@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.15.1
+------------------------
+ o define downstream distance via options(ChIPseeker.downstreamDistance = 300)
+   + https://support.bioconductor.org/p/103135/
+
 CHANGES IN VERSION 1.13.1
 ------------------------
  o fixed issue of naming intronList <2017-07-06, Thu>
