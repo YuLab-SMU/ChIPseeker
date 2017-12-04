@@ -4,14 +4,14 @@ ChIPseeker: ChIP peak Annotation, Comparison, and Visualization
 [![releaseVersion](https://img.shields.io/badge/release%20version-1.14.0-green.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker)
 [![develVersion](https://img.shields.io/badge/devel%20version-1.15.1-green.svg?style=flat)](https://github.com/guangchuangyu/ChIPseeker)
 [![Bioc](http://www.bioconductor.org/shields/years-in-bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#since)
-[![total](https://img.shields.io/badge/downloads-17545/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
+[![total](https://img.shields.io/badge/downloads-18008/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 [![month](https://img.shields.io/badge/downloads-546/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 
 [![Project Status: Active - The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![codecov](https://codecov.io/gh/GuangchuangYu/ChIPseeker/branch/master/graph/badge.svg)](https://codecov.io/gh/GuangchuangYu/ChIPseeker/)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2017--11--17-green.svg)](https://github.com/GuangchuangYu/ChIPseeker/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2017--12--04-green.svg)](https://github.com/GuangchuangYu/ChIPseeker/commits/master)
 [![commit](http://www.bioconductor.org/shields/commits/bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#svn_source)
 [![GitHub
 forks](https://img.shields.io/github/forks/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/network)
@@ -62,7 +62,7 @@ visualization. ***Bioinformatics*** 2015, 31(14):2382-2383.
 
 ### Citation
 
-[![citation](https://img.shields.io/badge/cited%20by-86-green.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
+[![citation](https://img.shields.io/badge/cited%20by-90-green.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 
 ![](https://img.shields.io/badge/ESI-Highly%20Cited%20Paper-green.svg?style=flat)
 
@@ -71,7 +71,7 @@ visualization. ***Bioinformatics*** 2015, 31(14):2382-2383.
 ### Download stats
 
 [![download](http://www.bioconductor.org/shields/downloads/ChIPseeker.svg)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
-[![total](https://img.shields.io/badge/downloads-17545/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
+[![total](https://img.shields.io/badge/downloads-18008/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 [![month](https://img.shields.io/badge/downloads-546/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 
 <img src="docs/images/dlstats.png" width="890"/>

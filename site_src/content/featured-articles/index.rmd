@@ -17,6 +17,9 @@ weight: 30
 
 ## <i class="fa fa-calendar"></i> 2017
 
+[Promoter-bound METTL3 maintains myeloid leukaemia by m6A-dependent translation control](https://doi.org/10.1038/nature24678).
+***Nature***. 2017.
+
 [Regeneration of the entire human epidermis using transgenic stem cells](https://www.nature.com/articles/nature24487).
 ***Nature***. 2017.
 
