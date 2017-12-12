@@ -1,8 +1,8 @@
 ##' get index of features that closest to peak and calculate distance
 ##'
-##' 
-##' @title getNearestFeatureIndicesAndDistances 
-##' @param peaks peak in GRanges 
+##'
+##' @title getNearestFeatureIndicesAndDistances
+##' @param peaks peak in GRanges
 ##' @param features features in GRanges
 ##' @param sameStrand logical, whether find nearest gene in the same strand
 ##' @param ignoreOverlap logical, whether ignore overlap of TSS with peak
@@ -32,7 +32,7 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
     ## start(features) <- end(features) <- ifelse(strand(features) == "+", start(features), end(features))
     features <- resize(features, width=1) # faster
 
-    ## add dummy NA feature for peaks that are at the last or first feature 
+    ## add dummy NA feature for peaks that are at the last or first feature
     ## suggested by Michael Kluge
     features.bak <- features
     seqlevels(features) <- c(seqlevels(features), "chrNA")
@@ -49,21 +49,21 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
             mcols(dummy)[[cn]] <- NA
         }
     }
-    
+
     features <- append(features, dummy)
     dummyID <- length(features)
-    
+
     if (sameStrand) {
         ## nearest from peak start
         ps.idx <- follow(peaks, features)
-        
+
         ## nearest from peak end
         pe.idx <- precede(peaks, features)
     } else {
         ps.idx <- follow(peaks, unstrand(features))
         pe.idx <- precede(peaks, unstrand(features))
     }
-    
+
     na.idx <- is.na(ps.idx) & is.na(pe.idx)
     if (sum(na.idx) > 0) { ## suggested by Thomas Schwarzl
         ps.idx <- ps.idx[!na.idx]
@@ -77,7 +77,7 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
 
     ## features from nearest peak start
     psF <- features[ps.idx]
-    
+
     ## feature distances from peak start
     psD <- ifelse(strand(psF) == "+", 1, -1) *
         (start(peaks[!na.idx]) - start(psF))
@@ -91,8 +91,8 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
     peD[pe.idx == dummyID] <- Inf # ensure that there is even no match if a seq with name "chrNA" exists
 
     ## restore the old feature object
-    features.bak <- features
-    
+    features <- features.bak
+
     pse <- data.frame(ps=psD, pe=peD)
     if (ignoreUpstream) {
         j <- rep(2, nrow(pse))
@@ -101,11 +101,11 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
     } else {
         j <- apply(pse, 1, function(i) which.min(abs(i)))
     }
-    
+
     ## index
     idx <- ps.idx
     idx[j==2] <- pe.idx[j==2]
-    
+
     ## distance
     dd <- psD
     dd[j==2] <- peD[j==2]
@@ -113,7 +113,7 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
     index <- distanceToTSS <- rep(NA, length(peaks))
     distanceToTSS[!na.idx] <- dd
     index[!na.idx] <- idx
-    
+
     if (!ignoreOverlap) {
         ## hit <- findOverlaps(peaks, unstrand(features))
 
@@ -125,7 +125,7 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
                 hit <- hit[hit.idx]
                 peakIdx <- queryHits(hit)
                 featureIdx <- subjectHits(hit)
-                
+
                 index[peakIdx] <- featureIdx
                 distance_both_end <- data.frame(start=start(peaks[peakIdx]) - start(features[featureIdx]),
                                           end = end(peaks[peakIdx]) - start(features[featureIdx]))
@@ -133,23 +133,24 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
                 distance_minimal <- distance_both_end[,1]
                 distance_minimal[distance_idx == 2] <- distance_both_end[distance_idx==2, 2]
 
-                distanceToTSS[peakIdx] <- distance_minimal
+                distanceToTSS[peakIdx] <- distance_minimal * ifelse(strand(features[featureIdx]) == "+", 1, -1)
+
             }
         }
-        
+
         hit <- findOverlaps(peaks, unstrand(features))
-        
+
         if ( length(hit) != 0 ) {
             qh <- queryHits(hit)
             hit.idx <- getFirstHitIndex(qh)
             hit <- hit[hit.idx]
             peakIdx <- queryHits(hit)
             featureIdx <- subjectHits(hit)
-            
+
             index[peakIdx] <- featureIdx
             distanceToTSS[peakIdx] <- 0
         }
-        
+
     }
 
     j <- is.na(distanceToTSS) | is.na(index)
@@ -157,7 +158,7 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
     res <- list(index=index[!j],
                 distance=distanceToTSS[!j],
                 peak=peaks[!j])
-    
+
     return(res)
 }
 

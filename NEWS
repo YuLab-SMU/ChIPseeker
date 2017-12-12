@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.15.2
+------------------------
+ o bug fixed for 'overlap = "all"' to consider strand information <2017-12-12, Tue>
+
 CHANGES IN VERSION 1.15.1
 ------------------------
  o define downstream distance via options(ChIPseeker.downstreamDistance = 300)
