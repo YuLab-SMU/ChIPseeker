@@ -294,11 +294,11 @@ getGene <- function(TxDb, by="gene") {
     by <- match.arg(by, c("gene", "transcript"))
 
     if (by == "gene") {
-        if ( exists("features", envir=ChIPseekerEnv, inherits=FALSE) ) {
-            features <- get("features", envir=ChIPseekerEnv)
+        if ( exists("Genes", envir=ChIPseekerEnv, inherits=FALSE) ) {
+            features <- get("Genes", envir=ChIPseekerEnv)
         } else {
             features <- genes(TxDb)
-            assign("features", features, envir=ChIPseekerEnv)
+            assign("Genes", features, envir=ChIPseekerEnv)
         }
     } else {
         if ( exists("Transcripts", envir=ChIPseekerEnv, inherits=FALSE) ) {
