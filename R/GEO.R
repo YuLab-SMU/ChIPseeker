@@ -8,7 +8,7 @@
 
 ##' accessing species statistics collecting from GEO database
 ##'
-##' 
+##'
 ##' @title getGEOspecies
 ##' @return data.frame
 ##' @author G Yu
@@ -22,14 +22,14 @@ getGEOspecies <- function() {
 
 ##' get genome version statistics collecting from GEO ChIPseq data
 ##'
-##' 
-##' @title getGEOgenomeVersion 
+##'
+##' @title getGEOgenomeVersion
 ##' @return data.frame
 ##' @author G Yu
 ##' @export
 getGEOgenomeVersion <- function() {
     gsminfo <- get_gsminfo()
-    gv <- gsminfo[, c("organism", 
+    gv <- gsminfo[, c("organism",
                       "genomeVersion")]
     genomeVersion <- gv$genomeVersion
     res <- as.data.frame(table(genomeVersion))
@@ -42,7 +42,7 @@ getGEOgenomeVersion <- function() {
 
 ##' get subset of GEO information by genome version keyword
 ##'
-##' 
+##'
 ##' @title getGEOInfo
 ##' @param genome genome version
 ##' @param simplify simplify result or not
@@ -61,7 +61,7 @@ getGEOInfo <- function(genome, simplify =TRUE) {
 
 ##' download all BED files of a particular genome version
 ##'
-##' 
+##'
 ##' @title downloadGEObedFiles
 ##' @param genome genome version
 ##' @param destDir destination folder
@@ -75,9 +75,9 @@ downloadGEObedFiles <- function(genome, destDir=getwd()) {
 
 ##' download BED supplementary files of a list of GSM accession numbers
 ##'
-##' 
-##' @title downloadGSMbedFiles 
-##' @param GSM GSM accession numbers 
+##'
+##' @title downloadGSMbedFiles
+##' @param GSM GSM accession numbers
 ##' @param destDir destination folder
 ##' @return NULL
 ##' @author G Yu
@@ -93,17 +93,18 @@ downloadGEO.internal <- function(info, destDir) {
     fnames <- as.character(info$supplementary_file)
     destfiles <- sub(".*\\/", paste(destDir, "/", sep=""), fnames)
     names(destfiles) <- NULL
-    
+
     for (i in seq_along(fnames)) {
         if ( ! file.exists(destfiles[i]) )
-            download.file(fnames[i],
+            tryCatch(download.file(fnames[i],
                           destfile=destfiles[i],
-                          mode="wb")
+                          mode="wb"),
+                     error = function(e) message(fnames[i], ': file not found and skip'))
     }
 }
 
 ##' @importFrom utils data
-## @importFrom GEOmetadb 
+## @importFrom GEOmetadb
 ## @importFrom RSQLite dbConnect
 ## @importFrom RSQLite dbGetQuery
 prepareGSMInfo <- function() {
@@ -112,16 +113,16 @@ prepareGSMInfo <- function() {
     getSQLiteFile <- eval(parse(text="getSQLiteFile"))
     ## get the latest version of sql file
     getSQLiteFile()
-    
+
     GEOmetadbFile="GEOmetadb.sqlite"
     file.info(GEOmetadbFile)
-  
+
     sqlpkg <- "RSQLite"
     require(sqlpkg, character.only=TRUE)
     dbConnect <- eval(parse(text="dbConnect"))
     dbGetQuery <- eval(parse(text="dbGetQuery"))
     SQLite <- eval(parse(text="SQLite"))
-    
+
     con <- dbConnect(SQLite(),GEOmetadbFile)
     ## dbListTables(con)
 
@@ -130,7 +131,7 @@ prepareGSMInfo <- function() {
     require(pkg, character.only=TRUE)
     getGEO <- eval(parse(text="getGEO"))
     Meta <- eval(parse(text="Meta"))
-    
+
     ## get all GPL IDs
     ## download soft using gpl = getGEO("GPLXXX")
     ## using Meta(gpl) find the technology match sequencing
@@ -151,7 +152,7 @@ prepareGSMInfo <- function() {
     if (!file.exists(gpldir)) {
         dir.create(gpldir)
     }
-    
+
     for (gid in gpl) {
         gg <- tryCatch(getGEO(gid, destdir=gpldir), error=function(e) NULL)
         if (is.null(gg)) {
@@ -163,7 +164,7 @@ prepareGSMInfo <- function() {
             next
         }
         newGSM <- c(newGSM, gsm)
-        
+
         sf <- batchGetGSMsuppFile(gsm)
         if (!is.null(sf)) {
             save(sf, file=paste(gid, "_sf.rda", sep=""))
@@ -174,7 +175,7 @@ prepareGSMInfo <- function() {
     processedGSM <- unique(processedGSM)
     save(processedGSM, file="../processedGSM.rda", compress="xz")
 
-    
+
     sfiles <- list.files(pattern="_sf.rda")
     res <- data.frame(gsm=NULL, remoteFile=NULL)
     for (ff in sfiles) {
@@ -184,29 +185,29 @@ prepareGSMInfo <- function() {
         }
     }
     colnames(res)[2] <- "supplementary_file"
-    
-    
+
+
     GSMInfo <- lapply(unique(as.character(res$gsm)), function(i) {
-        dbGetQuery(con,paste("select gsm,series_id,gpl,organism_ch1,title,characteristics_ch1,source_name_ch1,extract_protocol_ch1,description,data_processing,submission_date ", 
+        dbGetQuery(con,paste("select gsm,series_id,gpl,organism_ch1,title,characteristics_ch1,source_name_ch1,extract_protocol_ch1,description,data_processing,submission_date ",
                              "from gsm where gsm='", i, "'", sep=""))
     })
 
     GSMInfo <- do.call("rbind", GSMInfo)
-    
+
     colnames(GSMInfo) <- sub("_ch1", "", colnames(GSMInfo))
-    
+
     gsminfo <- merge(GSMInfo, res, by.x="gsm", by.y="gsm")
 
     tryCatch(utils::data("ucsc_release", package="ChIPseeker"))
     ucsc_release <- get("ucsc_release")
-    
+
     genVer <- lapply(1:nrow(gsminfo), function(i)
                      getGenomicVersion(ucsc_release,
                                        gsminfo[i, "data_processing"],
                                        gsminfo[i, "organism"],
                                        gsminfo[i, "supplementary_file"])
                      )
-    
+
     gsminfo$genomeVersion <- unlist(genVer)
 
     gse <- as.character(gsminfo$series_id)
@@ -224,12 +225,12 @@ prepareGSMInfo <- function() {
     }
     gsminfo2 <- gsminfo
     rm(gsminfo)
-    
+
     data("gsminfo", package="ChIPseeker")
     gsminfo <- get("gsminfo")
     gsminfo <- rbind(gsminfo, gsminfo2)
     gsminfo <- unique(gsminfo)
-    
+
     save(gsminfo, file="../gsminfo.rda", compress="xz")
 }
 
@@ -238,8 +239,8 @@ getGenomicVersion <- function(ucsc_release, data_processing, organism, supplemen
     data_processing <- as.character(data_processing)
     organism <- as.character(organism)
     supplementary_file <- as.character(supplementary_file)
-   
-    species <- NULL 
+
+    species <- NULL
     gs <- subset(ucsc_release, subset = species == organism)
     if (nrow(gs) == 0) return(NA)
 
@@ -248,14 +249,14 @@ getGenomicVersion <- function(ucsc_release, data_processing, organism, supplemen
         genMatch <- unlist(sapply(gs$ucsc_version, grep, supplementary_file))
         if (length(genMatch) == 0) {
             return(NA)
-        } 
+        }
     }
-    
+
     genVer <- names(genMatch)
     if (length(genVer) > 1) {
         genVer <- genVer[1]
     }
-    
+
     return(genVer)
 }
 
@@ -267,7 +268,7 @@ getGenomicVersion <- function(ucsc_release, data_processing, organism, supplemen
 ##     ##     res <- strapply(i, "(GSE\\d+)")
 ##     ##     unique(unlist(res))
 ##     ## })
-##     gse <- sapply(encode.chipseq, gsub, pattern='.*(GSE\\d+).*', replacement='\\1') 
+##     gse <- sapply(encode.chipseq, gsub, pattern='.*(GSE\\d+).*', replacement='\\1')
 ##     names(gse) <- NULL
 ##     return(gse)
 ## }
@@ -286,9 +287,9 @@ batchGetGSMsuppFile <- function(gsm) {
         cat("processing ", gsm[i], "\t",  i , " of ", length(gsm), "\n")
         tryCatch(getGSMsuppFile(gsm[i]), error=function(e) NULL)
     }, mc.cores=detectCores())
-    
+
     suppfiles <- suppfiles[!unlist(lapply(suppfiles, is.null))]
-    
+
     sf <- do.call("rbind", suppfiles)
     return(sf)
 }
@@ -298,7 +299,7 @@ getGSMsuppFile <- function(GSM) {
     require(pkg, character.only=TRUE)
     getGEO <- eval(parse(text="getGEO"))
     Meta <- eval(parse(text="Meta"))
-    
+
     destdir="geo_soft"
     if (!file.exists(destdir)) {
         dir.create(destdir)
@@ -306,12 +307,12 @@ getGSMsuppFile <- function(GSM) {
     info <- getGEO(GSM, GSEMatrix=FALSE, destdir=destdir)
     ## http://www.ncbi.nlm.nih.gov/geo/info/soft2.html
     metaInfo <- Meta(info)
-    
+
     ## suppmentary file names
     fnames <- unlist(metaInfo[grep("supplementary", names(metaInfo))])
     names(fnames) <- NULL
     i <- c(grep("bed.gz", fnames), grep("Peak.gz", fnames), grep("bedGraph.gz", fnames))
-    
+
     if (length(i) == 0) {
         message("No bed files found")
         return(NULL)
