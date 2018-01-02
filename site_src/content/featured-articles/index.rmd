@@ -17,6 +17,9 @@ weight: 30
 
 ## <i class="fa fa-calendar"></i> 2017
 
+[Intergenic disease-associated regions are abundant in novel transcripts](https://doi.org/10.1186/s13059-017-1363-3).
+**_Genome Biology_**. 2017, 18:241.
+
 [Promoter-bound METTL3 maintains myeloid leukaemia by m6A-dependent translation control](https://doi.org/10.1038/nature24678).
 ***Nature***. 2017.
 
