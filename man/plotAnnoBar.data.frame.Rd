@@ -31,5 +31,5 @@ plot chromosome region features
 \code{\link{annotatePeak}} \code{\link{plotAnnoPie}}
 }
 \author{
-Guangchuang Yu \url{http://ygc.name}
+Guangchuang Yu \url{https://guangchuangyu.github.io}
 }

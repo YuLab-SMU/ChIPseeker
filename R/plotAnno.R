@@ -20,7 +20,7 @@
 ##' @importFrom ggplot2 ggtitle
 ##' @importFrom ggplot2 guide_legend
 ##' @seealso \code{\link{annotatePeak}} \code{\link{plotAnnoPie}}
-##' @author Guangchuang Yu \url{http://ygc.name}
+##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
 plotAnnoBar.data.frame <- function(anno.df,
                                    xlab="",
                                    ylab="Percentage(%)",
@@ -69,7 +69,7 @@ plotAnnoBar.data.frame <- function(anno.df,
 ##' }
 ##' @seealso \code{\link{annotatePeak}} \code{\link{plotAnnoBar}}
 ##' @export
-##' @author G Yu
+##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
 plotAnnoPie.csAnno <- function(x,
                         ndigit=2,
                         cex=0.9,
@@ -156,11 +156,72 @@ getGenomicAnnoStat <- function(peakAnno) {
     anno <- peakAnno$annotation
     ## anno <- sub(" \\(.+", "", anno)
 
-    anno[grep("exon 1 of", anno)] <- "1st Exon"
-    anno[grep("intron 1 of", anno)] <- "1st Intron"
-    anno[grep("Exon \\(", anno)] <- "Other Exon"
-    anno[grep("Intron \\(", anno)] <- "Other Intron"
-    anno[grep("Downstream", anno)] <- "Downstream (<=3kb)"
+    e1 <- getOption("ChIPseeker.ignore_1st_exon")
+    i1 <- getOption("ChIPseeker.ignore_1st_intron")
+    ids <- getOption("ChIPseeker.ignore_downstream")
+
+    if (is.null(e1) || !e1) {
+        e1lab <- "1st Exon"
+        anno[grep("exon 1 of", anno)] <- e1lab
+        exonlab <- "Other Exon"
+    } else {
+        e1lab <- NULL
+        exonlab <- "Exon"
+    }
+
+    if (is.null(i1) || !i1) {
+        i1lab <- "1st Intron"
+        anno[grep("intron 1 of", anno)] <- i1lab
+        intronlab <- "Other Intron"
+    } else {
+        i1lab <- NULL
+        intronlab <- "Intron"
+    }
+
+    anno[grep("Exon \\(", anno)] <- exonlab
+    anno[grep("Intron \\(", anno)] <- intronlab
+
+    if (is.null(ids) || !ids) {
+        dsd <- getOption("ChIPseeker.downstreamDistance")
+        if (is.null(dsd))
+            dsd <- 3000 ## downstream 3k by default
+        if (dsd > 1000) {
+            dsd <- round(dsd/1000, 1)
+            dsd <- paste0(dsd, "kb")
+        }
+        dslab <- paste0("Downstream (<=", dsd, ")")
+
+        anno[grep("Downstream", anno)] <- dslab
+        iglab <- "Distal Intergenic"
+    } else {
+        dslab <- NULL
+        iglab <- "Intergenic"
+        anno[grep("Downstream", anno)] <- iglab
+    }
+    anno[grep("^Distal", anno)] <- iglab
+
+    lvs <- c(
+        "5' UTR",
+        "3' UTR",
+        e1lab,
+        exonlab,
+        i1lab,
+        intronlab,
+        dslab,
+        iglab
+    )
+
+    promoter <- unique(anno[grep("Promoter", anno)])
+    ip <- getOption("ChIPseeker.ignore_promoter_subcategory")
+    if (is.null(ip) || !ip) {
+        if (length(promoter) > 0) {
+            plab <- sort(as.character(promoter))
+        }
+    } else {
+        plab <- "Promoter"
+        anno[grep("^Promoter", anno)] <- plab
+    }
+    lvs <- c(plab, lvs)
 
     ## count frequency
     anno.table <- table(anno)
@@ -169,24 +230,6 @@ getGenomicAnnoStat <- function(peakAnno) {
     anno.ratio <- anno.table/ sum(anno.table) * 100
     anno.df <- as.data.frame(anno.ratio)
     colnames(anno.df) <- c("Feature", "Frequency")
-
-    lvs <- c(## "Promoter (<=1kb)",
-             ## "Promoter (1-2kb)",
-             ## "Promoter (2-3kb)",
-             "5' UTR",
-             "3' UTR",
-             "1st Exon",
-             "Other Exon",
-             "1st Intron",
-             "Other Intron",
-             "Downstream (<=3kb)",
-             "Distal Intergenic")
-
-    promoter.idx <- grep("Promoter", anno.df$Feature)
-    if (length(promoter.idx) > 0) {
-        promoter <- sort(as.character(anno.df$Feature[promoter.idx]))
-        lvs <- c(promoter, lvs)
-    }
 
     anno.df$Feature <- factor(anno.df$Feature, levels=lvs[lvs %in% anno.df$Feature])
     anno.df <- anno.df[order(anno.df$Feature),]

@@ -4,7 +4,7 @@ CHANGES IN VERSION 1.15.2
 
 CHANGES IN VERSION 1.15.1
 ------------------------
- o define downstream distance via options(ChIPseeker.downstreamDistance = 300)
+ o define downstream distance via options(ChIPseeker.downstreamDistance = 3000)
    + https://support.bioconductor.org/p/103135/
 
 CHANGES IN VERSION 1.13.1

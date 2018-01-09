@@ -41,5 +41,5 @@ plotAnnoPie(peakAnno)
 \code{\link{annotatePeak}} \code{\link{plotAnnoBar}}
 }
 \author{
-G Yu
+Guangchuang Yu \url{https://guangchuangyu.github.io}
 }

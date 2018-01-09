@@ -69,7 +69,7 @@ update:
 	git merge upstream/master;\
 	git merge origin/master
 
-push: update
+push: 
 	git push upstream master;\
 	git push origin master
 
