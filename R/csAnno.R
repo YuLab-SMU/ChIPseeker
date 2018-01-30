@@ -34,7 +34,7 @@ setClass("csAnno",
 
 ##' convert csAnno object to GRanges
 ##'
-##' 
+##'
 ##' @title as.GRanges
 ##' @param x csAnno object
 ##' @return GRanges object
@@ -86,7 +86,7 @@ setMethod("vennpie", signature(x="csAnno"),
 ##' @param ... additional parameter
 ##' @return plot
 ##' @usage upsetplot(x, ...)
-##' @importFrom DOSE upsetplot
+##' @importFrom enrichplot upsetplot
 ##' @exportMethod upsetplot
 ##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
 setMethod("upsetplot", signature(x="csAnno"),
@@ -97,7 +97,7 @@ setMethod("upsetplot", signature(x="csAnno"),
 
 ##' convert csAnno object to data.frame
 ##'
-##' 
+##'
 ##' @title as.data.frame.csAnno
 ##' @param x csAnno object
 ##' @param row.names row names
@@ -122,7 +122,7 @@ as.data.frame.csAnno <- function(x, row.names=NULL, optional=FALSE, ...) {
 ##' @docType methods
 ##' @rdname show-methods
 ##' @aliases show,csAnno,ANY-method
-##' @title show method 
+##' @title show method
 ##' @param object A \code{csAnno} instance
 ##' @return message
 ##' @importFrom methods show
@@ -149,7 +149,7 @@ setMethod("show", signature(object="csAnno"),
 ##' @aliases plotAnnoBar,list-method
 ##' @exportMethod plotAnnoBar
 setMethod("plotAnnoBar", signature(x="list"),
-          function(x, 
+          function(x,
                    xlab="",
                    ylab='Percentage(%)',
                    title="Feature Distribution",
@@ -181,7 +181,7 @@ setMethod("plotAnnoBar", signature(x="list"),
 ##' @usage plotAnnoBar(x, xlab="", ylab='Percentage(\%)',title="Feature Distribution", ...)
 ##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
 setMethod("plotAnnoBar", signature(x="csAnno"),
-          function(x, 
+          function(x,
                    xlab="",
                    ylab="Percentage(%)",
                    title="Feature Distribution",
@@ -212,7 +212,7 @@ setMethod("plotAnnoBar", signature(x="csAnno"),
 ##' @usage plotAnnoPie(x,ndigit=2, cex=0.9,col=NA,legend.position="rightside", pie3D=FALSE, ...)
 ##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
 setMethod("plotAnnoPie", signature(x="csAnno"),
-          function(x, 
+          function(x,
                    ndigit=2,
                    cex=0.9,
                    col=NA,
@@ -238,7 +238,7 @@ setMethod("plotDistToTSS", signature(x="list"),
               if (is.null(names(x))) {
                   stop("input object should be a named list...")
               }
-              
+
               peakAnno <- lapply(x, as.data.frame)
               ## peakDist <- ldply(peakAnno)
               peakDist <- list_to_dataframe(peakAnno)
