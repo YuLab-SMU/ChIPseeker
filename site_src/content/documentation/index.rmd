@@ -57,4 +57,4 @@ weight: 10
 
 + [ChIPseq Analysis](http://compbio.ucdenver.edu/Hunter_lab/Phang/resources/Tzu-Software/ChIPseq.Analysis.html)
 + [NGS data analysis with R / Bioconductor: ChIP-Seq workflow](http://biocluster.ucr.edu/~rkaundal/workshops/R_feb2016/ChIPseq/ChIPseq.html)
-+ [TCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages](http://f1000research.com/articles/5-1542/v1)
++ [TCGA Workflow: Analyze cancer genomics and epigenomics data using Bioconductor packages](http://f1000research.com/articles/5-1542/)

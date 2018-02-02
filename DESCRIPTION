@@ -26,6 +26,7 @@ Imports:
     BiocGenerics,
     boot,
     DOSE (>= 3.0.0),
+    enrichplot,
     IRanges,
     GenomeInfoDb,
     GenomicRanges,
