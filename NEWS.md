@@ -1,3 +1,9 @@
+# ChIPseeker 1.15.4
+
++ plotAnnoBar now visualize barplot according to the order of input list
+  (y-axis) (2018-02-27, Tue)
+      - <https://github.com/GuangchuangYu/ChIPseeker/issues/73>
+
 # ChIPseeker 1.15.3
 
 + options to ignore '1st exon', '1st intron', 'downstream' and promoter

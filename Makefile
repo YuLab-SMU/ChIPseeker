@@ -2,7 +2,7 @@ PKGNAME := $(shell sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGVERS := $(shell sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGSRC  := $(shell basename `pwd`)
 
-all: rd readme check clean
+all: rd check clean
 
 alldocs: rd readme site
 
@@ -47,7 +47,6 @@ site:
 	rm themes;\
 	cd ..
 
-
 preview:
 	cd site_src;\
 	ln -s ../../software/themes themes;\
@@ -55,13 +54,14 @@ preview:
 	rm themes;\
 	cd ..
 
-
-
 gitmaintain:
 	git gc --auto;\
 	git prune -v;\
 	git fsck --full
 
+release:
+	git checkout RELEASE_3_6;\
+	git fetch --all
 
 update:
 	git fetch --all;\
@@ -69,7 +69,7 @@ update:
 	git merge upstream/master;\
 	git merge origin/master
 
-push: 
+push:
 	git push upstream master;\
 	git push origin master
 

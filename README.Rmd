@@ -103,3 +103,10 @@ ggsave(p, file="docs/images/dlstats.png", width=8, height=4)
 ```
 
 <img src="docs/images/dlstats.png" width="890"/>
+
+
+## Contributing
+
+We welcome any contributions! By participating in this project you agree to
+abide by the terms outlined in the [Contributor Code of Conduct](CONDUCT.md).
+

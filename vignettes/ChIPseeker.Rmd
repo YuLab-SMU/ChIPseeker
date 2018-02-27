@@ -32,6 +32,7 @@ library(GenomicFeatures)
 library(GenomicRanges)
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 library(org.Hs.eg.db)
+library(ggplot2)
 library(clusterProfiler)
 library(ReactomePA)
 library(ChIPseeker)
@@ -307,7 +308,7 @@ compKEGG <- compareCluster(geneCluster   = genes,
                          fun           = "enrichKEGG",
                          pvalueCutoff  = 0.05,
                          pAdjustMethod = "BH")
-plot(compKEGG, showCategory = 15, title = "KEGG Pathway Enrichment Analysis")
+dotplot(compKEGG, showCategory = 15, title = "KEGG Pathway Enrichment Analysis")
 ```
 
 
