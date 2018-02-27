@@ -31,8 +31,6 @@ Please cite the following article when using `ChIPseeker`:
 
 [![citation](https://img.shields.io/badge/cited%20by-106-green.svg?style=flat)](https://scholar.google.com.hk/scholar?oi=bibs&hl=en&cites=12053363057899219488)
 
-![](https://img.shields.io/badge/ESI-Highly%20Cited%20Paper-green.svg?style=flat)
-
 <img src="docs/images/citation.png" width="890"/>
 
 ### Download stats
