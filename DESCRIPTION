@@ -27,6 +27,7 @@ Imports:
     boot,
     enrichplot,
     IRanges (>= 2.13.12),
+    GenomeInfoDb,
     GenomicRanges (>= 1.31.8),
     GenomicFeatures (>= 1.31.3),
     ggplot2 (>= 2.2.0),

@@ -40,3 +40,8 @@ Please cite the following article when using `ChIPseeker`:
 [![download](http://www.bioconductor.org/shields/downloads/ChIPseeker.svg)](https://bioconductor.org/packages/stats/bioc/ChIPseeker) [![total](https://img.shields.io/badge/downloads-19976/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker) [![month](https://img.shields.io/badge/downloads-782/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 
 <img src="docs/images/dlstats.png" width="890"/>
+
+Contributing
+------------
+
+We welcome any contributions! By participating in this project you agree to abide by the terms outlined in the [Contributor Code of Conduct](CONDUCT.md).
