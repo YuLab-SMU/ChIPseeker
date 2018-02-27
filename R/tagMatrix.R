@@ -179,11 +179,11 @@ getTagMatrix <- function(peak, weightCol=NULL, windows) {
     chr.idx <- intersect(names(peak.cov),
                          unique(as.character(seqnames(windows))))
     
-    peakView <- Views(peak.cov[chr.idx], as(windows, "RangesList")[chr.idx])
+    peakView <- Views(peak.cov[chr.idx], as(windows, "IntegerRangesList")[chr.idx])
     tagMatrixList <- lapply(peakView, function(x) t(viewApply(x, as.vector)))
     tagMatrix <- do.call("rbind", tagMatrixList)
 
-    ## get the index of windows, that are reorganized by as(windows, "RangesList")
+    ## get the index of windows, that are reorganized by as(windows, "IntegerRangesList")
     idx.list <- split(1:length(windows),  as.factor(seqnames(windows)))
     idx <- do.call("c", idx.list)
     
