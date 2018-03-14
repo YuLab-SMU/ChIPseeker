@@ -1,7 +1,7 @@
 ##' plot the profile of peaks
 ##'
-##' 
-##' @title plotAvgProf 
+##'
+##' @title plotAvgProf
 ##' @param tagMatrix tagMatrix or a list of tagMatrix
 ##' @param xlim xlim
 ##' @param xlab x label
@@ -15,7 +15,7 @@
 ##' @author G Yu; Y Yan
 plotAvgProf <- function(tagMatrix, xlim,
                         xlab="Genomic Region (5'->3')",
-                        ylab = "Read Count Frequency",
+                        ylab = "Peak Count Frequency",
                         conf,
                         facet="none", free_y = TRUE, ...) {
     ## S4Vectors change the behavior of ifelse
@@ -24,23 +24,23 @@ plotAvgProf <- function(tagMatrix, xlim,
     ## conf <- ifelse(missingArg(conf), NA, conf)
     ##
     conf <- if(missingArg(conf)) NA else conf
-    
+
     if (!(missingArg(conf) || is.na(conf))){
-        p <- plotAvgProf.internal(tagMatrix, conf = conf, xlim = xlim, 
+        p <- plotAvgProf.internal(tagMatrix, conf = conf, xlim = xlim,
                                   xlab = xlab, ylab = ylab,
                                   facet = facet, free_y = free_y
                                   )
     } else {
         p <- plotAvgProf.internal(tagMatrix, xlim = xlim,
                                   xlab = xlab, ylab = ylab,
-                                  facet = facet, free_y = free_y) 
+                                  facet = facet, free_y = free_y)
     }
     return(p)
 }
 
-##' plot the profile of peaks that align to flank sequences of TSS 
+##' plot the profile of peaks that align to flank sequences of TSS
 ##'
-##' 
+##'
 ##' @title plotAvgProf
 ##' @param peak peak file or GRanges object
 ##' @param weightCol column name of weight
@@ -60,12 +60,12 @@ plotAvgProf <- function(tagMatrix, xlim,
 plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
                          upstream = 1000, downstream = 1000,
                          xlab = "Genomic Region (5'->3')",
-                         ylab = "Read Count Frequency",
+                         ylab = "Peak Count Frequency",
                          conf,
                          facet = "none",
                          free_y = TRUE,
                          verbose = TRUE, ...) {
-    
+
     if (verbose) {
         cat(">> preparing promoter regions...\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -73,7 +73,7 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
     promoter <- getPromoters(TxDb=TxDb,
                              upstream=upstream,
                              downstream=downstream)
-    
+
     if (verbose) {
         cat(">> preparing tag matrix...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -84,7 +84,7 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
     } else {
         tagMatrix <- getTagMatrix(peak, weightCol, promoter)
     }
-    
+
     if (verbose) {
         cat(">> plotting figure...\t\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -106,7 +106,7 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
 
 ##' plot the heatmap of tagMatrix
 ##'
-##' 
+##'
 ##' @title tagHeatmap
 ##' @param tagMatrix tagMatrix or a list of tagMatrix
 ##' @param xlim xlim
@@ -127,7 +127,7 @@ tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="red
 
 ##' plot the heatmap of peaks align to flank sequences of TSS
 ##'
-##' 
+##'
 ##' @title peakHeatmap
 ##' @param peak peak file or GRanges object
 ##' @param weightCol column name of weight
@@ -152,7 +152,7 @@ peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
         if (is.null(names(peak)))
             stop("peak should be a peak file or a name list of peak files...")
     }
-        
+
     if (verbose) {
         cat(">> preparing promoter regions...\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -174,9 +174,9 @@ peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
         cat(">> generating figure...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     }
-   
+
     xlim=c(-upstream, downstream)
-    
+
     peakHeatmap.internal2(tagMatrix, xlim, listFlag, color, xlab, ylab, title)
 
     if (verbose) {
@@ -201,7 +201,7 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
         } else {
             cols <- color
         }
-        
+
         if (is.null(title) || is.na(title))
             title <- names(tagMatrix)
         if (length(xlab) != nc) {
@@ -233,12 +233,12 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
     tagMatrix <- t(apply(tagMatrix, 1, function(x) x/max(x)))
     ii <- order(rowSums(tagMatrix))
     tagMatrix <- tagMatrix[ii,]
-    cols <- colorRampPalette(c("white",color))(200)    
+    cols <- colorRampPalette(c("white",color))(200)
     if (is.null(xlim)) {
         xlim <- 1:ncol(tagMatrix)
     } else if (length(xlim) == 2) {
         xlim <- seq(xlim[1], xlim[2])
-    } 
+    }
     image(x=xlim, y=1:nrow(tagMatrix),z=t(tagMatrix),useRaster=TRUE, col=cols, yaxt="n", ylab="", xlab=xlab, main=title)
 }
 
@@ -256,10 +256,10 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
 ##' @importFrom ggplot2 theme
 ##' @importFrom ggplot2 element_blank
 ##' @importFrom ggplot2 facet_grid
-plotAvgProf.internal <- function(tagMatrix, conf, 
+plotAvgProf.internal <- function(tagMatrix, conf,
                                  xlim = c(-3000,3000),
                                  xlab = "Genomic Region (5'->3')",
-                                 ylab = "Read Count Frequency",
+                                 ylab = "Peak Count Frequency",
                                  facet="none", free_y = TRUE, ...) {
 
     listFlag <- FALSE
@@ -271,8 +271,8 @@ plotAvgProf.internal <- function(tagMatrix, conf,
             ## stop("tagMatrix should be a named list...")
         }
         listFlag <- TRUE
-    } 
-    
+    }
+
     if ( listFlag ) {
         facet <- match.arg(facet, c("none", "row", "column"))
         if ( (xlim[2]-xlim[1]+1) != ncol(tagMatrix[[1]]) ) {
@@ -290,23 +290,23 @@ plotAvgProf.internal <- function(tagMatrix, conf,
     ## conf <- ifelse(missingArg(conf), NA, conf)
     ##
     conf <- if(missingArg(conf)) NA else conf
-    
+
     pos <- value <- .id <- Lower <- Upper <- NULL
-    
+
     if ( listFlag ) {
         tagCount <- lapply(tagMatrix, function(x) getTagCount(x, xlim = xlim, conf = conf, ...))
         tagCount <- list_to_dataframe(tagCount)
         tagCount$.id <- factor(tagCount$.id, levels=names(tagMatrix))
         p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
         if (!(is.na(conf))) {
-            p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper, fill = .id), 
+            p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper, fill = .id),
                                 linetype = 0, alpha = 0.2)
-        }  
+        }
     } else {
         tagCount <- getTagCount(tagMatrix, xlim = xlim, conf = conf, ...)
         p <- ggplot(tagCount, aes(pos))
         if (!(is.na(conf))) {
-            p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper), 
+            p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper),
                                  linetype = 0, alpha = 0.2)
         }
     }

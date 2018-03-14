@@ -1,5 +1,7 @@
 # ChIPseeker 1.15.4
 
++ change `plotAvgProf`'s default y label <2018-03-14, Wed>
+    - <https://github.com/GuangchuangYu/ChIPseeker/issues/76>
 + plotAnnoBar now visualize barplot according to the order of input list
   (y-axis) (2018-02-27, Tue)
     - <https://github.com/GuangchuangYu/ChIPseeker/issues/73>
