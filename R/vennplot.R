@@ -1,7 +1,7 @@
 ##' plot the overlap of a list of object
 ##'
-##' 
-##' @title vennplot 
+##'
+##' @title vennplot
 ##' @param Sets a list of object, can be vector or GRanges object
 ##' @param by one of gplots or Vennerable
 ##' @return venn plot that summarize the overlap of peaks
@@ -24,9 +24,12 @@
 ##' @author G Yu
 vennplot <- function(Sets, by="gplots") {
     if (is.null(names(Sets))) {
-        stop("input object should be a named list...")
+        nn <- paste0("Set", seq_along(Sets))
+        warning("input is not a named list, set the name automatically to ", paste(nn, collapse = " "))
+        names(Sets) <- nn
+        ## stop("input object should be a named list...")
     }
-    
+
     overlapDF <- overlap(Sets)
     if (by == "Vennerable") {
         ## setRepositories(ind=7)
@@ -54,7 +57,7 @@ vennplot <- function(Sets, by="gplots") {
 
 ##' vennplot for peak files
 ##'
-##' 
+##'
 ##' @title vennplot.peakfile
 ##' @param files peak files
 ##' @param labels labels for peak files

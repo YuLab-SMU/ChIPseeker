@@ -155,7 +155,10 @@ setMethod("plotAnnoBar", signature(x="list"),
                    title="Feature Distribution",
                    ...) {
               if (is.null(names(x))) {
-                  stop("input object should be a named list...")
+                  nn <- paste0("Peak", seq_along(x))
+                  warning("input is not a named list, set the name automatically to ", paste(nn, collapse = " "))
+                  names(x) <- nn
+                  ## stop("input object should be a named list...")
               }
               anno <- lapply(x, getAnnoStat)
               ## anno.df <- ldply(anno)
@@ -236,7 +239,10 @@ setMethod("plotDistToTSS", signature(x="list"),
                                      xlab="", ylab="Binding sites (%) (5'->3')",
                                      title="Distribution of transcription factor-binding loci relative to TSS", ...) {
               if (is.null(names(x))) {
-                  stop("input object should be a named list...")
+                  nn <- paste0("Peak", seq_along(x))
+                  warning("input is not a named list, set the name automatically to ", paste(nn, collapse = " "))
+                  names(x) <- nn
+                  ## stop("input object should be a named list...")
               }
 
               peakAnno <- lapply(x, as.data.frame)

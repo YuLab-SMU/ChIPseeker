@@ -38,7 +38,7 @@
 ##' plotDistToTSS(peakAnno)
 ##' }
 ##' @seealso \code{\link{annotatePeak}}
-##' @author Guangchuang Yu \url{http://ygc.name}
+##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
 plotDistToTSS.data.frame <- function(peakDist,
                                      distanceColumn="distanceToTSS",
                                      xlab="",

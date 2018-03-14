@@ -1,5 +1,9 @@
 # ChIPseeker 1.15.4
 
++ If the required input is a named list and user input a list without name,
+  set the name automatically and throw warning msg instead of error <2018-03-14,
+  Wed>
+    - <https://support.bioconductor.org/p/106903/#106936>
 + change `plotAvgProf`'s default y label <2018-03-14, Wed>
     - <https://github.com/GuangchuangYu/ChIPseeker/issues/76>
 + plotAnnoBar now visualize barplot according to the order of input list
