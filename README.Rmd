@@ -10,23 +10,23 @@ html_preview: false
 #library("txtplot")
 library("badger")
 library("ypages")
-library("ggplot2")
-library("yyplot")
 ```
 
 
 # ChIPseeker: ChIP peak Annotation, Comparison, and Visualization
 
+<img src="https://raw.githubusercontent.com/Bioconductor/BiocStickers/master/ChIPseeker/ChIPseeker.png" height="200" align="right" />
+
+
 `r badge_bioc_release("ChIPseeker", "green")`
 `r badge_devel("guangchuangyu/ChIPseeker", "green")`
 [![Bioc](http://www.bioconductor.org/shields/years-in-bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#since)
-`r badge_bioc_download("ChIPseeker", "total", "blue")`
-`r badge_bioc_download("ChIPseeker", "month", "blue")`
+[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/GuangchuangYu)
+
 
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![codecov](https://codecov.io/gh/GuangchuangYu/ChIPseeker/branch/master/graph/badge.svg)](https://codecov.io/gh/GuangchuangYu/ChIPseeker/)
 [![Last-changedate](https://img.shields.io/badge/last%20change-`r gsub('-', '--', Sys.Date())`-green.svg)](https://github.com/GuangchuangYu/ChIPseeker/commits/master)
-[![commit](http://www.bioconductor.org/shields/commits/bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#svn_source)
 [![GitHub forks](https://img.shields.io/github/forks/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/network)
 [![GitHub stars](https://img.shields.io/github/stars/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/stargazers)
 
@@ -41,14 +41,16 @@ library("yyplot")
 This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare their own dataset with those deposited in database. The comparison can be used to infer cooperative regulation and thus can be used to generate hypotheses. Several visualization functions are implemented to summarize the coverage of the peak experiment, average profile and heatmap of peaks binding to TSS regions, genomic annotation, distance to TSS, and overlap of peaks or genes.
 
 
-For details, please visit our project website, <https://guangchuangyu.github.io/ChIPseeker>.
+For details, please visit our project website, <https://guangchuangyu.github.io/software/ChIPseeker>.
 
-+ [Documentation](https://guangchuangyu.github.io/ChIPseeker/documentation/)
-+ [Featured Articles](https://guangchuangyu.github.io/ChIPseeker/featuredArticles/)
-+ [Feedback](https://guangchuangyu.github.io/ChIPseeker/#feedback)
++ [Documentation](https://guangchuangyu.github.io/software/ChIPseeker/documentation/)
++ [Featured Articles](https://guangchuangyu.github.io/software/ChIPseeker/featuredArticles/)
++ [Feedback](https://guangchuangyu.github.io/software/ChIPseeker/#feedback)
 
 
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/GuangchuangYu/ChIPseeker.svg?style=social)](https://twitter.com/intent/tweet?hashtags=ChIPseeker&url=http://bioinformatics.oxfordjournals.org/content/31/14/2382&screen_name=guangchuangyu)
+[![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?hashtags=ChIPseeker&url=http://bioinformatics.oxfordjournals.org/content/31/14/2382&screen_name=guangchuangyu)
+`r badger::badge_custom("follow me on", "微信", "green", "https://guangchuangyu.github.io/blog_images/biobabble.jpg")`
+`r badger::badge_custom("打赏", "支付宝/微信", "green", "https://guangchuangyu.github.io/blog_images/pay_qrcode.png")`
 
 
 ------------------------------------------------------------------------
@@ -65,16 +67,9 @@ __*Yu G*__, Wang LG and He QY^\*^. ChIPseeker: an R/Bioconductor package for ChI
 
 ### Citation
 
-`r badge_citation("9pM33mqn1YgC", "12053363057899219488", "green")`
 
 
-```{r echo=F, comment=NA}
-p <- plot_citation_trend('DO5oG40AAAAJ', '9pM33mqn1YgC')
-ggsave(p, file="docs/images/citation.png", width=8, height=4)
-```
-
-
-<img src="docs/images/citation.png" width="890"/>
+<img src="https://guangchuangyu.github.io/software/ChIPseeker/featured-articles/index_files/figure-html/citation-1.png" width="890"/>
 
 
 ### Download stats
@@ -84,18 +79,7 @@ ggsave(p, file="docs/images/citation.png", width=8, height=4)
 `r badge_bioc_download("ChIPseeker", "month", "blue")`
 
 
-
-```{r echo=F, message=F, comment=NA}
-x <- dlstats::bioc_stats("ChIPseeker")
-x <- x[-nrow(x), ] # last month data is not complete
-## txtplot(ggtree::Date2decimal(x$end), x$Nb_of_downloads, width=100, height=25)
-p <- ggplot(x, aes(end, Nb_of_distinct_IPs)) + geom_point() + geom_line() +
-    theme_minimal() +xlab(NULL) + ylab(NULL) +
-    labs(title="ChIPseeker", subtitle="Monthly download stats (distinct IPs)", caption="data from Bioconductor")
-ggsave(p, file="docs/images/dlstats.png", width=8, height=4)
-```
-
-<img src="docs/images/dlstats.png" width="890"/>
+<img src="https://guangchuangyu.github.io/software/ChIPseeker/index_files/figure-html/dlstats-1.png" width="890"/>
 
 
 ## Contributing

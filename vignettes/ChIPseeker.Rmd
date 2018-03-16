@@ -17,6 +17,7 @@ vignette: >
   %\VignetteIndexEntry{ChIPseeker: an R package for ChIP peak Annotation, Comparison and Visualization}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
@@ -403,9 +404,23 @@ downloadGSMbedFiles(gsm, destDir="hg19")
 
 After download the bed files from GEO, we can pass them to `enrichPeakOverlap` for testing the significant of overlap. Parameter _targetPeak_ can be the folder, _e.g._ hg19, that containing bed files. `enrichPeakOverlap` will parse the folder and compare all the bed files. It is possible to test the overlap with bed files that are mapping to different genome or different genome versions, `enrichPeakOverlap` provide a parameter _chainFile_ that can pass a chain file and liftOver the _targetPeak_ to the genome version consistent with _queryPeak_. Signifcant overlap can be use to generate hypothesis of cooperative regulation.By mining the data deposited in GEO, we can identify some putative complex or interacted regulators in gene expression regulation or chromsome remodelling for further validation.
 
-# Homepage
 
-Please visit [ChIPseeker homepage](https://guangchuangyu.github.io/ChIPseeker/) for more information.
+# Need helps?
+
+
+If you have questions/issues, please visit
+[ChIPseeker homepage](https://guangchuangyu.github.io/software/ChIPseeker/) first.
+Your problems are mostly documented. If you think you found a bug, please follow
+[the guide](https://guangchuangyu.github.io/2016/07/how-to-bug-author/) and
+provide a reproducible example to be posted
+on
+[github issue tracker](https://github.com/GuangchuangYu/ChIPseeker/issues).
+For questions, please post
+to [Bioconductor support site](https://support.bioconductor.org/) and tag your
+post with *ChIPseeker*.
+
+
+For Chinese user, you can follow me on [WeChat (微信)](https://guangchuangyu.github.io/blog_images/biobabble.jpg).
 
 
 # Session Information
