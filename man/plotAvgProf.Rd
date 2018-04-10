@@ -5,7 +5,7 @@
 \title{plotAvgProf}
 \usage{
 plotAvgProf(tagMatrix, xlim, xlab = "Genomic Region (5'->3')",
-  ylab = "Read Count Frequency", conf, facet = "none", free_y = TRUE, ...)
+  ylab = "Peak Count Frequency", conf, facet = "none", free_y = TRUE, ...)
 }
 \arguments{
 \item{tagMatrix}{tagMatrix or a list of tagMatrix}

@@ -6,7 +6,7 @@
 \usage{
 plotAvgProf2(peak, weightCol = NULL, TxDb = NULL, upstream = 1000,
   downstream = 1000, xlab = "Genomic Region (5'->3')",
-  ylab = "Read Count Frequency", conf, facet = "none", free_y = TRUE,
+  ylab = "Peak Count Frequency", conf, facet = "none", free_y = TRUE,
   verbose = TRUE, ...)
 }
 \arguments{
