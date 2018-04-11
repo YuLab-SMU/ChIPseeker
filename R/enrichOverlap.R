@@ -115,7 +115,7 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
     query.gr <- loadPeak(queryPeak)
     if (is(targetPeak[1], "GRanges") || is(targetPeak[[1]], "GRanges")) {
         target.gr <- targetPeak
-        targetFiles <- NULL
+        ## targetFiles <- NULL
     } else {
         targetFiles <- parse_targetPeak_Param(targetPeak)
         target.gr <- lapply(targetFiles, loadPeak)
@@ -130,9 +130,9 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
         p.ol <- enrichOverlap.peak.internal(query.gr, target.gr, TxDb, nShuffle,
                                             mc.cores=mc.cores,verbose=verbose)
     } else {
-        res_list <- lapply(1:length(targetFiles), function(i) {
+        res_list <- lapply(1:length(target.gr), function(i) {
             enrichPeakOverlap(queryPeak = queryPeak,
-                              targetPeak = targetFiles[i],
+                              targetPeak = target.gr[i],
                               TxDb = TxDb,
                               pAdjustMethod = pAdjustMethod,
                               nShuffle = nShuffle,
