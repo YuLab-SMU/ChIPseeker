@@ -213,10 +213,8 @@ getGenomicAnnoStat <- function(peakAnno) {
 
     promoter <- unique(anno[grep("Promoter", anno)])
     ip <- getOption("ChIPseeker.ignore_promoter_subcategory")
-    if (is.null(ip) || !ip) {
-        if (length(promoter) > 0) {
-            plab <- sort(as.character(promoter))
-        }
+    if ((is.null(ip) || !ip) && (length(promoter) > 0)) {
+        plab <- sort(as.character(promoter))
     } else {
         plab <- "Promoter"
         anno[grep("^Promoter", anno)] <- plab
