@@ -184,7 +184,7 @@ TXID2EGID <- function(txid) {
 }
 
 ## according to: https://support.bioconductor.org/p/70432/#70545
-## contributed by Herve Pages
+## contributed by Hervé Pagès
 getFirstHitIndex <- function(x) {
     ## sapply(unique(x), function(i) which(x == i)[1])
     which(!duplicated(x))
