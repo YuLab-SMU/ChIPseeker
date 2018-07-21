@@ -1,3 +1,8 @@
+# ChIPseeker 1.17.1
+
++ fixed issue of `vennpie` by adding pseudo-count +1 (2018-07-21, Sat)
+  - <https://www.biostars.org/p/326456/>
+
 # ChIPseeker 1.15.4
 
 + If the required input is a named list and user input a list without name,
