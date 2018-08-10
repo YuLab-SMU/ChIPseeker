@@ -1,3 +1,8 @@
+# ChIPseeker 1.17.2
+
++ add `flip_minor_strand` parameter in `getTagMatrix` (2018-08-10, Fri)
+  - should set to FALSE if windows if not symetric
+  
 # ChIPseeker 1.17.1
 
 + fixed issue of `vennpie` by adding pseudo-count +1 (2018-07-21, Sat)

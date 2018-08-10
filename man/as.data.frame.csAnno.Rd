@@ -4,7 +4,8 @@
 \alias{as.data.frame.csAnno}
 \title{as.data.frame.csAnno}
 \usage{
-\method{as.data.frame}{csAnno}(x, row.names = NULL, optional = FALSE, ...)
+\method{as.data.frame}{csAnno}(x, row.names = NULL, optional = FALSE,
+  ...)
 }
 \arguments{
 \item{x}{csAnno object}

@@ -4,7 +4,7 @@
 \alias{getTagMatrix}
 \title{getTagMatrix}
 \usage{
-getTagMatrix(peak, weightCol = NULL, windows)
+getTagMatrix(peak, weightCol = NULL, windows, flip_minor_strand = TRUE)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}
@@ -12,6 +12,8 @@ getTagMatrix(peak, weightCol = NULL, windows)
 \item{weightCol}{column name of weight, default is NULL}
 
 \item{windows}{a collection of region with equal size, eg. promoter region.}
+
+\item{flip_minor_strand}{whether flip the orientation of minor strand}
 }
 \value{
 tagMatrix

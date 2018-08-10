@@ -3,9 +3,7 @@
 \docType{methods}
 \name{plotAnnoBar}
 \alias{plotAnnoBar}
-\alias{plotAnnoBar}
 \alias{plotAnnoBar,list-method}
-\alias{plotAnnoBar}
 \alias{plotAnnoBar,csAnno,ANY-method}
 \title{plotAnnoBar method generics}
 \usage{
@@ -32,10 +30,6 @@ plotAnnoBar(x, xlab="", ylab='Percentage(\%)',title="Feature Distribution", ...)
 plot
 }
 \description{
-plotAnnoBar method generics
-
-plotAnnoBar method for list of \code{csAnno} instances
-
 plotAnnoBar method for \code{csAnno} instance
 }
 \author{

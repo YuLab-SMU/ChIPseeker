@@ -5,8 +5,8 @@
 \title{peakHeatmap}
 \usage{
 peakHeatmap(peak, weightCol = NULL, TxDb = NULL, upstream = 1000,
-  downstream = 1000, xlab = "", ylab = "", title = NULL, color = NULL,
-  verbose = TRUE)
+  downstream = 1000, xlab = "", ylab = "", title = NULL,
+  color = NULL, verbose = TRUE)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}

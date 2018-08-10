@@ -32,9 +32,6 @@ getPromoters <- function(TxDb=NULL,
         }
     }
 
-    assign("upstream", upstream, envir=ChIPseekerEnv)
-    assign("downstream", downstream, envir=ChIPseekerEnv)
-
     Transcripts <- getGene(TxDb, by)
     ## get start position based on strand
     tss <- ifelse(strand(Transcripts) == "+", start(Transcripts), end(Transcripts))
@@ -42,7 +39,10 @@ getPromoters <- function(TxDb=NULL,
                          ranges=IRanges(tss-upstream, tss+downstream),
                          strand=strand(Transcripts))
     promoters <- unique(promoters)
+
     assign("promoters", promoters, envir=ChIPseekerEnv)
+    assign("upstream", upstream, envir=ChIPseekerEnv)
+    assign("downstream", downstream, envir=ChIPseekerEnv)
     
     return(promoters)
 }
@@ -104,10 +104,11 @@ getBioRegion <- function(TxDb=NULL,
 ##' @param peak peak file or GRanges object
 ##' @param weightCol column name of weight, default is NULL
 ##' @param windows a collection of region with equal size, eg. promoter region.
+##' @param flip_minor_strand whether flip the orientation of minor strand
 ##' @return tagMatrix
 ##' @export
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
-getTagMatrix <- function(peak, weightCol=NULL, windows) {
+getTagMatrix <- function(peak, weightCol=NULL, windows, flip_minor_strand=TRUE) {
     peak.gr <- loadPeak(peak)
     
     if (! is(windows, "GRanges")) {
@@ -191,8 +192,14 @@ getTagMatrix <- function(peak, weightCol=NULL, windows) {
     tagMatrix <- tagMatrix[order(idx),]
     
     ## minus strand
-    minus.idx <- which(as.character(strand(windows)) == "-")
-    tagMatrix[minus.idx,] <- tagMatrix[minus.idx, ncol(tagMatrix):1]
+    if (flip_minor_strand) {
+        ## should set to FALSE if upstream is not equal to downstream
+        ## can set to TRUE if e.g. 3k-TSS-3k
+        ## should set to FALSE if e.g. 3k-TSS-100
+        minus.idx <- which(as.character(strand(windows)) == "-")
+        tagMatrix[minus.idx,] <- tagMatrix[minus.idx, ncol(tagMatrix):1]
+    }
+
     tagMatrix <- tagMatrix[rowSums(tagMatrix)!=0,]
     ## assign("tagMatrix", tagMatrix, envir=ChIPseekerEnv)
     return(tagMatrix)

@@ -4,9 +4,9 @@
 \alias{covplot}
 \title{covplot}
 \usage{
-covplot(peak, weightCol = NULL, xlab = "Chromosome Size (bp)", ylab = "",
-  title = "ChIP Peaks over Chromosomes", chrs = NULL, xlim = NULL,
-  lower = 1)
+covplot(peak, weightCol = NULL, xlab = "Chromosome Size (bp)",
+  ylab = "", title = "ChIP Peaks over Chromosomes", chrs = NULL,
+  xlim = NULL, lower = 1)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}

@@ -3,7 +3,6 @@
 \docType{methods}
 \name{plotAnnoPie}
 \alias{plotAnnoPie}
-\alias{plotAnnoPie}
 \alias{plotAnnoPie,csAnno,ANY-method}
 \title{plotAnnoPie method generics}
 \usage{
@@ -31,8 +30,6 @@ plotAnnoPie(x,ndigit=2, cex=0.9,col=NA,legend.position="rightside", pie3D=FALSE,
 plot
 }
 \description{
-plotAnnoPie method generics
-
 plotAnnoPie method for \code{csAnno} instance
 }
 \author{

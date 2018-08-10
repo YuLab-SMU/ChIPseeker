@@ -3,9 +3,7 @@
 \docType{methods}
 \name{plotDistToTSS}
 \alias{plotDistToTSS}
-\alias{plotDistToTSS}
 \alias{plotDistToTSS,list-method}
-\alias{plotDistToTSS}
 \alias{plotDistToTSS,csAnno,ANY-method}
 \title{plotDistToTSS method generics}
 \usage{
@@ -40,10 +38,6 @@ title="Distribution of transcription factor-binding loci relative to TSS",...)
 plot
 }
 \description{
-plotDistToTSS method generics
-
-plotDistToTSS method for list of \code{csAnno} instances
-
 plotDistToTSS method for \code{csAnno} instance
 }
 \author{

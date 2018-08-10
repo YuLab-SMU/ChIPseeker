@@ -1,7 +1,7 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.17.1
+Version: 1.17.2
 Encoding: UTF-8
 Authors@R: c( person(given = "Guangchuang", family = "Yu",       email = "guangchuangyu@gmail.com",      role  = c("aut", "cre"), comment = c(ORCID = "0000-0002-6485-8781")),
               person(given = "Yun",         family = "Yan",      email = "youryanyun@gmail.com",         role = "ctb"),
@@ -66,4 +66,4 @@ VignetteBuilder: knitr
 ByteCompile: true
 License: Artistic-2.0
 biocViews: Annotation, ChIPSeq, Software, Visualization, MultipleComparison
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

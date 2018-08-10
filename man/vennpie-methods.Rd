@@ -3,7 +3,6 @@
 \docType{methods}
 \name{vennpie}
 \alias{vennpie}
-\alias{vennpie}
 \title{vennpie method generics}
 \usage{
 vennpie(x, r = 0.2, ...)
@@ -21,8 +20,6 @@ vennpie(x, r=0.2, ...)
 plot
 }
 \description{
-vennpie method generics
-
 vennpie method generics
 }
 \author{

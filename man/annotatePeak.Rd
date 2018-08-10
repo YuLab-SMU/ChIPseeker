@@ -6,11 +6,11 @@
 \usage{
 annotatePeak(peak, tssRegion = c(-3000, 3000), TxDb = NULL,
   level = "transcript", assignGenomicAnnotation = TRUE,
-  genomicAnnotationPriority = c("Promoter", "5UTR", "3UTR", "Exon", "Intron",
-  "Downstream", "Intergenic"), annoDb = NULL, addFlankGeneInfo = FALSE,
-  flankDistance = 5000, sameStrand = FALSE, ignoreOverlap = FALSE,
-  ignoreUpstream = FALSE, ignoreDownstream = FALSE, overlap = "TSS",
-  verbose = TRUE)
+  genomicAnnotationPriority = c("Promoter", "5UTR", "3UTR", "Exon",
+  "Intron", "Downstream", "Intergenic"), annoDb = NULL,
+  addFlankGeneInfo = FALSE, flankDistance = 5000, sameStrand = FALSE,
+  ignoreOverlap = FALSE, ignoreUpstream = FALSE,
+  ignoreDownstream = FALSE, overlap = "TSS", verbose = TRUE)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}
