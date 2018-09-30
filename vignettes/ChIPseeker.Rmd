@@ -1,17 +1,17 @@
 ---
 title: "ChIPseeker: an R package for ChIP peak Annotation, Comparison and Visualization"
-author: "\\
+author: "Guangchuang Yu\\
 
-	Guangchuang Yu (<guangchuangyu@gmail.com>)\\
-
-	School of Public Health, The University of Hong Kong"
+        School of Basic Medical Sciences, Southern Medical University"
 date: "`r Sys.Date()`"
 bibliography: ChIPseeker.bib
-csl: nature.csl
+biblio-style: apalike
 output:
-  BiocStyle::html_document:
+  prettydoc::html_pretty:
     toc: true
-  BiocStyle::pdf_document:
+    theme: cayman
+    highlight: github
+  pdf_document:
     toc: true
 vignette: >
   %\VignetteIndexEntry{ChIPseeker: an R package for ChIP peak Annotation, Comparison and Visualization}
@@ -22,10 +22,21 @@ vignette: >
 
 
 ```{r style, echo=FALSE, results='asis', message=FALSE}
-BiocStyle::markdown()
 knitr::opts_chunk$set(tidy         = FALSE,
                       warning      = FALSE,
                       message      = FALSE)
+
+CRANpkg <- function (pkg) {
+    cran <- "https://CRAN.R-project.org/package"
+    fmt <- "[%s](%s=%s)"
+    sprintf(fmt, pkg, cran, pkg)
+}
+
+Biocpkg <- function (pkg) {
+    sprintf("[%s](http://bioconductor.org/packages/%s)", pkg, pkg)
+}
+
+Biocannopkg <- Biocpkg
 ```
 
 ```{r echo=FALSE, results='hide', message=FALSE}
