@@ -1,3 +1,12 @@
+# ChIPseeker 1.19.1
+
++ add `origin_label = "TSS"` parameter to `plotAvgProf` (2018-12-12, Wed)
+  - <https://github.com/GuangchuangYu/ChIPseeker/issues/91>
+  
+# ChIPseeker 1.18.0
+
++ Bioconductor 3.8 release
+
 # ChIPseeker 1.17.2
 
 + add `flip_minor_strand` parameter in `getTagMatrix` (2018-08-10, Fri)

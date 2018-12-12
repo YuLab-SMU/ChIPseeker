@@ -28,12 +28,12 @@ plotAvgProf <- function(tagMatrix, xlim,
     if (!(missingArg(conf) || is.na(conf))){
         p <- plotAvgProf.internal(tagMatrix, conf = conf, xlim = xlim,
                                   xlab = xlab, ylab = ylab,
-                                  facet = facet, free_y = free_y
+                                  facet = facet, free_y = free_y, ...
                                   )
     } else {
         p <- plotAvgProf.internal(tagMatrix, xlim = xlim,
                                   xlab = xlab, ylab = ylab,
-                                  facet = facet, free_y = free_y)
+                                  facet = facet, free_y = free_y, ...)
     }
     return(p)
 }
@@ -94,12 +94,12 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
         p <- plotAvgProf.internal(tagMatrix,
                                   xlim = c(-upstream, downstream),
                                   xlab = xlab, ylab = ylab, conf = conf,
-                                  facet = facet, free_y = free_y)
+                                  facet = facet, free_y = free_y, ...)
     } else {
         p <- plotAvgProf.internal(tagMatrix,
                                   xlim=c(-upstream, downstream),
                                   xlab=xlab, ylab=ylab,
-                                  facet = facet, free_y = free_y)
+                                  facet = facet, free_y = free_y, ...)
     }
     return(p)
 }
@@ -260,7 +260,8 @@ plotAvgProf.internal <- function(tagMatrix, conf,
                                  xlim = c(-3000,3000),
                                  xlab = "Genomic Region (5'->3')",
                                  ylab = "Peak Count Frequency",
-                                 facet="none", free_y = TRUE, ...) {
+                                 facet="none", free_y = TRUE,
+                                 origin_label = "TSS", ...) {
 
     listFlag <- FALSE
     if (is(tagMatrix, "list")) {
@@ -320,7 +321,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
                                        0,
                                        floor(xlim[2]/2), xlim[2]),
                                    labels=c(xlim[1], floor(xlim[1]/2),
-                                       "TSS",
+                                       origin_label, 
                                        floor(xlim[2]/2), xlim[2]))
     }
 
