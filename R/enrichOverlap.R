@@ -115,7 +115,7 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
     query.gr <- loadPeak(queryPeak)
     if (is(targetPeak[1], "GRanges") || is(targetPeak[[1]], "GRanges")) {
         target.gr <- targetPeak
-        ## targetFiles <- NULL
+        targetFiles <- NULL
     } else {
         targetFiles <- parse_targetPeak_Param(targetPeak)
         target.gr <- lapply(targetFiles, loadPeak)
