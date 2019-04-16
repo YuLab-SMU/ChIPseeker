@@ -69,7 +69,7 @@ __*Yu G*__, Wang LG and He QY^\*^. ChIPseeker: an R/Bioconductor package for ChI
 
 
 
-<img src="https://guangchuangyu.github.io/software/ChIPseeker/featured-articles/index_files/figure-html/citation-1.png" width="890"/>
+<img src="https://guangchuangyu.github.io/software/citation_trend/ChIPseeker.png" width="890"/>
 
 
 ### Download stats
@@ -79,7 +79,7 @@ __*Yu G*__, Wang LG and He QY^\*^. ChIPseeker: an R/Bioconductor package for ChI
 `r badge_bioc_download("ChIPseeker", "month", "blue")`
 
 
-<img src="https://guangchuangyu.github.io/software/ChIPseeker/index_files/figure-html/dlstats-1.png" width="890"/>
+<img src="https://guangchuangyu.github.io/software/dlstats/ChIPseeker.png" width="890"/>
 
 
 ## Contributing

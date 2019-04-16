@@ -2,8 +2,8 @@
 
 <img src="https://raw.githubusercontent.com/Bioconductor/BiocStickers/master/ChIPseeker/ChIPseeker.png" height="200" align="right" />
 
-[![releaseVersion](https://img.shields.io/badge/release%20version-1.16.1-green.svg?style=flat)](https://bioconductor.org/packages/ChIPseeker)
-[![develVersion](https://img.shields.io/badge/devel%20version-1.17.2-green.svg?style=flat)](https://github.com/guangchuangyu/ChIPseeker)
+[![](https://img.shields.io/badge/release%20version-1.18.0-green.svg)](https://www.bioconductor.org/packages/ChIPseeker)
+[![](https://img.shields.io/badge/devel%20version-1.19.1-green.svg)](https://github.com/guangchuangyu/ChIPseeker)
 [![Bioc](http://www.bioconductor.org/shields/years-in-bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#since)
 [![Say
 Thanks\!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/GuangchuangYu)
@@ -12,7 +12,7 @@ Thanks\!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://sayth
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![codecov](https://codecov.io/gh/GuangchuangYu/ChIPseeker/branch/master/graph/badge.svg)](https://codecov.io/gh/GuangchuangYu/ChIPseeker/)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2018--09--30-green.svg)](https://github.com/GuangchuangYu/ChIPseeker/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2019--04--16-green.svg)](https://github.com/GuangchuangYu/ChIPseeker/commits/master)
 [![GitHub
 forks](https://img.shields.io/github/forks/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/network)
 [![GitHub
@@ -46,8 +46,8 @@ For details, please visit our project website,
   - [Feedback](https://guangchuangyu.github.io/software/ChIPseeker/#feedback)
 
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?hashtags=ChIPseeker&url=http://bioinformatics.oxfordjournals.org/content/31/14/2382&screen_name=guangchuangyu)
-[![](https://img.shields.io/badge/follow%20me%20on-微信-green.svg?style=flat)](https://guangchuangyu.github.io/blog_images/biobabble.jpg)
-[![](https://img.shields.io/badge/打赏-支付宝/微信-green.svg?style=flat)](https://guangchuangyu.github.io/blog_images/pay_qrcode.png)
+[![](https://img.shields.io/badge/follow%20me%20on-微信-green.svg)](https://guangchuangyu.github.io/blog_images/biobabble.jpg)
+[![](https://img.shields.io/badge/打赏-支付宝/微信-green.svg)](https://guangchuangyu.github.io/blog_images/pay_qrcode.png)
 
 -----
 
@@ -58,22 +58,22 @@ R/Bioconductor package for ChIP peak annotation, comparison and
 visualization. ***Bioinformatics*** 2015,
 31(14):2382-2383.
 
-[![doi](https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-green.svg?style=flat)](http://dx.doi.org/10.1093/bioinformatics/btv145)
-[![Altmetric](https://img.shields.io/badge/Altmetric-34-green.svg?style=flat)](https://www.altmetric.com/details/3781087)
+[![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-green.svg)](https://doi.org/10.1093/bioinformatics/btv145)
+[![](https://img.shields.io/badge/Altmetric-34-green.svg)](https://www.altmetric.com/details/3781087)
 
 -----
 
 ### Citation
 
-<img src="https://guangchuangyu.github.io/software/ChIPseeker/featured-articles/index_files/figure-html/citation-1.png" width="890"/>
+<img src="https://guangchuangyu.github.io/software/citation_trend/ChIPseeker.png" width="890"/>
 
 ### Download stats
 
 [![download](http://www.bioconductor.org/shields/downloads/ChIPseeker.svg)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
-[![total](https://img.shields.io/badge/downloads-26861/total-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
-[![month](https://img.shields.io/badge/downloads-937/month-blue.svg?style=flat)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
+[![](https://img.shields.io/badge/download-33391/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
+[![](https://img.shields.io/badge/download-997/month-blue.svg)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
 
-<img src="https://guangchuangyu.github.io/software/ChIPseeker/index_files/figure-html/dlstats-1.png" width="890"/>
+<img src="https://guangchuangyu.github.io/software/dlstats/ChIPseeker.png" width="890"/>
 
 ## Contributing
 
