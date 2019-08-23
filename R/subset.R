@@ -2,8 +2,8 @@
 ##' @importFrom S4Vectors length
 ##' @importFrom BiocGenerics start
 ##' @importFrom BiocGenerics end
+##' @export
 subset.csAnno <- function(x, ... ){
-  
   
   index <- paste(seqnames(x@anno),start(x@anno),end(x@anno), sep = "_")
   # subset the GRanges
@@ -16,7 +16,7 @@ subset.csAnno <- function(x, ... ){
   x@detailGenomicAnnotation <- x@detailGenomicAnnotation[index %in% index2,]
   
   # change the annotation stat 
-  x@annoStat <- ChIPseeker:::getGenomicAnnoStat(x@anno)
+  x@annoStat <- getGenomicAnnoStat(x@anno)
   
   # change peak number
   x@peakNum <-  length(x@anno)
