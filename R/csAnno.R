@@ -291,15 +291,14 @@ setMethod("plotDistToTSS", signature(x="csAnno"),
 ##' @rdname subset-methods
 ##' @aliases subset,csAnno,ANY-method
 ##' @title subset method
-##' @param object A \code{csAnno} instance
+##' @param x A \code{csAnno} instance
 ##' @return message
-##' @importFrom methods subset
 ##' @exportMethod subset
-##' @usage subset(object)
+##' @usage subset(x, ...)
 ##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
-setMethod("subset", signature(object="csAnno"),
-          function(x, subset, select, drop = FALSE, ...){
-            subset.csAnno(x, subset, select, drop = FALSE, ...)
+setMethod("subset", signature(x="csAnno"),
+          function(x,  ...){
+            subset.csAnno(x,  ...)
           }
 
 )
