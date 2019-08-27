@@ -9,6 +9,7 @@
 \alias{plotAnnoBar,csAnno-method}
 \alias{plotAnnoPie,csAnno-method}
 \alias{upsetplot,csAnno-method}
+\alias{subset,csAnno-method}
 \title{Class "csAnno"
 This class represents the output of ChIPseeker Annotation}
 \description{

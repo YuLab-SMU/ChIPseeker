@@ -1,3 +1,11 @@
+# ChIPseeker 1.21.1
+
++ `subset` method for `csAnno` object (2019-08-27, Tue)
+
+# ChIPseeker 1.20.0
+
++ Bioconductor 3.9 release
+
 # ChIPseeker 1.19.1
 
 + add `origin_label = "TSS"` parameter to `plotAvgProf` (2018-12-12, Wed)
@@ -16,6 +24,10 @@
 
 + fixed issue of `vennpie` by adding pseudo-count +1 (2018-07-21, Sat)
   - <https://www.biostars.org/p/326456/>
+
+# ChIPseeker 1.16.0
+
++ Bioconductor 3.7 release
 
 # ChIPseeker 1.15.4
 
