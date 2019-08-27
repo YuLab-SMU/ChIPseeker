@@ -1,7 +1,7 @@
 ##' @importFrom S4Vectors subset
-##' @importFrom S4Vectors length
 ##' @importFrom BiocGenerics start
 ##' @importFrom BiocGenerics end
+##' @method subset csAnno
 ##' @export
 subset.csAnno <- function(x, ... ){
   
