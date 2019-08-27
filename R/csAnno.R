@@ -7,6 +7,7 @@
 ##' show,csAnno-method vennpie,csAnno-method
 ##' plotDistToTSS,csAnno-method plotAnnoBar,csAnno-method
 ##' plotAnnoPie,csAnno-method upsetplot,csAnno-method
+##' subset,csAnno-method
 ##'
 ##' @docType class
 ##' @slot anno annotation
@@ -282,3 +283,24 @@ setMethod("plotDistToTSS", signature(x="csAnno"),
               plotDistToTSS.data.frame(peakDist, distanceColumn,
                                        xlab, ylab, title, categoryColumn)
           })
+
+
+##' subset method for \code{csAnno} instance
+##'
+##' @name subset
+##' @docType methods
+##' @rdname subset-methods
+##' @aliases subset,csAnno,ANY-method
+##' @title subset method
+##' @param x A \code{csAnno} instance
+##' @param ... Additional arguments (e.g. subset, select, drop), for use in specific methods. See ?base::subset for more information.
+##' @return csAnno object
+##' @exportMethod subset
+##' @usage subset(x, ...)
+##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
+setMethod("subset", signature(x="csAnno"),
+          function(x,  ...){
+            subset.csAnno(x,  ...)
+          }
+
+)
