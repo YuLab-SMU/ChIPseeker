@@ -47,7 +47,7 @@ gitmaintain:
 	git fsck --full
 
 release:
-	git checkout RELEASE_3_8;\
+	git checkout RELEASE_3_9;\
 	git fetch --all
 
 update:
