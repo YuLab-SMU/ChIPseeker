@@ -1,5 +1,5 @@
 ##' @importFrom plotrix floating.pie
-vennpie.csAnno <- function(x, r=0.2) {
+vennpie.csAnno <- function(x, r=0.2, cex = 1.2) {
     detailGenomicAnnotation <- x@detailGenomicAnnotation
 
     distance <- as.data.frame(x)$distanceToTSS
@@ -59,5 +59,5 @@ vennpie.csAnno <- function(x, r=0.2) {
     ##plot.new()
     ##legend(center), legend=names(cols)[-1], fill=cols[-1], bty="n")
     legend(3*r, 3*r, legend=sub("_", " ", names(cols)[-1]),
-           fill=cols[-1], bty="n", cex=1.2)
+           fill=cols[-1], bty="n", cex=cex)
 }

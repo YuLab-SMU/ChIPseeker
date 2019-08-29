@@ -28,16 +28,14 @@ Imports:
     BiocGenerics,
     boot,
     enrichplot,
-    IRanges (>= 2.13.12),
+    IRanges,
     GenomeInfoDb,
-    GenomicRanges (>= 1.31.8),
-    GenomicFeatures (>= 1.31.3),
-    ggplot2 (>= 2.2.0),
+    GenomicRanges,
+    GenomicFeatures,
+    ggplot2,
     gplots,
     graphics,
     grDevices,
-    grid,
-    gridBase,
     gtools,
     methods,
     plotrix,
@@ -46,23 +44,25 @@ Imports:
     magrittr,
     RColorBrewer,
     rtracklayer,
-    S4Vectors (>= 0.17.25),
+    S4Vectors,
     stats,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
-    UpSetR,
     utils
 Suggests:
     clusterProfiler,
+    ggimage,
+    ggplotify,
+    ggupset,
     ReactomePA,
     org.Hs.eg.db,
     knitr,
-    BiocStyle,
     rmarkdown,
-    testthat
+    testthat,
+    tibble
 Remotes:
     GuangchuangYu/enrichplot
 URL: https://guangchuangyu.github.io/software/ChIPseeker
-BugReports: https://github.com/GuangchuangYu/ChIPseeker/issues
+BugReports: https://github.com/YuLab-SMU/ChIPseeker/issues
 VignetteBuilder: knitr
 ByteCompile: true
 License: Artistic-2.0

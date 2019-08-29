@@ -1,5 +1,7 @@
 # ChIPseeker 1.21.1
 
++ new implementation of `upsetplot` (2019-08-29, Thu)
+  - use `ggupset`, `ggimage` and `ggplotify`
 + `subset` method for `csAnno` object (2019-08-27, Tue)
 
 # ChIPseeker 1.20.0

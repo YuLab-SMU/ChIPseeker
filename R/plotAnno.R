@@ -95,6 +95,7 @@ plotAnnoPie.csAnno <- function(x,
 ##' @importFrom graphics layout
 ##' @importFrom graphics pie
 ##' @importFrom graphics legend
+##' @importFrom graphics plot.new
 annoPie <- function(anno.df, ndigit=2, cex=0.9, col=NA, legend.position, ...) {
     if ( ! all(c("Feature", "Frequency") %in% colnames(anno.df))) {
         stop("check your input...")
