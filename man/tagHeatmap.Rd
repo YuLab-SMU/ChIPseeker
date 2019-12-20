@@ -4,8 +4,7 @@
 \alias{tagHeatmap}
 \title{tagHeatmap}
 \usage{
-tagHeatmap(tagMatrix, xlim, xlab = "", ylab = "", title = NULL,
-  color = "red")
+tagHeatmap(tagMatrix, xlim, xlab = "", ylab = "", title = NULL, color = "red")
 }
 \arguments{
 \item{tagMatrix}{tagMatrix or a list of tagMatrix}

@@ -4,8 +4,7 @@
 \alias{getPromoters}
 \title{getPromoters}
 \usage{
-getPromoters(TxDb = NULL, upstream = 1000, downstream = 1000,
-  by = "gene")
+getPromoters(TxDb = NULL, upstream = 1000, downstream = 1000, by = "gene")
 }
 \arguments{
 \item{TxDb}{TxDb}

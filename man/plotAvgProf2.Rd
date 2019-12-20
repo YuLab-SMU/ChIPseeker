@@ -4,10 +4,20 @@
 \alias{plotAvgProf2}
 \title{plotAvgProf}
 \usage{
-plotAvgProf2(peak, weightCol = NULL, TxDb = NULL, upstream = 1000,
-  downstream = 1000, xlab = "Genomic Region (5'->3')",
-  ylab = "Peak Count Frequency", conf, facet = "none", free_y = TRUE,
-  verbose = TRUE, ...)
+plotAvgProf2(
+  peak,
+  weightCol = NULL,
+  TxDb = NULL,
+  upstream = 1000,
+  downstream = 1000,
+  xlab = "Genomic Region (5'->3')",
+  ylab = "Peak Count Frequency",
+  conf,
+  facet = "none",
+  free_y = TRUE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}

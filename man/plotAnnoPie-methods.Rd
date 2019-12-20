@@ -6,8 +6,15 @@
 \alias{plotAnnoPie,csAnno,ANY-method}
 \title{plotAnnoPie method generics}
 \usage{
-plotAnnoPie(x, ndigit = 2, cex = 0.9, col = NA,
-  legend.position = "rightside", pie3D = FALSE, ...)
+plotAnnoPie(
+  x,
+  ndigit = 2,
+  cex = 0.9,
+  col = NA,
+  legend.position = "rightside",
+  pie3D = FALSE,
+  ...
+)
 
 plotAnnoPie(x,ndigit=2, cex=0.9,col=NA,legend.position="rightside", pie3D=FALSE, ...)
 }

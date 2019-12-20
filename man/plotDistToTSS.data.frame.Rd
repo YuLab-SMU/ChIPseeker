@@ -4,10 +4,14 @@
 \alias{plotDistToTSS.data.frame}
 \title{plotDistToTSS.data.frame}
 \usage{
-plotDistToTSS.data.frame(peakDist, distanceColumn = "distanceToTSS",
-  xlab = "", ylab = "Binding sites (\%) (5'->3')",
+plotDistToTSS.data.frame(
+  peakDist,
+  distanceColumn = "distanceToTSS",
+  xlab = "",
+  ylab = "Binding sites (\%) (5'->3')",
   title = "Distribution of transcription factor-binding loci relative to TSS",
-  categoryColumn)
+  categoryColumn
+)
 }
 \arguments{
 \item{peakDist}{peak annotation}

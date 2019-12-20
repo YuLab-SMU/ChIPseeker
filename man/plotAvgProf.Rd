@@ -4,9 +4,16 @@
 \alias{plotAvgProf}
 \title{plotAvgProf}
 \usage{
-plotAvgProf(tagMatrix, xlim, xlab = "Genomic Region (5'->3')",
-  ylab = "Peak Count Frequency", conf, facet = "none", free_y = TRUE,
-  ...)
+plotAvgProf(
+  tagMatrix,
+  xlim,
+  xlab = "Genomic Region (5'->3')",
+  ylab = "Peak Count Frequency",
+  conf,
+  facet = "none",
+  free_y = TRUE,
+  ...
+)
 }
 \arguments{
 \item{tagMatrix}{tagMatrix or a list of tagMatrix}

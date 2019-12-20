@@ -1,3 +1,12 @@
+# ChIPseeker 1.23.1
+
++ update GEO data (51079/762820 GSM) (2019-12-20, Fri)
+
+# ChIPseeker 1.22.0
+
++ Bioconductor 3.10 release
+
+
 # ChIPseeker 1.21.1
 
 + new implementation of `upsetplot` (2019-08-29, Thu)

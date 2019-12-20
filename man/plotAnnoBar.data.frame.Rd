@@ -4,8 +4,13 @@
 \alias{plotAnnoBar.data.frame}
 \title{plotAnnoBar.data.frame}
 \usage{
-plotAnnoBar.data.frame(anno.df, xlab = "", ylab = "Percentage(\%)",
-  title = "Feature Distribution", categoryColumn)
+plotAnnoBar.data.frame(
+  anno.df,
+  xlab = "",
+  ylab = "Percentage(\%)",
+  title = "Feature Distribution",
+  categoryColumn
+)
 }
 \arguments{
 \item{anno.df}{annotation stats}

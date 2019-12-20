@@ -7,15 +7,23 @@
 \alias{plotDistToTSS,csAnno,ANY-method}
 \title{plotDistToTSS method generics}
 \usage{
-plotDistToTSS(x, distanceColumn = "distanceToTSS", xlab = "",
+plotDistToTSS(
+  x,
+  distanceColumn = "distanceToTSS",
+  xlab = "",
   ylab = "Binding sites (\%) (5'->3')",
   title = "Distribution of transcription factor-binding loci relative to TSS",
-  ...)
+  ...
+)
 
-\S4method{plotDistToTSS}{list}(x, distanceColumn = "distanceToTSS",
-  xlab = "", ylab = "Binding sites (\%) (5'->3')",
+\S4method{plotDistToTSS}{list}(
+  x,
+  distanceColumn = "distanceToTSS",
+  xlab = "",
+  ylab = "Binding sites (\%) (5'->3')",
   title = "Distribution of transcription factor-binding loci relative to TSS",
-  ...)
+  ...
+)
 
 plotDistToTSS(x,distanceColumn="distanceToTSS", xlab="",
 ylab="Binding sites (\%) (5'->3')",

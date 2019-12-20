@@ -4,8 +4,15 @@
 \alias{plotAnnoPie.csAnno}
 \title{plotAnnoPie}
 \usage{
-plotAnnoPie.csAnno(x, ndigit = 2, cex = 0.9, col = NA,
-  legend.position = "rightside", pie3D = FALSE, ...)
+plotAnnoPie.csAnno(
+  x,
+  ndigit = 2,
+  cex = 0.9,
+  col = NA,
+  legend.position = "rightside",
+  pie3D = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{csAnno object}

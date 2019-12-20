@@ -7,11 +7,21 @@
 \alias{plotAnnoBar,csAnno,ANY-method}
 \title{plotAnnoBar method generics}
 \usage{
-plotAnnoBar(x, xlab = "", ylab = "Percentage(\%)",
-  title = "Feature Distribution", ...)
+plotAnnoBar(
+  x,
+  xlab = "",
+  ylab = "Percentage(\%)",
+  title = "Feature Distribution",
+  ...
+)
 
-\S4method{plotAnnoBar}{list}(x, xlab = "", ylab = "Percentage(\%)",
-  title = "Feature Distribution", ...)
+\S4method{plotAnnoBar}{list}(
+  x,
+  xlab = "",
+  ylab = "Percentage(\%)",
+  title = "Feature Distribution",
+  ...
+)
 
 plotAnnoBar(x, xlab="", ylab='Percentage(\%)',title="Feature Distribution", ...)
 }

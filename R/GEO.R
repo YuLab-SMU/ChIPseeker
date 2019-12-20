@@ -112,7 +112,22 @@ prepareGSMInfo <- function() {
     require(pkg, character.only=TRUE)
     getSQLiteFile <- eval(parse(text="getSQLiteFile"))
     ## get the latest version of sql file
-    getSQLiteFile()
+    is.dl <- tryCatch(getSQLiteFile(), error = function(e) NULL)
+
+    if (is.null(is.dl)) {
+        url <- 'http://starbuck1.s3.amazonaws.com/sradb/GEOmetadb.sqlite.gz'
+        HEAD <- eval(parse(text = "httr::HEAD"))
+        hh <- HEAD(url)
+        size <- hh$headers[["content-length"]]
+        cmd <- paste('wget -c', url)
+        while(file.info("GEOmetadb.sqlite.gz")$size < size) {
+            system(cmd)
+        }
+        if (file.exists('GEOmetadb.sqlite') && file.exists('GEOmetadb.sqlite.gz')) {
+            file.remove("GEOmetadb.sqlite")
+        }
+        system('gunzip GEOmetadb.sqlite.gz')
+    }
 
     GEOmetadbFile="GEOmetadb.sqlite"
     file.info(GEOmetadbFile)

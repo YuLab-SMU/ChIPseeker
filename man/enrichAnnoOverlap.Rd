@@ -4,9 +4,14 @@
 \alias{enrichAnnoOverlap}
 \title{enrichAnnoOverlap}
 \usage{
-enrichAnnoOverlap(queryPeak, targetPeak, TxDb = NULL,
-  pAdjustMethod = "BH", chainFile = NULL,
-  distanceToTSS_cutoff = NULL)
+enrichAnnoOverlap(
+  queryPeak,
+  targetPeak,
+  TxDb = NULL,
+  pAdjustMethod = "BH",
+  chainFile = NULL,
+  distanceToTSS_cutoff = NULL
+)
 }
 \arguments{
 \item{queryPeak}{query bed file}

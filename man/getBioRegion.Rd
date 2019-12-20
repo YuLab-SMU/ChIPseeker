@@ -4,8 +4,7 @@
 \alias{getBioRegion}
 \title{getBioRegion}
 \usage{
-getBioRegion(TxDb = NULL, upstream = 1000, downstream = 1000,
-  by = "gene")
+getBioRegion(TxDb = NULL, upstream = 1000, downstream = 1000, by = "gene")
 }
 \arguments{
 \item{TxDb}{TxDb}

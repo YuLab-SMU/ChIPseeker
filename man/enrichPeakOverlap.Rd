@@ -4,9 +4,17 @@
 \alias{enrichPeakOverlap}
 \title{enrichPeakOverlap}
 \usage{
-enrichPeakOverlap(queryPeak, targetPeak, TxDb = NULL,
-  pAdjustMethod = "BH", nShuffle = 1000, chainFile = NULL,
-  pool = TRUE, mc.cores = detectCores() - 1, verbose = TRUE)
+enrichPeakOverlap(
+  queryPeak,
+  targetPeak,
+  TxDb = NULL,
+  pAdjustMethod = "BH",
+  nShuffle = 1000,
+  chainFile = NULL,
+  pool = TRUE,
+  mc.cores = detectCores() - 1,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{queryPeak}{query bed file or GRanges object}

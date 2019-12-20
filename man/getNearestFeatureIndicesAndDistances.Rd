@@ -4,9 +4,15 @@
 \alias{getNearestFeatureIndicesAndDistances}
 \title{getNearestFeatureIndicesAndDistances}
 \usage{
-getNearestFeatureIndicesAndDistances(peaks, features, sameStrand = FALSE,
-  ignoreOverlap = FALSE, ignoreUpstream = FALSE,
-  ignoreDownstream = FALSE, overlap = "TSS")
+getNearestFeatureIndicesAndDistances(
+  peaks,
+  features,
+  sameStrand = FALSE,
+  ignoreOverlap = FALSE,
+  ignoreUpstream = FALSE,
+  ignoreDownstream = FALSE,
+  overlap = "TSS"
+)
 }
 \arguments{
 \item{peaks}{peak in GRanges}
