@@ -241,7 +241,7 @@ prepareGSMInfo <- function() {
     gsminfo2 <- gsminfo
     rm(gsminfo)
 
-    data("gsminfo", package="ChIPseeker")
+    utils::data("gsminfo", package="ChIPseeker")
     gsminfo <- get("gsminfo")
     gsminfo <- rbind(gsminfo, gsminfo2)
     gsminfo <- unique(gsminfo)

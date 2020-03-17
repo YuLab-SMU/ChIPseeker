@@ -22,7 +22,7 @@ Description: This package implements functions to retrieve the nearest genes
     regions, genomic annotation, distance to TSS, and overlap of peaks or
     genes.
 Depends:
-    R (>= 3.4.0)
+    R (>= 3.5.0)
 Imports:
     AnnotationDbi,
     BiocGenerics,
