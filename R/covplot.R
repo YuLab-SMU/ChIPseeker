@@ -68,7 +68,7 @@ covplot <- function(peak, weightCol=NULL,
     p <- p + scale_y_continuous(expand=c(0,0))
     p <- p + theme(strip.text.y=element_text(angle=360))
 
-    if (!is.null(xlim) && !is.na(xlim) && is.numeric(xlim) && length(xlim) == 2) {
+    if (!is.null(xlim) && !all(is.na(xlim)) && is.numeric(xlim) && length(xlim) == 2) {
         p <- p + xlim(xlim)
     }
 
@@ -130,10 +130,10 @@ getChrCov <- function(peak, weightCol, chrs, xlim, lower=1) {
     
     chr.sorted <- sortChrName(as.character(unique(df$chr)))
     df$chr <- factor(df$chr, levels=chr.sorted)
-    if (!is.null(chrs) && !is.na(chrs) && chrs %in% chr.sorted) {
+    if (!is.null(chrs) && !all(is.na(chrs)) && all(chrs %in% chr.sorted)) {
         df <- df[df$chr %in% chrs, ]
     }
-    if (!is.null(xlim) && !is.na(xlim) && is.numeric(xlim) && length(xlim) == 2) {
+    if (!is.null(xlim) && !all(is.na(xlim)) && is.numeric(xlim) && length(xlim) == 2) {
         df <- df[df$start >= xlim[1] & df$end <= xlim[2],]
     }
 
