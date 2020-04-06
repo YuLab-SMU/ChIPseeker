@@ -1,3 +1,7 @@
+# ChIPseeker 1.23.3
+
++ Add support for `EnsDb` annotation databases in `annotatePeak`. 
+
 # ChIPseeker 1.23.1
 
 + update GEO data (51079/762820 GSM) (2019-12-20, Fri)
