@@ -28,7 +28,7 @@ annotatePeak(
 
 \item{tssRegion}{Region Range of TSS}
 
-\item{TxDb}{TxDb object}
+\item{TxDb}{TxDb or EnsDb annotation object}
 
 \item{level}{one of transcript and gene}
 

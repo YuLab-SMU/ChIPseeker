@@ -4,7 +4,7 @@
 ##' @title annotatePeak
 ##' @param peak peak file or GRanges object
 ##' @param tssRegion Region Range of TSS
-##' @param TxDb TxDb object
+##' @param TxDb TxDb or EnsDb annotation object
 ##' @param level one of transcript and gene
 ##' @param assignGenomicAnnotation logical, assign peak genomic annotation or not
 ##' @param genomicAnnotationPriority genomic annotation priority
