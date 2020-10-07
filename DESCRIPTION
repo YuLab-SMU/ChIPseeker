@@ -2,9 +2,10 @@ Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
 Version: 1.25.0
+Encoding: UTF-8
 Authors@R: c( person(given = "Guangchuang", family = "Yu",       email = "guangchuangyu@gmail.com",      role  = c("aut", "cre"), comment = c(ORCID = "0000-0002-6485-8781")),
               person(given = "Yun",         family = "Yan",      email = "youryanyun@gmail.com",         role = "ctb"),
-              person(given = "Hervé",       family = "Pagès",    email = "hpages@fredhutch.org",         role  = "ctb"),
+              person(given = "Hervé",       family = "Pagès",    email = "hpages.on.github@gmail.com",   role  = "ctb"),
               person(given = "Michael",     family = "Kluge",    email = "michael.kluge@bio.ifi.lmu.de", role  = "ctb"),
               person(given = "Thomas",      family = "Schwarzl", email = "schwarzl@embl.de",             role  = "ctb"),
               person(given = "Zhougeng",    family = "Xu",       email = "xuzhougeng@163.com",           role  = "ctb")
