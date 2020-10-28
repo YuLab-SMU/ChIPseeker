@@ -47,10 +47,10 @@ gitmaintain:
 	git fsck --full
 
 rmoldrelease:
-	git branch -D RELEASE_3_9
+	git branch -D RELEASE_3_11
 
 release:
-	git checkout RELEASE_3_10;\
+	git checkout RELEASE_3_12;\
 	git fetch --all
 
 update:

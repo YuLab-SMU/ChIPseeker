@@ -1,3 +1,7 @@
+# ChIPseeker 1.26.0
+
++ Bioconductor 3.12 release (2020-10-28, Wed)
+
 # ChIPseeker 1.23.1
 
 + update GEO data (51079/762820 GSM) (2019-12-20, Fri)
