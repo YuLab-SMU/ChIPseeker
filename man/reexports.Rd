@@ -11,6 +11,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{GenomicRanges}{\code{\link[GenomicRanges]{GRangesList}}}
+  \item{GenomicRanges}{\code{\link[GenomicRanges:GRangesList-class]{GRangesList}}}
 }}
 

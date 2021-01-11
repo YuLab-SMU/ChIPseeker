@@ -1,4 +1,4 @@
----
+/al---
 output:
   md_document:
     variant: gfm
@@ -60,7 +60,7 @@ Please cite the following article when using `ChIPseeker`:
 __*Yu G*__, Wang LG and He QY^\*^. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. ***Bioinformatics*** 2015, 31(14):2382-2383.
 
 `r badge_doi("10.1093/bioinformatics/btv145", "green")`
-`r badge_altmetric("3781087", "green")`
+<!-- r badge_altmetric("3781087", "green") -->
 
 ------------------------------------------------------------------------
 
