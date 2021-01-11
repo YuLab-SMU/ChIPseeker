@@ -1,6 +1,12 @@
-# ChIPseeker 1.23.3
+
+# ChIPseeker 1.27.1
 
 + Add support for `EnsDb` annotation databases in `annotatePeak`. 
+
+# ChIPseeker 1.26.0
+
++ Bioconductor 3.12 release (2020-10-28, Wed)
+
 
 # ChIPseeker 1.23.1
 
@@ -10,7 +16,7 @@
 
 + Bioconductor 3.10 release
 
-
+ 
 # ChIPseeker 1.21.1
 
 + new implementation of `upsetplot` (2019-08-29, Thu)
