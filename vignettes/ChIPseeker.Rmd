@@ -167,6 +167,21 @@ peakAnno <- annotatePeak(files[[4]], tssRegion=c(-3000, 3000),
                          TxDb=txdb, annoDb="org.Hs.eg.db")
 ```
 
+Note that it would also be possible to use Ensembl-based `EnsDb` annotation 
+databases created by the `r BiocStyle::Biocpkg("ensembldb")` package for the
+peak annotations by providing it with the `TxDb` parameter. Since UCSC-style 
+chromosome names are used we have to change the style of the chromosome names
+from *Ensembl* to *UCSC* in the example below.
+
+```{r, eval = FALSE}
+library(EnsDb.Hsapiens.v75)
+edb <- EnsDb.Hsapiens.v75
+seqlevelsStyle(edb) <- "UCSC"
+
+peakAnno.edb <- annotatePeak(files[[4]], tssRegion=c(-3000, 3000),
+                             TxDb=edb, annoDb="org.Hs.eg.db")
+```
+
 Peak Annotation is performed by `annotatePeak`. User can define TSS (transcription start site) region, by default TSS is defined from -3kb to +3kb. The output of `annotatePeak` is `csAnno` instance. `r Biocpkg("ChIPseeker")` provides `as.GRanges` to convert `csAnno` to `GRanges` instance, and `as.data.frame` to convert `csAnno` to `data.frame` which can be exported to file by `write.table`.
 
 `TxDb` object contained transcript-related features of a particular genome. Bioconductor provides several package that containing `TxDb` object of model organisms with multiple commonly used genome version, for instance `r Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`, `r Biocannopkg("TxDb.Hsapiens.UCSC.hg19.knownGene")` for human genome hg38 and hg19, `r Biocannopkg("TxDb.Mmusculus.UCSC.mm10.knownGene")` and `r Biocannopkg("TxDb.Mmusculus.UCSC.mm9.knownGene")` for mouse genome mm10 and mm9, etc. User can also prepare their own `TxDb` object by retrieving information from UCSC Genome Bioinformatics and BioMart data resources by R function `makeTxDbFromBiomart` and `makeTxDbFromUCSC`. `TxDb` object should be passed for peak annotation.

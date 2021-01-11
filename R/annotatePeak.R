@@ -4,7 +4,7 @@
 ##' @title annotatePeak
 ##' @param peak peak file or GRanges object
 ##' @param tssRegion Region Range of TSS
-##' @param TxDb TxDb object
+##' @param TxDb TxDb or EnsDb annotation object
 ##' @param level one of transcript and gene
 ##' @param assignGenomicAnnotation logical, assign peak genomic annotation or not
 ##' @param genomicAnnotationPriority genomic annotation priority
@@ -174,12 +174,36 @@ annotatePeak <- function(peak,
         colnames(nearestFeatures.df)[1:5] <- c("geneChr", "geneStart", "geneEnd",
                                           "geneLength", "geneStrand")
     } else if (level == "transcript") {
-        colnames(nearestFeatures.df) <- c("geneChr", "geneStart", "geneEnd",
-                                          "geneLength", "geneStrand", "geneId", "transcriptId")
-        nearestFeatures.df$geneId <- TXID2EG(as.character(nearestFeatures.df$geneId), geneIdOnly=TRUE)
+        if (is(TxDb, "EnsDb")) {
+            nearestFeatures.df <- nearestFeatures.df[, c("seqnames", "start",
+                                                         "end", "width",
+                                                         "strand", "gene_id",
+                                                         "tx_id", "tx_biotype"),
+                                                     drop = FALSE]
+            colnames(nearestFeatures.df) <- c(
+                "geneChr", "geneStart", "geneEnd", "geneLength", "geneStrand",
+                "geneId", "transcriptId", "transcriptBiotype")
+        } else {
+            colnames(nearestFeatures.df) <- c("geneChr", "geneStart", "geneEnd",
+                                              "geneLength", "geneStrand",
+                                              "geneId", "transcriptId")
+            nearestFeatures.df$geneId <- TXID2EG(
+                as.character(nearestFeatures.df$geneId), geneIdOnly=TRUE)
+        }
     } else {
-        colnames(nearestFeatures.df) <- c("geneChr", "geneStart", "geneEnd",
-                                          "geneLength", "geneStrand", "geneId")
+        if (is(TxDb, "EnsDb")) {
+            nearestFeatures.df <- nearestFeatures.df[, c("seqnames", "start",
+                                                         "end", "width",
+                                                         "strand", "gene_id",
+                                                         "gene_biotype"),
+                                                     drop = FALSE]
+            colnames(nearestFeatures.df) <- c("geneChr", "geneStart", "geneEnd",
+                                              "geneLength", "geneStrand",
+                                              "geneId", "geneBiotype")
+        } else
+            colnames(nearestFeatures.df) <- c("geneChr", "geneStart", "geneEnd",
+                                              "geneLength", "geneStrand",
+                                              "geneId")
     }
 
     for(cn in colnames(nearestFeatures.df)) {
