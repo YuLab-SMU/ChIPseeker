@@ -400,7 +400,7 @@ list_to_dataframe <- function(dataList) {
     if (is.null(names(dataList)))
         return(do.call('rbind', dataList))
 
-    cn <- sapply(dataList, colnames) %>% unlist %>% unique
+    cn <- lapply(dataList, colnames) %>% unlist %>% unique
     cn <- c('.id', cn)
     dataList2 <- lapply(seq_along(dataList), function(i) {
         data = dataList[[i]]
