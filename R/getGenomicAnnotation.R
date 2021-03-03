@@ -72,11 +72,7 @@ getGenomicAnnotation <- function(peaks,
 
     genomicAnnotationPriority <- rev(genomicAnnotationPriority)
     for (AP in genomicAnnotationPriority) {
-        if (AP == "Intergenic") {
-            ## Intergenic
-            annotation[is.na(annotation)] <- "Intergenic"
-            anno[["annotation"]] <- annotation
-        } else if (AP == "Intron") {
+        if (AP == "Intron") {
             ## Introns
             intronList <- get_intronList(ChIPseekerEnv)
             anno <- updateGenomicAnnotation(peaks, intronList, "Intron", anno, sameStrand=sameStrand)
@@ -102,16 +98,14 @@ getGenomicAnnotation <- function(peaks,
                 assign("fiveUTRList", fiveUTRList, envir=ChIPseekerEnv)
             }
             anno <- updateGenomicAnnotation(peaks, fiveUTRList, "fiveUTR", anno, sameStrand=sameStrand)
-        }
+        } else if (AP == "Promoter") {
+            annotation <- anno[["annotation"]]
+            ## detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
 
-        annotation <- anno[["annotation"]]
-        detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
-
-        if (AP == "Promoter") {
             ## TSS
             tssIndex <- distance >= tssRegion[1] & distance <= tssRegion[2]
             annotation[tssIndex] <- "Promoter"
-            detailGenomicAnnotation[tssIndex, "Promoter"] <- TRUE
+            anno$detailGenomicAnnotation[tssIndex, "Promoter"] <- TRUE
 
             pm <- max(abs(tssRegion))
             if (pm/1000 >= 2) {
@@ -120,20 +114,25 @@ getGenomicAnnotation <- function(peaks,
                     if (i == 1) {
                         lbs <- paste("Promoter", " (<=", dd[i]/1000, "kb)", sep="")
                         annotation[abs(distance) <= dd[i] &
-                                       annotation == "Promoter"] <- lbs
+                                   annotation == "Promoter"] <- lbs
                     } else {
                         lbs <- paste("Promoter", " (", dd[i-1]/1000, "-", dd[i]/1000, "kb)", sep="")
                         annotation[abs(distance) <= dd[i] &
-                                       abs(distance) > dd[i-1] &
-                                           annotation == "Promoter"] <- lbs
+                                   abs(distance) > dd[i-1] &
+                                   annotation == "Promoter"] <- lbs
                     }
                 }
             }
+            anno[["annotation"]] <- annotation
+        } else {
+            ## Intergenic
+            annotation[is.na(annotation)] <- "Intergenic"
+            anno[["annotation"]] <- annotation
         }
-
     }
 
-
+    annotation <- anno[["annotation"]]
+    detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
     genicIndex <- which(apply(detailGenomicAnnotation[, c("Exon", "Intron")], 1, any))
     detailGenomicAnnotation[-genicIndex, "Intergenic"] <- TRUE
     detailGenomicAnnotation[genicIndex, "genic"] <- TRUE

@@ -1,3 +1,7 @@
+# ChIPseeker 1.27.2
+
++ bug fixed of `getGenomicAnnotation` (2020-03-03, Wed)
+  - <https://github.com/YuLab-SMU/ChIPseeker/issues/142>
 
 # ChIPseeker 1.27.1
 
