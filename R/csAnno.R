@@ -222,8 +222,9 @@ setMethod("plotAnnoPie", signature(x="csAnno"),
                    col=NA,
                    legend.position="rightside",
                    pie3D=FALSE,
+                   radius=0.8,
                    ...){
-              plotAnnoPie.csAnno(x, ndigit, cex, col, legend.position, pie3D, ...)
+              plotAnnoPie.csAnno(x, ndigit, cex, col, legend.position, pie3D, radius, ...)
           })
 
 

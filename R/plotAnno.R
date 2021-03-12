@@ -57,6 +57,7 @@ plotAnnoBar.data.frame <- function(anno.df,
 ##' @param col color
 ##' @param legend.position topright or other.
 ##' @param pie3D plot in 3D or not
+##' @param radius radius of Pie
 ##' @param ... extra parameter
 ##' @return pie plot of peak genomic feature annotation
 ##' @examples
@@ -72,10 +73,11 @@ plotAnnoBar.data.frame <- function(anno.df,
 ##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
 plotAnnoPie.csAnno <- function(x,
                         ndigit=2,
-                        cex=0.9,
+                        cex=0.8,
                         col=NA,
                         legend.position="rightside",
                         pie3D=FALSE,
+                        radius=0.8,
                         ...){
 
     anno.df <- getAnnoStat(x)
@@ -86,7 +88,7 @@ plotAnnoPie.csAnno <- function(x,
     if (pie3D)
         annoPie3D(anno.df, ndigit=ndigit, cex=cex, col=col, ...)
 
-    annoPie(anno.df, ndigit=ndigit, cex=cex, col=col, legend.position=legend.position, ...)
+    annoPie(anno.df, ndigit=ndigit, cex=cex, col=col, legend.position=legend.position, radius=radius, ...)
  }
 
 ##' @importFrom RColorBrewer brewer.pal
@@ -96,7 +98,7 @@ plotAnnoPie.csAnno <- function(x,
 ##' @importFrom graphics pie
 ##' @importFrom graphics legend
 ##' @importFrom graphics plot.new
-annoPie <- function(anno.df, ndigit=2, cex=0.9, col=NA, legend.position, ...) {
+annoPie <- function(anno.df, ndigit=2, cex=0.8, col=NA, legend.position, radius=0.8, ...) {
     if ( ! all(c("Feature", "Frequency") %in% colnames(anno.df))) {
         stop("check your input...")
     }
@@ -110,8 +112,9 @@ annoPie <- function(anno.df, ndigit=2, cex=0.9, col=NA, legend.position, ...) {
         layout(matrix(c(1,2), ncol=2), widths=c(0.6,0.4))
         pie(anno.df$Frequency, labels=NA, cex=cex, col=col, ...)
         plot.new()
-        legend("center", legend = labels, fill=col, bty="n")
+        legend("center", legend = labels, fill = col, bty = "n", cex = cex)
     } else {
+        par(mai = c(0,0,0,0))
         pie(anno.df$Frequency,
             ##     ## labels=paste(round(anno.df$Frequency/sum(anno.df$Frequency)*100, 2), "%", sep=""),
             labels=paste(anno.df$Feature, " (",
@@ -119,6 +122,7 @@ annoPie <- function(anno.df, ndigit=2, cex=0.9, col=NA, legend.position, ...) {
                 "%)", sep=""),
             cex=cex,
             col=col,
+            radius=radius,
             ...
             )
     }

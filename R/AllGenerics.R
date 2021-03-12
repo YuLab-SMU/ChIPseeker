@@ -49,5 +49,6 @@ setGeneric("plotAnnoPie",
                     col=NA,
                     legend.position="rightside",
                     pie3D=FALSE,
+                    radius=0.8,
                     ...)
            standardGeneric("plotAnnoPie"))
