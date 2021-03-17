@@ -13,10 +13,11 @@ plotAnnoPie(
   col = NA,
   legend.position = "rightside",
   pie3D = FALSE,
+  radius = 0.8,
   ...
 )
 
-plotAnnoPie(x,ndigit=2, cex=0.9,col=NA,legend.position="rightside", pie3D=FALSE, ...)
+plotAnnoPie(x,ndigit=2, cex=0.9,col=NA,legend.position="rightside", pie3D=FALSE, radius = 0.8, ...)
 }
 \arguments{
 \item{x}{\code{csAnno} instance}
@@ -30,6 +31,8 @@ plotAnnoPie(x,ndigit=2, cex=0.9,col=NA,legend.position="rightside", pie3D=FALSE,
 \item{legend.position}{topright or other.}
 
 \item{pie3D}{plot in 3D or not}
+
+\item{radius}{radius of the pie}
 
 \item{...}{extra parameter}
 }

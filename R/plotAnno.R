@@ -2,6 +2,7 @@
 ##'
 ##' plot chromosome region features
 ##' @title plotAnnoBar.data.frame
+##' @rdname plotAnnoBar
 ##' @param anno.df annotation stats
 ##' @param xlab xlab
 ##' @param ylab ylab
@@ -20,7 +21,7 @@
 ##' @importFrom ggplot2 ggtitle
 ##' @importFrom ggplot2 guide_legend
 ##' @seealso \code{\link{annotatePeak}} \code{\link{plotAnnoPie}}
-##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
+##' @author Guangchuang Yu \url{https://yulab-smu.top}
 plotAnnoBar.data.frame <- function(anno.df,
                                    xlab="",
                                    ylab="Percentage(%)",
@@ -51,6 +52,7 @@ plotAnnoBar.data.frame <- function(anno.df,
 ##'
 ##'
 ##' @title plotAnnoPie
+##' @rdname plotAnnoPie
 ##' @param x csAnno object
 ##' @param ndigit number of digit to round
 ##' @param cex label cex
@@ -70,7 +72,7 @@ plotAnnoBar.data.frame <- function(anno.df,
 ##' }
 ##' @seealso \code{\link{annotatePeak}} \code{\link{plotAnnoBar}}
 ##' @export
-##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
+##' @author Guangchuang Yu \url{https://yulab-smu.top}
 plotAnnoPie.csAnno <- function(x,
                         ndigit=2,
                         cex=0.8,
