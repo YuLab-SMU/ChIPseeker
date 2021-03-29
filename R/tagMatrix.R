@@ -54,7 +54,7 @@ getPromoters <- function(TxDb=NULL,
 ##' @param TxDb TxDb
 ##' @param upstream upstream from start site
 ##' @param downstream downstream from start site
-##' @param by one of 'gene', 'transcript', 'exon', 'intron'
+##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'
 ##' @return GRanges object
 ##' @import BiocGenerics IRanges GenomicRanges
 ##' @export
@@ -65,7 +65,7 @@ getBioRegion <- function(TxDb=NULL,
                          downstream=1000,
                          by="gene") {
     
-    by <- match.arg(by, c("gene", "transcript", "exon", "intron"))
+    by <- match.arg(by, c("gene", "transcript", "exon", "intron", "3UTR", "5UTR"))
 
     if (by %in% c("gene", "transcript")) {
         return(getPromoters(TxDb, upstream, downstream, by))
@@ -83,6 +83,16 @@ getBioRegion <- function(TxDb=NULL,
     if (by == "intron") {
         intronList <- get_intronList(ChIPseekerEnv)
         regions <- unlist(intronList)
+    }
+  
+   if (by == "3UTR") {
+        threeUTRList <- threeUTRsByTranscript(TxDb)
+        regions <- unlist(threeUTRList)
+    }
+    
+   if (by == "5UTR") {
+       fiveUTRList <- fiveUTRsByTranscript(TxDb)
+       regions <- unlist(fiveUTRList)
     }
 
     start_site <- ifelse(strand(regions) == "+", start(regions), end(regions))
