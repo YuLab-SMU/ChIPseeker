@@ -1,11 +1,17 @@
+# ChIPseeker 1.27.3
+
++ add two parameter, cex and radius, to `plotAnnoPie` (2021-03-12, Fri)
+  - <https://github.com/YuLab-SMU/ChIPseeker/pull/144>
+
 # ChIPseeker 1.27.2
 
-+ bug fixed of `getGenomicAnnotation` (2020-03-03, Wed)
++ bug fixed of `getGenomicAnnotation` (2021-03-03, Wed)
   - <https://github.com/YuLab-SMU/ChIPseeker/issues/142>
 
 # ChIPseeker 1.27.1
 
 + Add support for `EnsDb` annotation databases in `annotatePeak`. 
+  - <https://github.com/YuLab-SMU/ChIPseeker/pull/120>
 
 # ChIPseeker 1.26.0
 

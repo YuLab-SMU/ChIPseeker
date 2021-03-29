@@ -7,10 +7,11 @@
 plotAnnoPie.csAnno(
   x,
   ndigit = 2,
-  cex = 0.9,
+  cex = 0.8,
   col = NA,
   legend.position = "rightside",
   pie3D = FALSE,
+  radius = 0.8,
   ...
 )
 }
@@ -26,6 +27,8 @@ plotAnnoPie.csAnno(
 \item{legend.position}{topright or other.}
 
 \item{pie3D}{plot in 3D or not}
+
+\item{radius}{radius of Pie}
 
 \item{...}{extra parameter}
 }
@@ -48,5 +51,5 @@ plotAnnoPie(peakAnno)
 \code{\link{annotatePeak}} \code{\link{plotAnnoBar}}
 }
 \author{
-Guangchuang Yu \url{https://guangchuangyu.github.io}
+Guangchuang Yu \url{https://yulab-smu.top}
 }
