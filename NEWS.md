@@ -1,3 +1,8 @@
+# ChIPseeker 1.27.3.991
+
++ `getBioRegion` now supports '3UTR' and '5UTR' (2021-03-30, Tue)
+  - <https://github.com/YuLab-SMU/ChIPseeker/pull/146>
+
 # ChIPseeker 1.27.3
 
 + add two parameter, cex and radius, to `plotAnnoPie` (2021-03-12, Fri)

@@ -13,7 +13,7 @@ getBioRegion(TxDb = NULL, upstream = 1000, downstream = 1000, by = "gene")
 
 \item{downstream}{downstream from start site}
 
-\item{by}{one of 'gene', 'transcript', 'exon', 'intron'}
+\item{by}{one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'}
 }
 \value{
 GRanges object
