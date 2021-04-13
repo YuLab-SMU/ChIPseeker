@@ -159,14 +159,14 @@ getGenomicAnnotation <- function(peaks,
     
     peF <- features[idx]
     dd <- ifelse(strand(peF) == "+",
-             start(peaks) - end(peF),
-             end(peaks) - start(peF))
+		 start(peaks) - end(peF),
+		 end(peaks) - start(peF))
     
     if (length(na.idx)) {
         dd2 <- numeric(length(idx) + length(na.idx))
         dd2[-na.idx] <- dd
     } else {
-         dd2 <- dd
+        dd2 <- dd
     }
 
     dsd <- getOption("ChIPseeker.downstreamDistance")
