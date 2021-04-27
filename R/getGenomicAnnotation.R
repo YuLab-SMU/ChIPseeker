@@ -146,19 +146,22 @@ getGenomicAnnotation <- function(peaks,
 
     ## nearest from gene end
     if (sameStrand) {
-        idx <- precede(peaks, features)
+        idx <- follow(peaks, features)
     } else {
-        idx <- precede(peaks, unstrand(features))
+        idx <- follow(peaks, unstrand(features))
     }
+    
     na.idx <- which(is.na(idx))
     if (length(na.idx)) {
         idx <- idx[-na.idx]
         peaks <- peaks[-na.idx]
     }
+    
     peF <- features[idx]
     dd <- ifelse(strand(peF) == "+",
-                 start(peaks) - end(peF),
-                 end(peaks) - start(peF))
+		 start(peaks) - end(peF),
+		 end(peaks) - start(peF))
+    
     if (length(na.idx)) {
         dd2 <- numeric(length(idx) + length(na.idx))
         dd2[-na.idx] <- dd
@@ -166,22 +169,40 @@ getGenomicAnnotation <- function(peaks,
         dd2 <- dd
     }
 
-    for (i in 1:3) { ## downstream within 3k
-        j <- which(annotation == "Intergenic" & abs(dd2) <= i*1000 & dd2 != 0)
-        if (length(j) > 0) {
-            if (i == 1) {
-                lbs <- "Downstream (<1kb)"
-            } else {
-                lbs <- paste("Downstream (", i-1, "-", i, "kb)", sep="")
+    dsd <- getOption("ChIPseeker.downstreamDistance")
+    if (is.null(dsd))
+	    dsd <- 3000 ## downstream 3k by default
+
+    ## downstream within dsd
+    if(dsd/1000<=1){
+        j <- which(annotation == "Intergenic" & abs(dd2) <= dsd & dd2 != 0)
+        if(length(j)>0){
+            lbs <- paste("Downstream (<=", dsd, "bp)", sep="")
+            annotation[j] <- lbs
+        }
+    }else{
+        
+        ## downstream within 0-dsd/1000 kb
+        for(i in 1:(dsd/1000)){
+            j <- which(annotation == "Intergenic" & abs(dd2) <= i*1000 & dd2 != 0)
+            if (length(j) > 0){
+                if (i == 1){
+                    lbs <- "Downstream (<1kb)"
+                }else{
+                    lbs <- paste("Downstream (", i-1, "-", i, "kb)", sep="")
+                }
             }
             annotation[j] <- lbs
         }
+        
+        ## downstream (dsd/1000) kb - dsd bp
+        z <- which(annotation == "Intergenic" & abs(dd2) <= dsd & dd2 != 0)
+        if(length(z)>0){
+            lbs <- paste("Downstream (",dsd/1000,"kb-", dsd, "bp)", sep="")
+            annotation[z] <- lbs
+        }
     }
     annotation[which(annotation == "Intergenic")] = "Distal Intergenic"
-
-    dsd <- getOption("ChIPseeker.downstreamDistance")
-    if (is.null(dsd))
-        dsd <- 3000 ## downstream 3k by default
 
     downstreamIndex <- dd2 > 0 & dd2 < dsd
     detailGenomicAnnotation[downstreamIndex, "downstream"] <- TRUE
