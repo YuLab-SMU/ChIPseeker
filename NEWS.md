@@ -1,5 +1,7 @@
-# ChIPseeker 1.27.3.991
+# ChIPseeker 1.27.4
 
++ bug fixed in determine downstream gene (2021-04-27, Thu)
+  - <https://github.com/YuLab-SMU/ChIPseeker/pull/148>
 + `getBioRegion` now supports '3UTR' and '5UTR' (2021-03-30, Tue)
   - <https://github.com/YuLab-SMU/ChIPseeker/pull/146>
 
