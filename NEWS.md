@@ -1,3 +1,11 @@
+# ChIPseeker 1.28.0
+
++ Bioconductor 3.13 release (2021-05-20, Thu)
+
+# ChIPseeker 1.27.5
+
++ update GEO data (103398/1973025 GSM) (2021-05-14, Fri)
+
 # ChIPseeker 1.27.4
 
 + bug fixed in determine downstream gene (2021-04-27, Thu)
@@ -32,7 +40,6 @@
 # ChIPseeker 1.22.0
 
 + Bioconductor 3.10 release
-
  
 # ChIPseeker 1.21.1
 
