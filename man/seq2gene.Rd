@@ -23,6 +23,9 @@ gene vector
 \description{
 annotate genomic regions to genes in many-to-many mapping
 }
+\details{
+This funciton associates genomic regions with coding genes in a many-to-many mapping. It first maps genomic regions to host genes (either located in exon or intron), proximal genes (located in promoter regions) and flanking genes (located in upstream and downstream within user specify distance).
+}
 \examples{
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 TxDb <- TxDb.Hsapiens.UCSC.hg19.knownGene
