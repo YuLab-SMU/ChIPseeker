@@ -9,6 +9,12 @@
 ##' @param sameStrand logical whether find nearest/overlap gene in the same strand
 ##' @return gene vector
 ##' @export
+##' @examples
+##' library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+##' TxDb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+##' file <- getSampleFiles()[[1]] # a bed file
+##' gr <- readPeakFile(file)
+##' genes <- seq2gene(gr, tssRegion=c(-1000, 1000), flankDistance = 3000, TxDb) 
 ##' @author Guangchuang Yu
 seq2gene <- function(seq, tssRegion, flankDistance, TxDb, sameStrand=FALSE) {
     .ChIPseekerEnv(TxDb)

@@ -1,3 +1,7 @@
+# ChIPseeker 1.29.1
+
++ add example for `seq2gene` function (2021-05-21, Fri)
+
 # ChIPseeker 1.28.0
 
 + Bioconductor 3.13 release (2021-05-20, Thu)
