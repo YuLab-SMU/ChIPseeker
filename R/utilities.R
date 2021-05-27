@@ -75,7 +75,8 @@ getCols <- function(n) {
               "#6a3d9a", "#ffff99", "#b15928")
 
     ## colorRampPalette(brewer.pal(12, "Set3"))(n)
-    colorRampPalette(col3)(11)[1:n]
+    x <- colorRampPalette(col3)(11)
+    x[1:n]
 }
 
 
