@@ -213,27 +213,9 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
         if (length(title) != nc) {
             title <- rep(title[1], nc)
         }
-        
-        x<-vector(mode="numeric",length=0)
-        v <- 1
-        for(i in 1:(nc*2)){
-          if(i%%2!=0){
-            x[v] <- i
-            v <- v+1
-            x[v] <- i
-            v <- v+1
-          }else{
-            x[v] <- i
-            v <- v+1
-          }
-        }  
-      
-        layout(matrix(x,ncol = nc*3))
-        layout.show(nc*2)
-        par(mar=c(5,4,5,5))
       
         for (i in 1:nc) {
-            peakHeatmap.internal(tagMatrix[[i]], xlim, cols[i], xlab[i], ylab[i], title[i])
+            peakHeatmap.internal(tagMatrix[[i]], xlim, cols[i], xlab[i], ylab[i], title[i], listFlag)
         }
     } else {
         if (is.null(color) || is.na(color))
@@ -241,25 +223,27 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
         if (is.null(title) || is.na(title))
             title <- ""
       
-        layout(matrix(c(1,1,2),ncol = 3))
-        layout.show(2)
-        par(mar=c(5,4,5,5))
-        peakHeatmap.internal(tagMatrix, xlim, color, xlab, ylab, title)
+        peakHeatmap.internal(tagMatrix, xlim, color, xlab, ylab, title, listFlag)
     }
 }
 
 
 ##' @import BiocGenerics
 ##' @importFrom grDevices colorRampPalette
-peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", ylab="", title="") {
+peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", ylab="", title="", listFlag=FALSE) {
   
     tagMatrix <- t(apply(tagMatrix, 1, function(x) (x/max(x))*10))
     ii <- order(rowSums(tagMatrix))
     tagMatrix <- tagMatrix[ii,]
                          
     cols <- colorRampPalette(c("white",color))
-    breaks <- seq(0,10,2)
     
+    if(!listFlag) {
+      breaks <- seq(0,10,2)
+      layout(matrix(c(1,1,2),ncol = 3))
+      layout.show(2)
+      par(mar=c(5,4,5,5))
+    }
                          
     if (is.null(xlim)) {
         xlim <- 1:ncol(tagMatrix)
@@ -268,8 +252,10 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
     }
     image(x=xlim, y=1:nrow(tagMatrix),z=t(tagMatrix),useRaster=TRUE, col=cols(length(breaks)-1), yaxt="n", ylab="", xlab=xlab, main=title)
     
-    image.scale(tagMatrix, col=cols(length(breaks)-1), breaks=breaks-1e-8, axis.pos=4, add.axis=FALSE)
-    axis(4,at=breaks, las=2)                     
+    if(!listFlag) {
+      image.scale(tagMatrix, col=cols(length(breaks)-1), breaks=breaks-1e-8, axis.pos=4, add.axis=FALSE)
+      axis(4,at=breaks, las=2)    
+    }
 }
 
 
