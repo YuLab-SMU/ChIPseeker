@@ -229,6 +229,7 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
         }  
         layout(matrix(x,ncol = nc))
         layout.show(nc)
+        par(mar=c(3,2,3,3))
       
         for (i in 1:nc) {
             peakHeatmap.internal(tagMatrix[[i]], xlim, cols[i], xlab[i], ylab[i], title[i])
@@ -241,6 +242,7 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
       
         layout(matrix(c(1,1,2),ncol = 3))
         layout.show(2)
+        par(mar=c(5,4,5,5))
         peakHeatmap.internal(tagMatrix, xlim, color, xlab, ylab, title)
     }
 }
@@ -265,7 +267,6 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
     }
     image(x=xlim, y=1:nrow(tagMatrix),z=t(tagMatrix),useRaster=TRUE, col=cols(length(breaks)-1), yaxt="n", ylab="", xlab=xlab, main=title)
     
-    par(mar=c(2,1,2,2))
     image.scale(tagMatrix, col=cols(length(breaks)-1), breaks=breaks-1e-8, axis.pos=4, add.axis=FALSE)
     axis(4,at=breaks, las=2)                     
 }
