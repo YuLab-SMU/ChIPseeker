@@ -230,6 +230,10 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
 ##' @import BiocGenerics
 ##' @importFrom grDevices colorRampPalette
 peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", ylab="", title="") {
+    
+    layout(matrix(c(1,1,1,1,2,2),ncol = 3, nrow = 2))
+    layout.show(2)
+  
     tagMatrix <- t(apply(tagMatrix, 1, function(x) (x/max(x))*10))
     ii <- order(rowSums(tagMatrix))
     tagMatrix <- tagMatrix[ii,]
