@@ -238,8 +238,8 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
                          
     cols <- colorRampPalette(c("white",color))
     
+    breaks <- seq(0,10,2)                     
     if(!listFlag) {
-      breaks <- seq(0,10,2)
       layout(matrix(c(1,1,2),ncol = 3))
       layout.show(2)
       par(mar=c(5,4,5,5))
