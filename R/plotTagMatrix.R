@@ -230,16 +230,24 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
 ##' @import BiocGenerics
 ##' @importFrom grDevices colorRampPalette
 peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", ylab="", title="") {
-    tagMatrix <- t(apply(tagMatrix, 1, function(x) x/max(x)))
+    tagMatrix <- t(apply(tagMatrix, 1, function(x) (x/max(x))*10))
     ii <- order(rowSums(tagMatrix))
     tagMatrix <- tagMatrix[ii,]
-    cols <- colorRampPalette(c("white",color))(200)
+                         
+    cols <- colorRampPalette(c("white",color))
+    breaks <- seq(0,10,2)
+    
+                         
     if (is.null(xlim)) {
         xlim <- 1:ncol(tagMatrix)
     } else if (length(xlim) == 2) {
         xlim <- seq(xlim[1], xlim[2])
     }
-    image(x=xlim, y=1:nrow(tagMatrix),z=t(tagMatrix),useRaster=TRUE, col=cols, yaxt="n", ylab="", xlab=xlab, main=title)
+    image(x=xlim, y=1:nrow(tagMatrix),z=t(tagMatrix),useRaster=TRUE, col=cols(length(breaks)-1), yaxt="n", ylab="", xlab=xlab, main=title)
+    
+    par(mar=c(5,4,5,5))
+    image.scale(tagMatrix, col=cols(length(breaks)-1), breaks=breaks-1e-8, axis.pos=4, add.axis=FALSE)
+    axis(4,at=breaks, las=2)                     
 }
 
 
