@@ -213,7 +213,23 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
         if (length(title) != nc) {
             title <- rep(title[1], nc)
         }
-        par(mfrow=c(1, nc))
+        
+        x<-vector(mode="numeric",length=0)
+        v <- 1
+        for(i in 1:(nc*2)){
+          if(i%%2!=0){
+            x[v] <- i
+            v <- v+1
+            x[v] <- i
+            v <- v+1
+          }else{
+            x[v] <- i
+            v <- v+1
+          }
+        }  
+        layout(x,ncol = nc))
+        layout.show(nc)
+      
         for (i in 1:nc) {
             peakHeatmap.internal(tagMatrix[[i]], xlim, cols[i], xlab[i], ylab[i], title[i])
         }
@@ -230,9 +246,6 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
 ##' @import BiocGenerics
 ##' @importFrom grDevices colorRampPalette
 peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", ylab="", title="") {
-    
-    layout(matrix(c(1,1,1,1,2,2),ncol = 3, nrow = 2))
-    layout.show(2)
   
     tagMatrix <- t(apply(tagMatrix, 1, function(x) (x/max(x))*10))
     ii <- order(rowSums(tagMatrix))
