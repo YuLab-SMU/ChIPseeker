@@ -227,7 +227,7 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
             v <- v+1
           }
         }  
-        layout(x,ncol = nc)
+        layout(matrix(x,ncol = nc))
         layout.show(nc)
       
         for (i in 1:nc) {
