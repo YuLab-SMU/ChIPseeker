@@ -238,6 +238,9 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
             color <- "red"
         if (is.null(title) || is.na(title))
             title <- ""
+      
+        layout(matrix(c(1,1,2),ncol = 3))
+        layout.show(2)
         peakHeatmap.internal(tagMatrix, xlim, color, xlab, ylab, title)
     }
 }
