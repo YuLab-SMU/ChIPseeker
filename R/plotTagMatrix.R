@@ -214,6 +214,7 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
             title <- rep(title[1], nc)
         }
       
+        par(mfrow=c(1, nc))
         for (i in 1:nc) {
             peakHeatmap.internal(tagMatrix[[i]], xlim, cols[i], xlab[i], ylab[i], title[i], listFlag)
         }
