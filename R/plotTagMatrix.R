@@ -231,7 +231,7 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
         }
         layout(matrix(x,ncol = nc*3))
         layout.show(nc*2)
-        par(mar=c(1,1,1,1))
+        par(mar=c(3,2,2,2))
       
         for (i in 1:nc) {
             peakHeatmap.internal(tagMatrix[[i]], xlim, cols[i], xlab[i], ylab[i], title[i], listFlag)
@@ -272,7 +272,12 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
     
     ## a scale is added to graph
     ## image.scale function is fromm https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/  
-    par(pin=c(0.1,1.7))                     
+    if(listflag){
+      par(pin=c(0.07,1.7))
+    }else{
+      par(pin=c(0.1,1.7)) 
+    }
+                  
     image.scale(tagMatrix, col=cols(length(breaks)-1), breaks=breaks, axis.pos=4, add.axis=FALSE)
     axis(4,at=breaks, las=2)    
 }
