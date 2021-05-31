@@ -256,7 +256,7 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
 
 ##' @import BiocGenerics
 ##' @importFrom grDevices colorRampPalette
-##' use image.scale function fromm https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/
+##' use image.scale function from https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/
 peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", ylab="", title="", listFlag=FALSE) {
   
     tagMatrix <- t(apply(tagMatrix, 1, function(x) (x/max(x))*10))
