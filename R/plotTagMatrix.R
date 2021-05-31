@@ -216,7 +216,6 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
       
         x <- vector(mode="numeric",length=0)
         v <- 1
-        nc <- 5
 
         for(i in 1:(nc*2)){
           if(i%%2!=0){
