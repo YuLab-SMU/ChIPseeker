@@ -231,6 +231,8 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
 
 ##' @import BiocGenerics
 ##' @importFrom grDevices colorRampPalette
+##' use image.scale function fromm https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/
+##  the scale will be added only when the input tagmatrix is not a list
 peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", ylab="", title="", listFlag=FALSE) {
   
     tagMatrix <- t(apply(tagMatrix, 1, function(x) (x/max(x))*10))
@@ -238,8 +240,10 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
     tagMatrix <- tagMatrix[ii,]
                          
     cols <- colorRampPalette(c("white",color))
-    
-    breaks <- seq(0,10,2)                     
+    breaks <- seq(0,10,2)  
+                         
+    ## if the tagmatrix is not a list, a scale will be add to the graph   
+    ## here is to design the layout to contain a scale                     
     if(!listFlag) {
       layout(matrix(c(1,1,2),ncol = 3))
       layout.show(2)
@@ -253,6 +257,8 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
     }
     image(x=xlim, y=1:nrow(tagMatrix),z=t(tagMatrix),useRaster=TRUE, col=cols(length(breaks)-1), yaxt="n", ylab="", xlab=xlab, main=title)
     
+    ## a scale is added to graph
+    ## image.scale function is fromm https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/                     
     if(!listFlag) {
       image.scale(tagMatrix, col=cols(length(breaks)-1), breaks=breaks, axis.pos=4, add.axis=FALSE)
       axis(4,at=breaks, las=2)    
