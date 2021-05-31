@@ -230,9 +230,9 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
         }
         layout(matrix(x,ncol = nc*3))
         layout.show(nc*2)
-        par(mar=c(3,2,2,2))
       
         for (i in 1:nc) {
+            par(mar=c(3,2,2,2))
             peakHeatmap.internal(tagMatrix[[i]], xlim, cols[i], xlab[i], ylab[i], title[i], listFlag)
         }
     } else {
