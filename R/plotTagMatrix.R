@@ -214,7 +214,25 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
             title <- rep(title[1], nc)
         }
       
-        par(mfrow=c(1, nc))
+        x <- vector(mode="numeric",length=0)
+        v <- 1
+        nc <- 5
+
+        for(i in 1:(nc*2)){
+          if(i%%2!=0){
+            x[v] <- i
+            v <- v+1
+            x[v] <- i
+            v <- v+1
+          }else{
+            x[v] <- i
+            v <- v+1
+          }
+        }
+        layout(matrix(x,ncol = nc*3))
+        layout.show(nc*2)
+        par(mar=c(1,1,1,1))
+      
         for (i in 1:nc) {
             peakHeatmap.internal(tagMatrix[[i]], xlim, cols[i], xlab[i], ylab[i], title[i], listFlag)
         }
@@ -223,6 +241,9 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
             color <- "red"
         if (is.null(title) || is.na(title))
             title <- ""
+        
+        layout(matrix(c(1,1,2),ncol = 3))
+        layout.show(2)
       
         peakHeatmap.internal(tagMatrix, xlim, color, xlab, ylab, title, listFlag)
     }
@@ -241,15 +262,7 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
                          
     cols <- colorRampPalette(c("white",color))
     breaks <- seq(0,10,2)  
-                         
-    ## if the tagmatrix is not a list, a scale will be add to the graph   
-    ## here is to design the layout to contain a scale                     
-    if(!listFlag) {
-      layout(matrix(c(1,1,2),ncol = 3))
-      layout.show(2)
-      par(mar=c(5,4,5,5))
-    }
-                         
+                                             
     if (is.null(xlim)) {
         xlim <- 1:ncol(tagMatrix)
     } else if (length(xlim) == 2) {
@@ -258,11 +271,10 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
     image(x=xlim, y=1:nrow(tagMatrix),z=t(tagMatrix),useRaster=TRUE, col=cols(length(breaks)-1), yaxt="n", ylab="", xlab=xlab, main=title)
     
     ## a scale is added to graph
-    ## image.scale function is fromm https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/                     
-    if(!listFlag) {
-      image.scale(tagMatrix, col=cols(length(breaks)-1), breaks=breaks, axis.pos=4, add.axis=FALSE)
-      axis(4,at=breaks, las=2)    
-    }
+    ## image.scale function is fromm https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/  
+    par(pin=c(0.1,1.7))                     
+    image.scale(tagMatrix, col=cols(length(breaks)-1), breaks=breaks, axis.pos=4, add.axis=FALSE)
+    axis(4,at=breaks, las=2)    
 }
 
 
