@@ -438,13 +438,8 @@ GenomicRanges::GRangesList
     structure(as.list(match.call()[-1]), env = .env, class = "quoted")
 }
 
-##  image.scale function was all from https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/
-##  This function creates a color scale for use with the image()
-##  function. Input parameters should be consistent with those
-##  used in the corresponding image plot. The "axis.pos" argument
-##  defines the side of the axis. The "add.axis" argument defines
-##  whether the axis is added (default: TRUE)or not (FALSE).    
-                                   
+## according to https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/  
+## add a scale to the image()                                    
 image.scale <- function(z, zlim, col = heat.colors(12),
                         breaks, axis.pos=1, add.axis=TRUE, ...){
     if(!missing(breaks)){
