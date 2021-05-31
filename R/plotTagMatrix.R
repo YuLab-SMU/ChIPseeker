@@ -272,7 +272,7 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
     
     ## a scale is added to graph
     ## image.scale function is fromm https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/  
-    if(listflag){
+    if(listFlag){
       par(pin=c(0.07,1.7))
     }else{
       par(pin=c(0.1,1.7)) 
