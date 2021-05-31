@@ -214,6 +214,8 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
             title <- rep(title[1], nc)
         }
       
+        ## create a vector x for the layout
+        ## the vector is like 1,1,2,3,3,4.....
         x <- vector(mode="numeric",length=0)
         v <- 1
 
@@ -228,10 +230,13 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
             v <- v+1
           }
         }
+      
+        ## set the layout
         layout(matrix(x,ncol = nc*3))
         layout.show(nc*2)
       
         for (i in 1:nc) {
+            ## this par is for the heatmap
             par(mar=c(3,2,2,2))
             peakHeatmap.internal(tagMatrix[[i]], xlim, cols[i], xlab[i], ylab[i], title[i], listFlag)
         }
@@ -252,7 +257,6 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
 ##' @import BiocGenerics
 ##' @importFrom grDevices colorRampPalette
 ##' use image.scale function fromm https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/
-##  the scale will be added only when the input tagmatrix is not a list
 peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", ylab="", title="", listFlag=FALSE) {
   
     tagMatrix <- t(apply(tagMatrix, 1, function(x) (x/max(x))*10))
@@ -269,14 +273,15 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
     }
     image(x=xlim, y=1:nrow(tagMatrix),z=t(tagMatrix),useRaster=TRUE, col=cols(length(breaks)-1), yaxt="n", ylab="", xlab=xlab, main=title)
     
-    ## a scale is added to graph
-    ## image.scale function is fromm https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/  
+    ## this par is for the scale                 
     if(listFlag){
       par(pin=c(0.07,1.7))
     }else{
       par(pin=c(0.1,1.7)) 
     }
-                  
+    
+    ## a scale is added to graph
+    ## image.scale function is from https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/  
     image.scale(tagMatrix, col=cols(length(breaks)-1), breaks=breaks, axis.pos=4, add.axis=FALSE)
     axis(4,at=breaks, las=2)    
 }
