@@ -472,3 +472,14 @@ image.scale <- function(z, zlim, col = heat.colors(12),
     box()
     if(add.axis) {axis(axis.pos)}
  }                                  
+
+##' get the gradient color for the heatmap                                   
+##' @title getHeatmapcolor
+##' @param n the amount of colors
+##' @return String vector contain the name of color schemes                                    
+getHeatmapColor <- function(n){
+  col <- c("RdYlBu","RdYlGn","Spectral",
+           "RdGy","RdBu","PuOr",
+           "PRGn","PiYG","BrBG")
+  col[1:n]
+}                                   
