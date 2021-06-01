@@ -242,7 +242,7 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
         }
     } else {
         if (is.null(color) || is.na(color))
-            color <- "red"
+            color <- "RdYlBu"
         if (is.null(title) || is.na(title))
             title <- ""
         
