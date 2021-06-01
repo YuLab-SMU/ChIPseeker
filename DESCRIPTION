@@ -46,7 +46,8 @@ Imports:
     S4Vectors,
     stats,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
-    utils
+    utils,
+    sinkr
 Suggests:
     clusterProfiler,
     ggimage,
