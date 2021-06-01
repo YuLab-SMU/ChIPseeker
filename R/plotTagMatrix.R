@@ -195,7 +195,7 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
     if (listFlag) {
         nc <- length(tagMatrix)
         if ( is.null(color) || is.na(color) ) {
-            cols <- getHeatmapColor(nc)
+            cols <- getHeatmapColors(nc)
         } else if (length(color) != nc) {
             cols <- rep(color[1], nc)
         } else {

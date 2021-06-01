@@ -439,13 +439,13 @@ GenomicRanges::GRangesList
 }
                         
                                    
-##' get the gradient color for the heatmap                                   
-##' @title getHeatmapcolor
+##' get the gradient colors for the heatmap                                   
+##' @title getHeatmapcolors
 ##'
 ##' @param n the amount of colors
 ##'
 ##' @return String vector contain the name of color schemes                                    
-getHeatmapColor <- function(n){
+getHeatmapColors <- function(n){
   col <- c("RdYlBu","RdYlGn","Spectral",
            "RdGy","RdBu","PuOr",
            "PRGn","PiYG","BrBG")
