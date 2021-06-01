@@ -145,7 +145,7 @@ tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="RdY
 peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
                             upstream=1000, downstream=1000,
                             xlab="", ylab="", title=NULL,
-                            color="NULL", verbose=TRUE) {
+                            color=NULL, verbose=TRUE) {
     listFlag <- FALSE
     if ( is(peak, "list") ) {
         listFlag <- TRUE
