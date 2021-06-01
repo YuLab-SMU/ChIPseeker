@@ -113,11 +113,11 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
 ##' @param xlab xlab
 ##' @param ylab ylab
 ##' @param title title
-##' @param color color
+##' @param color color like c("RdYlBu","RdYlGn","Spectral","RdGy","RdBu","PuOr","PRGn","PiYG","BrBG")
 ##' @return figure
 ##' @export
 ##' @author G Yu
-tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="red") {
+tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="RdYlBu") {
     listFlag <- FALSE
     if (is(tagMatrix, "list")) {
         listFlag <- TRUE
@@ -137,7 +137,7 @@ tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="red
 ##' @param xlab xlab
 ##' @param ylab ylab
 ##' @param title title
-##' @param color color
+##' @param color color like c("RdYlBu","RdYlGn","Spectral","RdGy","RdBu","PuOr","PRGn","PiYG","BrBG")
 ##' @param verbose print message or not
 ##' @return figure
 ##' @export
@@ -145,7 +145,7 @@ tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="red
 peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
                             upstream=1000, downstream=1000,
                             xlab="", ylab="", title=NULL,
-                            color=NULL, verbose=TRUE) {
+                            color="NULL", verbose=TRUE) {
     listFlag <- FALSE
     if ( is(peak, "list") ) {
         listFlag <- TRUE
@@ -195,7 +195,7 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
     if (listFlag) {
         nc <- length(tagMatrix)
         if ( is.null(color) || is.na(color) ) {
-            cols <- getCols(nc)
+            cols <- getHeatmapColor(nc)
         } else if (length(color) != nc) {
             cols <- rep(color[1], nc)
         } else {
@@ -255,16 +255,17 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
 
 
 ##' @import BiocGenerics
+##' @importFrom RColorBrewer brewer.pal
 ##' @importFrom grDevices colorRampPalette
 ##' use image.scale function from https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/
-peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", ylab="", title="", listFlag=FALSE) {
+peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="RdYlBu", xlab="", ylab="", title="", listFlag=FALSE) {
   
     tagMatrix <- t(apply(tagMatrix, 1, function(x) (x/max(x))*10))
     ii <- order(rowSums(tagMatrix))
     tagMatrix <- tagMatrix[ii,]
                          
-    cols <- colorRampPalette(c("white",color))
-    breaks <- seq(0,10,2)  
+    breaks <- seq(0,10,length.out = 100)
+    cols <- colorRampPalette(brewer.pal(11,color))
                                              
     if (is.null(xlim)) {
         xlim <- 1:ncol(tagMatrix)
@@ -283,7 +284,7 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", yla
     ## a scale is added to graph
     ## image.scale function is from https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/  
     image.scale(tagMatrix, col=cols(length(breaks)-1), breaks=breaks, axis.pos=4, add.axis=FALSE)
-    axis(4,at=breaks, las=2)    
+    axis(4,at=c(0,2,4,6,8,10), las=2)    
 }
 
 
