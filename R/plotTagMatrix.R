@@ -265,7 +265,7 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="RdYlBu", xlab="", 
     tagMatrix <- tagMatrix[ii,]
                          
     breaks <- seq(0,10,length.out = 1000)
-    cols <- colorRampPalette(brewer.pal(7,color))
+    cols <- colorRampPalette(brewer.pal(8,color))
                                              
     if (is.null(xlim)) {
         xlim <- 1:ncol(tagMatrix)
