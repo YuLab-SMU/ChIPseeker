@@ -34,7 +34,7 @@ peakHeatmap(
 
 \item{title}{title}
 
-\item{color}{color}
+\item{color}{color like c("RdYlBu","RdYlGn","Spectral","RdGy","RdBu","PuOr","PRGn","PiYG","BrBG")}
 
 \item{verbose}{print message or not}
 }

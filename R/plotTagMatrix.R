@@ -257,7 +257,7 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
 ##' @import BiocGenerics
 ##' @importFrom RColorBrewer brewer.pal
 ##' @importFrom grDevices colorRampPalette
-##' @import sinkr 
+##' @importFrom sinkr imageScale
 peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="RdYlBu", xlab="", ylab="", title="", listFlag=FALSE) {
   
     tagMatrix <- t(apply(tagMatrix, 1, function(x) (x/max(x))*10))

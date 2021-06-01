@@ -4,7 +4,14 @@
 \alias{tagHeatmap}
 \title{tagHeatmap}
 \usage{
-tagHeatmap(tagMatrix, xlim, xlab = "", ylab = "", title = NULL, color = "red")
+tagHeatmap(
+  tagMatrix,
+  xlim,
+  xlab = "",
+  ylab = "",
+  title = NULL,
+  color = "RdYlBu"
+)
 }
 \arguments{
 \item{tagMatrix}{tagMatrix or a list of tagMatrix}
@@ -17,7 +24,7 @@ tagHeatmap(tagMatrix, xlim, xlab = "", ylab = "", title = NULL, color = "red")
 
 \item{title}{title}
 
-\item{color}{color}
+\item{color}{color like c("RdYlBu","RdYlGn","Spectral","RdGy","RdBu","PuOr","PRGn","PiYG","BrBG")}
 }
 \value{
 figure
