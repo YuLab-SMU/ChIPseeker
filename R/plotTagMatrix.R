@@ -257,7 +257,7 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
 ##' @import BiocGenerics
 ##' @importFrom RColorBrewer brewer.pal
 ##' @importFrom grDevices colorRampPalette
-##' use image.scale function from https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/
+##' @importFrom sinkr imageScale
 peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="RdYlBu", xlab="", ylab="", title="", listFlag=FALSE) {
   
     tagMatrix <- t(apply(tagMatrix, 1, function(x) (x/max(x))*10))
@@ -274,16 +274,15 @@ peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="RdYlBu", xlab="", 
     }
     image(x=xlim, y=1:nrow(tagMatrix),z=t(tagMatrix),useRaster=TRUE, col=cols(length(breaks)-1), yaxt="n", ylab="", xlab=xlab, main=title)
     
-    ## this par is for the scale                 
+    ## this par is set for the scale                 
     if(listFlag){
       par(pin=c(0.07,1.7))
     }else{
       par(pin=c(0.1,1.7)) 
     }
     
-    ## a scale is added to graph
-    ## image.scale function is from https://www.r-bloggers.com/2013/12/new-version-of-image-scale-function/  
-    image.scale(tagMatrix, col=cols(length(breaks)-1), breaks=breaks, axis.pos=4, add.axis=FALSE)
+    ## a scale is added to graph 
+    imageScale(tagMatrix, col=cols(length(breaks)-1), breaks=breaks, axis.pos=4, add.axis=FALSE)
     axis(4,at=c(0,2,4,6,8,10), las=2)    
 }
 
