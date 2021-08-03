@@ -265,6 +265,8 @@ getGeneBody <- function(TxDb=NULL,
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
 ##' @return bodymatrix
 ##' @export
+##' the idea was derived from the function of deeptools
+##' (https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html)                           
 getGenebodyMatrix <- function(peak, 
                               weightCol=NULL, 
                               windows, 
