@@ -350,3 +350,254 @@ plotAvgProf.internal <- function(tagMatrix, conf,
     return(p)
 }
 
+
+##' plot the profile of peaks of the gene regions
+##' 
+##' 
+##' Title plotGeneBody
+##'
+##' @param bodymatrix tagMatrix tagMatrix or a list of tagMatrix
+##' @param xlab x label
+##' @param ylab y label 
+##' @param conf confidence interval
+##' @param facet one of 'none', 'row' and 'column'
+##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param scaledlength the length of gene regions to be scaled to
+##' @param binsize the amount of nucleotide base in each box
+##' @param ... 
+##' @return ggplot object
+##' @export
+plotGeneBody <- function(bodymatrix, 
+                         xlab= "Scaled Genomic Region (5'->3')",
+                         ylab = "Peak Count Frequency",
+                         conf,
+                         facet="none", free_y = TRUE, 
+                         scaledlength=8000,
+                         binsize=50, ...) {
+    
+    ## S4Vectors change the behavior of ifelse
+    ## see https://support.bioconductor.org/p/70871/
+    ##
+    ## conf <- ifelse(missingArg(conf), NA, conf)
+    ##
+    
+    conf <- if(missingArg(conf)) NA else conf
+    
+    box <- dim(bodymatrix)[2]
+    xlim <- c(1,box)
+    
+    if (!(missingArg(conf) || is.na(conf))){
+        p <- plotGeneBody.internal(bodymatrix , conf = conf, xlim = xlim,
+                                   xlab = xlab, ylab = ylab,
+                                   facet = facet, free_y = free_y,
+                                   scaledlength = scaledlength, 
+                                   binsize = binsize, ...)
+    } else {
+        p <- plotGeneBody.internal(bodymatrix , xlim = xlim,
+                                   xlab = xlab, ylab = ylab,
+                                   facet = facet, free_y = free_y, 
+                                   scaledlength = scaledlength, 
+                                   binsize = binsize, ...)
+    }
+    return(p)
+}
+
+
+##' @importFrom ggplot2 ggplot
+##' @importFrom ggplot2 geom_line
+##' @importFrom ggplot2 geom_vline
+##' @importFrom ggplot2 geom_ribbon
+##' @importFrom ggplot2 scale_x_continuous
+##' @importFrom ggplot2 scale_color_manual
+##' @importFrom ggplot2 xlab
+##' @importFrom ggplot2 ylab
+##' @importFrom ggplot2 theme_bw
+##' @importFrom ggplot2 theme
+##' @importFrom ggplot2 element_blank
+##' @importFrom ggplot2 facet_grid
+plotGeneBody.internal <- function(bodymatrix, conf,
+                                  xlim,
+                                  xlab = "Scaled Genomic Region (5'->3')",
+                                  ylab = "Peak Count Frequency",
+                                  facet="none", free_y = TRUE,
+                                  scaledlength=8000,
+                                  binsize=50,
+                                  ...) {
+    
+    listFlag <- FALSE
+    if (is(bodymatrix, "list")) {
+        if ( is.null(names(bodymatrix )) ) {
+            nn <- paste0("peak", seq_along(bodymatrix ))
+            warning("input is not a named list, set the name automatically to ", paste(nn, collapse=' '))
+            names(bodymatrix) <- nn
+            ## stop("tagMatrix should be a named list...")
+        }
+        listFlag <- TRUE
+    }
+    
+    if ( listFlag ) {
+        facet <- match.arg(facet, c("none", "row", "column"))
+    }
+    
+    ## S4Vectors change the behavior of ifelse
+    ## see https://support.bioconductor.org/p/70871/
+    ##
+    ## conf <- ifelse(missingArg(conf), NA, conf)
+    ##
+    conf <- if(missingArg(conf)) NA else conf
+    
+    pos <- value <- .id <- Lower <- Upper <- NULL
+    
+    if ( listFlag ) {
+        tagCount <- lapply(bodymatrix , function(x) getTagCount(x, xlim = xlim, conf = conf, ...))
+        tagCount <- list_to_dataframe(tagCount)
+        tagCount$.id <- factor(tagCount$.id, levels=names(bodymatrix ))
+        p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
+        if (!(is.na(conf))) {
+            p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper, fill = .id),
+                                 linetype = 0, alpha = 0.2)
+        }
+    } else {
+        tagCount <- getTagCount(bodymatrix , xlim = xlim, conf = conf, ...)
+        p <- ggplot(tagCount, aes(pos))
+        if (!(is.na(conf))) {
+            p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper),
+                                 linetype = 0, alpha = 0.2)
+        }
+    }
+    
+    p <- p + geom_line(aes(y = value))
+    
+    p <- p + scale_x_continuous(breaks=c(1, 
+                                         floor((scaledlength/binsize)*0.25),
+                                         floor((scaledlength/binsize)*0.5),
+                                         floor((scaledlength/binsize)*0.75),
+                                         (scaledlength/binsize)),
+                                labels=c("1 bp", 
+                                         paste(floor((scaledlength/binsize)*0.25)*binsize,"bp",seq=" "),
+                                         paste(floor((scaledlength/binsize)*0.5)*binsize,"bp",seq=" "),
+                                         paste(floor((scaledlength/binsize)*0.75)*binsize,"bp",seq=" "),
+                                         paste(scaledlength,"bp",seq=" ")))
+    
+    
+    if (listFlag) {
+        cols <- getCols(length(bodymatrix))
+        p <- p + scale_color_manual(values=cols)
+        if (facet == "row") {
+            if (free_y) {
+                p <- p + facet_grid(.id ~ ., scales = "free_y")
+            } else {
+                p <- p + facet_grid(.id ~ .)
+            }
+        } else if (facet == "column") {
+            if (free_y) {
+                p <-  p + facet_grid(. ~ .id, scales = "free_y")
+            } else {
+                p <-  p + facet_grid(. ~ .id)
+            }
+        }
+    }
+    p <- p+xlab(xlab)+ylab(ylab)
+    p <- p + theme_bw() + theme(legend.title=element_blank())
+    if(facet != "none") {
+        p <- p + theme(legend.position="none")
+    }
+    return(p)
+}
+
+
+
+##' plot the profile of peaks that align to gene regions
+#' 
+#' 
+#' Title plotGeneBody2
+#'
+#' @param peak peak file or GRanges object
+#' @param weightCol weightCol column name of weight
+#' @param TxDb TxDb object
+#' @param type one of "genes", "exon", "intron", "promoters"
+#' @param xlab x label
+#' @param ylab y label
+#' @param conf confidence interval
+#' @param facet one of 'none', 'row' and 'column'
+#' @param free_y if TRUE, y will be scaled by AvgProf
+#' @param verbose print message or not
+#' @param scaledlength the length that different gene regions are scaled to
+#' @param binsize the amount of nucleotide base in each box
+#' @param min_body_length the minimum length that each gene region should be 
+#' @param ... 
+#' @return ggplot object
+#' @export
+#'
+#' @examples
+plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
+                          type = "genes",
+                          xlab = "Scaled Genomic Region (5'->3')",
+                          ylab = "Peak Count Frequency",
+                          conf,
+                          facet = "none",
+                          free_y = TRUE,
+                          verbose = TRUE, 
+                          scaledlength=8000,
+                          binsize=50,
+                          min_body_length=1000, ...) {
+    
+    if (verbose) {
+        cat(">> preparing genebody regions...\t",
+            format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    }
+    
+    type <- match.arg(type, c("genes", "exon", "intron", "promoters"))
+    if(type=="promoters"){
+        genebody <- getPromoters(TxDb=txdb, 
+                                 upstream=3000, downstream=3000)
+    }else{
+        genebody <- getGeneBody(TxDb = txdb, type = type)
+    }
+    
+    
+    
+    if (verbose) {
+        cat(">> preparing genebody matrix...\t\t",
+            format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    }
+    
+    if ( is(peak, "list") ) {
+        bodymatrix <- lapply(peak, getGenebodyMatrix,
+                             weightCol=weightCol, 
+                             windows=genebody,
+                             scaledlength=scaledlength,
+                             binsize=binsize,
+                             min_body_length=min_body_length)
+        
+    } else {
+        bodymatrix <- getGenebodyMatrix(peak, weightCol, genebody,
+                                        scaledlength,
+                                        binsize,
+                                        min_body_length)
+    }
+    
+    
+    box = scaledlength / binsize
+    xlim <- c(1,box)
+    
+    if (verbose) {
+        cat(">> plotting figure...\t\t\t",
+            format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    }
+    
+    
+    if (!(missingArg(conf) || is.na(conf))){
+        p <- plotGeneBody.internal(bodymatrix,
+                                   xlim = xlim,
+                                   xlab = xlab, ylab = ylab, conf = conf,
+                                   facet = facet, free_y = free_y, ...)
+    } else {
+        p <- plotGeneBody.internal(bodymatrix,
+                                   xlim=xlim,
+                                   xlab=xlab, ylab=ylab,
+                                   facet = facet, free_y = free_y, ...)
+    }
+    return(p)
+}
+
