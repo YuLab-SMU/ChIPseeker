@@ -18,6 +18,8 @@ plotGeneBody2(
   scaledlength = 8000,
   binsize = 50,
   min_body_length = 1000,
+  upstream = 3000,
+  downstream = 3000,
   ...
 )
 }
@@ -48,7 +50,9 @@ plotGeneBody2(
 
 \item{min_body_length}{the minimum length that each gene region should be}
 
-\item{...}{}
+\item{upstream}{upstream}
+
+\item{downstream}{downstream}
 }
 \value{
 ggplot object

@@ -525,7 +525,8 @@ plotGeneBody.internal <- function(bodymatrix, conf,
 ##' @param scaledlength the length that different gene regions are scaled to
 ##' @param binsize the amount of nucleotide base in each box
 ##' @param min_body_length the minimum length that each gene region should be 
-##' @param ... 
+##' @param downstream downstream
+##' @param upstream upstream
 ##' @return ggplot object
 ##' @export
 plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
@@ -538,17 +539,20 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                           verbose = TRUE, 
                           scaledlength=8000,
                           binsize=50,
-                          min_body_length=1000, ...) {
+                          min_body_length=1000, 
+                          upstream=3000,
+                          downstream=3000,...) {
     
     if (verbose) {
         cat(">> preparing genebody regions...\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     }
     
+    ## TSS region is also supported
     type <- match.arg(type, c("genes", "exon", "intron", "promoters"))
     if(type=="promoters"){
         genebody <- getPromoters(TxDb=txdb, 
-                                 upstream=3000, downstream=3000)
+                                 upstream=upstream, downstream=downstream)
     }else{
         genebody <- getGeneBody(TxDb = txdb, type = type)
     }
