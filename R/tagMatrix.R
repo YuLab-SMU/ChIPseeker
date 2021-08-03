@@ -311,7 +311,7 @@ getGenebodyMatrix <- function(peak,
   bodyList <- lapply(peakView, function(x) viewApply(x, as.vector))
   
   ## the "if" judge statement is to be compatible with 
-  ## windows that has the same size(like promoters(-3000,3000))
+  ## windows that has the equal size, like promoters(-3000,3000)
   if(class(bodyList[[1]])=="matrix"){
     
     bodyList <- lapply(bodyList, function(x) t(x))
