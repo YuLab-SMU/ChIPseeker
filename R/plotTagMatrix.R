@@ -508,28 +508,26 @@ plotGeneBody.internal <- function(bodymatrix, conf,
 
 
 ##' plot the profile of peaks that align to gene regions
-#' 
-#' 
-#' Title plotGeneBody2
-#'
-#' @param peak peak file or GRanges object
-#' @param weightCol weightCol column name of weight
-#' @param TxDb TxDb object
-#' @param type one of "genes", "exon", "intron", "promoters"
-#' @param xlab x label
-#' @param ylab y label
-#' @param conf confidence interval
-#' @param facet one of 'none', 'row' and 'column'
-#' @param free_y if TRUE, y will be scaled by AvgProf
-#' @param verbose print message or not
-#' @param scaledlength the length that different gene regions are scaled to
-#' @param binsize the amount of nucleotide base in each box
-#' @param min_body_length the minimum length that each gene region should be 
-#' @param ... 
-#' @return ggplot object
-#' @export
-#'
-#' @examples
+##' 
+##' 
+##' Title plotGeneBody2
+##'
+##' @param peak peak file or GRanges object
+##' @param weightCol weightCol column name of weight
+##' @param TxDb TxDb object
+##' @param type one of "genes", "exon", "intron", "promoters"
+##' @param xlab x label
+##' @param ylab y label
+##' @param conf confidence interval
+##' @param facet one of 'none', 'row' and 'column'
+##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param verbose print message or not
+##' @param scaledlength the length that different gene regions are scaled to
+##' @param binsize the amount of nucleotide base in each box
+##' @param min_body_length the minimum length that each gene region should be 
+##' @param ... 
+##' @return ggplot object
+##' @export
 plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                           type = "genes",
                           xlab = "Scaled Genomic Region (5'->3')",
