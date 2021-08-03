@@ -216,3 +216,187 @@ getTagMatrix <- function(peak, weightCol=NULL, windows, flip_minor_strand=TRUE) 
 }
 
 
+##' prepare the genebody region
+##' 
+##' 
+##' Title getGeneBody
+##' @param TxDb TxDb
+##' @param type by one of "genes", "exon", "intron"
+##' @return GRanges object
+##' @import BiocGenerics IRanges GenomicRanges
+##' @export
+getGeneBody <- function(TxDb=NULL,
+                        type="genes"){
+  
+  type <- match.arg(type, c("genes", "exon", "intron"))
+  
+  TxDb <- loadTxDb(TxDb)
+  .ChIPseekerEnv(TxDb)
+  ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
+  
+  
+  ## select the type of gene to be windows
+  if( type == "intron"){
+    genebody <- get_intronList(ChIPseekerEnv)
+  }else if( type == "exon"){
+    genebody <- get_exonList(ChIPseekerEnv)
+  }else if(type == "genes"){
+    genebody <- getGene(TxDb)
+  }else {
+    stop("type must be genes, exon or intron..")
+  }
+  
+  return(genebody)
+}
+
+
+
+##' calculate the genebodymatrix
+##' 
+##' 
+##' Title getGenebodyMatrix
+##'
+##' @param peak peak peak file or GRanges object
+##' @param weightCol weightCol column name of weight, default is NULL
+##' @param windows windows a collection of region with equal or not equal size, eg. promoter region, gene region.
+##' @param scaledlength the length that different gene regions are scaled to
+##' @param binsize the amount of nucleotide base in each box
+##' @param min_body_length the minimum length that each gene region should be 
+##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
+##' @return bodymatrix
+##' @export
+getGenebodyMatrix <- function(peak, 
+                              weightCol=NULL, 
+                              windows, 
+                              scaledlength=8000,
+                              binsize=50,
+                              min_body_length=1000){
+  
+  ## the amounts of the boxes 
+  box = scaledlength / binsize
+  
+  
+  peak.gr <- loadPeak(peak)
+  
+  if (! is(windows, "GRanges")) {
+    stop("windows should be a GRanges object...")
+  }
+  
+  if (is.null(weightCol)) {
+    peak.cov <- coverage(peak.gr)
+  } else {
+    weight <- mcols(peak.gr)[[weightCol]]
+    peak.cov <- coverage(peak.gr, weight=weight)
+  }
+  
+  
+  cov.len <- elementNROWS(peak.cov)
+  cov.width <- GRanges(seqnames=names(cov.len),
+                       IRanges(start=rep(1, length(cov.len)),
+                               end=cov.len))
+  
+  windows <- subsetByOverlaps(windows, 
+                              cov.width,
+                              type="within", 
+                              ignore.strand=TRUE)
+  
+  chr.idx <- intersect(names(peak.cov),
+                       unique(as.character(seqnames(windows))))
+  
+  peakView <- Views(peak.cov[chr.idx], as(windows, "IntegerRangesList")[chr.idx])
+  
+  ## remove the gene that has no binding proteins
+  peakView <- lapply(peakView, function(x) x <- x[viewSums(x)!=0])
+  
+  bodyList <- lapply(peakView, function(x) viewApply(x, as.vector))
+  
+  ## the "if" judge statement is to be compatible with 
+  ## windows that has the same size(like promoters(-3000,3000))
+  if(class(bodyList[[1]])=="matrix"){
+    
+    bodyList <- lapply(bodyList, function(x) t(x))
+    
+    # to remove the chromosome that has no binding protein
+    bodyList <- bodyList[vapply(bodyList, function(x) length(x)>0, FUN.VALUE = logical(1))]
+    suppressWarnings(bodyList <- do.call("rbind", bodyList))
+    
+    ## create a matrix to receive binning result                 
+    bodymatrix <- matrix(nrow = dim(bodyList)[1],ncol = box)
+    
+    ## this circulation is to deal with different gene             
+    for (i in 1:dim(bodyList)[1]) {
+      
+      ## seq is the distance between different boxes
+      seq <- floor(length(bodyList[i,])/box)
+      
+      ## cursor record the position of calculation
+      cursor <- 1
+      
+      ## the third circulation is to calculate the bingding strength
+      ## it has two parts
+      ## the first part is to for the box(1:box-1)
+      ## because the seq is not derived from exact division
+      ## the second part is to compensate the loss of non-exact-division
+      
+      ## this the first part for 1:(box-1)
+      for (j in 1:(box-1)) {
+        
+        read <- 0
+        
+        for (k in cursor:(cursor+seq-1)) {
+          read <- read + bodyList[i,k]
+        }
+        
+        bodymatrix[i,j] <- read/seq
+        
+        cursor <- cursor+seq
+      }
+      
+      ## this the second part to to compensate the loss of non-exact-division
+      read <- 0
+      for (k in cursor:length(bodyList[i,])) {
+        read <- read+bodyList[i,k]
+      }
+      
+      bodymatrix[i,box] <- read/(length(bodyList[i,])-cursor)
+    }
+    
+  }else{
+    
+    bodyList <- bodyList[vapply(bodyList, function(x) length(x)>0, FUN.VALUE = logical(1))]
+    
+    bodyList <- lapply(bodyList, function(x) x[vapply(x, function(y) length(y)>min_body_length,FUN.VALUE = logical(1))])
+    suppressWarnings(bodyList <- do.call("rbind",bodyList))
+    
+    bodymatrix <- matrix(nrow = length(bodyList),ncol = box)
+    
+    for (i in 1:length(bodyList)) {
+      
+      seq <- floor(length(bodyList[[i]])/box)
+      cursor <- 1
+      
+      for (j in 1:(box-1)) {
+        
+        read <- 0
+        
+        for (k in cursor:(cursor+seq-1)) {
+          read <- read + bodyList[[i]][k]
+        }
+        
+        bodymatrix[i,j] <- read/seq
+        
+        cursor <- cursor+seq
+      }
+      
+      read <- 0
+      for (k in cursor:length(bodyList[[i]])) {
+        read <- read+bodyList[[i]][k]
+      }
+      
+      bodymatrix[i,box] <- read/(length(bodyList[[i]])-cursor)
+    }
+  }
+  
+  return(bodymatrix)
+}
+
