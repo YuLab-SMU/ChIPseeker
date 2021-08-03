@@ -273,7 +273,7 @@ getGenebodyMatrix <- function(peak,
                               min_body_length=1000){
   
   ## the amounts of the boxes 
-  box = scaledlength / binsize
+  box = floor(scaledlength / binsize)
   
   
   peak.gr <- loadPeak(peak)
