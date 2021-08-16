@@ -259,22 +259,16 @@ getGeneBody <- function(TxDb=NULL,
 ##' @param peak peak peak file or GRanges object
 ##' @param weightCol weightCol column name of weight, default is NULL
 ##' @param windows windows a collection of region with equal or not equal size, eg. promoter region, gene region.
-##' @param scaledlength the length that different gene regions are scaled to
-##' @param binsize the amount of nucleotide base in each box
-##' @param min_body_length the minimum length that each gene region should be 
+##' @param box the amount of boxes need to be splited which should be less than 
+##' @param min_body_length the minimum length that each gene region should be less than min_body_length
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
 ##' @return bodymatrix
 ##' @export
 getGenebodyMatrix <- function(peak, 
                               weightCol=NULL, 
                               windows, 
-                              scaledlength=8000,
-                              binsize=50,
+                              box=500,
                               min_body_length=1000){
-  
-  ## the amounts of the boxes 
-  box = floor(scaledlength / binsize)
-  
   
   peak.gr <- loadPeak(peak)
   
