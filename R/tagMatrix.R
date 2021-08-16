@@ -269,7 +269,7 @@ getGeneBody <- function(TxDb=NULL,
 getGenebodyMatrix <- function(peak, 
                               weightCol=NULL, 
                               windows, 
-                              box=500,
+                              box=1000,
                               min_body_length=1000){
   
   peak.gr <- loadPeak(peak)

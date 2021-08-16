@@ -15,7 +15,7 @@ plotGeneBody2(
   facet = "none",
   free_y = TRUE,
   verbose = TRUE,
-  box = 500,
+  box = 1000,
   min_body_length = 1000,
   upstream = 3000,
   downstream = 3000,

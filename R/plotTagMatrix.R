@@ -415,7 +415,8 @@ plotGeneBody.internal <- function(bodymatrix, conf,
                                   xlab = "Scaled Genomic Region (5'->3')",
                                   ylab = "Peak Count Frequency",
                                   facet="none", free_y = TRUE,
-                                  box,...) {
+                                  box,
+                                  ...) {
     
     listFlag <- FALSE
     if (is(bodymatrix, "list")) {
@@ -529,7 +530,7 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                           facet = "none",
                           free_y = TRUE,
                           verbose = TRUE, 
-                          box=500,
+                          box=1000,
                           min_body_length=1000, 
                           upstream=3000,
                           downstream=3000,...) {
