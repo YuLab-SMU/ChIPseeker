@@ -361,9 +361,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
 ##' @param ylab y label 
 ##' @param conf confidence interval
 ##' @param facet one of 'none', 'row' and 'column'
-##' @param free_y if TRUE, y will be scaled by AvgProf
-##' @param scaledlength the length of gene regions to be scaled to
-##' @param binsize the amount of nucleotide base in each box
+##' @param free_y if TRUE, y will be scaled 
 ##' @param ... 
 ##' @return ggplot object
 ##' @export
@@ -372,8 +370,7 @@ plotGeneBody <- function(bodymatrix,
                          ylab = "Peak Count Frequency",
                          conf,
                          facet="none", free_y = TRUE, 
-                         scaledlength=8000,
-                         binsize=50, ...) {
+                         ...) {
     
     ## S4Vectors change the behavior of ifelse
     ## see https://support.bioconductor.org/p/70871/
@@ -390,14 +387,12 @@ plotGeneBody <- function(bodymatrix,
         p <- plotGeneBody.internal(bodymatrix , conf = conf, xlim = xlim,
                                    xlab = xlab, ylab = ylab,
                                    facet = facet, free_y = free_y,
-                                   scaledlength = scaledlength, 
-                                   binsize = binsize, ...)
+                                   box=box, ...)
     } else {
         p <- plotGeneBody.internal(bodymatrix , xlim = xlim,
                                    xlab = xlab, ylab = ylab,
                                    facet = facet, free_y = free_y, 
-                                   scaledlength = scaledlength, 
-                                   binsize = binsize, ...)
+                                   box=box, ...)
     }
     return(p)
 }
@@ -420,9 +415,7 @@ plotGeneBody.internal <- function(bodymatrix, conf,
                                   xlab = "Scaled Genomic Region (5'->3')",
                                   ylab = "Peak Count Frequency",
                                   facet="none", free_y = TRUE,
-                                  scaledlength=8000,
-                                  binsize=50,
-                                  ...) {
+                                  box,...) {
     
     listFlag <- FALSE
     if (is(bodymatrix, "list")) {
@@ -469,15 +462,15 @@ plotGeneBody.internal <- function(bodymatrix, conf,
     p <- p + geom_line(aes(y = value))
     
     p <- p + scale_x_continuous(breaks=c(1, 
-                                         floor((scaledlength/binsize)*0.25),
-                                         floor((scaledlength/binsize)*0.5),
-                                         floor((scaledlength/binsize)*0.75),
-                                         (scaledlength/binsize)),
-                                labels=c("1 bp", 
-                                         paste(floor((scaledlength/binsize)*0.25)*binsize,"bp",seq=" "),
-                                         paste(floor((scaledlength/binsize)*0.5)*binsize,"bp",seq=" "),
-                                         paste(floor((scaledlength/binsize)*0.75)*binsize,"bp",seq=" "),
-                                         paste(scaledlength,"bp",seq=" ")))
+                                         floor(box*0.25),
+                                         floor(box*0.5),
+                                         floor(box*0.75),
+                                         box),
+                                labels=c("1 box", 
+                                         paste(floor(box*0.25)*binsize,"box",seq=" "),
+                                         paste(floor(box*0.5)*binsize,"box",seq=" "),
+                                         paste(floor(box*0.75)*binsize,"box",seq=" "),
+                                         paste(box,"box",seq=" ")))
     
     
     if (listFlag) {
@@ -522,11 +515,10 @@ plotGeneBody.internal <- function(bodymatrix, conf,
 ##' @param facet one of 'none', 'row' and 'column'
 ##' @param free_y if TRUE, y will be scaled by AvgProf
 ##' @param verbose print message or not
-##' @param scaledlength the length that different gene regions are scaled to
-##' @param binsize the amount of nucleotide base in each box
+##' @param box the amount of boxes needed to be splited which should be less than min_body_length
 ##' @param min_body_length the minimum length that each gene region should be 
-##' @param downstream downstream
-##' @param upstream upstream
+##' @param downstream downstream, when use this function to draw TSS region
+##' @param upstream upstream, when use this function to draw TSS region
 ##' @return ggplot object
 ##' @export
 plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
@@ -537,8 +529,7 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                           facet = "none",
                           free_y = TRUE,
                           verbose = TRUE, 
-                          scaledlength=8000,
-                          binsize=50,
+                          box=500,
                           min_body_length=1000, 
                           upstream=3000,
                           downstream=3000,...) {
@@ -568,19 +559,16 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
         bodymatrix <- lapply(peak, getGenebodyMatrix,
                              weightCol=weightCol, 
                              windows=genebody,
-                             scaledlength=scaledlength,
-                             binsize=binsize,
+                             box=box,
                              min_body_length=min_body_length)
         
     } else {
         bodymatrix <- getGenebodyMatrix(peak, weightCol, genebody,
-                                        scaledlength,
-                                        binsize,
+                                        box,
                                         min_body_length)
     }
     
     
-    box = scaledlength / binsize
     xlim <- c(1,box)
     
     if (verbose) {

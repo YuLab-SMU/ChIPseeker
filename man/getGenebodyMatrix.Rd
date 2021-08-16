@@ -8,8 +8,7 @@ getGenebodyMatrix(
   peak,
   weightCol = NULL,
   windows,
-  scaledlength = 8000,
-  binsize = 50,
+  box = 500,
   min_body_length = 1000
 )
 }
@@ -20,9 +19,7 @@ getGenebodyMatrix(
 
 \item{windows}{windows a collection of region with equal or not equal size, eg. promoter region, gene region.}
 
-\item{scaledlength}{the length that different gene regions are scaled to}
-
-\item{binsize}{the amount of nucleotide base in each box}
+\item{box}{the amount of boxes needed to be splited which should be less than min_body_length}
 
 \item{min_body_length}{the minimum length that each gene region should be}
 }

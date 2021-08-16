@@ -15,8 +15,7 @@ plotGeneBody2(
   facet = "none",
   free_y = TRUE,
   verbose = TRUE,
-  scaledlength = 8000,
-  binsize = 50,
+  box = 500,
   min_body_length = 1000,
   upstream = 3000,
   downstream = 3000,
@@ -44,15 +43,13 @@ plotGeneBody2(
 
 \item{verbose}{print message or not}
 
-\item{scaledlength}{the length that different gene regions are scaled to}
-
-\item{binsize}{the amount of nucleotide base in each box}
+\item{box}{the amount of boxes needed to be splited which should be less than min_body_length}
 
 \item{min_body_length}{the minimum length that each gene region should be}
 
-\item{upstream}{upstream}
+\item{upstream}{upstream, when use this function to draw TSS region}
 
-\item{downstream}{downstream}
+\item{downstream}{downstream, when use this function to draw TSS region}
 }
 \value{
 ggplot object

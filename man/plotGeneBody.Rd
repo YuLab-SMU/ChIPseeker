@@ -11,8 +11,6 @@ plotGeneBody(
   conf,
   facet = "none",
   free_y = TRUE,
-  scaledlength = 8000,
-  binsize = 50,
   ...
 )
 }
@@ -27,11 +25,7 @@ plotGeneBody(
 
 \item{facet}{one of 'none', 'row' and 'column'}
 
-\item{free_y}{if TRUE, y will be scaled by AvgProf}
-
-\item{scaledlength}{the length of gene regions to be scaled to}
-
-\item{binsize}{the amount of nucleotide base in each box}
+\item{free_y}{if TRUE, y will be scaled}
 
 \item{...}{}
 }
