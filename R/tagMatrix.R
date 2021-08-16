@@ -264,14 +264,14 @@ getGeneBody <- function(TxDb=NULL,
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
 ##' @return bodymatrix
 ##' @export
-##' the idea was derived from the function of deeptools
-##' (https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html)  
 getGenebodyMatrix <- function(peak, 
                               weightCol=NULL, 
                               windows, 
                               box=1000,
                               min_body_length=1000){
   
+  ## the idea was derived from the function of deeptools
+  ## (https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html)  
   peak.gr <- loadPeak(peak)
   
   if (! is(windows, "GRanges")) {
