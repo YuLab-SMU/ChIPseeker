@@ -564,7 +564,9 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                              min_body_length=min_body_length)
         
     } else {
-        bodymatrix <- getGenebodyMatrix(peak, weightCol, genebody,
+        bodymatrix <- getGenebodyMatrix(peak, 
+                                        weightCol, 
+                                        genebody,
                                         box,
                                         min_body_length)
     }
