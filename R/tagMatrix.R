@@ -267,7 +267,7 @@ getGeneBody <- function(TxDb=NULL,
 getGenebodyMatrix <- function(peak, 
                               weightCol=NULL, 
                               windows, 
-                              box=1000,
+                              box=800,
                               min_body_length=1000){
   
   ## the idea was derived from the function of deeptools

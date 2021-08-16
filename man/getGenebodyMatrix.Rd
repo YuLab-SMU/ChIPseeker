@@ -8,7 +8,7 @@ getGenebodyMatrix(
   peak,
   weightCol = NULL,
   windows,
-  box = 1000,
+  box = 800,
   min_body_length = 1000
 )
 }
