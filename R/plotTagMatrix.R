@@ -467,9 +467,9 @@ plotGeneBody.internal <- function(bodymatrix, conf,
                                          floor(box*0.75),
                                          box),
                                 labels=c("1 box", 
-                                         paste(floor(box*0.25)*binsize,"box",seq=" "),
-                                         paste(floor(box*0.5)*binsize,"box",seq=" "),
-                                         paste(floor(box*0.75)*binsize,"box",seq=" "),
+                                         paste(floor(box*0.25),"box",seq=" "),
+                                         paste(floor(box*0.5),"box",seq=" "),
+                                         paste(floor(box*0.75),"box",seq=" "),
                                          paste(box,"box",seq=" ")))
     
     
