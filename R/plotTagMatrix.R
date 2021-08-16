@@ -516,7 +516,7 @@ plotGeneBody.internal <- function(bodymatrix, conf,
 ##' @param facet one of 'none', 'row' and 'column'
 ##' @param free_y if TRUE, y will be scaled by AvgProf
 ##' @param verbose print message or not
-##' @param box the amount of boxes needed to be splited which should be less than min_body_length
+##' @param box the amount of boxes needed to be splited and it should not be more than min_body_length
 ##' @param min_body_length the minimum length that each gene region should be 
 ##' @param downstream downstream, when use this function to draw TSS region
 ##' @param upstream upstream, when use this function to draw TSS region

@@ -19,7 +19,7 @@ getGenebodyMatrix(
 
 \item{windows}{windows a collection of region with equal or not equal size, eg. promoter region, gene region.}
 
-\item{box}{the amount of boxes needed to be splited which should be less than min_body_length}
+\item{box}{the amount of boxes needed to be splited and it should not be more than min_body_length}
 
 \item{min_body_length}{the minimum length that each gene region should be}
 }
