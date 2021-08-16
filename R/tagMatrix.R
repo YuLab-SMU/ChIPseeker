@@ -265,7 +265,8 @@ getGeneBody <- function(TxDb=NULL,
 ##' @return bodymatrix
 ##' @export
 ##' the idea was derived from the function of deeptools
-##' (https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html)                           
+##' (https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html)  
+##'                          
 getGenebodyMatrix <- function(peak, 
                               weightCol=NULL, 
                               windows, 
