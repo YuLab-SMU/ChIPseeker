@@ -584,11 +584,13 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
         p <- plotGeneBody.internal(bodymatrix,
                                    xlim = xlim,
                                    xlab = xlab, ylab = ylab, conf = conf,
+                                   box=box,
                                    facet = facet, free_y = free_y, ...)
     } else {
         p <- plotGeneBody.internal(bodymatrix,
                                    xlim=xlim,
                                    xlab=xlab, ylab=ylab,
+                                   box=box,
                                    facet = facet, free_y = free_y, ...)
     }
     return(p)
