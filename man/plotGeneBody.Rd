@@ -11,6 +11,7 @@ plotGeneBody(
   conf,
   facet = "none",
   free_y = TRUE,
+  extension = F,
   ...
 )
 }
@@ -26,6 +27,8 @@ plotGeneBody(
 \item{facet}{one of 'none', 'row' and 'column'}
 
 \item{free_y}{if TRUE, y will be scaled}
+
+\item{extension}{if TRUE, extension of TSS region will be drawn, including upstream and downstream}
 
 \item{...}{}
 }

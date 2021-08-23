@@ -362,14 +362,16 @@ plotAvgProf.internal <- function(tagMatrix, conf,
 ##' @param conf confidence interval
 ##' @param facet one of 'none', 'row' and 'column'
 ##' @param free_y if TRUE, y will be scaled 
+##' @param extension if TRUE, extension of TSS region will be drawn, including upstream and downstream
 ##' @param ... 
 ##' @return ggplot object
 ##' @export
 plotGeneBody <- function(bodymatrix, 
-                         xlab= "Scaled Genomic Region (5'->3')",
+                         xlab = "Scaled Genomic Region (5'->3')",
                          ylab = "Peak Count Frequency",
                          conf,
-                         facet="none", free_y = TRUE, 
+                         facet="none", free_y = TRUE,
+                         extension = F,
                          ...) {
     
     ## S4Vectors change the behavior of ifelse
@@ -387,12 +389,14 @@ plotGeneBody <- function(bodymatrix,
         p <- plotGeneBody.internal(bodymatrix , conf = conf, xlim = xlim,
                                    xlab = xlab, ylab = ylab,
                                    facet = facet, free_y = free_y,
-                                   box=box, ...)
+                                   box = box, 
+                                   extension = extension,...)
     } else {
         p <- plotGeneBody.internal(bodymatrix , xlim = xlim,
                                    xlab = xlab, ylab = ylab,
                                    facet = facet, free_y = free_y, 
-                                   box=box, ...)
+                                   box = box, 
+                                   extension = extension, ...)
     }
     return(p)
 }
@@ -416,6 +420,7 @@ plotGeneBody.internal <- function(bodymatrix, conf,
                                   ylab = "Peak Count Frequency",
                                   facet="none", free_y = TRUE,
                                   box,
+                                  extension,
                                   ...) {
     
     listFlag <- FALSE
@@ -462,16 +467,35 @@ plotGeneBody.internal <- function(bodymatrix, conf,
     
     p <- p + geom_line(aes(y = value))
     
-    p <- p + scale_x_continuous(breaks=c(1, 
-                                         floor(box*0.25),
-                                         floor(box*0.5),
-                                         floor(box*0.75),
-                                         box),
-                                labels=c("1 box", 
-                                         paste(floor(box*0.25),"box",seq=" "),
-                                         paste(floor(box*0.5),"box",seq=" "),
-                                         paste(floor(box*0.75),"box",seq=" "),
-                                         paste(box,"box",seq=" ")))
+    if(extension){
+        p <- p + geom_vline(xintercept=floor(box*0.5),
+                            linetype="longdash")
+    }
+    
+    
+    if(extension){
+        p <- p + scale_x_continuous(breaks=c(1, 
+                                             floor(box*0.25),
+                                             floor(box*0.5),
+                                             floor(box*0.75),
+                                             box),
+                                    labels=c("-50", 
+                                             "-25%",
+                                             "TSS",
+                                             "25%",
+                                             "50%"))
+    }else{
+        p <- p + scale_x_continuous(breaks=c(1, 
+                                             floor(box*0.25),
+                                             floor(box*0.5),
+                                             floor(box*0.75),
+                                             box),
+                                    labels=c("TSS", 
+                                             "25%",
+                                             "50%",
+                                             "75%",
+                                             "TES"))
+    }
     
     
     if (listFlag) {
@@ -545,8 +569,10 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
     if(type=="promoters"){
         genebody <- getPromoters(TxDb=txdb, 
                                  upstream=upstream, downstream=downstream)
+        extension <- T
     }else{
         genebody <- getGeneBody(TxDb = txdb, type = type)
+        extension <- F
     }
     
     
@@ -585,13 +611,15 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                                    xlim = xlim,
                                    xlab = xlab, ylab = ylab, conf = conf,
                                    box=box,
-                                   facet = facet, free_y = free_y, ...)
+                                   facet = facet, free_y = free_y, 
+                                   extension = extension, ...)
     } else {
         p <- plotGeneBody.internal(bodymatrix,
                                    xlim=xlim,
                                    xlab=xlab, ylab=ylab,
                                    box=box,
-                                   facet = facet, free_y = free_y, ...)
+                                   facet = facet, free_y = free_y, 
+                                   extension = extension...)
     }
     return(p)
 }
