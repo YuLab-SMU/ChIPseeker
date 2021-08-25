@@ -12,6 +12,8 @@ plotGeneBody(
   facet = "none",
   free_y = TRUE,
   extension = F,
+  flankExtension = F,
+  flankExtPer = 0.2,
   ...
 )
 }
@@ -28,7 +30,11 @@ plotGeneBody(
 
 \item{free_y}{if TRUE, y will be scaled}
 
-\item{extension}{if TRUE, extension of TSS region will be drawn, including upstream and downstream}
+\item{extension}{set TRUE to draw the extension of TSS region}
+
+\item{flankExtension}{set TRUE to extend the flank  of TSS and TES}
+
+\item{flankExtPer}{the percentage of flank extension, e.g 0.2, it means (TSS-20%)~(TES+20%)}
 
 \item{...}{}
 }

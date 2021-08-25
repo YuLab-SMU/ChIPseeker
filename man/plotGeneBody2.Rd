@@ -19,6 +19,8 @@ plotGeneBody2(
   min_body_length = 1000,
   upstream = 3000,
   downstream = 3000,
+  flankExtension = F,
+  flankExtPer = 0.2,
   ...
 )
 }
@@ -50,6 +52,10 @@ plotGeneBody2(
 \item{upstream}{upstream, when use this function to draw TSS region}
 
 \item{downstream}{downstream, when use this function to draw TSS region}
+
+\item{flankExtension}{set TRUE to extend the flank  of TSS and TES}
+
+\item{flankExtPer}{the percentage of flank extension, e.g 0.2, it means (TSS-20%)~(TES+20%)}
 }
 \value{
 ggplot object

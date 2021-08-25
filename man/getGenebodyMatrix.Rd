@@ -9,7 +9,10 @@ getGenebodyMatrix(
   weightCol = NULL,
   windows,
   box = 800,
-  min_body_length = 1000
+  min_body_length = 1000,
+  flankExtension = F,
+  flankExtPer = 0.2,
+  ...
 )
 }
 \arguments{
@@ -22,6 +25,10 @@ getGenebodyMatrix(
 \item{box}{the amount of boxes needed to be splited and it should not be more than min_body_length}
 
 \item{min_body_length}{the minimum length that each gene region should be}
+
+\item{flankExtension}{set TRUE to extend the flank  of TSS and TES}
+
+\item{flankExtPer}{the percentage of flank extension, e.g 0.2, it means (TSS-20%)~(TES+20%)}
 }
 \value{
 bodymatrix

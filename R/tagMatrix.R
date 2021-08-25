@@ -261,14 +261,19 @@ getGeneBody <- function(TxDb=NULL,
 ##' @param windows windows a collection of region with equal or not equal size, eg. promoter region, gene region.
 ##' @param box the amount of boxes needed to be splited and it should not be more than min_body_length
 ##' @param min_body_length the minimum length that each gene region should be
+##' @param flankExtension set TRUE to extend the flank  of TSS and TES 
+##' @param flankExtPer the percentage of flank extension, e.g 0.2, it means (TSS-20%)~(TES+20%)
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
 ##' @return bodymatrix
 ##' @export
 getGenebodyMatrix <- function(peak, 
-                              weightCol=NULL, 
+                              weightCol = NULL, 
                               windows, 
-                              box=800,
-                              min_body_length=1000){
+                              box = 800,
+                              min_body_length = 1000,
+                              flankExtension = F,
+                              flankExtPer = 0.2,
+                              ...){
   
   ## the idea was derived from the function of deeptools
   ## (https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html)  
@@ -295,6 +300,14 @@ getGenebodyMatrix <- function(peak,
                               cov.width,
                               type="within", 
                               ignore.strand=TRUE)
+  
+  if(flankExtension){
+    windows1 <-windows
+    start(windows1) <- start(windows1) - floor(width(windows)*flankExtPer)
+    end(windows1) <- end(windows1) + floor(width(windows)*flankExtPer)
+    windows <- windows1
+    box <- floor(box*(1+2*flankExtPer))
+  }
   
   chr.idx <- intersect(names(peak.cov),
                        unique(as.character(seqnames(windows))))

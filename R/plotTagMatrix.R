@@ -362,7 +362,9 @@ plotAvgProf.internal <- function(tagMatrix, conf,
 ##' @param conf confidence interval
 ##' @param facet one of 'none', 'row' and 'column'
 ##' @param free_y if TRUE, y will be scaled 
-##' @param extension if TRUE, extension of TSS region will be drawn, including upstream and downstream
+##' @param extension set TRUE to draw the extension of TSS region 
+##' @param flankExtension set TRUE to extend the flank  of TSS and TES 
+##' @param flankExtPer the percentage of flank extension, e.g 0.2, it means (TSS-20%)~(TES+20%)
 ##' @param ... 
 ##' @return ggplot object
 ##' @export
@@ -370,8 +372,10 @@ plotGeneBody <- function(bodymatrix,
                          xlab = "Scaled Genomic Region (5'->3')",
                          ylab = "Peak Count Frequency",
                          conf,
-                         facet="none", free_y = TRUE,
+                         facet ="none", free_y = TRUE,
                          extension = F,
+                         flankExtension = F,
+                         flankExtPer = 0.2,
                          ...) {
     
     ## S4Vectors change the behavior of ifelse
@@ -386,17 +390,21 @@ plotGeneBody <- function(bodymatrix,
     xlim <- c(1,box)
     
     if (!(missingArg(conf) || is.na(conf))){
-        p <- plotGeneBody.internal(bodymatrix , conf = conf, xlim = xlim,
+        p <- plotGeneBody.internal(bodymatrix , conf = conf, 
                                    xlab = xlab, ylab = ylab,
                                    facet = facet, free_y = free_y,
-                                   box = box, 
-                                   extension = extension,...)
+                                   extension = extension,
+                                   flankExtension = flankExtension,
+                                   flankExtPer = flankExtPer,
+                                   ...)
     } else {
-        p <- plotGeneBody.internal(bodymatrix , xlim = xlim,
+        p <- plotGeneBody.internal(bodymatrix , 
                                    xlab = xlab, ylab = ylab,
                                    facet = facet, free_y = free_y, 
-                                   box = box, 
-                                   extension = extension, ...)
+                                   extension = extension, 
+                                   flankExtension = flankExtension,
+                                   flankExtPer = flankExtPer,
+                                   ...)
     }
     return(p)
 }
@@ -415,12 +423,12 @@ plotGeneBody <- function(bodymatrix,
 ##' @importFrom ggplot2 element_blank
 ##' @importFrom ggplot2 facet_grid
 plotGeneBody.internal <- function(bodymatrix, conf,
-                                  xlim,
                                   xlab = "Scaled Genomic Region (5'->3')",
                                   ylab = "Peak Count Frequency",
                                   facet="none", free_y = TRUE,
-                                  box,
                                   extension,
+                                  flankExtension,
+                                  flankExtPer,
                                   ...) {
     
     listFlag <- FALSE
@@ -433,6 +441,13 @@ plotGeneBody.internal <- function(bodymatrix, conf,
         }
         listFlag <- TRUE
     }
+    
+    if(listFlag){
+        box <- dim(bodymatrix[[1]])[2]
+    }else{
+        box <- dim(bodymatrix)[2]
+    }
+    xlim <- c(1,box)
     
     if ( listFlag ) {
         facet <- match.arg(facet, c("none", "row", "column"))
@@ -468,12 +483,6 @@ plotGeneBody.internal <- function(bodymatrix, conf,
     p <- p + geom_line(aes(y = value))
     
     if(extension){
-        p <- p + geom_vline(xintercept=floor(box*0.5),
-                            linetype="longdash")
-    }
-    
-    
-    if(extension){
         p <- p + scale_x_continuous(breaks=c(1, 
                                              floor(box*0.25),
                                              floor(box*0.5),
@@ -484,17 +493,50 @@ plotGeneBody.internal <- function(bodymatrix, conf,
                                              "TSS",
                                              "25%",
                                              "50%"))
+        
+        p <- p + geom_vline(xintercept=floor(box*0.5),
+                            linetype="longdash")
+        
     }else{
-        p <- p + scale_x_continuous(breaks=c(1, 
-                                             floor(box*0.25),
-                                             floor(box*0.5),
-                                             floor(box*0.75),
-                                             box),
-                                    labels=c("TSS", 
-                                             "25%",
-                                             "50%",
-                                             "75%",
-                                             "TES"))
+        
+        if(flankExtension){
+            
+            flankExtPerlabel <- paste0(flankExtPer*100,"%")
+            
+            p <- p + scale_x_continuous(breaks=c(1, 
+                                                 floor(box*(flankExtPer*100/(100+2*flankExtPer*100))),
+                                                 floor(box*((flankExtPer*100+25)/(100+2*flankExtPer*100))),
+                                                 floor(box*((flankExtPer*100+50)/(100+2*flankExtPer*100))),
+                                                 floor(box*((flankExtPer*100+75)/(100+2*flankExtPer*100))),
+                                                 floor(box*((flankExtPer*100+100)/(100+2*flankExtPer*100))),
+                                                 box),
+                                        labels=c(paste0("-",flankExtPerlabel), 
+                                                 "TSS",
+                                                 "25%",
+                                                 "50%",
+                                                 "75%",
+                                                 "TES",
+                                                 paste0("+",flankExtPerlabel)))
+            p <- p + geom_vline(xintercept=floor(box*(flankExtPer*100/(100+2*flankExtPer*100))),
+                                linetype="longdash")
+            
+            p <- p + geom_vline(xintercept=floor(box*((flankExtPer*100+100)/(100+2*flankExtPer*100))),
+                                linetype="longdash")
+            
+            
+        }else{
+            p <- p + scale_x_continuous(breaks=c(1, 
+                                                 floor(box*0.25),
+                                                 floor(box*0.5),
+                                                 floor(box*0.75),
+                                                 box),
+                                        labels=c("TSS", 
+                                                 "25%",
+                                                 "50%",
+                                                 "75%",
+                                                 "TES"))
+        }
+        
     }
     
     
@@ -544,6 +586,8 @@ plotGeneBody.internal <- function(bodymatrix, conf,
 ##' @param min_body_length the minimum length that each gene region should be 
 ##' @param downstream downstream, when use this function to draw TSS region
 ##' @param upstream upstream, when use this function to draw TSS region
+##' @param flankExtension set TRUE to extend the flank  of TSS and TES 
+##' @param flankExtPer the percentage of flank extension, e.g 0.2, it means (TSS-20%)~(TES+20%)
 ##' @return ggplot object
 ##' @export
 plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
@@ -554,10 +598,13 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                           facet = "none",
                           free_y = TRUE,
                           verbose = TRUE, 
-                          box=800,
-                          min_body_length=1000, 
-                          upstream=3000,
-                          downstream=3000,...) {
+                          box = 800,
+                          min_body_length = 1000, 
+                          upstream = 3000,
+                          downstream = 3000,
+                          flankExtension = F,
+                          flankExtPer = 0.2,
+                          ...) {
     
     if (verbose) {
         cat(">> preparing genebody regions...\t",
@@ -576,7 +623,6 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
     }
     
     
-    
     if (verbose) {
         cat(">> preparing genebody matrix...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
@@ -587,39 +633,42 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                              weightCol=weightCol, 
                              windows=genebody,
                              box=box,
-                             min_body_length=min_body_length)
+                             min_body_length=min_body_length,
+                             flankExtension=flankExtension,
+                             flankExtPer=flankExtPer)
         
     } else {
-        bodymatrix <- getGenebodyMatrix(peak, 
-                                        weightCol, 
-                                        genebody,
-                                        box,
-                                        min_body_length)
+        bodymatrix <- getGenebodyMatrix(peak = peak, 
+                                        weightCol = weightCol, 
+                                        windows = genebody,
+                                        box = box,
+                                        min_body_length = min_body_length,
+                                        flankExtension = flankExtension,
+                                        flankExtPer = flankExtPer)
     }
     
-    
-    xlim <- c(1,box)
     
     if (verbose) {
         cat(">> plotting figure...\t\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     }
     
-    
     if (!(missingArg(conf) || is.na(conf))){
         p <- plotGeneBody.internal(bodymatrix,
-                                   xlim = xlim,
                                    xlab = xlab, ylab = ylab, conf = conf,
-                                   box=box,
                                    facet = facet, free_y = free_y, 
-                                   extension = extension, ...)
+                                   extension = extension, 
+                                   flankExtension = flankExtension,
+                                   flankExtPer = flankExtPer,
+                                   ...)
     } else {
         p <- plotGeneBody.internal(bodymatrix,
-                                   xlim=xlim,
                                    xlab=xlab, ylab=ylab,
-                                   box=box,
                                    facet = facet, free_y = free_y, 
-                                   extension = extension...)
+                                   extension = extension,
+                                   flankExtension = flankExtension,
+                                   flankExtPer = flankExtPer,
+                                   ...)
     }
     return(p)
 }
