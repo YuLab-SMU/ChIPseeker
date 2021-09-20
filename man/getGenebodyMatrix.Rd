@@ -10,8 +10,8 @@ getGenebodyMatrix(
   windows,
   box = 800,
   min_body_length = 1000,
-  flankExtension = F,
-  flankExtPer = 0.2,
+  upstream = NULL,
+  downstream = NULL,
   ...
 )
 }
@@ -26,9 +26,9 @@ getGenebodyMatrix(
 
 \item{min_body_length}{the minimum length that each gene region should be}
 
-\item{flankExtension}{set TRUE to extend the flank  of TSS and TES}
+\item{upstream}{the percentage of upstream flank extension, e.g 0.2, it means (TSS-20%)}
 
-\item{flankExtPer}{the percentage of flank extension, e.g 0.2, it means (TSS-20%)~(TES+20%)}
+\item{downstream}{the percentage of downstream flank extension, e.g 0.2, it means (TES+20%)}
 }
 \value{
 bodymatrix

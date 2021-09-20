@@ -17,10 +17,8 @@ plotGeneBody2(
   verbose = TRUE,
   box = 800,
   min_body_length = 1000,
-  upstream = 3000,
-  downstream = 3000,
-  flankExtension = F,
-  flankExtPer = 0.2,
+  upstream = NULL,
+  downstream = NULL,
   ...
 )
 }
@@ -49,13 +47,13 @@ plotGeneBody2(
 
 \item{min_body_length}{the minimum length that each gene region should be}
 
-\item{upstream}{upstream, when use this function to draw TSS region}
+\item{upstream}{decimal reflects the percentage of flank extension
+numeric reflects the flank of TSS region
+NULL reflects the gene body with no extension}
 
-\item{downstream}{downstream, when use this function to draw TSS region}
-
-\item{flankExtension}{set TRUE to extend the flank  of TSS and TES}
-
-\item{flankExtPer}{the percentage of flank extension, e.g 0.2, it means (TSS-20%)~(TES+20%)}
+\item{downstream}{decimal reflects the percentage of flank extension
+numeric reflects the flank of TSS region
+NULL reflects the gene body with no extension}
 }
 \value{
 ggplot object

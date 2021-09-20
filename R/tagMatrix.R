@@ -14,37 +14,37 @@ getPromoters <- function(TxDb=NULL,
                          upstream=1000,
                          downstream=1000,
                          by = "gene") {
-
-    by <- match.arg(by, c("gene", "transcript"))
-    
-    TxDb <- loadTxDb(TxDb)
-    .ChIPseekerEnv(TxDb)
-    ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
-
-    if ( exists("upstream", envir=ChIPseekerEnv, inherits=FALSE) &&
-        exists("downstream", envir=ChIPseekerEnv, inherits=FALSE) ) {
-        us <- get("upstream", envir=ChIPseekerEnv)
-        ds <- get("downstream", envir=ChIPseekerEnv)
-        if (us == upstream && ds == downstream &&
-            exists("promoters", envir=ChIPseekerEnv, inherits=FALSE) ){
-            promoters <- get("promoters", envir=ChIPseekerEnv)
-            return(promoters)
-        }
+  
+  by <- match.arg(by, c("gene", "transcript"))
+  
+  TxDb <- loadTxDb(TxDb)
+  .ChIPseekerEnv(TxDb)
+  ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
+  
+  if ( exists("upstream", envir=ChIPseekerEnv, inherits=FALSE) &&
+       exists("downstream", envir=ChIPseekerEnv, inherits=FALSE) ) {
+    us <- get("upstream", envir=ChIPseekerEnv)
+    ds <- get("downstream", envir=ChIPseekerEnv)
+    if (us == upstream && ds == downstream &&
+        exists("promoters", envir=ChIPseekerEnv, inherits=FALSE) ){
+      promoters <- get("promoters", envir=ChIPseekerEnv)
+      return(promoters)
     }
-
-    Transcripts <- getGene(TxDb, by)
-    ## get start position based on strand
-    tss <- ifelse(strand(Transcripts) == "+", start(Transcripts), end(Transcripts))
-    promoters <- GRanges(seqnames=seqnames(Transcripts),
-                         ranges=IRanges(tss-upstream, tss+downstream),
-                         strand=strand(Transcripts))
-    promoters <- unique(promoters)
-
-    assign("promoters", promoters, envir=ChIPseekerEnv)
-    assign("upstream", upstream, envir=ChIPseekerEnv)
-    assign("downstream", downstream, envir=ChIPseekerEnv)
-    
-    return(promoters)
+  }
+  
+  Transcripts <- getGene(TxDb, by)
+  ## get start position based on strand
+  tss <- ifelse(strand(Transcripts) == "+", start(Transcripts), end(Transcripts))
+  promoters <- GRanges(seqnames=seqnames(Transcripts),
+                       ranges=IRanges(tss-upstream, tss+downstream),
+                       strand=strand(Transcripts))
+  promoters <- unique(promoters)
+  
+  assign("promoters", promoters, envir=ChIPseekerEnv)
+  assign("upstream", upstream, envir=ChIPseekerEnv)
+  assign("downstream", downstream, envir=ChIPseekerEnv)
+  
+  return(promoters)
 }
 
 ##' prepare a region center on start site of selected feature
@@ -64,45 +64,45 @@ getBioRegion <- function(TxDb=NULL,
                          upstream=1000,
                          downstream=1000,
                          by="gene") {
-    
-    by <- match.arg(by, c("gene", "transcript", "exon", "intron", "3UTR", "5UTR"))
-
-    if (by %in% c("gene", "transcript")) {
-        return(getPromoters(TxDb, upstream, downstream, by))
-    }
-    
-    TxDb <- loadTxDb(TxDb)
-    .ChIPseekerEnv(TxDb)
-    ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
-
-    if (by == "exon") {
-        exonList <- get_exonList(ChIPseekerEnv)
-        regions <-  unlist(exonList)
-    }
-
-    if (by == "intron") {
-        intronList <- get_intronList(ChIPseekerEnv)
-        regions <- unlist(intronList)
-    }
   
-   if (by == "3UTR") {
-        threeUTRList <- threeUTRsByTranscript(TxDb)
-        regions <- unlist(threeUTRList)
-    }
-    
-   if (by == "5UTR") {
-       fiveUTRList <- fiveUTRsByTranscript(TxDb)
-       regions <- unlist(fiveUTRList)
-    }
-
-    start_site <- ifelse(strand(regions) == "+", start(regions), end(regions))
-
-    bioRegion <- GRanges(seqnames=seqnames(regions),
-                         ranges=IRanges(start_site-upstream, start_site+downstream),
-                         strand=strand(regions))
-    bioRegion <- unique(bioRegion)
-
-    return(bioRegion)
+  by <- match.arg(by, c("gene", "transcript", "exon", "intron", "3UTR", "5UTR"))
+  
+  if (by %in% c("gene", "transcript")) {
+    return(getPromoters(TxDb, upstream, downstream, by))
+  }
+  
+  TxDb <- loadTxDb(TxDb)
+  .ChIPseekerEnv(TxDb)
+  ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
+  
+  if (by == "exon") {
+    exonList <- get_exonList(ChIPseekerEnv)
+    regions <-  unlist(exonList)
+  }
+  
+  if (by == "intron") {
+    intronList <- get_intronList(ChIPseekerEnv)
+    regions <- unlist(intronList)
+  }
+  
+  if (by == "3UTR") {
+    threeUTRList <- threeUTRsByTranscript(TxDb)
+    regions <- unlist(threeUTRList)
+  }
+  
+  if (by == "5UTR") {
+    fiveUTRList <- fiveUTRsByTranscript(TxDb)
+    regions <- unlist(fiveUTRList)
+  }
+  
+  start_site <- ifelse(strand(regions) == "+", start(regions), end(regions))
+  
+  bioRegion <- GRanges(seqnames=seqnames(regions),
+                       ranges=IRanges(start_site-upstream, start_site+downstream),
+                       strand=strand(regions))
+  bioRegion <- unique(bioRegion)
+  
+  return(bioRegion)
 }
 
 
@@ -119,100 +119,100 @@ getBioRegion <- function(TxDb=NULL,
 ##' @export
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
 getTagMatrix <- function(peak, weightCol=NULL, windows, flip_minor_strand=TRUE) {
-    peak.gr <- loadPeak(peak)
-    
-    if (! is(windows, "GRanges")) {
-        stop("windows should be a GRanges object...")
-    }
-    if (length(unique(width(windows))) != 1) {
-        stop("width of windows should be equal...")
-    }
-
-    ## if (!exists("ChIPseekerEnv", envir = .GlobalEnv)) {
-    ##     assign("ChIPseekerEnv", new.env(), .GlobalEnv)
-    ## }
-    ## ChIPseekerEnv <- get("ChIPseekerEnv", envir = .GlobalEnv)
-    
-    ## if (exists("peak", envir=ChIPseekerEnv, inherits=FALSE) &&
-    ##     exists("promoters", envir=ChIPseekerEnv, inherits=FALSE) &&
-    ##     exists("weightCol", envir=ChIPseekerEnv, inherits=FALSE) &&
-    ##     exists("tagMatrix", envir=ChIPseekerEnv, inherits=FALSE) ) {
-
-    ##     pp <- get("peak", envir=ChIPseekerEnv)
-    ##     promoters <- get("promoters", envir=ChIPseekerEnv)
-    ##     w <- get("weightCol", envir=ChIPseekerEnv)
-        
-    ##     if (all(pp == peak)) {
-    ##         if (all(windows == promoters)) {
-    ##             if ( (is.null(w) && is.null(weightCol)) ||
-    ##                 (!is.null(w) && !is.null(weightCol) && w == weightCol)) {
-    ##                 tagMatrix <- get("tagMatrix", envir=ChIPseekerEnv)
-    ##                 return(tagMatrix)
-    ##             } else {
-    ##                 assign("weightCol", weightCol, envir=ChIPseekerEnv)
-    ##             }
-    ##         } else {
-    ##             assign("promoters", windows)
-    ##             ## make sure it is not conflict with getPromoters
-    ##             if ( exists("upstream", envir=ChIPseekerEnv, inherits=FALSE))
-    ##                 rm("upstream", envir=ChIPseekerEnv)
-    ##         }
-    ##     } else {
-    ##         assign("peak", peak, envir=ChIPseekerEnv)
-    ##     }
-        
-    ## }
-
-    ## if ( !exists("peak", envir=ChIPseekerEnv, inherits=FALSE)) {
-    ##     assign("peak", peak, envir=ChIPseekerEnv)
-    ## }
-
-    ## if ( !exists("promoters", envir=ChIPseekerEnv, inherits=FALSE)) {
-    ##     assign("promoters", windows, envir=ChIPseekerEnv)
-    ## }
-
-    ## if (!exists("weightCol", envir=ChIPseekerEnv, inherits=FALSE)) {
-    ##     assign("weightCol", weightCol, envir=ChIPseekerEnv)
-    ## }
-    if (is.null(weightCol)) {
-        peak.cov <- coverage(peak.gr)
-    } else {
-        weight <- mcols(peak.gr)[[weightCol]]
-        peak.cov <- coverage(peak.gr, weight=weight)
-    }
-    cov.len <- elementNROWS(peak.cov)
-    cov.width <- GRanges(seqnames=names(cov.len),
-                         IRanges(start=rep(1, length(cov.len)),
-                                 end=cov.len))
-    windows <- subsetByOverlaps(windows, cov.width,
-                                type="within", ignore.strand=TRUE)
-
-    chr.idx <- intersect(names(peak.cov),
-                         unique(as.character(seqnames(windows))))
-    
-    peakView <- Views(peak.cov[chr.idx], as(windows, "IntegerRangesList")[chr.idx])
-    tagMatrixList <- lapply(peakView, function(x) t(viewApply(x, as.vector)))
-    tagMatrix <- do.call("rbind", tagMatrixList)
-
-    ## get the index of windows, that are reorganized by as(windows, "IntegerRangesList")
-    idx.list <- split(1:length(windows),  as.factor(seqnames(windows)))
-    idx <- do.call("c", idx.list)
-    
-    rownames(tagMatrix) <- idx
-    tagMatrix <- tagMatrix[order(idx),]
-    
-    ## minus strand
-    if (flip_minor_strand) {
-        ## should set to FALSE if upstream is not equal to downstream
-        ## can set to TRUE if e.g. 3k-TSS-3k
-        ## should set to FALSE if e.g. 3k-TSS-100
-        minus.idx <- which(as.character(strand(windows)) == "-")
-        tagMatrix[minus.idx,] <- tagMatrix[minus.idx, ncol(tagMatrix):1]
-    }
-
-    tagMatrix <- tagMatrix[rowSums(tagMatrix)!=0,]
-    ## assign("tagMatrix", tagMatrix, envir=ChIPseekerEnv)
-    return(tagMatrix)
+  peak.gr <- loadPeak(peak)
+  
+  if (! is(windows, "GRanges")) {
+    stop("windows should be a GRanges object...")
+  }
+  if (length(unique(width(windows))) != 1) {
+    stop("width of windows should be equal...")
+  }
+  
+  ## if (!exists("ChIPseekerEnv", envir = .GlobalEnv)) {
+  ##     assign("ChIPseekerEnv", new.env(), .GlobalEnv)
+  ## }
+  ## ChIPseekerEnv <- get("ChIPseekerEnv", envir = .GlobalEnv)
+  
+  ## if (exists("peak", envir=ChIPseekerEnv, inherits=FALSE) &&
+  ##     exists("promoters", envir=ChIPseekerEnv, inherits=FALSE) &&
+  ##     exists("weightCol", envir=ChIPseekerEnv, inherits=FALSE) &&
+  ##     exists("tagMatrix", envir=ChIPseekerEnv, inherits=FALSE) ) {
+  
+  ##     pp <- get("peak", envir=ChIPseekerEnv)
+  ##     promoters <- get("promoters", envir=ChIPseekerEnv)
+  ##     w <- get("weightCol", envir=ChIPseekerEnv)
+  
+  ##     if (all(pp == peak)) {
+  ##         if (all(windows == promoters)) {
+  ##             if ( (is.null(w) && is.null(weightCol)) ||
+  ##                 (!is.null(w) && !is.null(weightCol) && w == weightCol)) {
+  ##                 tagMatrix <- get("tagMatrix", envir=ChIPseekerEnv)
+  ##                 return(tagMatrix)
+  ##             } else {
+  ##                 assign("weightCol", weightCol, envir=ChIPseekerEnv)
+  ##             }
+  ##         } else {
+  ##             assign("promoters", windows)
+  ##             ## make sure it is not conflict with getPromoters
+  ##             if ( exists("upstream", envir=ChIPseekerEnv, inherits=FALSE))
+  ##                 rm("upstream", envir=ChIPseekerEnv)
+  ##         }
+  ##     } else {
+  ##         assign("peak", peak, envir=ChIPseekerEnv)
+  ##     }
+  
+  ## }
+  
+  ## if ( !exists("peak", envir=ChIPseekerEnv, inherits=FALSE)) {
+  ##     assign("peak", peak, envir=ChIPseekerEnv)
+  ## }
+  
+  ## if ( !exists("promoters", envir=ChIPseekerEnv, inherits=FALSE)) {
+  ##     assign("promoters", windows, envir=ChIPseekerEnv)
+  ## }
+  
+  ## if (!exists("weightCol", envir=ChIPseekerEnv, inherits=FALSE)) {
+  ##     assign("weightCol", weightCol, envir=ChIPseekerEnv)
+  ## }
+  if (is.null(weightCol)) {
+    peak.cov <- coverage(peak.gr)
+  } else {
+    weight <- mcols(peak.gr)[[weightCol]]
+    peak.cov <- coverage(peak.gr, weight=weight)
+  }
+  cov.len <- elementNROWS(peak.cov)
+  cov.width <- GRanges(seqnames=names(cov.len),
+                       IRanges(start=rep(1, length(cov.len)),
+                               end=cov.len))
+  windows <- subsetByOverlaps(windows, cov.width,
+                              type="within", ignore.strand=TRUE)
+  
+  chr.idx <- intersect(names(peak.cov),
+                       unique(as.character(seqnames(windows))))
+  
+  peakView <- Views(peak.cov[chr.idx], as(windows, "IntegerRangesList")[chr.idx])
+  tagMatrixList <- lapply(peakView, function(x) t(viewApply(x, as.vector)))
+  tagMatrix <- do.call("rbind", tagMatrixList)
+  
+  ## get the index of windows, that are reorganized by as(windows, "IntegerRangesList")
+  idx.list <- split(1:length(windows),  as.factor(seqnames(windows)))
+  idx <- do.call("c", idx.list)
+  
+  rownames(tagMatrix) <- idx
+  tagMatrix <- tagMatrix[order(idx),]
+  
+  ## minus strand
+  if (flip_minor_strand) {
+    ## should set to FALSE if upstream is not equal to downstream
+    ## can set to TRUE if e.g. 3k-TSS-3k
+    ## should set to FALSE if e.g. 3k-TSS-100
+    minus.idx <- which(as.character(strand(windows)) == "-")
+    tagMatrix[minus.idx,] <- tagMatrix[minus.idx, ncol(tagMatrix):1]
+  }
+  
+  tagMatrix <- tagMatrix[rowSums(tagMatrix)!=0,]
+  ## assign("tagMatrix", tagMatrix, envir=ChIPseekerEnv)
+  return(tagMatrix)
 }
 
 
@@ -261,8 +261,8 @@ getGeneBody <- function(TxDb=NULL,
 ##' @param windows windows a collection of region with equal or not equal size, eg. promoter region, gene region.
 ##' @param box the amount of boxes needed to be splited and it should not be more than min_body_length
 ##' @param min_body_length the minimum length that each gene region should be
-##' @param flankExtension set TRUE to extend the flank  of TSS and TES 
-##' @param flankExtPer the percentage of flank extension, e.g 0.2, it means (TSS-20%)~(TES+20%)
+##' @param upstream the percentage of upstream flank extension, e.g 0.2, it means (TSS-20%)
+##' @param downstream the percentage of downstream flank extension, e.g 0.2, it means (TES+20%) 
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
 ##' @return bodymatrix
 ##' @export
@@ -271,8 +271,8 @@ getGenebodyMatrix <- function(peak,
                               windows, 
                               box = 800,
                               min_body_length = 1000,
-                              flankExtension = F,
-                              flankExtPer = 0.2,
+                              upstream = NULL,
+                              downstream = NULL,
                               ...){
   
   ## the idea was derived from the function of deeptools
@@ -281,6 +281,34 @@ getGenebodyMatrix <- function(peak,
   
   if (! is(windows, "GRanges")) {
     stop("windows should be a GRanges object...")
+  }
+  
+  ## downstream and upstream parameter should be decimal or NULL
+  ## decimal is for genebody region with flank extension
+  ## NULL is for genebody region with no flank extension or TSS region
+  if((!is.numeric(upstream) & !is.null(upstream)) 
+     | (!is.numeric(downstream) & !is.null(downstream))){
+    stop("upstream and downstream parameter should be decimal or NULL...")
+  }
+  
+  if(!is.null(upstream)){
+    if(upstream > 1 | upstream < 0){
+      warning("upstream and downstream parameter should be decimal or NULL...")
+      upstream <- NULL
+    }
+  }
+  
+  if(!is.null(downstream)){
+    if(downstream > 1 | downstream < 0){
+      warning("upstream and downstream parameter should be decimal or NULL...")
+      downstream <- NULL
+    }
+  }
+  
+  ## if getting TSS region, upstream and downstream parameter should only be NULL
+  if(sum(!duplicated(width(windows)))==1 & (!is.null(upstream) | !is.null(downstream))){
+    stop("windows is a GRanges object with equal length(e.g promoter region).\n",
+         "If you want to extend it, try to extend it when getting windows.")
   }
   
   if (is.null(weightCol)) {
@@ -301,12 +329,41 @@ getGenebodyMatrix <- function(peak,
                               type="within", 
                               ignore.strand=TRUE)
   
-  if(flankExtension){
+  if(is.null(upstream) & is.null(downstream)){
+    cat(">> preparing matrix with no flank extension...\t",
+        format(Sys.time(), "%Y-%m-%d %X"),"\n")
+  }else if(is.null(upstream) | is.null(downstream)){
+    
+    if(is.null(downstream)){
+      windows1 <-windows
+      start(windows1) <- start(windows1) - floor(width(windows)*upstream)
+      end(windows1) <- end(windows1)
+      windows <- windows1
+      box <- floor(box*(1+upstream))
+      
+      cat(">> preparing matrix with upstream flank extension...\t",
+          format(Sys.time(), "%Y-%m-%d %X"),"\n")
+    }else if(is.null(upstream)){
+      windows1 <-windows
+      start(windows1) <- start(windows1)
+      end(windows1) <- end(windows1) + floor(width(windows)*downstream)
+      windows <- windows1
+      box <- floor(box*(1+downstream))
+      
+      cat(">> preparing matrix with downstream flank extension...\t",
+          format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    }
+    
+  }else{
     windows1 <-windows
-    start(windows1) <- start(windows1) - floor(width(windows)*flankExtPer)
-    end(windows1) <- end(windows1) + floor(width(windows)*flankExtPer)
+    start(windows1) <- start(windows1) - floor(width(windows)*upstream)
+    end(windows1) <- end(windows1) + floor(width(windows)*downstream)
     windows <- windows1
-    box <- floor(box*(1+2*flankExtPer))
+    box <- floor(box*(1+downstream+upstream))
+    
+    cat(">> preparing matrix with upstream and downstream flank extension from ",
+        "(TSS-",100*upstream,")~(TES+",100*downstream,")...\t",
+        format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
   }
   
   chr.idx <- intersect(names(peak.cov),
