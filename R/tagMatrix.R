@@ -267,7 +267,8 @@ getGeneBody <- function(TxDb=NULL,
 ##' @param downstream rel object reflects the percentage of flank extension, e.g rel(0.2)
 ##'                   integer reflects the actual length of flank extension
 ##'                   default(NULL) reflects the gene body with no extension
-##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges ggplot2
+##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges 
+##' @importFrom ggplot2 rel
 ##' @return bodymatrix
 ##' @export
 getGenebodyMatrix <- function(peak, 

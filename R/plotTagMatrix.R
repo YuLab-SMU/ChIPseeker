@@ -371,7 +371,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
 ##' @param is_TSSregion plotting TSS region or not
 ##' @param ... 
 ##' @return ggplot object
-##' @import ggplot2
+##' @importFrom ggplot2 rel
 ##' @export
 plotGeneBody <- function(bodymatrix, 
                          xlab = "Scaled Genomic Region (5'->3')",
@@ -621,7 +621,7 @@ plotGeneBody.internal <- function(bodymatrix, conf,
 ##'                   integer reflects the actual length of flank extension or TSS region
 ##'                   NULL reflects the gene body with no extension
 ##' @param is_TSSregion plotting TSS region or not
-##' @import ggplot2
+##' @importFrom ggplot2 rel
 ##' @return ggplot object
 ##' @export
 plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,

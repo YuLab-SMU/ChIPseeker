@@ -447,7 +447,7 @@ GenomicRanges::GRangesList
 ##' @param upstream upstream
 ##' @param downstream downstream
 ##'
-##' @import ggplot2
+##' @importFrom ggplot2 rel
 
 check_upstream_and_downstream <- function(upstream, downstream){
     
