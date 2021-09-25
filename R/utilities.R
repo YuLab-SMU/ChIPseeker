@@ -494,3 +494,8 @@ check_upstream_and_downstream <- function(upstream, downstream){
     
 }
 
+##' @importFrom ggplot2 rel
+##' 
+##' @export
+ggplot2::rel
+
