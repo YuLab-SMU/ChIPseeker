@@ -438,3 +438,59 @@ GenomicRanges::GRangesList
     structure(as.list(match.call()[-1]), env = .env, class = "quoted")
 }
 
+
+##' check upstream and downstream parameter
+##' 
+##' 
+##' check_upstream_and_downstream
+##'
+##' @param upstream upstream
+##' @param downstream downstream
+##'
+##' @import ggplot2
+
+check_upstream_and_downstream <- function(upstream, downstream){
+    
+    ## downstream and upstream parameter should be numeric or NULL
+    if((!is.numeric(upstream) & !is.null(upstream)) 
+       | (!is.numeric(downstream) & !is.null(downstream))){
+        stop("upstream and downstream parameter should be numeric or NULL...")
+    }
+    
+    ## upstream and downstream parameter should be the same type
+    ## check rel object
+    if(inherits(upstream, 'rel') | inherits(downstream, 'rel')){
+        if(!(inherits(downstream, 'rel') & inherits(upstream, 'rel'))){
+            stop('upstream and downstream parameter should be the same type...')
+        }
+        
+        ## the value of rel object should be in (0,1)
+        if((as.numeric(upstream) < 0 | as.numeric(upstream) >1 ) | 
+           (as.numeric(downstream) < 0 | as.numeric(downstream) > 1)){
+            stop('the value of rel object should be in (0,1)...')
+        }
+    }
+    
+    ## check NULL
+    if(is.null(upstream) | is.null(downstream)){
+        if(!(is.null(downstream) & is.null(upstream))){
+            stop('upstream and downstream parameter should be the same type...')
+        }
+    }
+    
+    ## check actual number
+    if((is.numeric(upstream) & !inherits(upstream, 'rel')) | 
+       (is.numeric(downstream) & !inherits(downstream, 'rel'))){
+        
+        if(!((is.numeric(upstream) & !inherits(upstream, 'rel')) & 
+             (is.numeric(downstream) & !inherits(downstream, 'rel')))){
+            stop('upstream and downstream parameter should be the same type...')
+        }
+        
+        if(upstream < 1 | downstream < 1){
+            stop('if upstream or downstream is integer, the value of it should be greater than 1...')
+        }
+    }
+    
+}
+

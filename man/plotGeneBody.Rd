@@ -13,6 +13,7 @@ plotGeneBody(
   free_y = TRUE,
   upstream = NULL,
   downstream = NULL,
+  is_TSSregion = F,
   ...
 )
 }
@@ -29,13 +30,15 @@ plotGeneBody(
 
 \item{free_y}{if TRUE, y will be scaled}
 
-\item{upstream}{decimal reflects the percentage of flank extension
-numeric reflects the flank of TSS region
+\item{upstream}{rel object reflects the percentage of flank extension, e.g rel(0.2)
+integer reflects the actual length of flank extension or TSS region
 NULL reflects the gene body with no extension}
 
-\item{downstream}{decimal reflects the percentage of flank extension
-numeric reflects the flank of TSS region
+\item{downstream}{rel object reflects the percentage of flank extension, e.g rel(0.2)
+integer reflects the actual length of flank extension or TSS region
 NULL reflects the gene body with no extension}
+
+\item{is_TSSregion}{plotting TSS region or not}
 
 \item{...}{}
 }

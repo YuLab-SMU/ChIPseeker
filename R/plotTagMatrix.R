@@ -362,14 +362,16 @@ plotAvgProf.internal <- function(tagMatrix, conf,
 ##' @param conf confidence interval
 ##' @param facet one of 'none', 'row' and 'column'
 ##' @param free_y if TRUE, y will be scaled 
-##' @param upstream decimal reflects the percentage of flank extension
-##'                 numeric reflects the flank of TSS region
+##' @param upstream rel object reflects the percentage of flank extension, e.g rel(0.2)
+##'                 integer reflects the actual length of flank extension or TSS region
 ##'                 NULL reflects the gene body with no extension
-##' @param downstream decimal reflects the percentage of flank extension
-##'                   numeric reflects the flank of TSS region
+##' @param downstream rel object reflects the percentage of flank extension, e.g rel(0.2)
+##'                   integer reflects the actual length of flank extension or TSS region
 ##'                   NULL reflects the gene body with no extension
+##' @param is_TSSregion plotting TSS region or not
 ##' @param ... 
 ##' @return ggplot object
+##' @import ggplot2
 ##' @export
 plotGeneBody <- function(bodymatrix, 
                          xlab = "Scaled Genomic Region (5'->3')",
@@ -378,6 +380,7 @@ plotGeneBody <- function(bodymatrix,
                          facet ="none", free_y = TRUE,
                          upstream = NULL,
                          downstream = NULL,
+                         is_TSSregion = F,
                          ...) {
     
     ## S4Vectors change the behavior of ifelse
@@ -385,18 +388,9 @@ plotGeneBody <- function(bodymatrix,
     ##
     ## conf <- ifelse(missingArg(conf), NA, conf)
     
-    if((!is.numeric(upstream) & !is.null(upstream)) 
-       | (!is.numeric(downstream) & !is.null(downstream))){
-        stop("upstream and downstream parameter should be numeric or NULL.\n",
-             "integer is for flank of TSS region.\n",
-             "decimal is for extension of genebody region.\n",
-             "NULL reflects no extension of genebody region")
-    }
+    check_upstream_and_downstream(upstream = upstream, downstream = downstream)
     
     conf <- if(missingArg(conf)) NA else conf
-    
-    box <- dim(bodymatrix)[2]
-    xlim <- c(1,box)
     
     if (!(missingArg(conf) || is.na(conf))){
         p <- plotGeneBody.internal(bodymatrix , conf = conf, 
@@ -404,6 +398,7 @@ plotGeneBody <- function(bodymatrix,
                                    facet = facet, free_y = free_y,
                                    upstream = upstream,
                                    downstream = downstream,
+                                   is_TSSregion = is_TSSregion,
                                    ...)
     } else {
         p <- plotGeneBody.internal(bodymatrix , 
@@ -411,6 +406,7 @@ plotGeneBody <- function(bodymatrix,
                                    facet = facet, free_y = free_y, 
                                    upstream = upstream,
                                    downstream = downstream,
+                                   is_TSSregion = is_TSSregion,
                                    ...)
     }
     return(p)
@@ -429,12 +425,14 @@ plotGeneBody <- function(bodymatrix,
 ##' @importFrom ggplot2 theme
 ##' @importFrom ggplot2 element_blank
 ##' @importFrom ggplot2 facet_grid
+##' @importFrom ggplot2 rel
 plotGeneBody.internal <- function(bodymatrix, conf,
                                   xlab = "Scaled Genomic Region (5'->3')",
                                   ylab = "Peak Count Frequency",
                                   facet="none", free_y = TRUE,
                                   upstream = NULL,
                                   downstream = NULL,
+                                  is_TSSregion,
                                   ...) {
     
     listFlag <- FALSE
@@ -488,7 +486,8 @@ plotGeneBody.internal <- function(bodymatrix, conf,
     
     p <- p + geom_line(aes(y = value))
     
-    if(is.null(upstream) & is.null(downstream)){
+    ## x_scale for gene body with no flank extension
+    if(is.null(upstream) | is.null(downstream)){
         p <- p + scale_x_continuous(breaks=c(1, 
                                              floor(box*0.25),
                                              floor(box*0.5),
@@ -499,83 +498,75 @@ plotGeneBody.internal <- function(bodymatrix, conf,
                                              "50%",
                                              "75%",
                                              "TES"))
+    }
+    
+    
+    ## x_scale for flank extension by relative value
+    if(inherits(upstream, 'rel')){
         
-    }else if(is.null(upstream) | is.null(downstream)){
-        
-        if(is.null(upstream)){
-            p <- p + scale_x_continuous(breaks=c(1, 
-                                                 floor(box*(25/(100+downstream*100))),
-                                                 floor(box*(50/(100+downstream*100))),
-                                                 floor(box*(75/(100+downstream*100))),
-                                                 floor(box*(100/(100+downstream*100))),
-                                                 box),
-                                        labels=c("TSS",
-                                                 "25%",
-                                                 "50%",
-                                                 "75%",
-                                                 "TES",
-                                                 paste0("+",downstream*100,"%")))
-            
-            p <- p + geom_vline(xintercept=floor(box*(100/(100+downstream*100))),
-                                linetype="longdash")
-        }else if(is.null(downstream)){
-            
-            p <- p + scale_x_continuous(breaks=c(1, 
-                                                 floor(box*(upstream*100/(100+upstream*100))),
-                                                 floor(box*((upstream*100+25)/(100+upstream*100))),
-                                                 floor(box*((upstream*100+50)/(100+upstream*100))),
-                                                 floor(box*((upstream*100+75)/(100+upstream*100))),
-                                                 box),
-                                        labels=c(paste0("-",upstream*100,"%"), 
-                                                 "TSS",
-                                                 "25%",
-                                                 "50%",
-                                                 "75%",
-                                                 "TES"))
-            
-            p <- p + geom_vline(xintercept=floor(box*(upstream*100/(100+upstream*100))),
-                                linetype="longdash")
-        }else{
-            stop("If one of the upstream and downstream parameter is NULL,",
-                 "the other should be decimal...")
-        }
-        
-    }else if(upstream < 1 & upstream > 0 & downstream < 1 & downstream > 0){
         p <- p + scale_x_continuous(breaks=c(1, 
-                                             floor(box*(upstream*100/(100+(upstream+downstream)*100))),
-                                             floor(box*((upstream*100+25)/(100+(upstream+downstream)*100))),
-                                             floor(box*((upstream*100+50)/(100+(upstream+downstream)*100))),
-                                             floor(box*((upstream*100+75)/(100+(upstream+downstream)*100))),
-                                             floor(box*((upstream*100+100)/(100+(upstream+downstream)*100))),
+                                             floor(box*(as.numeric(upstream)*100/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                             floor(box*((as.numeric(upstream)*100+25)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                             floor(box*((as.numeric(upstream)*100+50)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                             floor(box*((as.numeric(upstream)*100+75)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                             floor(box*((as.numeric(upstream)*100+100)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
                                              box),
-                                    labels=c(paste0("-",upstream*100,"%"), 
+                                    labels=c(paste0("-",as.numeric(upstream)*100,"%"), 
                                              "TSS",
                                              "25%",
                                              "50%",
                                              "75%",
                                              "TES",
-                                             paste0("+",downstream*100,"%")))
-        p <- p + geom_vline(xintercept=floor(box*(upstream*100/(100+(upstream+downstream)*100))),
+                                             paste0("+",as.numeric(downstream)*100,"%")))
+        p <- p + geom_vline(xintercept=floor(box*(as.numeric(upstream)*100/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
                             linetype="longdash")
         
-        p <- p + geom_vline(xintercept=floor(box*((upstream*100+100)/(100+(upstream+downstream)*100))),
+        p <- p + geom_vline(xintercept=floor(box*((as.numeric(upstream)*100+100)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
                             linetype="longdash")
-    }else if(downstream > 1 & upstream > 1){
+    }
+    
+    ## x_scale for flank extension by absolute value
+    if(!is.null(upstream) & !inherits(upstream, 'rel') & !is_TSSregion){
+        
+        upstreamPer <- floor(upstream/1000)*0.1
+        downstreamPer <- floor(downstream/1000)*0.1
+        
+        p <- p + scale_x_continuous(breaks=c(1, 
+                                             floor(box*(upstreamPer/(1+upstreamPer+downstreamPer))),
+                                             floor(box*((upstreamPer+0.25)/(1+upstreamPer+downstreamPer))),
+                                             floor(box*((upstreamPer+0.5)/(1+upstreamPer+downstreamPer))),
+                                             floor(box*((upstreamPer+0.75)/(1+upstreamPer+downstreamPer))),
+                                             floor(box*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
+                                             box),
+                                    labels=c(paste0("-",upstream), 
+                                             "TSS",
+                                             "25%",
+                                             "50%",
+                                             "75%",
+                                             "TES",
+                                             paste0(downstream)))
+        p <- p + geom_vline(xintercept=floor(box*(upstreamPer/(1+upstreamPer+downstreamPer))),
+                            linetype="longdash")
+        
+        p <- p + geom_vline(xintercept=floor(box*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
+                            linetype="longdash")
+    }
+    
+    ## x_scale for TSS region
+    if(is_TSSregion){
         p <- p + scale_x_continuous(breaks=c(1, 
                                              floor(box*0.25),
                                              floor(box*0.5),
                                              floor(box*0.75),
                                              box),
                                     labels=c(paste0("-",upstream,"bp"), 
-                                             paste0("-",floor(upstream*0.5),"bp"),
+                                             paste0("-",floor(upstream*0.5)," bp"),
                                              "TSS",
-                                             paste0(floor(downstream*0.5),"bp"),
+                                             paste0(floor(downstream*0.5)," bp"),
                                              paste0(downstream,"bp")))
         
         p <- p + geom_vline(xintercept=floor(box*0.5),
                             linetype="longdash")
-    }else{
-        stop("upstream and downstream parameter should both be decimal、integer or NULL...")
     }
     
     
@@ -623,12 +614,14 @@ plotGeneBody.internal <- function(bodymatrix, conf,
 ##' @param verbose print message or not
 ##' @param box the amount of boxes needed to be splited and it should not be more than min_body_length
 ##' @param min_body_length the minimum length that each gene region should be 
-##' @param upstream decimal reflects the percentage of flank extension
-##'                 numeric reflects the flank of TSS region
+##' @param upstream rel object reflects the percentage of flank extension, e.g rel(0.2)
+##'                 integer reflects the actual length of flank extension or TSS region
 ##'                 NULL reflects the gene body with no extension
-##' @param downstream decimal reflects the percentage of flank extension
-##'                   numeric reflects the flank of TSS region
+##' @param downstream rel object reflects the percentage of flank extension, e.g rel(0.2)
+##'                   integer reflects the actual length of flank extension or TSS region
 ##'                   NULL reflects the gene body with no extension
+##' @param is_TSSregion plotting TSS region or not
+##' @import ggplot2
 ##' @return ggplot object
 ##' @export
 plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
@@ -645,6 +638,9 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                           downstream = NULL,
                           ...) {
     
+    ## check upstream and downstream value
+    check_upstream_and_downstream(upstream = upstream, downstream = downstream)
+    
     ## store the value of upstream and downstream
     temp_upstream <- upstream
     temp_downstream <- downstream
@@ -654,14 +650,6 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     }
     
-    if((!is.numeric(upstream) & !is.null(upstream)) 
-       | (!is.numeric(downstream) & !is.null(downstream))){
-        stop("upstream and downstream parameter should be numeric or NULL.\n",
-             "integer is for flank of TSS region.\n",
-             "decimal is for extension of genebody region.\n",
-             "NULL reflects no extension of genebody region")
-    }
-    
     ## TSS region is also supported
     type <- match.arg(type, c("genes", "exon", "intron", "promoters"))
     if(type=="promoters"){
@@ -669,6 +657,8 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
             stop("upstream and downstream parameter for TSS region should be ",
                  "integer(the actual bp for TSS flank...)")
         }
+        
+        is_TSSregion <- T
         
         genebody <- getPromoters(TxDb=txdb, 
                                  upstream=upstream, 
@@ -681,7 +671,7 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
     }else{
         
         genebody <- getGeneBody(TxDb = txdb, type = type)
-        
+        is_TSSregion <- F
     }
     
     
@@ -725,6 +715,7 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                                    facet = facet, free_y = free_y, 
                                    upstream = upstream,
                                    downstream = downstream,
+                                   is_TSSregion = is_TSSregion,
                                    ...)
     } else {
         p <- plotGeneBody.internal(bodymatrix,
@@ -732,6 +723,7 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                                    facet = facet, free_y = free_y, 
                                    upstream = upstream,
                                    downstream = downstream,
+                                   is_TSSregion = is_TSSregion,
                                    ...)
     }
     return(p)

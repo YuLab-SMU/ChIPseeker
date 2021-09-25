@@ -261,9 +261,13 @@ getGeneBody <- function(TxDb=NULL,
 ##' @param windows windows a collection of region with equal or not equal size, eg. promoter region, gene region.
 ##' @param box the amount of boxes needed to be splited and it should not be more than min_body_length
 ##' @param min_body_length the minimum length that each gene region should be
-##' @param upstream the percentage of upstream flank extension, e.g 0.2, it means (TSS-20%)
-##' @param downstream the percentage of downstream flank extension, e.g 0.2, it means (TES+20%) 
-##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
+##' @param upstream rel object reflects the percentage of flank extension, e.g rel(0.2)
+##'                 integer reflects the actual length of flank extension
+##'                 default(NULL) reflects the gene body with no extension 
+##' @param downstream rel object reflects the percentage of flank extension, e.g rel(0.2)
+##'                   integer reflects the actual length of flank extension
+##'                   default(NULL) reflects the gene body with no extension
+##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges ggplot2
 ##' @return bodymatrix
 ##' @export
 getGenebodyMatrix <- function(peak, 
@@ -283,30 +287,11 @@ getGenebodyMatrix <- function(peak,
     stop("windows should be a GRanges object...")
   }
   
-  ## downstream and upstream parameter should be decimal or NULL
-  ## decimal is for genebody region with flank extension
-  ## NULL is for genebody region with no flank extension or TSS region
-  if((!is.numeric(upstream) & !is.null(upstream)) 
-     | (!is.numeric(downstream) & !is.null(downstream))){
-    stop("upstream and downstream parameter should be decimal or NULL...")
-  }
-  
-  if(!is.null(upstream)){
-    if(upstream > 1 | upstream < 0){
-      warning("upstream and downstream parameter should be decimal or NULL...")
-      upstream <- NULL
-    }
-  }
-  
-  if(!is.null(downstream)){
-    if(downstream > 1 | downstream < 0){
-      warning("upstream and downstream parameter should be decimal or NULL...")
-      downstream <- NULL
-    }
-  }
+  ## check upstream and downstream parameter
+  check_upstream_and_downstream(upstream = upstream, downstream = downstream)
   
   ## if getting TSS region, upstream and downstream parameter should only be NULL
-  if(sum(!duplicated(width(windows)))==1 & (!is.null(upstream) | !is.null(downstream))){
+  if(sum(!duplicated(width(windows))) == 1 & (!is.null(upstream) | !is.null(downstream))){
     stop("windows is a GRanges object with equal length(e.g promoter region).\n",
          "If you want to extend it, try to extend it when getting windows.")
   }
@@ -329,40 +314,41 @@ getGenebodyMatrix <- function(peak,
                               type="within", 
                               ignore.strand=TRUE)
   
-  if(is.null(upstream) & is.null(downstream)){
-    cat(">> preparing matrix with no flank extension...\t",
-        format(Sys.time(), "%Y-%m-%d %X"),"\n")
-  }else if(is.null(upstream) | is.null(downstream)){
+  ## extend the windows by upstream and downstream parameter
+  if(inherits(upstream, 'rel') | inherits(downstream, 'rel')){
     
-    if(is.null(downstream)){
-      windows1 <-windows
-      start(windows1) <- start(windows1) - floor(width(windows)*upstream)
-      end(windows1) <- end(windows1)
-      windows <- windows1
-      box <- floor(box*(1+upstream))
-      
-      cat(">> preparing matrix with upstream flank extension...\t",
-          format(Sys.time(), "%Y-%m-%d %X"),"\n")
-    }else if(is.null(upstream)){
-      windows1 <-windows
-      start(windows1) <- start(windows1)
-      end(windows1) <- end(windows1) + floor(width(windows)*downstream)
-      windows <- windows1
-      box <- floor(box*(1+downstream))
-      
-      cat(">> preparing matrix with downstream flank extension...\t",
-          format(Sys.time(), "%Y-%m-%d %X"), "\n")
-    }
-    
-  }else{
-    windows1 <-windows
-    start(windows1) <- start(windows1) - floor(width(windows)*upstream)
-    end(windows1) <- end(windows1) + floor(width(windows)*downstream)
+    windows1 <- windows
+    start(windows1) <- start(windows1) - floor(width(windows)*as.numeric(upstream))
+    end(windows1) <- end(windows1) + floor(width(windows)*as.numeric(downstream))
     windows <- windows1
-    box <- floor(box*(1+downstream+upstream))
+    box <- floor(box*(1+as.numeric(downstream)+as.numeric(upstream)))
     
     cat(">> preparing matrix with upstream and downstream flank extension from ",
-        "(TSS-",100*upstream,")~(TES+",100*downstream,")...\t",
+        "(TSS-",100*as.numeric(upstream),"%)~(TES+",100*as.numeric(downstream),"%)...\t",
+        format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
+  }
+  
+  if(is.null(upstream) | is.null(downstream)){
+    if(sum(!duplicated(width(windows))) == 1){
+      cat(">> preparing matrix for TSS region...\t",
+          format(Sys.time(), "%Y-%m-%d %X"),"\n")
+    }else{
+      cat(">> preparing matrix with no flank extension...\t",
+          format(Sys.time(), "%Y-%m-%d %X"),"\n")
+    }
+  }
+  
+  if(!is.null(upstream) & !inherits(upstream, 'rel')){
+    windows1 <- windows
+    start(windows1) <- start(windows1) - upstream
+    end(windows1) <- end(windows1) + downstream
+    windows <- windows1
+    upstreamPer <- floor(upstream/1000)*0.1
+    downstreamPer <- floor(downstream/1000)*0.1
+    box <- floor(box*(1+upstreamPer+downstreamPer))
+    
+    cat(">> preparing matrix with upstream and downstream flank extension from ",
+        "(TSS-",upstream,"bp)~(TES+",downstream,"bp)...\t",
         format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
   }
   
@@ -429,38 +415,140 @@ getGenebodyMatrix <- function(peak,
     
   }else{
     
-    bodyList <- bodyList[vapply(bodyList, function(x) length(x)>0, FUN.VALUE = logical(1))]
-    
-    bodyList <- lapply(bodyList, function(x) x[vapply(x, function(y) length(y)>min_body_length,FUN.VALUE = logical(1))])
-    suppressWarnings(bodyList <- do.call("rbind",bodyList))
-    
-    bodymatrix <- matrix(nrow = length(bodyList),ncol = box)
-    
-    for (i in 1:length(bodyList)) {
+    ## extend genebody by atual number
+    if(!is.null(upstream) & !inherits(upstream, 'rel')){
       
-      seq <- floor(length(bodyList[[i]])/box)
-      cursor <- 1
+      bodyList <- bodyList[vapply(bodyList, function(x) length(x)>0, FUN.VALUE = logical(1))]
       
-      for (j in 1:(box-1)) {
+      bodyList <- lapply(bodyList, function(x) x[vapply(x, function(y) length(y)>min_body_length+downstream+upstream,FUN.VALUE = logical(1))])
+      suppressWarnings(bodyList <- do.call("rbind",bodyList))
+      
+      bodymatrix <- matrix(nrow = length(bodyList),ncol = box)
+      
+      upstreambox <- floor(box*(upstreamPer/(1+upstreamPer+downstreamPer)))
+      bodybox <- floor(box*(1/(1+upstreamPer+downstreamPer)))
+      downstreambox <- floor(box*(downstreamPer/(1+upstreamPer+downstreamPer)))
+      
+      # count the upstream 
+      for (i in 1:length(bodyList)) {
         
-        read <- 0
+        seq <- floor(upstream/upstreambox)
+        cursor <- 1
         
-        for (k in cursor:(cursor+seq-1)) {
-          read <- read + bodyList[[i]][k]
+        for (j in 1:(upstreambox-1)) {
+          
+          read <- 0
+          
+          for (k in cursor:(cursor+seq-1)) {
+            read <- read + bodyList[[i]][k]
+          }
+          
+          bodymatrix[i,j] <- read/seq
+          
+          cursor <- cursor+seq
         }
         
-        bodymatrix[i,j] <- read/seq
         
-        cursor <- cursor+seq
+        read <- 0
+        for (k in cursor:upstream) {
+          read <- read+bodyList[[i]][k]
+        }
+        
+        bodymatrix[i,upstreambox] <- read/(upstream-cursor)
       }
       
-      read <- 0
-      for (k in cursor:length(bodyList[[i]])) {
-        read <- read+bodyList[[i]][k]
+      
+      ## count genebody
+      for (i in 1:length(bodyList)) {
+        
+        seq <- floor((length(bodyList[[i]])-upstream-downstream)/bodybox)
+        cursor <- upstream+1
+        
+        for (j in (upstreambox+1):(upstreambox+bodybox-1)) {
+          
+          read <- 0
+          
+          for (k in cursor:(cursor+seq-1)) {
+            read <- read + bodyList[[i]][k]
+          }
+          
+          bodymatrix[i,j] <- read/seq
+          
+          cursor <- cursor+seq
+        }
+        
+        read <- 0
+        for (k in cursor:(length(bodyList[[i]])-downstream)) {
+          read <- read+bodyList[[i]][k]
+        }
+        
+        bodymatrix[i,bodybox+upstreambox] <- read/(length(bodyList[[i]])-downstream-cursor)
       }
       
-      bodymatrix[i,box] <- read/(length(bodyList[[i]])-cursor)
+      
+      ## count downstream
+      for (i in 1:length(bodyList)) {
+        
+        seq <- floor(downstream/downstreambox)
+        cursor <- length(bodyList[[i]])-downstream+1
+        
+        for (j in (upstreambox+bodybox+1):(box-1)) {
+          
+          read <- 0
+          
+          for (k in cursor:(cursor+seq-1)) {
+            read <- read + bodyList[[i]][k]
+          }
+          
+          bodymatrix[i,j] <- read/seq
+          
+          cursor <- cursor+seq
+        }
+        
+        read <- 0
+        for (k in cursor:length(bodyList[[i]])) {
+          read <- read+bodyList[[i]][k]
+        }
+        
+        bodymatrix[i,box] <- read/(length(bodyList[[i]])-cursor)
+      }
+      
+    }else{
+      
+      bodyList <- bodyList[vapply(bodyList, function(x) length(x)>0, FUN.VALUE = logical(1))]
+      
+      bodyList <- lapply(bodyList, function(x) x[vapply(x, function(y) length(y)>min_body_length,FUN.VALUE = logical(1))])
+      suppressWarnings(bodyList <- do.call("rbind",bodyList))
+      
+      bodymatrix <- matrix(nrow = length(bodyList),ncol = box)
+      
+      for (i in 1:length(bodyList)) {
+        
+        seq <- floor(length(bodyList[[i]])/box)
+        cursor <- 1
+        
+        for (j in 1:(box-1)) {
+          
+          read <- 0
+          
+          for (k in cursor:(cursor+seq-1)) {
+            read <- read + bodyList[[i]][k]
+          }
+          
+          bodymatrix[i,j] <- read/seq
+          
+          cursor <- cursor+seq
+        }
+        
+        read <- 0
+        for (k in cursor:length(bodyList[[i]])) {
+          read <- read+bodyList[[i]][k]
+        }
+        
+        bodymatrix[i,box] <- read/(length(bodyList[[i]])-cursor)
+      }
     }
+    
   }
   
   return(bodymatrix)

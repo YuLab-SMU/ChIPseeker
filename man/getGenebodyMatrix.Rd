@@ -26,9 +26,13 @@ getGenebodyMatrix(
 
 \item{min_body_length}{the minimum length that each gene region should be}
 
-\item{upstream}{the percentage of upstream flank extension, e.g 0.2, it means (TSS-20%)}
+\item{upstream}{rel object reflects the percentage of flank extension, e.g rel(0.2)
+integer reflects the actual length of flank extension
+default(NULL) reflects the gene body with no extension}
 
-\item{downstream}{the percentage of downstream flank extension, e.g 0.2, it means (TES+20%)}
+\item{downstream}{rel object reflects the percentage of flank extension, e.g rel(0.2)
+integer reflects the actual length of flank extension
+default(NULL) reflects the gene body with no extension}
 }
 \value{
 bodymatrix
