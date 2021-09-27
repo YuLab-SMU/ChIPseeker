@@ -28,6 +28,10 @@ getPromoters <- function(TxDb=NULL,
     if (us == upstream && ds == downstream &&
         exists("promoters", envir=ChIPseekerEnv, inherits=FALSE) ){
       promoters <- get("promoters", envir=ChIPseekerEnv)
+      
+      ## assign attribute 
+      attr(promoters, 'type') = 'start_region'
+      
       return(promoters)
     }
   }
@@ -44,8 +48,12 @@ getPromoters <- function(TxDb=NULL,
   assign("upstream", upstream, envir=ChIPseekerEnv)
   assign("downstream", downstream, envir=ChIPseekerEnv)
   
+  ## assign attribute 
+  attr(promoters, 'type') = 'start_region'
+  
   return(promoters)
 }
+
 
 ##' prepare a region center on start site of selected feature
 ##'
@@ -101,6 +109,9 @@ getBioRegion <- function(TxDb=NULL,
                        ranges=IRanges(start_site-upstream, start_site+downstream),
                        strand=strand(regions))
   bioRegion <- unique(bioRegion)
+  
+  ## assign attribute 
+  attr(bioRegion, 'type') = 'start_region'
   
   return(bioRegion)
 }
@@ -246,6 +257,9 @@ getGeneBody <- function(TxDb=NULL,
     stop("type must be genes, exon or intron..")
   }
   
+  ## assign attribute 
+  attr(genebody, 'type') = 'genebody'
+  
   return(genebody)
 }
 
@@ -292,7 +306,7 @@ getGenebodyMatrix <- function(peak,
   check_upstream_and_downstream(upstream = upstream, downstream = downstream)
   
   ## if getting TSS region, upstream and downstream parameter should only be NULL
-  if(sum(!duplicated(width(windows))) == 1 & (!is.null(upstream) | !is.null(downstream))){
+  if((attr(windows, 'type') == 'start_region') & (!is.null(upstream) | !is.null(downstream))){
     stop("windows is a GRanges object with equal length(e.g promoter region).\n",
          "If you want to extend it, try to extend it when getting windows.")
   }
@@ -330,11 +344,11 @@ getGenebodyMatrix <- function(peak,
   }
   
   if(is.null(upstream) | is.null(downstream)){
-    if(sum(!duplicated(width(windows))) == 1){
-      cat(">> preparing matrix for TSS region...\t",
+    if(attr(windows, 'type') == 'start_region'){
+      cat(">> preparing matrix for start_region...\t",
           format(Sys.time(), "%Y-%m-%d %X"),"\n")
     }else{
-      cat(">> preparing matrix with no flank extension...\t",
+      cat(">> preparing matrix for bioregion with no flank extension...\t",
           format(Sys.time(), "%Y-%m-%d %X"),"\n")
     }
   }
@@ -551,6 +565,10 @@ getGenebodyMatrix <- function(peak,
     }
     
   }
+  
+  
+  ## assign attribute 
+  attr(bodymatrix, 'type') = attr(windows, 'type')
   
   return(bodymatrix)
 }

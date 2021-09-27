@@ -368,7 +368,6 @@ plotAvgProf.internal <- function(tagMatrix, conf,
 ##' @param downstream rel object reflects the percentage of flank extension, e.g rel(0.2)
 ##'                   integer reflects the actual length of flank extension or TSS region
 ##'                   NULL reflects the gene body with no extension
-##' @param is_TSSregion plotting TSS region or not
 ##' @param ... 
 ##' @return ggplot object
 ##' @importFrom ggplot2 rel
@@ -380,7 +379,6 @@ plotGeneBody <- function(bodymatrix,
                          facet ="none", free_y = TRUE,
                          upstream = NULL,
                          downstream = NULL,
-                         is_TSSregion = F,
                          ...) {
     
     ## S4Vectors change the behavior of ifelse
@@ -398,7 +396,6 @@ plotGeneBody <- function(bodymatrix,
                                    facet = facet, free_y = free_y,
                                    upstream = upstream,
                                    downstream = downstream,
-                                   is_TSSregion = is_TSSregion,
                                    ...)
     } else {
         p <- plotGeneBody.internal(bodymatrix , 
@@ -406,7 +403,6 @@ plotGeneBody <- function(bodymatrix,
                                    facet = facet, free_y = free_y, 
                                    upstream = upstream,
                                    downstream = downstream,
-                                   is_TSSregion = is_TSSregion,
                                    ...)
     }
     return(p)
@@ -432,7 +428,6 @@ plotGeneBody.internal <- function(bodymatrix, conf,
                                   facet="none", free_y = TRUE,
                                   upstream = NULL,
                                   downstream = NULL,
-                                  is_TSSregion,
                                   ...) {
     
     listFlag <- FALSE
@@ -526,7 +521,7 @@ plotGeneBody.internal <- function(bodymatrix, conf,
     }
     
     ## x_scale for flank extension by absolute value
-    if(!is.null(upstream) & !inherits(upstream, 'rel') & !is_TSSregion){
+    if(!is.null(upstream) & !inherits(upstream, 'rel') & (attr(bodymatrix, 'type') != 'start_region')){
         
         upstreamPer <- floor(upstream/1000)*0.1
         downstreamPer <- floor(downstream/1000)*0.1
@@ -538,13 +533,13 @@ plotGeneBody.internal <- function(bodymatrix, conf,
                                              floor(box*((upstreamPer+0.75)/(1+upstreamPer+downstreamPer))),
                                              floor(box*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
                                              box),
-                                    labels=c(paste0("-",upstream), 
+                                    labels=c(paste0("-",upstream,"bp"), 
                                              "TSS",
                                              "25%",
                                              "50%",
                                              "75%",
                                              "TES",
-                                             paste0(downstream)))
+                                             paste0(downstream,"bp")))
         p <- p + geom_vline(xintercept=floor(box*(upstreamPer/(1+upstreamPer+downstreamPer))),
                             linetype="longdash")
         
@@ -553,16 +548,16 @@ plotGeneBody.internal <- function(bodymatrix, conf,
     }
     
     ## x_scale for TSS region
-    if(is_TSSregion){
+    if(attr(bodymatrix, 'type') == 'start_region'){
         p <- p + scale_x_continuous(breaks=c(1, 
                                              floor(box*0.25),
                                              floor(box*0.5),
                                              floor(box*0.75),
                                              box),
                                     labels=c(paste0("-",upstream,"bp"), 
-                                             paste0("-",floor(upstream*0.5)," bp"),
+                                             paste0("-",floor(upstream*0.5),"bp"),
                                              "TSS",
-                                             paste0(floor(downstream*0.5)," bp"),
+                                             paste0(floor(downstream*0.5),"bp"),
                                              paste0(downstream,"bp")))
         
         p <- p + geom_vline(xintercept=floor(box*0.5),
@@ -620,7 +615,6 @@ plotGeneBody.internal <- function(bodymatrix, conf,
 ##' @param downstream rel object reflects the percentage of flank extension, e.g rel(0.2)
 ##'                   integer reflects the actual length of flank extension or TSS region
 ##'                   NULL reflects the gene body with no extension
-##' @param is_TSSregion plotting TSS region or not
 ##' @importFrom ggplot2 rel
 ##' @return ggplot object
 ##' @export
@@ -646,19 +640,17 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
     temp_downstream <- downstream
     
     if (verbose) {
-        cat(">> preparing genebody regions...\t",
+        cat(">> preparing bioregions...\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     }
     
     ## TSS region is also supported
     type <- match.arg(type, c("genes", "exon", "intron", "promoters"))
     if(type=="promoters"){
-        if(upstream < 1 | downstream < 1){
+        if(upstream < 1 | downstream < 1 | inherits(upstream, 'rel') | inherits(downstream, 'rel')){
             stop("upstream and downstream parameter for TSS region should be ",
                  "integer(the actual bp for TSS flank...)")
         }
-        
-        is_TSSregion <- T
         
         genebody <- getPromoters(TxDb=txdb, 
                                  upstream=upstream, 
@@ -671,12 +663,11 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
     }else{
         
         genebody <- getGeneBody(TxDb = txdb, type = type)
-        is_TSSregion <- F
     }
     
     
     if (verbose) {
-        cat(">> preparing genebody matrix...\t\t",
+        cat(">> preparing bioregion matrix...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     }
     
@@ -688,6 +679,9 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                              min_body_length=min_body_length,
                              downstream = downstream,
                              upstream = upstream)
+        
+        ## assign attribute
+        attr(bodymatrix, 'type') = attr(genebody, 'type')
         
     } else {
         bodymatrix <- getGenebodyMatrix(peak = peak, 
@@ -715,7 +709,6 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                                    facet = facet, free_y = free_y, 
                                    upstream = upstream,
                                    downstream = downstream,
-                                   is_TSSregion = is_TSSregion,
                                    ...)
     } else {
         p <- plotGeneBody.internal(bodymatrix,
@@ -723,7 +716,6 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
                                    facet = facet, free_y = free_y, 
                                    upstream = upstream,
                                    downstream = downstream,
-                                   is_TSSregion = is_TSSregion,
                                    ...)
     }
     return(p)

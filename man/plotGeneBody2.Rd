@@ -54,8 +54,6 @@ NULL reflects the gene body with no extension}
 \item{downstream}{rel object reflects the percentage of flank extension, e.g rel(0.2)
 integer reflects the actual length of flank extension or TSS region
 NULL reflects the gene body with no extension}
-
-\item{is_TSSregion}{plotting TSS region or not}
 }
 \value{
 ggplot object
