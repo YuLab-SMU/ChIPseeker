@@ -30,7 +30,7 @@ getPromoters <- function(TxDb=NULL,
       promoters <- get("promoters", envir=ChIPseekerEnv)
       
       ## assign attribute 
-      attr(promoters, 'type') = 'start_region'
+      attr(promoters, 'type') = 'TSS'
       
       return(promoters)
     }
@@ -49,7 +49,7 @@ getPromoters <- function(TxDb=NULL,
   assign("downstream", downstream, envir=ChIPseekerEnv)
   
   ## assign attribute 
-  attr(promoters, 'type') = 'start_region'
+  attr(promoters, 'type') = 'TSS'
   
   return(promoters)
 }
@@ -86,21 +86,33 @@ getBioRegion <- function(TxDb=NULL,
   if (by == "exon") {
     exonList <- get_exonList(ChIPseekerEnv)
     regions <-  unlist(exonList)
+    
+    ## assign attribute 
+    attr(regions, 'type') = 'exon_SS'
   }
   
   if (by == "intron") {
     intronList <- get_intronList(ChIPseekerEnv)
     regions <- unlist(intronList)
+    
+    ## assign attribute 
+    attr(regions, 'type') = 'intron_SS'
   }
   
   if (by == "3UTR") {
     threeUTRList <- threeUTRsByTranscript(TxDb)
     regions <- unlist(threeUTRList)
+    
+    ## assign attribute 
+    attr(regions, 'type') = '3UTR_SS'
   }
   
   if (by == "5UTR") {
     fiveUTRList <- fiveUTRsByTranscript(TxDb)
     regions <- unlist(fiveUTRList)
+    
+    ## assign attribute 
+    attr(regions, 'type') = '5UTR_SS'
   }
   
   start_site <- ifelse(strand(regions) == "+", start(regions), end(regions))
@@ -111,7 +123,7 @@ getBioRegion <- function(TxDb=NULL,
   bioRegion <- unique(bioRegion)
   
   ## assign attribute 
-  attr(bioRegion, 'type') = 'start_region'
+  attr(bioRegion, 'type') = attr(regions, 'type')
   
   return(bioRegion)
 }
@@ -265,10 +277,10 @@ getGeneBody <- function(TxDb=NULL,
 
 
 
-##' calculate the genebodymatrix
+##' calculate the BioRegionMatrix by binning
 ##' 
 ##' 
-##' Title getGenebodyMatrix
+##' Title getBioRegionMatrix
 ##'
 ##' @param peak peak peak file or GRanges object
 ##' @param weightCol weightCol column name of weight, default is NULL
@@ -283,16 +295,16 @@ getGeneBody <- function(TxDb=NULL,
 ##'                   default(NULL) reflects the gene body with no extension
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges 
 ##' @importFrom ggplot2 rel
-##' @return bodymatrix
+##' @return bioregionmatrix
 ##' @export
-getGenebodyMatrix <- function(peak, 
-                              weightCol = NULL, 
-                              windows, 
-                              box = 800,
-                              min_body_length = 1000,
-                              upstream = NULL,
-                              downstream = NULL,
-                              ...){
+getBioRegionMatrix <- function(peak, 
+                               weightCol = NULL, 
+                               windows, 
+                               box = 800,
+                               min_body_length = 1000,
+                               upstream = NULL,
+                               downstream = NULL,
+                               ...){
   
   ## the idea was derived from the function of deeptools
   ## (https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html)  
@@ -330,7 +342,7 @@ getGenebodyMatrix <- function(peak,
                               ignore.strand=TRUE)
   
   ## extend the windows by upstream and downstream parameter
-  if(inherits(upstream, 'rel') | inherits(downstream, 'rel')){
+  if(inherits(upstream, 'rel') || inherits(downstream, 'rel')){
     
     windows1 <- windows
     start(windows1) <- start(windows1) - floor(width(windows)*as.numeric(upstream))
@@ -343,12 +355,12 @@ getGenebodyMatrix <- function(peak,
         format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
   }
   
-  if(is.null(upstream) | is.null(downstream)){
-    if(attr(windows, 'type') == 'start_region'){
-      cat(">> preparing matrix for start_region...\t",
+  if(is.null(upstream) || is.null(downstream)){
+    if(attr(windows, 'type') == 'genebody'){
+      cat(">> preparing matrix for bioregion with no flank extension...\t",
           format(Sys.time(), "%Y-%m-%d %X"),"\n")
     }else{
-      cat(">> preparing matrix for bioregion with no flank extension...\t",
+      cat(">> preparing matrix for start_site_region...\t",
           format(Sys.time(), "%Y-%m-%d %X"),"\n")
     }
   }
@@ -375,26 +387,26 @@ getGenebodyMatrix <- function(peak,
   ## remove the gene that has no binding proteins
   peakView <- lapply(peakView, function(x) x <- x[viewSums(x)!=0])
   
-  bodyList <- lapply(peakView, function(x) viewApply(x, as.vector))
+  bioregionList <- lapply(peakView, function(x) viewApply(x, as.vector))
   
   ## the "if" judge statement is to be compatible with 
   ## windows that has the equal size, like promoters(-3000,3000)
-  if(class(bodyList[[1]])=="matrix"){
+  if(class(bioregionList[[1]])=="matrix"){
     
-    bodyList <- lapply(bodyList, function(x) t(x))
+    bioregionList <- lapply(bioregionList, function(x) t(x))
     
     # to remove the chromosome that has no binding protein
-    bodyList <- bodyList[vapply(bodyList, function(x) length(x)>0, FUN.VALUE = logical(1))]
-    suppressWarnings(bodyList <- do.call("rbind", bodyList))
+    bioregionList <- bioregionList[vapply(bioregionList, function(x) length(x)>0, FUN.VALUE = logical(1))]
+    suppressWarnings(bioregionList <- do.call("rbind", bioregionList))
     
     ## create a matrix to receive binning result                 
-    bodymatrix <- matrix(nrow = dim(bodyList)[1],ncol = box)
+    bioregionmatrix <- matrix(nrow = dim(bioregionList)[1],ncol = box)
     
     ## this circulation is to deal with different gene             
-    for (i in 1:dim(bodyList)[1]) {
+    for (i in 1:dim(bioregionList)[1]) {
       
       ## seq is the distance between different boxes
-      seq <- floor(length(bodyList[i,])/box)
+      seq <- floor(length(bioregionList[i,])/box)
       
       ## cursor record the position of calculation
       cursor <- 1
@@ -411,21 +423,21 @@ getGenebodyMatrix <- function(peak,
         read <- 0
         
         for (k in cursor:(cursor+seq-1)) {
-          read <- read + bodyList[i,k]
+          read <- read + bioregionList[i,k]
         }
         
-        bodymatrix[i,j] <- read/seq
+        bioregionmatrix[i,j] <- read/seq
         
         cursor <- cursor+seq
       }
       
       ## this the second part to to compensate the loss of non-exact-division
       read <- 0
-      for (k in cursor:length(bodyList[i,])) {
-        read <- read+bodyList[i,k]
+      for (k in cursor:length(bioregionList[i,])) {
+        read <- read+bioregionList[i,k]
       }
       
-      bodymatrix[i,box] <- read/(length(bodyList[i,])-cursor)
+      bioregionmatrix[i,box] <- read/(length(bioregionList[i,])-cursor)
     }
     
   }else{
@@ -433,19 +445,19 @@ getGenebodyMatrix <- function(peak,
     ## extend genebody by atual number
     if(!is.null(upstream) & !inherits(upstream, 'rel')){
       
-      bodyList <- bodyList[vapply(bodyList, function(x) length(x)>0, FUN.VALUE = logical(1))]
+      bioregionList <- bioregionList[vapply(bioregionList, function(x) length(x)>0, FUN.VALUE = logical(1))]
       
-      bodyList <- lapply(bodyList, function(x) x[vapply(x, function(y) length(y)>min_body_length+downstream+upstream,FUN.VALUE = logical(1))])
-      suppressWarnings(bodyList <- do.call("rbind",bodyList))
+      bioregionList <- lapply(bioregionList, function(x) x[vapply(x, function(y) length(y)>min_body_length+downstream+upstream,FUN.VALUE = logical(1))])
+      suppressWarnings(bioregionList <- do.call("rbind",bioregionList))
       
-      bodymatrix <- matrix(nrow = length(bodyList),ncol = box)
+      bioregionmatrix <- matrix(nrow = length(bioregionList),ncol = box)
       
       upstreambox <- floor(box*(upstreamPer/(1+upstreamPer+downstreamPer)))
       bodybox <- floor(box*(1/(1+upstreamPer+downstreamPer)))
       downstreambox <- floor(box*(downstreamPer/(1+upstreamPer+downstreamPer)))
       
       # count the upstream 
-      for (i in 1:length(bodyList)) {
+      for (i in 1:length(bioregionList)) {
         
         seq <- floor(upstream/upstreambox)
         cursor <- 1
@@ -455,10 +467,10 @@ getGenebodyMatrix <- function(peak,
           read <- 0
           
           for (k in cursor:(cursor+seq-1)) {
-            read <- read + bodyList[[i]][k]
+            read <- read + bioregionList[[i]][k]
           }
           
-          bodymatrix[i,j] <- read/seq
+          bioregionmatrix[i,j] <- read/seq
           
           cursor <- cursor+seq
         }
@@ -466,17 +478,17 @@ getGenebodyMatrix <- function(peak,
         
         read <- 0
         for (k in cursor:upstream) {
-          read <- read+bodyList[[i]][k]
+          read <- read+bioregionList[[i]][k]
         }
         
-        bodymatrix[i,upstreambox] <- read/(upstream-cursor)
+        bioregionmatrix[i,upstreambox] <- read/(upstream-cursor)
       }
       
       
       ## count genebody
-      for (i in 1:length(bodyList)) {
+      for (i in 1:length(bioregionList)) {
         
-        seq <- floor((length(bodyList[[i]])-upstream-downstream)/bodybox)
+        seq <- floor((length(bioregionList[[i]])-upstream-downstream)/bodybox)
         cursor <- upstream+1
         
         for (j in (upstreambox+1):(upstreambox+bodybox-1)) {
@@ -484,62 +496,62 @@ getGenebodyMatrix <- function(peak,
           read <- 0
           
           for (k in cursor:(cursor+seq-1)) {
-            read <- read + bodyList[[i]][k]
+            read <- read + bioregionList[[i]][k]
           }
           
-          bodymatrix[i,j] <- read/seq
+          bioregionmatrix[i,j] <- read/seq
           
           cursor <- cursor+seq
         }
         
         read <- 0
-        for (k in cursor:(length(bodyList[[i]])-downstream)) {
-          read <- read+bodyList[[i]][k]
+        for (k in cursor:(length(bioregionList[[i]])-downstream)) {
+          read <- read+bioregionList[[i]][k]
         }
         
-        bodymatrix[i,bodybox+upstreambox] <- read/(length(bodyList[[i]])-downstream-cursor)
+        bioregionmatrix[i,bodybox+upstreambox] <- read/(length(bioregionList[[i]])-downstream-cursor)
       }
       
       
       ## count downstream
-      for (i in 1:length(bodyList)) {
+      for (i in 1:length(bioregionList)) {
         
         seq <- floor(downstream/downstreambox)
-        cursor <- length(bodyList[[i]])-downstream+1
+        cursor <- length(bioregionList[[i]])-downstream+1
         
         for (j in (upstreambox+bodybox+1):(box-1)) {
           
           read <- 0
           
           for (k in cursor:(cursor+seq-1)) {
-            read <- read + bodyList[[i]][k]
+            read <- read + bioregionList[[i]][k]
           }
           
-          bodymatrix[i,j] <- read/seq
+          bioregionmatrix[i,j] <- read/seq
           
           cursor <- cursor+seq
         }
         
         read <- 0
-        for (k in cursor:length(bodyList[[i]])) {
-          read <- read+bodyList[[i]][k]
+        for (k in cursor:length(bioregionList[[i]])) {
+          read <- read+bioregionList[[i]][k]
         }
         
-        bodymatrix[i,box] <- read/(length(bodyList[[i]])-cursor)
+        bioregionmatrix[i,box] <- read/(length(bioregionList[[i]])-cursor)
       }
       
     }else{
       
-      bodyList <- bodyList[vapply(bodyList, function(x) length(x)>0, FUN.VALUE = logical(1))]
+      bioregionList <- bioregionList[vapply(bioregionList, function(x) length(x)>0, FUN.VALUE = logical(1))]
       
-      bodyList <- lapply(bodyList, function(x) x[vapply(x, function(y) length(y)>min_body_length,FUN.VALUE = logical(1))])
-      suppressWarnings(bodyList <- do.call("rbind",bodyList))
+      bioregionList <- lapply(bioregionList, function(x) x[vapply(x, function(y) length(y)>min_body_length,FUN.VALUE = logical(1))])
+      suppressWarnings(bioregionList <- do.call("rbind",bioregionList))
       
-      bodymatrix <- matrix(nrow = length(bodyList),ncol = box)
+      bioregionmatrix <- matrix(nrow = length(bioregionList),ncol = box)
       
-      for (i in 1:length(bodyList)) {
+      for (i in 1:length(bioregionList)) {
         
-        seq <- floor(length(bodyList[[i]])/box)
+        seq <- floor(length(bioregionList[[i]])/box)
         cursor <- 1
         
         for (j in 1:(box-1)) {
@@ -547,20 +559,20 @@ getGenebodyMatrix <- function(peak,
           read <- 0
           
           for (k in cursor:(cursor+seq-1)) {
-            read <- read + bodyList[[i]][k]
+            read <- read + bioregionList[[i]][k]
           }
           
-          bodymatrix[i,j] <- read/seq
+          bioregionmatrix[i,j] <- read/seq
           
           cursor <- cursor+seq
         }
         
         read <- 0
-        for (k in cursor:length(bodyList[[i]])) {
-          read <- read+bodyList[[i]][k]
+        for (k in cursor:length(bioregionList[[i]])) {
+          read <- read+bioregionList[[i]][k]
         }
         
-        bodymatrix[i,box] <- read/(length(bodyList[[i]])-cursor)
+        bioregionmatrix[i,box] <- read/(length(bioregionList[[i]])-cursor)
       }
     }
     
@@ -568,8 +580,8 @@ getGenebodyMatrix <- function(peak,
   
   
   ## assign attribute 
-  attr(bodymatrix, 'type') = attr(windows, 'type')
+  attr(bioregionmatrix, 'type') = attr(windows, 'type')
   
-  return(bodymatrix)
+  return(bioregionmatrix)
 }
 

@@ -351,12 +351,12 @@ plotAvgProf.internal <- function(tagMatrix, conf,
 }
 
 
-##' plot the profile of peaks of the gene regions
+##' plot the profile of peaks of the bioregion by binning
 ##' 
 ##' 
-##' Title plotGeneBody
+##' Title plotBioRegion
 ##'
-##' @param bodymatrix tagMatrix tagMatrix or a list of tagMatrix
+##' @param bioregionmatrix tagMatrix or a list of tagMatrix
 ##' @param xlab x label
 ##' @param ylab y label 
 ##' @param conf confidence interval
@@ -372,14 +372,14 @@ plotAvgProf.internal <- function(tagMatrix, conf,
 ##' @return ggplot object
 ##' @importFrom ggplot2 rel
 ##' @export
-plotGeneBody <- function(bodymatrix, 
-                         xlab = "Scaled Genomic Region (5'->3')",
-                         ylab = "Peak Count Frequency",
-                         conf,
-                         facet ="none", free_y = TRUE,
-                         upstream = NULL,
-                         downstream = NULL,
-                         ...) {
+plotBioRegion <- function(bioregionmatrix, 
+                          xlab = "Scaled Genomic Region (5'->3')",
+                          ylab = "Peak Count Frequency",
+                          conf,
+                          facet ="none", free_y = TRUE,
+                          upstream = NULL,
+                          downstream = NULL,
+                          ...) {
     
     ## S4Vectors change the behavior of ifelse
     ## see https://support.bioconductor.org/p/70871/
@@ -391,14 +391,14 @@ plotGeneBody <- function(bodymatrix,
     conf <- if(missingArg(conf)) NA else conf
     
     if (!(missingArg(conf) || is.na(conf))){
-        p <- plotGeneBody.internal(bodymatrix , conf = conf, 
+        p <- plotBioRegion.internal(bioregionmatrix , conf = conf, 
                                    xlab = xlab, ylab = ylab,
                                    facet = facet, free_y = free_y,
                                    upstream = upstream,
                                    downstream = downstream,
                                    ...)
     } else {
-        p <- plotGeneBody.internal(bodymatrix , 
+        p <- plotBioRegion.internal(bioregionmatrix , 
                                    xlab = xlab, ylab = ylab,
                                    facet = facet, free_y = free_y, 
                                    upstream = upstream,
@@ -422,29 +422,29 @@ plotGeneBody <- function(bodymatrix,
 ##' @importFrom ggplot2 element_blank
 ##' @importFrom ggplot2 facet_grid
 ##' @importFrom ggplot2 rel
-plotGeneBody.internal <- function(bodymatrix, conf,
-                                  xlab = "Scaled Genomic Region (5'->3')",
-                                  ylab = "Peak Count Frequency",
-                                  facet="none", free_y = TRUE,
-                                  upstream = NULL,
-                                  downstream = NULL,
+plotBioRegion.internal <- function(bioregionmatrix, conf,
+                                   xlab = "Scaled Genomic Region (5'->3')",
+                                   ylab = "Peak Count Frequency",
+                                   facet="none", free_y = TRUE,
+                                   upstream = NULL,
+                                   downstream = NULL,
                                   ...) {
     
     listFlag <- FALSE
-    if (is(bodymatrix, "list")) {
-        if ( is.null(names(bodymatrix )) ) {
-            nn <- paste0("peak", seq_along(bodymatrix ))
+    if (is(bioregionmatrix, "list")) {
+        if ( is.null(names(bioregionmatrix )) ) {
+            nn <- paste0("peak", seq_along(bioregionmatrix ))
             warning("input is not a named list, set the name automatically to ", paste(nn, collapse=' '))
-            names(bodymatrix) <- nn
+            names(bioregionmatrix) <- nn
             ## stop("tagMatrix should be a named list...")
         }
         listFlag <- TRUE
     }
     
     if(listFlag){
-        box <- dim(bodymatrix[[1]])[2]
+        box <- dim(bioregionmatrix[[1]])[2]
     }else{
-        box <- dim(bodymatrix)[2]
+        box <- dim(bioregionmatrix)[2]
     }
     xlim <- c(1,box)
     
@@ -462,16 +462,16 @@ plotGeneBody.internal <- function(bodymatrix, conf,
     pos <- value <- .id <- Lower <- Upper <- NULL
     
     if ( listFlag ) {
-        tagCount <- lapply(bodymatrix , function(x) getTagCount(x, xlim = xlim, conf = conf, ...))
+        tagCount <- lapply(bioregionmatrix , function(x) getTagCount(x, xlim = xlim, conf = conf, ...))
         tagCount <- list_to_dataframe(tagCount)
-        tagCount$.id <- factor(tagCount$.id, levels=names(bodymatrix ))
+        tagCount$.id <- factor(tagCount$.id, levels=names(bioregionmatrix ))
         p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
         if (!(is.na(conf))) {
             p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper, fill = .id),
                                  linetype = 0, alpha = 0.2)
         }
     } else {
-        tagCount <- getTagCount(bodymatrix , xlim = xlim, conf = conf, ...)
+        tagCount <- getTagCount(bioregionmatrix , xlim = xlim, conf = conf, ...)
         p <- ggplot(tagCount, aes(pos))
         if (!(is.na(conf))) {
             p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper),
@@ -481,74 +481,82 @@ plotGeneBody.internal <- function(bodymatrix, conf,
     
     p <- p + geom_line(aes(y = value))
     
-    ## x_scale for gene body with no flank extension
-    if(is.null(upstream) | is.null(downstream)){
-        p <- p + scale_x_continuous(breaks=c(1, 
-                                             floor(box*0.25),
-                                             floor(box*0.5),
-                                             floor(box*0.75),
-                                             box),
-                                    labels=c("TSS", 
-                                             "25%",
-                                             "50%",
-                                             "75%",
-                                             "TES"))
+    ## x_scale for genebody
+    if(attr(bioregionmatrix, 'type') == 'genebody'){
+        ## x_scale for gene body with no flank extension
+        if(is.null(upstream) || is.null(downstream)){
+            p <- p + scale_x_continuous(breaks=c(1, 
+                                                 floor(box*0.25),
+                                                 floor(box*0.5),
+                                                 floor(box*0.75),
+                                                 box),
+                                        labels=c("TSS", 
+                                                 "25%",
+                                                 "50%",
+                                                 "75%",
+                                                 "TES"))
+        }
+        
+        
+        ## x_scale for flank extension by relative value
+        if(inherits(upstream, 'rel')){
+            
+            p <- p + scale_x_continuous(breaks=c(1, 
+                                                 floor(box*(as.numeric(upstream)*100/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                                 floor(box*((as.numeric(upstream)*100+25)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                                 floor(box*((as.numeric(upstream)*100+50)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                                 floor(box*((as.numeric(upstream)*100+75)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                                 floor(box*((as.numeric(upstream)*100+100)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                                 box),
+                                        labels=c(paste0("-",as.numeric(upstream)*100,"%"), 
+                                                 "TSS",
+                                                 "25%",
+                                                 "50%",
+                                                 "75%",
+                                                 "TES",
+                                                 paste0("+",as.numeric(downstream)*100,"%")))
+            p <- p + geom_vline(xintercept=floor(box*(as.numeric(upstream)*100/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                linetype="longdash")
+            
+            p <- p + geom_vline(xintercept=floor(box*((as.numeric(upstream)*100+100)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                linetype="longdash")
+        }
+        
+        ## x_scale for flank extension by absolute value
+        if(!is.null(upstream) & !inherits(upstream, 'rel')){
+            
+            upstreamPer <- floor(upstream/1000)*0.1
+            downstreamPer <- floor(downstream/1000)*0.1
+            
+            p <- p + scale_x_continuous(breaks=c(1, 
+                                                 floor(box*(upstreamPer/(1+upstreamPer+downstreamPer))),
+                                                 floor(box*((upstreamPer+0.25)/(1+upstreamPer+downstreamPer))),
+                                                 floor(box*((upstreamPer+0.5)/(1+upstreamPer+downstreamPer))),
+                                                 floor(box*((upstreamPer+0.75)/(1+upstreamPer+downstreamPer))),
+                                                 floor(box*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
+                                                 box),
+                                        labels=c(paste0("-",upstream,"bp"), 
+                                                 "TSS",
+                                                 "25%",
+                                                 "50%",
+                                                 "75%",
+                                                 "TES",
+                                                 paste0(downstream,"bp")))
+            p <- p + geom_vline(xintercept=floor(box*(upstreamPer/(1+upstreamPer+downstreamPer))),
+                                linetype="longdash")
+            
+            p <- p + geom_vline(xintercept=floor(box*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
+                                linetype="longdash")
+        }
     }
+
     
-    
-    ## x_scale for flank extension by relative value
-    if(inherits(upstream, 'rel')){
+    ## x_scale for start region
+    if(attr(bioregionmatrix, 'type') != 'genebody'){
         
-        p <- p + scale_x_continuous(breaks=c(1, 
-                                             floor(box*(as.numeric(upstream)*100/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
-                                             floor(box*((as.numeric(upstream)*100+25)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
-                                             floor(box*((as.numeric(upstream)*100+50)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
-                                             floor(box*((as.numeric(upstream)*100+75)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
-                                             floor(box*((as.numeric(upstream)*100+100)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
-                                             box),
-                                    labels=c(paste0("-",as.numeric(upstream)*100,"%"), 
-                                             "TSS",
-                                             "25%",
-                                             "50%",
-                                             "75%",
-                                             "TES",
-                                             paste0("+",as.numeric(downstream)*100,"%")))
-        p <- p + geom_vline(xintercept=floor(box*(as.numeric(upstream)*100/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
-                            linetype="longdash")
+        ## origin label
+        origin_label <- attr(bioregionmatrix, 'type')
         
-        p <- p + geom_vline(xintercept=floor(box*((as.numeric(upstream)*100+100)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
-                            linetype="longdash")
-    }
-    
-    ## x_scale for flank extension by absolute value
-    if(!is.null(upstream) & !inherits(upstream, 'rel') & (attr(bodymatrix, 'type') != 'start_region')){
-        
-        upstreamPer <- floor(upstream/1000)*0.1
-        downstreamPer <- floor(downstream/1000)*0.1
-        
-        p <- p + scale_x_continuous(breaks=c(1, 
-                                             floor(box*(upstreamPer/(1+upstreamPer+downstreamPer))),
-                                             floor(box*((upstreamPer+0.25)/(1+upstreamPer+downstreamPer))),
-                                             floor(box*((upstreamPer+0.5)/(1+upstreamPer+downstreamPer))),
-                                             floor(box*((upstreamPer+0.75)/(1+upstreamPer+downstreamPer))),
-                                             floor(box*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
-                                             box),
-                                    labels=c(paste0("-",upstream,"bp"), 
-                                             "TSS",
-                                             "25%",
-                                             "50%",
-                                             "75%",
-                                             "TES",
-                                             paste0(downstream,"bp")))
-        p <- p + geom_vline(xintercept=floor(box*(upstreamPer/(1+upstreamPer+downstreamPer))),
-                            linetype="longdash")
-        
-        p <- p + geom_vline(xintercept=floor(box*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
-                            linetype="longdash")
-    }
-    
-    ## x_scale for TSS region
-    if(attr(bodymatrix, 'type') == 'start_region'){
         p <- p + scale_x_continuous(breaks=c(1, 
                                              floor(box*0.25),
                                              floor(box*0.5),
@@ -556,7 +564,7 @@ plotGeneBody.internal <- function(bodymatrix, conf,
                                              box),
                                     labels=c(paste0("-",upstream,"bp"), 
                                              paste0("-",floor(upstream*0.5),"bp"),
-                                             "TSS",
+                                             origin_label,
                                              paste0(floor(downstream*0.5),"bp"),
                                              paste0(downstream,"bp")))
         
@@ -566,7 +574,7 @@ plotGeneBody.internal <- function(bodymatrix, conf,
     
     
     if (listFlag) {
-        cols <- getCols(length(bodymatrix))
+        cols <- getCols(length(bioregionmatrix))
         p <- p + scale_color_manual(values=cols)
         if (facet == "row") {
             if (free_y) {
@@ -592,15 +600,16 @@ plotGeneBody.internal <- function(bodymatrix, conf,
 
 
 
-##' plot the profile of peaks that align to gene regions
+##' plot the profile of peaks that align to bio regions
 ##' 
 ##' 
-##' Title plotGeneBody2
+##' Title plotBioRegion2
 ##'
 ##' @param peak peak file or GRanges object
 ##' @param weightCol weightCol column name of weight
 ##' @param TxDb TxDb object
-##' @param type one of "genes", "exon", "intron", "promoters"
+##' @param body_type one of "genes", "exon", "intron"
+##' @param start_region_by one of "gene", "transcript", "exon", "intron", "3UTR", "5UTR"
 ##' @param xlab x label
 ##' @param ylab y label
 ##' @param conf confidence interval
@@ -618,19 +627,20 @@ plotGeneBody.internal <- function(bodymatrix, conf,
 ##' @importFrom ggplot2 rel
 ##' @return ggplot object
 ##' @export
-plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
-                          type = "genes",
-                          xlab = "Scaled Genomic Region (5'->3')",
-                          ylab = "Peak Count Frequency",
-                          conf,
-                          facet = "none",
-                          free_y = TRUE,
-                          verbose = TRUE, 
-                          box = 800,
-                          min_body_length = 1000, 
-                          upstream = NULL,
-                          downstream = NULL,
-                          ...) {
+plotBioRegion2 <- function(peak, weightCol = NULL, TxDb = NULL,
+                           body_type = NULL,
+                           start_region_by = NULL,
+                           xlab = "Scaled Genomic Region (5'->3')",
+                           ylab = "Peak Count Frequency",
+                           conf,
+                           facet = "none",
+                           free_y = TRUE,
+                           verbose = TRUE, 
+                           box = 800,
+                           min_body_length = 1000, 
+                           upstream = NULL,
+                           downstream = NULL,
+                           ...) {
     
     ## check upstream and downstream value
     check_upstream_and_downstream(upstream = upstream, downstream = downstream)
@@ -644,25 +654,39 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
             format(Sys.time(), "%Y-%m-%d %X"), "\n")
     }
     
-    ## TSS region is also supported
-    type <- match.arg(type, c("genes", "exon", "intron", "promoters"))
-    if(type=="promoters"){
-        if(upstream < 1 | downstream < 1 | inherits(upstream, 'rel') | inherits(downstream, 'rel')){
+    ## check body_type or start_region_by
+    if(is.null(body_type) && is.null(start_region_by)){
+        stop('body_type or start_region_by should be set...')
+    }
+    
+    if(!is.null(body_type) && !is.null(start_region_by)){
+        stop('body_type or start_region_by should not be set simultaneously...')
+    }
+    
+    ## get the windows for body region
+    if(!is.null(body_type)){
+        body_type <- match.arg(body_type, c("genes", "exon", "intron"))
+        
+        windows <- getGeneBody(TxDb = txdb, type = body_type)
+    }
+    
+    ## get the windows for start site region
+    if(!is.null(start_region_by)){
+        start_region_by <- match.arg(start_region_by, c("gene", "transcript", "exon", "intron", "3UTR", "5UTR"))
+        
+        if(upstream < 1 || downstream < 1 || inherits(upstream, 'rel') || inherits(downstream, 'rel')){
             stop("upstream and downstream parameter for TSS region should be ",
                  "integer(the actual bp for TSS flank...)")
         }
         
-        genebody <- getPromoters(TxDb=txdb, 
-                                 upstream=upstream, 
-                                 downstream=downstream)
+        windows <- getBioRegion(TxDb=txdb, 
+                                upstream=upstream, 
+                                downstream=downstream,
+                                by = start_region_by)
         
-        ## set NULL to get the bodymatrix
+        ## set NULL to get the bioregionmatrix
         upstream <- NULL
         downstream <- NULL
-        
-    }else{
-        
-        genebody <- getGeneBody(TxDb = txdb, type = type)
     }
     
     
@@ -672,25 +696,24 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
     }
     
     if ( is(peak, "list") ) {
-        bodymatrix <- lapply(peak, getGenebodyMatrix,
-                             weightCol=weightCol, 
-                             windows=genebody,
-                             box=box,
-                             min_body_length=min_body_length,
-                             downstream = downstream,
-                             upstream = upstream)
+        bioregionmatrix <- lapply(peak, getBioRegionMatrix,
+                                  weightCol=weightCol, 
+                                  windows=windows,
+                                  box=box,
+                                  min_body_length=min_body_length,
+                                  downstream = downstream,
+                                  upstream = upstream)
         
         ## assign attribute
-        attr(bodymatrix, 'type') = attr(genebody, 'type')
+        attr(bioregionmatrix, 'type') = attr(windows, 'type')
         
     } else {
-        bodymatrix <- getGenebodyMatrix(peak = peak, 
-                                        weightCol = weightCol, 
-                                        windows = genebody,
-                                        box = box,
-                                        min_body_length = min_body_length,
-                                        upstream = upstream,
-                                        downstream = downstream)
+        bioregionmatrix <- getBioRegionMatrix(peak = peak, weightCol = weightCol, 
+                                              windows = windows,
+                                              box = box,
+                                              min_body_length = min_body_length,
+                                              upstream = upstream,
+                                              downstream = downstream)
     }
     
     
@@ -704,19 +727,19 @@ plotGeneBody2 <- function(peak, weightCol = NULL, TxDb = NULL,
     downstream <- temp_downstream
     
     if (!(missingArg(conf) || is.na(conf))){
-        p <- plotGeneBody.internal(bodymatrix,
-                                   xlab = xlab, ylab = ylab, conf = conf,
-                                   facet = facet, free_y = free_y, 
-                                   upstream = upstream,
-                                   downstream = downstream,
-                                   ...)
+        p <- plotBioRegion.internal(bioregionmatrix,
+                                    xlab = xlab, ylab = ylab, conf = conf,
+                                    facet = facet, free_y = free_y, 
+                                    upstream = upstream,
+                                    downstream = downstream,
+                                    ...)
     } else {
-        p <- plotGeneBody.internal(bodymatrix,
-                                   xlab=xlab, ylab=ylab,
-                                   facet = facet, free_y = free_y, 
-                                   upstream = upstream,
-                                   downstream = downstream,
-                                   ...)
+        p <- plotBioRegion.internal(bioregionmatrix,
+                                    xlab=xlab, ylab=ylab,
+                                    facet = facet, free_y = free_y, 
+                                    upstream = upstream,
+                                    downstream = downstream,
+                                    ...)
     }
     return(p)
 }
