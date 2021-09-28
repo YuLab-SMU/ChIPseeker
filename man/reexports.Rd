@@ -4,6 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{GRangesList}
+\alias{rel}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -12,5 +13,7 @@ below to see their documentation.
 
 \describe{
   \item{GenomicRanges}{\code{\link[GenomicRanges:GRangesList-class]{GRangesList}}}
+
+  \item{ggplot2}{\code{\link[ggplot2:element]{rel}}}
 }}
 
