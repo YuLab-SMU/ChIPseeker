@@ -1,3 +1,7 @@
+# ChIPseeker 1.29.1.990
+
++ add function of plotting bioregion by bining (2021-09-28, Tue; @MingLi-929, #156)
+
 # ChIPseeker 1.29.1
 
 + add example for `seq2gene` function (2021-05-21, Fri)
