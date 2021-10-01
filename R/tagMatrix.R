@@ -64,9 +64,10 @@ getPromoters <- function(TxDb=NULL,
 ##' @param downstream downstream from TSS site
 ##' @param by one of gene or transcript
 ##' @return GRanges object
-##' @export
 ##' @import BiocGenerics IRanges GenomicRanges
 ##' @importFrom GenomicFeatures transcriptsBy
+##' @export
+##' https://github.com/GuangchuangYu/ChIPseeker/issues/87
 getTTSRegion <- function(TxDb=NULL,
                          upstream=1000,
                          downstream=1000,
@@ -124,7 +125,7 @@ getTTSRegion <- function(TxDb=NULL,
 ##' @import BiocGenerics IRanges GenomicRanges
 ##' @export
 ##' @author Guangchuang Yu
-##  https://github.com/GuangchuangYu/ChIPseeker/issues/16
+##  https://github.com/GuangchuangYu/ChIPseeker/issues/87
 getEndRegion <- function(TxDb=NULL,
                          upstream=1000,
                          downstream=1000,
