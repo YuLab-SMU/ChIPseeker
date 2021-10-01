@@ -55,6 +55,136 @@ getPromoters <- function(TxDb=NULL,
 }
 
 
+##' get the tts region 
+##' 
+##' 
+##' @title getTTSRegion
+##' @param TxDb TxDb
+##' @param upstream upstream from TSS site
+##' @param downstream downstream from TSS site
+##' @param by one of gene or transcript
+##' @return GRanges object
+##' @export
+##' @import BiocGenerics IRanges GenomicRanges
+##' @importFrom GenomicFeatures transcriptsBy
+getTTSRegion <- function(TxDb=NULL,
+                         upstream=1000,
+                         downstream=1000,
+                         by = "gene"){
+  
+  by <- match.arg(by, c("gene", "transcript"))
+  
+  TxDb <- loadTxDb(TxDb)
+  .ChIPseekerEnv(TxDb)
+  ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
+  
+  if ( exists("upstream", envir=ChIPseekerEnv, inherits=FALSE) &&
+       exists("downstream", envir=ChIPseekerEnv, inherits=FALSE) ) {
+    us <- get("upstream", envir=ChIPseekerEnv)
+    ds <- get("downstream", envir=ChIPseekerEnv)
+    if (us == upstream && ds == downstream &&
+        exists("TTS", envir=ChIPseekerEnv, inherits=FALSE) ){
+      TTS_region <- get("TTS", envir=ChIPseekerEnv)
+      
+      ## assign attribute 
+      attr(TTS_region, 'type') = 'TTS'
+      
+      return(TTS_region)
+    }
+  }
+  
+  Transcripts <- getGene(TxDb, by)
+  ## get end position based on strand
+  tts <- ifelse(strand(Transcripts) == "+", end(Transcripts), start(Transcripts))
+  TTS_region <- GRanges(seqnames=seqnames(Transcripts),
+                        ranges=IRanges(tts-upstream, tts+downstream),
+                        strand=strand(Transcripts))
+  TTS_region <- unique(TTS_region)
+  
+  assign("TTS", TTS_region, envir=ChIPseekerEnv)
+  assign("upstream", upstream, envir=ChIPseekerEnv)
+  assign("downstream", downstream, envir=ChIPseekerEnv)
+  
+  ## assign attribute 
+  attr(TTS_region, 'type') = 'TTS'
+  
+  return(TTS_region)
+  
+}
+
+##' prepare a region center on end site of selected feature
+##'
+##' 
+##' @title getEndRegion
+##' @param TxDb TxDb
+##' @param upstream upstream from start site
+##' @param downstream downstream from start site
+##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'
+##' @return GRanges object
+##' @import BiocGenerics IRanges GenomicRanges
+##' @export
+##' @author Guangchuang Yu
+##  https://github.com/GuangchuangYu/ChIPseeker/issues/16
+getEndRegion <- function(TxDb=NULL,
+                         upstream=1000,
+                         downstream=1000,
+                         by="gene") {
+  
+  by <- match.arg(by, c("gene", "transcript", "exon", "intron", "3UTR", "5UTR"))
+  
+  if (by %in% c("gene", "transcript")) {
+    return(getTTSRegion(TxDb, upstream, downstream, by))
+  }
+  
+  TxDb <- loadTxDb(TxDb)
+  .ChIPseekerEnv(TxDb)
+  ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
+  
+  if (by == "exon") {
+    exonList <- get_exonList(ChIPseekerEnv)
+    regions <-  unlist(exonList)
+    
+    ## assign attribute 
+    attr(regions, 'type') = 'exon_TS'
+  }
+  
+  if (by == "intron") {
+    intronList <- get_intronList(ChIPseekerEnv)
+    regions <- unlist(intronList)
+    
+    ## assign attribute 
+    attr(regions, 'type') = 'intron_TS'
+  }
+  
+  if (by == "3UTR") {
+    threeUTRList <- threeUTRsByTranscript(TxDb)
+    regions <- unlist(threeUTRList)
+    
+    ## assign attribute 
+    attr(regions, 'type') = '3UTR_TS'
+  }
+  
+  if (by == "5UTR") {
+    fiveUTRList <- fiveUTRsByTranscript(TxDb)
+    regions <- unlist(fiveUTRList)
+    
+    ## assign attribute 
+    attr(regions, 'type') = '5UTR_TS'
+  }
+  
+  end_site <- ifelse(strand(regions) == "+", end(regions), start(regions))
+  
+  endRegion <- GRanges(seqnames=seqnames(regions),
+                       ranges=IRanges(end_site-upstream, end_site+downstream),
+                       strand=strand(regions))
+  endRegion <- unique(endRegion)
+  
+  ## assign attribute 
+  attr(endRegion, 'type') = attr(regions, 'type')
+  
+  return(endRegion)
+}
+
 ##' prepare a region center on start site of selected feature
 ##'
 ##' 
