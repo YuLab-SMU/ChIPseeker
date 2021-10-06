@@ -21,6 +21,3 @@ GRanges object
 \description{
 prepare a region center on end site of selected feature
 }
-\author{
-Guangchuang Yu
-}
