@@ -15,6 +15,50 @@ getPromoters <- function(TxDb=NULL,
                          downstream=1000,
                          by = "gene") {
   
+  getPromoters.internal(TxDb=TxDb,
+                        upstream=upstream,
+                        downstream=downstream,
+                        by = by,
+                        type = "promoters",
+                        label = "TSS")
+  
+}
+
+##' get the tts region 
+##' 
+##' 
+##' @title getTTSRegion
+##' @param TxDb TxDb
+##' @param upstream upstream from TSS site
+##' @param downstream downstream from TSS site
+##' @param by one of gene or transcript
+##' @return GRanges object
+##' @import BiocGenerics IRanges GenomicRanges
+##' @importFrom GenomicFeatures transcriptsBy
+##' @export
+## https://github.com/GuangchuangYu/ChIPseeker/issues/87
+getTTSRegion <- function(TxDb=NULL,
+                         upstream=1000,
+                         downstream=1000,
+                         by = "gene"){
+  
+  getPromoters.internal(TxDb=TxDb,
+                        upstream=upstream,
+                        downstream=downstream,
+                        by = by,
+                        type = "TTS",
+                        label = "TTS")
+}
+
+
+##' @import BiocGenerics IRanges GenomicRanges
+##' @importFrom GenomicFeatures transcriptsBy
+getPromoters.internal <- function(TxDb,
+                                  upstream,
+                                  downstream,
+                                  by,
+                                  type,
+                                  label){
   by <- match.arg(by, c("gene", "transcript"))
   
   TxDb <- loadTxDb(TxDb)
@@ -26,34 +70,65 @@ getPromoters <- function(TxDb=NULL,
     us <- get("upstream", envir=ChIPseekerEnv)
     ds <- get("downstream", envir=ChIPseekerEnv)
     if (us == upstream && ds == downstream &&
-        exists("promoters", envir=ChIPseekerEnv, inherits=FALSE) ){
-      promoters <- get("promoters", envir=ChIPseekerEnv)
+        exists(type, envir=ChIPseekerEnv, inherits=FALSE) ){
+      windows <- get(type, envir=ChIPseekerEnv)
       
       ## assign attribute 
-      attr(promoters, 'type') = 'TSS'
+      attr(windows, 'type') = label
       
-      return(promoters)
+      return(windows)
     }
   }
   
-  Transcripts <- getGene(TxDb, by)
+  region <- getGene(TxDb, by)
   ## get start position based on strand
-  tss <- ifelse(strand(Transcripts) == "+", start(Transcripts), end(Transcripts))
-  promoters <- GRanges(seqnames=seqnames(Transcripts),
-                       ranges=IRanges(tss-upstream, tss+downstream),
-                       strand=strand(Transcripts))
-  promoters <- unique(promoters)
+  if(type == "promoters"){
+    coordinate<- ifelse(strand(region) == "+", start(region), end(region))
+  }else{
+    coordinate<- ifelse(strand(region) == "+", end(region), start(region))
+  }
   
-  assign("promoters", promoters, envir=ChIPseekerEnv)
+  windows <- GRanges(seqnames=seqnames(region),
+                     ranges=IRanges(coordinate-upstream, coordinate+downstream),
+                     strand=strand(region))
+  windows <- unique(windows)
+  
+  assign(type, windows, envir=ChIPseekerEnv)
   assign("upstream", upstream, envir=ChIPseekerEnv)
   assign("downstream", downstream, envir=ChIPseekerEnv)
   
   ## assign attribute 
-  attr(promoters, 'type') = 'TSS'
+  attr(windows, 'type') = label
   
-  return(promoters)
+  return(windows) 
+  
 }
 
+
+##' prepare a region center on end site of selected feature
+##'
+##' 
+##' @title getEndRegion
+##' @param TxDb TxDb
+##' @param upstream upstream from start site
+##' @param downstream downstream from start site
+##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'
+##' @return GRanges object
+##' @import BiocGenerics IRanges GenomicRanges
+##' @export
+##  https://github.com/GuangchuangYu/ChIPseeker/issues/87
+getEndRegion <- function(TxDb=NULL,
+                         upstream=1000,
+                         downstream=1000,
+                         by="gene") {
+  
+  getBioRegion.internal(TxDb=TxDb,
+                        upstream=upstream,
+                        downstream=downstream,
+                        by=by,
+                        type="TTS",
+                        label="TS")
+}
 
 ##' prepare a region center on start site of selected feature
 ##'
@@ -73,10 +148,31 @@ getBioRegion <- function(TxDb=NULL,
                          downstream=1000,
                          by="gene") {
   
+  getBioRegion.internal(TxDb=TxDb,
+                        upstream=upstream,
+                        downstream=downstream,
+                        by=by,
+                        type="promoters",
+                        label="SS")
+  
+}
+
+##' @import BiocGenerics IRanges GenomicRanges
+getBioRegion.internal <- function(TxDb,
+                                  upstream,
+                                  downstream,
+                                  by,
+                                  type,
+                                  label){
   by <- match.arg(by, c("gene", "transcript", "exon", "intron", "3UTR", "5UTR"))
   
-  if (by %in% c("gene", "transcript")) {
-    return(getPromoters(TxDb, upstream, downstream, by))
+  if (by %in% c("gene", "transcript")){
+    if(type == "promoters"){
+      return(getPromoters(TxDb, upstream, downstream, by))
+    }else{
+      return(getTTSRegion(TxDb, upstream, downstream, by))
+    }
+    
   }
   
   TxDb <- loadTxDb(TxDb)
@@ -96,7 +192,7 @@ getBioRegion <- function(TxDb=NULL,
     regions <- unlist(intronList)
     
     ## assign attribute 
-    attr(regions, 'type') = 'intron_SS'
+    attr(regions, 'type') = paste0(by,label)
   }
   
   if (by == "3UTR") {
@@ -104,7 +200,7 @@ getBioRegion <- function(TxDb=NULL,
     regions <- unlist(threeUTRList)
     
     ## assign attribute 
-    attr(regions, 'type') = '3UTR_SS'
+    attr(regions, 'type') = paste0(by,label)
   }
   
   if (by == "5UTR") {
@@ -112,13 +208,17 @@ getBioRegion <- function(TxDb=NULL,
     regions <- unlist(fiveUTRList)
     
     ## assign attribute 
-    attr(regions, 'type') = '5UTR_SS'
+    attr(regions, 'type') = paste0(by,label)
   }
   
-  start_site <- ifelse(strand(regions) == "+", start(regions), end(regions))
+  if(type == "promoters"){
+    coordinate<- ifelse(strand(region) == "+", start(region), end(region))
+  }else{
+    coordinate<- ifelse(strand(region) == "+", end(region), start(region))
+  }
   
   bioRegion <- GRanges(seqnames=seqnames(regions),
-                       ranges=IRanges(start_site-upstream, start_site+downstream),
+                       ranges=IRanges(coordinate-upstream, coordinate+downstream),
                        strand=strand(regions))
   bioRegion <- unique(bioRegion)
   
@@ -126,8 +226,8 @@ getBioRegion <- function(TxDb=NULL,
   attr(bioRegion, 'type') = attr(regions, 'type')
   
   return(bioRegion)
+  
 }
-
 
 
 ##' calculate the tag matrix
