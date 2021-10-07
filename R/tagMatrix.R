@@ -212,9 +212,9 @@ getBioRegion.internal <- function(TxDb,
   }
   
   if(type == "promoters"){
-    coordinate<- ifelse(strand(region) == "+", start(region), end(region))
+    coordinate<- ifelse(strand(regions) == "+", start(regions), end(regions))
   }else{
-    coordinate<- ifelse(strand(region) == "+", end(region), start(region))
+    coordinate<- ifelse(strand(regions) == "+", end(regions), start(regions))
   }
   
   bioRegion <- GRanges(seqnames=seqnames(regions),
@@ -403,8 +403,7 @@ getBioRegionMatrix <- function(peak,
                                box = 800,
                                min_body_length = 1000,
                                upstream = NULL,
-                               downstream = NULL,
-                               ...){
+                               downstream = NULL){
   
   ## the idea was derived from the function of deeptools
   ## (https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html)  

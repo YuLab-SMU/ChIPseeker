@@ -17,7 +17,7 @@ plotAnnoPie(
   ...
 )
 
-plotAnnoPie(x,ndigit=2, cex=0.9,col=NA,legend.position="rightside", pie3D=FALSE, radius = 0.8, ...)
+plotAnnoPie(x,ndigit=2,cex=0.9,col=NA,legend.position="rightside",pie3D=FALSE,radius=0.8,...)
 }
 \arguments{
 \item{x}{\code{csAnno} instance}

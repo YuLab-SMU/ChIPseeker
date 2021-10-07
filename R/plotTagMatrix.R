@@ -295,7 +295,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
     pos <- value <- .id <- Lower <- Upper <- NULL
     
     if ( listFlag ) {
-        tagCount <- lapply(tagMatrix, function(x) getTagCount(x, xlim = xlim, conf = conf, ...))
+        tagCount <- lapply(tagMatrix, function(x) getTagCount(x, xlim = xlim, conf = conf))
         tagCount <- list_to_dataframe(tagCount)
         tagCount$.id <- factor(tagCount$.id, levels=names(tagMatrix))
         p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
@@ -304,7 +304,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
                                  linetype = 0, alpha = 0.2)
         }
     } else {
-        tagCount <- getTagCount(tagMatrix, xlim = xlim, conf = conf, ...)
+        tagCount <- getTagCount(tagMatrix, xlim = xlim, conf = conf)
         p <- ggplot(tagCount, aes(pos))
         if (!(is.na(conf))) {
             p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper),
@@ -368,7 +368,6 @@ plotAvgProf.internal <- function(tagMatrix, conf,
 ##' @param downstream rel object reflects the percentage of flank extension, e.g rel(0.2)
 ##'                   integer reflects the actual length of flank extension or TSS region
 ##'                   NULL reflects the gene body with no extension
-##' @param ... 
 ##' @return ggplot object
 ##' @importFrom ggplot2 rel
 ##' @export
@@ -378,8 +377,7 @@ plotBioRegion <- function(bioregionmatrix,
                           conf,
                           facet ="none", free_y = TRUE,
                           upstream = NULL,
-                          downstream = NULL,
-                          ...) {
+                          downstream = NULL) {
     
     ## S4Vectors change the behavior of ifelse
     ## see https://support.bioconductor.org/p/70871/
@@ -395,15 +393,13 @@ plotBioRegion <- function(bioregionmatrix,
                                    xlab = xlab, ylab = ylab,
                                    facet = facet, free_y = free_y,
                                    upstream = upstream,
-                                   downstream = downstream,
-                                   ...)
+                                   downstream = downstream)
     } else {
         p <- plotBioRegion.internal(bioregionmatrix , 
                                    xlab = xlab, ylab = ylab,
                                    facet = facet, free_y = free_y, 
                                    upstream = upstream,
-                                   downstream = downstream,
-                                   ...)
+                                   downstream = downstream)
     }
     return(p)
 }
@@ -427,8 +423,7 @@ plotBioRegion.internal <- function(bioregionmatrix, conf,
                                    ylab = "Peak Count Frequency",
                                    facet="none", free_y = TRUE,
                                    upstream = NULL,
-                                   downstream = NULL,
-                                  ...) {
+                                   downstream = NULL) {
     
     listFlag <- FALSE
     if (is(bioregionmatrix, "list")) {
@@ -462,7 +457,7 @@ plotBioRegion.internal <- function(bioregionmatrix, conf,
     pos <- value <- .id <- Lower <- Upper <- NULL
     
     if ( listFlag ) {
-        tagCount <- lapply(bioregionmatrix , function(x) getTagCount(x, xlim = xlim, conf = conf, ...))
+        tagCount <- lapply(bioregionmatrix , function(x) getTagCount(x, xlim = xlim, conf = conf))
         tagCount <- list_to_dataframe(tagCount)
         tagCount$.id <- factor(tagCount$.id, levels=names(bioregionmatrix ))
         p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
@@ -471,7 +466,7 @@ plotBioRegion.internal <- function(bioregionmatrix, conf,
                                  linetype = 0, alpha = 0.2)
         }
     } else {
-        tagCount <- getTagCount(bioregionmatrix , xlim = xlim, conf = conf, ...)
+        tagCount <- getTagCount(bioregionmatrix , xlim = xlim, conf = conf)
         p <- ggplot(tagCount, aes(pos))
         if (!(is.na(conf))) {
             p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper),
@@ -639,8 +634,7 @@ plotBioRegion2 <- function(peak, weightCol = NULL, TxDb = NULL,
                            box = 800,
                            min_body_length = 1000, 
                            upstream = NULL,
-                           downstream = NULL,
-                           ...) {
+                           downstream = NULL) {
     
     ## check upstream and downstream value
     check_upstream_and_downstream(upstream = upstream, downstream = downstream)
@@ -667,7 +661,7 @@ plotBioRegion2 <- function(peak, weightCol = NULL, TxDb = NULL,
     if(!is.null(body_type)){
         body_type <- match.arg(body_type, c("genes", "exon", "intron"))
         
-        windows <- getGeneBody(TxDb = txdb, type = body_type)
+        windows <- getGeneBody(TxDb = TxDb, type = body_type)
     }
     
     ## get the windows for start site region
@@ -679,7 +673,7 @@ plotBioRegion2 <- function(peak, weightCol = NULL, TxDb = NULL,
                  "integer(the actual bp for TSS flank...)")
         }
         
-        windows <- getBioRegion(TxDb=txdb, 
+        windows <- getBioRegion(TxDb=TxDb, 
                                 upstream=upstream, 
                                 downstream=downstream,
                                 by = start_region_by)
@@ -731,15 +725,13 @@ plotBioRegion2 <- function(peak, weightCol = NULL, TxDb = NULL,
                                     xlab = xlab, ylab = ylab, conf = conf,
                                     facet = facet, free_y = free_y, 
                                     upstream = upstream,
-                                    downstream = downstream,
-                                    ...)
+                                    downstream = downstream)
     } else {
         p <- plotBioRegion.internal(bioregionmatrix,
                                     xlab=xlab, ylab=ylab,
                                     facet = facet, free_y = free_y, 
                                     upstream = upstream,
-                                    downstream = downstream,
-                                    ...)
+                                    downstream = downstream)
     }
     return(p)
 }
