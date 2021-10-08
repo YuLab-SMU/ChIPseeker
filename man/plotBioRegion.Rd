@@ -12,8 +12,7 @@ plotBioRegion(
   facet = "none",
   free_y = TRUE,
   upstream = NULL,
-  downstream = NULL,
-  ...
+  downstream = NULL
 )
 }
 \arguments{
@@ -36,8 +35,6 @@ NULL reflects the gene body with no extension}
 \item{downstream}{rel object reflects the percentage of flank extension, e.g rel(0.2)
 integer reflects the actual length of flank extension or TSS region
 NULL reflects the gene body with no extension}
-
-\item{...}{}
 }
 \value{
 ggplot object

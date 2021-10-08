@@ -19,8 +19,7 @@ plotBioRegion2(
   box = 800,
   min_body_length = 1000,
   upstream = NULL,
-  downstream = NULL,
-  ...
+  downstream = NULL
 )
 }
 \arguments{

@@ -214,7 +214,7 @@ setMethod("plotAnnoBar", signature(x="csAnno"),
 ##' @param ... extra parameter
 ##' @return plot
 ##' @exportMethod plotAnnoPie
-##' @usage plotAnnoPie(x,ndigit=2, cex=0.9,col=NA,legend.position="rightside", pie3D=FALSE, radius = 0.8, ...)
+##' @usage plotAnnoPie(x,ndigit=2,cex=0.9,col=NA,legend.position="rightside",pie3D=FALSE,radius=0.8,...)
 ##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
 setMethod("plotAnnoPie", signature(x="csAnno"),
           function(x,
