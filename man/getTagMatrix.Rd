@@ -8,6 +8,7 @@ getTagMatrix(
   peak,
   upstream,
   downstream,
+  windows,
   type,
   by,
   TxDb = NULL,
@@ -23,6 +24,8 @@ getTagMatrix(
 \item{upstream}{the distance of upstream extension}
 
 \item{downstream}{the distance of downstream extension}
+
+\item{windows}{a collection of region}
 
 \item{type}{one of "start_site", "end_site", "body"}
 

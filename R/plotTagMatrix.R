@@ -80,13 +80,14 @@ plotPeakProf <- function(tagMatrix,
 ##' @param ... additional parameter
 ##' @return ggplot object
 ##' @author G Yu; Y Yan
+##' @export
 plotAvgProf <- function(tagMatrix, xlim,
                         xlab="Genomic Region (5'->3')",
                         ylab = "Peak Count Frequency",
                         conf,
                         facet="none", 
                         free_y = TRUE, 
-                        origin_label,
+                        origin_label = "TSS",
                         verbose = T,
                         ...) {
   
@@ -234,6 +235,51 @@ plotAvgProf.internal <- function(tagMatrix, conf,
   return(p)
 }
 
+##' plot the profile of peaks that align to flank sequences of TSS
+##'
+##'
+##' @title plotAvgProf
+##' @param peak peak file or GRanges object
+##' @param weightCol column name of weight
+##' @param TxDb TxDb object
+##' @param upstream upstream position
+##' @param downstream downstream position
+##' @param xlab xlab
+##' @param ylab ylab
+##' @param conf confidence interval
+##' @param facet one of 'none', 'row' and 'column'
+##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param verbose print message or not
+##' @param ... additional parameter
+##' @return ggplot object
+##' @export
+##' @author G Yu, Ming L
+plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
+                         upstream = 1000, downstream = 1000,
+                         xlab = "Genomic Region (5'->3')",
+                         ylab = "Peak Count Frequency",
+                         conf,
+                         facet = "none",
+                         free_y = TRUE,
+                         verbose = TRUE, ...) {
+  
+  plotPeakProf2(peak = peak, 
+                upstream = upstream, 
+                downstream = downstream,
+                conf,
+                by = "gene",
+                type = "start_site",
+                weightCol = weightCol, 
+                TxDb = TxDb,
+                xlab = xlab,
+                ylab = ylab,
+                facet = facet,
+                free_y = free_y,
+                verbose = verbose, 
+                nbin = 800,
+                flip_minor_strand = T)
+  
+}
 
 ##' plot the profile of peaks  by binning
 ##' 

@@ -1,3 +1,26 @@
+##' prepare the promoter regions
+##'
+##'
+##' @title getPromoters
+##' @param TxDb TxDb
+##' @param upstream upstream from TSS site
+##' @param downstream downstream from TSS site
+##' @param by one of gene or transcript
+##' @return GRanges object
+##' @export
+getPromoters <- function(TxDb=NULL,
+                         upstream=1000,
+                         downstream=1000,
+                         by = "gene") {
+  
+  getBioRegion(TxDb = TxDb,
+               upstream = upstream,
+               downstream = downstream,
+               by = by,
+               type = "start_site")
+}
+
+
 ##' prepare a bioregion of selected feature
 ##' 
 ##' this function combined previous functions getPromoters(),getBioRegion(),getGeneBody()
@@ -13,6 +36,7 @@
 ##' @return GRanges object
 ##' @import BiocGenerics IRanges GenomicRanges
 ##' @author Guangchuang Yu, Ming L
+##' @export
 getBioRegion <- function(TxDb=NULL,
                          upstream=1000,
                          downstream=1000,
@@ -111,6 +135,7 @@ getBioRegion <- function(TxDb=NULL,
 ##' @param peak peak peak file or GRanges object
 ##' @param upstream the distance of upstream extension
 ##' @param downstream the distance of downstream extension
+##' @param windows a collection of region
 ##' @param type one of "start_site", "end_site", "body"
 ##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'
 ##' @param TxDb TxDb
@@ -124,6 +149,7 @@ getBioRegion <- function(TxDb=NULL,
 getTagMatrix <- function(peak, 
                          upstream,
                          downstream, 
+                         windows,
                          type,
                          by,
                          TxDb=NULL,
@@ -138,6 +164,23 @@ getTagMatrix <- function(peak,
   ## check upstream and downstream parameter
   check_upstream_and_downstream(upstream = upstream, downstream = downstream)
   
+  if(missingArg(windows)){
+    windows <- getBioRegion(TxDb=TxDb,
+                            upstream=upstream,
+                            downstream=downstream,
+                            by=by,
+                            type=type)
+  }else{
+    
+    if (! is(windows, "GRanges")) {
+      stop("windows should be a GRanges object...")
+    }
+    
+    type <- attr(windows, 'type')
+    by <- attr(windows, 'by')
+    
+  }
+  
   if(type != 'body'){
     if(inherits(upstream, 'rel') || is.null(upstream)){
       stop("upstream and downstream for site region should be actual number...")
@@ -148,12 +191,6 @@ getTagMatrix <- function(peak,
     cat(">> preparing ",type," regions"," by ",by,"... ",
         format(Sys.time(), "%Y-%m-%d %X"), "\n",sep = "")
   }
-  
-  windows <- getBioRegion(TxDb=TxDb,
-                          upstream=upstream,
-                          downstream=downstream,
-                          by=by,
-                          type=type)
   
   
   if(type == "body" || width(windows[1]) > max_region_length){
