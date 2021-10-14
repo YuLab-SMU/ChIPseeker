@@ -158,9 +158,6 @@ getTagMatrix <- function(peak,
                          verbose = TRUE,
                          flip_minor_strand=TRUE){
   
-  ## max_region_length decides to use binning method or not
-  max_region_length <- getOption("ChIPseeker.max_region_length")
-  
   ## check upstream and downstream parameter
   check_upstream_and_downstream(upstream = upstream, downstream = downstream)
   
