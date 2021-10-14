@@ -154,12 +154,38 @@ getTagMatrix <- function(peak,
                          by,
                          TxDb=NULL,
                          weightCol = NULL, 
-                         nbin = 800,
+                         nbin = NULL,
                          verbose = TRUE,
                          flip_minor_strand=TRUE){
   
   ## check upstream and downstream parameter
   check_upstream_and_downstream(upstream = upstream, downstream = downstream)
+  
+  if(type != 'body'){
+    if(inherits(upstream, 'rel') || is.null(upstream)){
+      stop("upstream and downstream for site region should be actual number...")
+    }
+  }
+  
+  ## check nbin parameters
+  if(!is.null(nbin) && !is.numeric(nbin)){
+    stop('nbin should be NULL or numeric...')
+  }
+  
+  if(type == 'body' && is.null(nbin)){
+    stop('plotting body region should set the nbin parameter...')
+  }
+  
+  ## check nbin parameter
+  if(!is.null(nbin)){
+    cat(">> binning method is used...",
+        format(Sys.time(), "%Y-%m-%d %X"), "\n",sep = "")
+    
+    is.binning <- T
+  }else{
+    
+    is.binning <- F
+  }
   
   if(missingArg(windows)){
     windows <- getBioRegion(TxDb=TxDb,
@@ -175,13 +201,6 @@ getTagMatrix <- function(peak,
     
     type <- attr(windows, 'type')
     by <- attr(windows, 'by')
-    
-  }
-  
-  if(type != 'body'){
-    if(inherits(upstream, 'rel') || is.null(upstream)){
-      stop("upstream and downstream for site region should be actual number...")
-    }
   }
   
   if (verbose) {
@@ -190,7 +209,7 @@ getTagMatrix <- function(peak,
   }
   
   
-  if(type == "body" || width(windows[1]) > max_region_length){
+  if(is.binning){
     
     if (verbose) {
       cat(">> preparing tag matrix by binning... ",
@@ -203,9 +222,6 @@ getTagMatrix <- function(peak,
                                                nbin = nbin,
                                                upstream = upstream,
                                                downstream = downstream)
-    
-    attr(tagMatrix, "is.binning") <- T
-    
   }else{
     
     if (verbose) {
@@ -217,8 +233,6 @@ getTagMatrix <- function(peak,
                                        weightCol=weightCol, 
                                        windows=windows, 
                                        flip_minor_strand=flip_minor_strand)
-    
-    attr(tagMatrix, "is.binning") <- F
   }
   
   ## assign attribute 
@@ -226,6 +240,7 @@ getTagMatrix <- function(peak,
   attr(tagMatrix, 'downstream') = downstream
   attr(tagMatrix, 'type') = attr(windows, 'type')
   attr(tagMatrix, 'label') = attr(windows, 'label')
+  attr(tagMatrix, "is.binning") <- is.binning
   
   return(tagMatrix)
 }

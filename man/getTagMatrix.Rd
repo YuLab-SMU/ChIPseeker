@@ -13,7 +13,7 @@ getTagMatrix(
   by,
   TxDb = NULL,
   weightCol = NULL,
-  nbin = 800,
+  nbin = NULL,
   verbose = TRUE,
   flip_minor_strand = TRUE
 )
