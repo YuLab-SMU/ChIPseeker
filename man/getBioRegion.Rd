@@ -4,7 +4,13 @@
 \alias{getBioRegion}
 \title{getBioRegion}
 \usage{
-getBioRegion(TxDb = NULL, upstream = 1000, downstream = 1000, by = "gene")
+getBioRegion(
+  TxDb = NULL,
+  upstream = 1000,
+  downstream = 1000,
+  by = "gene",
+  type = "start_site"
+)
 }
 \arguments{
 \item{TxDb}{TxDb}
@@ -14,13 +20,20 @@ getBioRegion(TxDb = NULL, upstream = 1000, downstream = 1000, by = "gene")
 \item{downstream}{downstream from start site}
 
 \item{by}{one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'}
+
+\item{type}{one of "start_site", "end_site", "body"}
 }
 \value{
 GRanges object
 }
 \description{
-prepare a region center on start site of selected feature
+prepare a bioregion of selected feature
+}
+\details{
+this function combined previous functions getPromoters(),getBioRegion(),getGeneBody()
+https://github.com/GuangchuangYu/ChIPseeker/issues/16
+https://github.com/GuangchuangYu/ChIPseeker/issues/87
 }
 \author{
-Guangchuang Yu
+Guangchuang Yu, Ming L
 }

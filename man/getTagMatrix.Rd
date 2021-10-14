@@ -4,14 +4,40 @@
 \alias{getTagMatrix}
 \title{getTagMatrix}
 \usage{
-getTagMatrix(peak, weightCol = NULL, windows, flip_minor_strand = TRUE)
+getTagMatrix(
+  peak,
+  upstream,
+  downstream,
+  windows,
+  type,
+  by,
+  TxDb = NULL,
+  weightCol = NULL,
+  nbin = NULL,
+  verbose = TRUE,
+  flip_minor_strand = TRUE
+)
 }
 \arguments{
-\item{peak}{peak file or GRanges object}
+\item{peak}{peak peak file or GRanges object}
+
+\item{upstream}{the distance of upstream extension}
+
+\item{downstream}{the distance of downstream extension}
+
+\item{windows}{a collection of region}
+
+\item{type}{one of "start_site", "end_site", "body"}
+
+\item{by}{one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'}
+
+\item{TxDb}{TxDb}
 
 \item{weightCol}{column name of weight, default is NULL}
 
-\item{windows}{a collection of region with equal size, eg. promoter region.}
+\item{nbin}{the amount of nbines}
+
+\item{verbose}{print message or not}
 
 \item{flip_minor_strand}{whether flip the orientation of minor strand}
 }

@@ -8,213 +8,109 @@
 ##' @param by one of gene or transcript
 ##' @return GRanges object
 ##' @export
-##' @import BiocGenerics IRanges GenomicRanges
-##' @importFrom GenomicFeatures transcriptsBy
 getPromoters <- function(TxDb=NULL,
                          upstream=1000,
                          downstream=1000,
                          by = "gene") {
   
-  getPromoters.internal(TxDb=TxDb,
-                        upstream=upstream,
-                        downstream=downstream,
-                        by = by,
-                        type = "promoters",
-                        label = "TSS")
-  
+  getBioRegion(TxDb = TxDb,
+               upstream = upstream,
+               downstream = downstream,
+               by = by,
+               type = "start_site")
 }
 
-##' get the tts region 
+
+##' prepare a bioregion of selected feature
 ##' 
-##' 
-##' @title getTTSRegion
-##' @param TxDb TxDb
-##' @param upstream upstream from TSS site
-##' @param downstream downstream from TSS site
-##' @param by one of gene or transcript
-##' @return GRanges object
-##' @import BiocGenerics IRanges GenomicRanges
-##' @importFrom GenomicFeatures transcriptsBy
-##' @export
-## https://github.com/GuangchuangYu/ChIPseeker/issues/87
-getTTSRegion <- function(TxDb=NULL,
-                         upstream=1000,
-                         downstream=1000,
-                         by = "gene"){
-  
-  getPromoters.internal(TxDb=TxDb,
-                        upstream=upstream,
-                        downstream=downstream,
-                        by = by,
-                        type = "TTS",
-                        label = "TTS")
-}
-
-
-##' @import BiocGenerics IRanges GenomicRanges
-##' @importFrom GenomicFeatures transcriptsBy
-getPromoters.internal <- function(TxDb,
-                                  upstream,
-                                  downstream,
-                                  by,
-                                  type,
-                                  label){
-  by <- match.arg(by, c("gene", "transcript"))
-  
-  TxDb <- loadTxDb(TxDb)
-  .ChIPseekerEnv(TxDb)
-  ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
-  
-  if ( exists("upstream", envir=ChIPseekerEnv, inherits=FALSE) &&
-       exists("downstream", envir=ChIPseekerEnv, inherits=FALSE) ) {
-    us <- get("upstream", envir=ChIPseekerEnv)
-    ds <- get("downstream", envir=ChIPseekerEnv)
-    if (us == upstream && ds == downstream &&
-        exists(type, envir=ChIPseekerEnv, inherits=FALSE) ){
-      windows <- get(type, envir=ChIPseekerEnv)
-      
-      ## assign attribute 
-      attr(windows, 'type') = label
-      
-      return(windows)
-    }
-  }
-  
-  region <- getGene(TxDb, by)
-  ## get start position based on strand
-  if(type == "promoters"){
-    coordinate<- ifelse(strand(region) == "+", start(region), end(region))
-  }else{
-    coordinate<- ifelse(strand(region) == "+", end(region), start(region))
-  }
-  
-  windows <- GRanges(seqnames=seqnames(region),
-                     ranges=IRanges(coordinate-upstream, coordinate+downstream),
-                     strand=strand(region))
-  windows <- unique(windows)
-  
-  assign(type, windows, envir=ChIPseekerEnv)
-  assign("upstream", upstream, envir=ChIPseekerEnv)
-  assign("downstream", downstream, envir=ChIPseekerEnv)
-  
-  ## assign attribute 
-  attr(windows, 'type') = label
-  
-  return(windows) 
-  
-}
-
-
-##' prepare a region center on end site of selected feature
+##' this function combined previous functions getPromoters(),getBioRegion(),getGeneBody()
+##' https://github.com/GuangchuangYu/ChIPseeker/issues/16
+##' https://github.com/GuangchuangYu/ChIPseeker/issues/87
 ##'
-##' 
-##' @title getEndRegion
-##' @param TxDb TxDb
-##' @param upstream upstream from start site
-##' @param downstream downstream from start site
-##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'
-##' @return GRanges object
-##' @import BiocGenerics IRanges GenomicRanges
-##' @export
-##  https://github.com/GuangchuangYu/ChIPseeker/issues/87
-getEndRegion <- function(TxDb=NULL,
-                         upstream=1000,
-                         downstream=1000,
-                         by="gene") {
-  
-  getBioRegion.internal(TxDb=TxDb,
-                        upstream=upstream,
-                        downstream=downstream,
-                        by=by,
-                        type="TTS",
-                        label="TS")
-}
-
-##' prepare a region center on start site of selected feature
-##'
-##' 
 ##' @title getBioRegion
 ##' @param TxDb TxDb
 ##' @param upstream upstream from start site
 ##' @param downstream downstream from start site
 ##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'
+##' @param type one of "start_site", "end_site", "body"
 ##' @return GRanges object
 ##' @import BiocGenerics IRanges GenomicRanges
+##' @author Guangchuang Yu, Ming L
 ##' @export
-##' @author Guangchuang Yu
-##  https://github.com/GuangchuangYu/ChIPseeker/issues/16
 getBioRegion <- function(TxDb=NULL,
                          upstream=1000,
                          downstream=1000,
-                         by="gene") {
+                         by="gene",
+                         type="start_site"){
   
-  getBioRegion.internal(TxDb=TxDb,
-                        upstream=upstream,
-                        downstream=downstream,
-                        by=by,
-                        type="promoters",
-                        label="SS")
-  
-}
-
-##' @import BiocGenerics IRanges GenomicRanges
-getBioRegion.internal <- function(TxDb,
-                                  upstream,
-                                  downstream,
-                                  by,
-                                  type,
-                                  label){
-  by <- match.arg(by, c("gene", "transcript", "exon", "intron", "3UTR", "5UTR"))
-  
-  if (by %in% c("gene", "transcript")){
-    if(type == "promoters"){
-      return(getPromoters(TxDb, upstream, downstream, by))
-    }else{
-      return(getTTSRegion(TxDb, upstream, downstream, by))
-    }
-    
-  }
+  by <- match.arg(by, c('gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'))
+  type <- match.arg(type, c("start_site", "end_site", "body"))
   
   TxDb <- loadTxDb(TxDb)
   .ChIPseekerEnv(TxDb)
   ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
   
+  if(type == 'body'){
+    if(by %in% c('gene', 'transcript', 'exon', 'intron')){
+      label_SS <- paste0("T","SS")
+      label_TS <- paste0("T","TS")
+      label <- c(label_SS,label_TS)
+    }else{
+      label_SS <- paste0(by,"_SS")
+      label_TS <- paste0(by,"_TS")
+      label <- c(label_SS,label_TS)
+    }
+    
+  }else if(type == "start_site"){
+    if(by %in% c('gene', 'transcript', 'exon', 'intron')){
+      label <- paste0("T","SS")
+    }else{
+      label <- paste0(by,"_SS") 
+    }
+    
+  }else{
+    if(by %in% c('gene', 'transcript', 'exon', 'intron')){
+      label <- paste0("T","TS")
+    }else{
+      label <- paste0(by,"_TS")
+    }
+  }
+  
+  
+  if(by == 'gene' || by == 'transcript'){
+    regions <- getGene(TxDb, by)
+  }
+  
   if (by == "exon") {
     exonList <- get_exonList(ChIPseekerEnv)
     regions <-  unlist(exonList)
-    
-    ## assign attribute 
-    attr(regions, 'type') = 'exon_SS'
   }
   
   if (by == "intron") {
     intronList <- get_intronList(ChIPseekerEnv)
     regions <- unlist(intronList)
-    
-    ## assign attribute 
-    attr(regions, 'type') = paste0(by,label)
   }
   
   if (by == "3UTR") {
     threeUTRList <- threeUTRsByTranscript(TxDb)
     regions <- unlist(threeUTRList)
-    
-    ## assign attribute 
-    attr(regions, 'type') = paste0(by,label)
   }
   
   if (by == "5UTR") {
     fiveUTRList <- fiveUTRsByTranscript(TxDb)
     regions <- unlist(fiveUTRList)
-    
-    ## assign attribute 
-    attr(regions, 'type') = paste0(by,label)
   }
   
-  if(type == "promoters"){
+  if(type == "start_site"){
     coordinate<- ifelse(strand(regions) == "+", start(regions), end(regions))
-  }else{
+  }else if(type == "end_site"){
     coordinate<- ifelse(strand(regions) == "+", end(regions), start(regions))
+  }else{
+    ## assign attribute 
+    attr(regions, 'type') = type
+    attr(regions, 'label') = label
+    
+    return(regions)
   }
   
   bioRegion <- GRanges(seqnames=seqnames(regions),
@@ -223,25 +119,148 @@ getBioRegion.internal <- function(TxDb,
   bioRegion <- unique(bioRegion)
   
   ## assign attribute 
-  attr(bioRegion, 'type') = attr(regions, 'type')
+  attr(bioRegion, 'type') = type
+  attr(bioRegion, 'label') = label
   
   return(bioRegion)
+}
+
+
+
+##' calculate the tag matrix
+##' 
+##' 
+##' @title getTagMatrix
+##'
+##' @param peak peak peak file or GRanges object
+##' @param upstream the distance of upstream extension
+##' @param downstream the distance of downstream extension
+##' @param windows a collection of region
+##' @param type one of "start_site", "end_site", "body"
+##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'
+##' @param TxDb TxDb
+##' @param weightCol column name of weight, default is NULL
+##' @param nbin the amount of nbines 
+##' @param verbose print message or not
+##' @param flip_minor_strand whether flip the orientation of minor strand
+##' @return tagMatrix
+##' @importFrom ggplot2 rel
+##' @export
+getTagMatrix <- function(peak, 
+                         upstream,
+                         downstream, 
+                         windows,
+                         type,
+                         by,
+                         TxDb=NULL,
+                         weightCol = NULL, 
+                         nbin = NULL,
+                         verbose = TRUE,
+                         flip_minor_strand=TRUE){
   
+  ## check upstream and downstream parameter
+  check_upstream_and_downstream(upstream = upstream, downstream = downstream)
+  
+  if(type != 'body'){
+    if(inherits(upstream, 'rel') || is.null(upstream)){
+      stop("upstream and downstream for site region should be actual number...")
+    }
+  }
+  
+  ## check nbin parameters
+  if(!is.null(nbin) && !is.numeric(nbin)){
+    stop('nbin should be NULL or numeric...')
+  }
+  
+  if(type == 'body' && is.null(nbin)){
+    stop('plotting body region should set the nbin parameter...')
+  }
+  
+  ## check nbin parameter
+  if(!is.null(nbin)){
+    cat(">> binning method is used...",
+        format(Sys.time(), "%Y-%m-%d %X"), "\n",sep = "")
+    
+    is.binning <- T
+  }else{
+    
+    is.binning <- F
+  }
+  
+  if(missingArg(windows)){
+    windows <- getBioRegion(TxDb=TxDb,
+                            upstream=upstream,
+                            downstream=downstream,
+                            by=by,
+                            type=type)
+  }else{
+    
+    if (! is(windows, "GRanges")) {
+      stop("windows should be a GRanges object...")
+    }
+    
+    type <- attr(windows, 'type')
+    by <- attr(windows, 'by')
+  }
+  
+  if (verbose) {
+    cat(">> preparing ",type," regions"," by ",by,"... ",
+        format(Sys.time(), "%Y-%m-%d %X"), "\n",sep = "")
+  }
+  
+  
+  if(is.binning){
+    
+    if (verbose) {
+      cat(">> preparing tag matrix by binning... ",
+          format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    }
+    
+    tagMatrix <- getTagMatrix.binning.internal(peak = peak, 
+                                               weightCol = weightCol, 
+                                               windows = windows, 
+                                               nbin = nbin,
+                                               upstream = upstream,
+                                               downstream = downstream)
+  }else{
+    
+    if (verbose) {
+      cat(">> preparing tag matrix... ",
+          format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    }
+    
+    tagMatrix <- getTagMatrix.internal(peak=peak, 
+                                       weightCol=weightCol, 
+                                       windows=windows, 
+                                       flip_minor_strand=flip_minor_strand)
+  }
+  
+  ## assign attribute 
+  attr(tagMatrix, 'upstream') = upstream
+  attr(tagMatrix, 'downstream') = downstream
+  attr(tagMatrix, 'type') = attr(windows, 'type')
+  attr(tagMatrix, 'label') = attr(windows, 'label')
+  attr(tagMatrix, "is.binning") <- is.binning
+  
+  return(tagMatrix)
 }
 
 
 ##' calculate the tag matrix
 ##'
 ##'
-##' @title getTagMatrix
+##' @title getTagMatrix.internal
 ##' @param peak peak file or GRanges object
 ##' @param weightCol column name of weight, default is NULL
 ##' @param windows a collection of region with equal size, eg. promoter region.
 ##' @param flip_minor_strand whether flip the orientation of minor strand
 ##' @return tagMatrix
-##' @export
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
-getTagMatrix <- function(peak, weightCol=NULL, windows, flip_minor_strand=TRUE) {
+##' @author G Yu
+getTagMatrix.internal <- function(peak, 
+                                  weightCol=NULL, 
+                                  windows, 
+                                  flip_minor_strand=TRUE) {
   peak.gr <- loadPeak(peak)
   
   if (! is(windows, "GRanges")) {
@@ -339,87 +358,32 @@ getTagMatrix <- function(peak, weightCol=NULL, windows, flip_minor_strand=TRUE) 
 }
 
 
-##' prepare the genebody region
+##' calculate the tagMatrix by binning
+##' the idea was derived from the function of deeptools
+##' https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html 
 ##' 
-##' 
-##' Title getGeneBody
-##' @param TxDb TxDb
-##' @param type by one of "genes", "exon", "intron"
-##' @return GRanges object
-##' @import BiocGenerics IRanges GenomicRanges
-##' @export
-getGeneBody <- function(TxDb=NULL,
-                        type="genes"){
-  
-  type <- match.arg(type, c("genes", "exon", "intron"))
-  
-  TxDb <- loadTxDb(TxDb)
-  .ChIPseekerEnv(TxDb)
-  ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
-  
-  
-  ## select the type of gene to be windows
-  if( type == "intron"){
-    genebody <- get_intronList(ChIPseekerEnv)
-  }else if( type == "exon"){
-    genebody <- get_exonList(ChIPseekerEnv)
-  }else if(type == "genes"){
-    genebody <- getGene(TxDb)
-  }else {
-    stop("type must be genes, exon or intron..")
-  }
-  
-  ## assign attribute 
-  attr(genebody, 'type') = 'genebody'
-  
-  return(genebody)
-}
-
-
-
-##' calculate the BioRegionMatrix by binning
-##' 
-##' 
-##' Title getBioRegionMatrix
-##'
+##' @title getTagMatrix.binning.internal
 ##' @param peak peak peak file or GRanges object
 ##' @param weightCol weightCol column name of weight, default is NULL
 ##' @param windows windows a collection of region with equal or not equal size, eg. promoter region, gene region.
-##' @param box the amount of boxes needed to be splited and it should not be more than min_body_length
-##' @param min_body_length the minimum length that each gene region should be
-##' @param upstream rel object reflects the percentage of flank extension, e.g rel(0.2)
-##'                 integer reflects the actual length of flank extension
-##'                 default(NULL) reflects the gene body with no extension 
-##' @param downstream rel object reflects the percentage of flank extension, e.g rel(0.2)
-##'                   integer reflects the actual length of flank extension
-##'                   default(NULL) reflects the gene body with no extension
+##' @param nbin the amount of nbines needed to be splited and it should not be more than min_body_length
+##' @param upstream rel object, NULL or actual number
+##' @param downstream rel object, NULL or actual number
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges 
 ##' @importFrom ggplot2 rel
-##' @return bioregionmatrix
-##' @export
-getBioRegionMatrix <- function(peak, 
-                               weightCol = NULL, 
-                               windows, 
-                               box = 800,
-                               min_body_length = 1000,
-                               upstream = NULL,
-                               downstream = NULL){
+##' @return tagMatrix 
+getTagMatrix.binning.internal <- function(peak, 
+                                          weightCol = NULL, 
+                                          windows, 
+                                          nbin = 800,
+                                          upstream = NULL,
+                                          downstream = NULL){
   
-  ## the idea was derived from the function of deeptools
-  ## (https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html)  
+  min_body_length <- filter_length <- nbin
   peak.gr <- loadPeak(peak)
   
-  if (! is(windows, "GRanges")) {
+  if (!is(windows, "GRanges")) {
     stop("windows should be a GRanges object...")
-  }
-  
-  ## check upstream and downstream parameter
-  check_upstream_and_downstream(upstream = upstream, downstream = downstream)
-  
-  ## if getting TSS region, upstream and downstream parameter should only be NULL
-  if((attr(windows, 'type') == 'start_region') & (!is.null(upstream) | !is.null(downstream))){
-    stop("windows is a GRanges object with equal length(e.g promoter region).\n",
-         "If you want to extend it, try to extend it when getting windows.")
   }
   
   if (is.null(weightCol)) {
@@ -440,41 +404,46 @@ getBioRegionMatrix <- function(peak,
                               type="within", 
                               ignore.strand=TRUE)
   
-  ## extend the windows by upstream and downstream parameter
-  if(inherits(upstream, 'rel') || inherits(downstream, 'rel')){
+  ## extend the windows by rel object
+  if(inherits(upstream, 'rel')){
     
     windows1 <- windows
     start(windows1) <- start(windows1) - floor(width(windows)*as.numeric(upstream))
     end(windows1) <- end(windows1) + floor(width(windows)*as.numeric(downstream))
     windows <- windows1
-    box <- floor(box*(1+as.numeric(downstream)+as.numeric(upstream)))
+    nbin <- floor(nbin*(1+as.numeric(downstream)+as.numeric(upstream)))
+    min_body_length <- min_body_length*(1+as.numeric(upstream)+as.numeric(downstream))
     
-    cat(">> preparing matrix with upstream and downstream flank extension from ",
-        "(TSS-",100*as.numeric(upstream),"%)~(TES+",100*as.numeric(downstream),"%)...\t",
+    cat(">> preparing matrix with extension from (",attr(windows,'label')[1],"-",
+        100*as.numeric(upstream),"%)~(",attr(windows,'label')[2],"+",
+        100*as.numeric(downstream),"%)... ",
         format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
   }
   
-  if(is.null(upstream) || is.null(downstream)){
-    if(attr(windows, 'type') == 'genebody'){
-      cat(">> preparing matrix for bioregion with no flank extension...\t",
-          format(Sys.time(), "%Y-%m-%d %X"),"\n")
+  ## do not extend
+  if(is.null(upstream)){
+    if(attr(windows, 'type') == 'body'){
+      cat(">> preparing matrix for ",attr(windows, 'type')," region with no flank extension... ",
+          format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
     }else{
-      cat(">> preparing matrix for start_site_region...\t",
-          format(Sys.time(), "%Y-%m-%d %X"),"\n")
+      cat(">> preparing matrix for ",attr(windows,'type')," region... ",
+          format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
     }
   }
   
-  if(!is.null(upstream) & !inherits(upstream, 'rel')){
+  ## extend the windows by actual number 
+  if(!is.null(upstream) && !inherits(upstream, 'rel') && attr(windows, 'type')== 'body'){
     windows1 <- windows
     start(windows1) <- start(windows1) - upstream
     end(windows1) <- end(windows1) + downstream
     windows <- windows1
     upstreamPer <- floor(upstream/1000)*0.1
     downstreamPer <- floor(downstream/1000)*0.1
-    box <- floor(box*(1+upstreamPer+downstreamPer))
+    nbin <- floor(nbin*(1+upstreamPer+downstreamPer))
+    min_body_length <- min_body_length+upstream+downstream
     
-    cat(">> preparing matrix with upstream and downstream flank extension from ",
-        "(TSS-",upstream,"bp)~(TES+",downstream,"bp)...\t",
+    cat(">> preparing matrix with flank extension from (",attr(windows,'label')[1],"-",
+        upstream,"bp)~(",attr(windows,'label')[2],"+",downstream,"bp)... ",
         format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
   }
   
@@ -486,57 +455,55 @@ getBioRegionMatrix <- function(peak,
   ## remove the gene that has no binding proteins
   peakView <- lapply(peakView, function(x) x <- x[viewSums(x)!=0])
   
-  bioregionList <- lapply(peakView, function(x) viewApply(x, as.vector))
+  tagMatrixList <- lapply(peakView, function(x) viewApply(x, as.vector))
   
-  ## the "if" judge statement is to be compatible with 
-  ## windows that has the equal size, like promoters(-3000,3000)
-  if(class(bioregionList[[1]])=="matrix"){
+  if(!attr(windows, 'type') == 'body'){
     
-    bioregionList <- lapply(bioregionList, function(x) t(x))
+    tagMatrixList <- lapply(tagMatrixList, function(x) t(x))
     
     # to remove the chromosome that has no binding protein
-    bioregionList <- bioregionList[vapply(bioregionList, function(x) length(x)>0, FUN.VALUE = logical(1))]
-    suppressWarnings(bioregionList <- do.call("rbind", bioregionList))
+    tagMatrixList <- tagMatrixList[vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))]
+    suppressWarnings(tagMatrixList <- do.call("rbind", tagMatrixList))
     
     ## create a matrix to receive binning result                 
-    bioregionmatrix <- matrix(nrow = dim(bioregionList)[1],ncol = box)
+    tagMatrix  <- matrix(nrow = dim(tagMatrixList)[1],ncol = nbin)
     
     ## this circulation is to deal with different gene             
-    for (i in 1:dim(bioregionList)[1]) {
+    for (i in 1:dim(tagMatrixList)[1]) {
       
-      ## seq is the distance between different boxes
-      seq <- floor(length(bioregionList[i,])/box)
+      ## seq is the distance between different nbines
+      seq <- floor(length(tagMatrixList[i,])/nbin)
       
       ## cursor record the position of calculation
       cursor <- 1
       
       ## the third circulation is to calculate the bingding strength
       ## it has two parts
-      ## the first part is to for the box(1:box-1)
+      ## the first part is to for the nbin(1:nbin-1)
       ## because the seq is not derived from exact division
       ## the second part is to compensate the loss of non-exact-division
       
-      ## this the first part for 1:(box-1)
-      for (j in 1:(box-1)) {
+      ## this the first part for 1:(nbin-1)
+      for (j in 1:(nbin-1)) {
         
         read <- 0
         
         for (k in cursor:(cursor+seq-1)) {
-          read <- read + bioregionList[i,k]
+          read <- read + tagMatrixList[i,k]
         }
         
-        bioregionmatrix[i,j] <- read/seq
+        tagMatrix [i,j] <- read/seq
         
         cursor <- cursor+seq
       }
       
       ## this the second part to to compensate the loss of non-exact-division
       read <- 0
-      for (k in cursor:length(bioregionList[i,])) {
-        read <- read+bioregionList[i,k]
+      for (k in cursor:length(tagMatrixList[i,])) {
+        read <- read+tagMatrixList[i,k]
       }
       
-      bioregionmatrix[i,box] <- read/(length(bioregionList[i,])-cursor)
+      tagMatrix [i,nbin] <- read/(length(tagMatrixList[i,])-cursor)
     }
     
   }else{
@@ -544,32 +511,49 @@ getBioRegionMatrix <- function(peak,
     ## extend genebody by atual number
     if(!is.null(upstream) & !inherits(upstream, 'rel')){
       
-      bioregionList <- bioregionList[vapply(bioregionList, function(x) length(x)>0, FUN.VALUE = logical(1))]
+      tagMatrixList <- tagMatrixList[vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))]
       
-      bioregionList <- lapply(bioregionList, function(x) x[vapply(x, function(y) length(y)>min_body_length+downstream+upstream,FUN.VALUE = logical(1))])
-      suppressWarnings(bioregionList <- do.call("rbind",bioregionList))
+      ## count the amount before filtering
+      pre_amount <- 0
+      for(i in 1:length(tagMatrixList)){
+        pre_amount <- pre_amount+length(tagMatrixList[[i]])
+      }
       
-      bioregionmatrix <- matrix(nrow = length(bioregionList),ncol = box)
+      tagMatrixList <- lapply(tagMatrixList, function(x) x[vapply(x, function(y) length(y)>min_body_length,FUN.VALUE = logical(1))])
       
-      upstreambox <- floor(box*(upstreamPer/(1+upstreamPer+downstreamPer)))
-      bodybox <- floor(box*(1/(1+upstreamPer+downstreamPer)))
-      downstreambox <- floor(box*(downstreamPer/(1+upstreamPer+downstreamPer)))
+      ## count the amount after filtering
+      amount <- 0
+      for(i in 1:length(tagMatrixList)){
+        amount <- amount+length(tagMatrixList[[i]])
+      }
+      
+      cat(">> ",pre_amount-amount," peaks(",100*((pre_amount-amount)/pre_amount),
+          "%), having lengths smaller than ",filter_length,"bp, are filtered... ",
+          format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
+      
+      suppressWarnings(tagMatrixList <- do.call("rbind",tagMatrixList))
+      
+      tagMatrix  <- matrix(nrow = length(tagMatrixList),ncol = nbin)
+      
+      upstreamnbin <- floor(nbin*(upstreamPer/(1+upstreamPer+downstreamPer)))
+      bodynbin <- floor(nbin*(1/(1+upstreamPer+downstreamPer)))
+      downstreamnbin <- floor(nbin*(downstreamPer/(1+upstreamPer+downstreamPer)))
       
       # count the upstream 
-      for (i in 1:length(bioregionList)) {
+      for (i in 1:length(tagMatrixList)) {
         
-        seq <- floor(upstream/upstreambox)
+        seq <- floor(upstream/upstreamnbin)
         cursor <- 1
         
-        for (j in 1:(upstreambox-1)) {
+        for (j in 1:(upstreamnbin-1)) {
           
           read <- 0
           
           for (k in cursor:(cursor+seq-1)) {
-            read <- read + bioregionList[[i]][k]
+            read <- read + tagMatrixList[[i]][k]
           }
           
-          bioregionmatrix[i,j] <- read/seq
+          tagMatrix [i,j] <- read/seq
           
           cursor <- cursor+seq
         }
@@ -577,110 +561,122 @@ getBioRegionMatrix <- function(peak,
         
         read <- 0
         for (k in cursor:upstream) {
-          read <- read+bioregionList[[i]][k]
+          read <- read+tagMatrixList[[i]][k]
         }
         
-        bioregionmatrix[i,upstreambox] <- read/(upstream-cursor)
+        tagMatrix [i,upstreamnbin] <- read/(upstream-cursor)
       }
       
       
       ## count genebody
-      for (i in 1:length(bioregionList)) {
+      for (i in 1:length(tagMatrixList)) {
         
-        seq <- floor((length(bioregionList[[i]])-upstream-downstream)/bodybox)
+        seq <- floor((length(tagMatrixList[[i]])-upstream-downstream)/bodynbin)
         cursor <- upstream+1
         
-        for (j in (upstreambox+1):(upstreambox+bodybox-1)) {
+        for (j in (upstreamnbin+1):(upstreamnbin+bodynbin-1)) {
           
           read <- 0
           
           for (k in cursor:(cursor+seq-1)) {
-            read <- read + bioregionList[[i]][k]
+            read <- read + tagMatrixList[[i]][k]
           }
           
-          bioregionmatrix[i,j] <- read/seq
+          tagMatrix [i,j] <- read/seq
           
           cursor <- cursor+seq
         }
         
         read <- 0
-        for (k in cursor:(length(bioregionList[[i]])-downstream)) {
-          read <- read+bioregionList[[i]][k]
+        for (k in cursor:(length(tagMatrixList[[i]])-downstream)) {
+          read <- read+tagMatrixList[[i]][k]
         }
         
-        bioregionmatrix[i,bodybox+upstreambox] <- read/(length(bioregionList[[i]])-downstream-cursor)
+        tagMatrix [i,bodynbin+upstreamnbin] <- read/(length(tagMatrixList[[i]])-downstream-cursor)
       }
       
       
       ## count downstream
-      for (i in 1:length(bioregionList)) {
+      for (i in 1:length(tagMatrixList)) {
         
-        seq <- floor(downstream/downstreambox)
-        cursor <- length(bioregionList[[i]])-downstream+1
+        seq <- floor(downstream/downstreamnbin)
+        cursor <- length(tagMatrixList[[i]])-downstream+1
         
-        for (j in (upstreambox+bodybox+1):(box-1)) {
+        for (j in (upstreamnbin+bodynbin+1):(nbin-1)) {
           
           read <- 0
           
           for (k in cursor:(cursor+seq-1)) {
-            read <- read + bioregionList[[i]][k]
+            read <- read + tagMatrixList[[i]][k]
           }
           
-          bioregionmatrix[i,j] <- read/seq
+          tagMatrix [i,j] <- read/seq
           
           cursor <- cursor+seq
         }
         
         read <- 0
-        for (k in cursor:length(bioregionList[[i]])) {
-          read <- read+bioregionList[[i]][k]
+        for (k in cursor:length(tagMatrixList[[i]])) {
+          read <- read+tagMatrixList[[i]][k]
         }
         
-        bioregionmatrix[i,box] <- read/(length(bioregionList[[i]])-cursor)
+        tagMatrix [i,nbin] <- read/(length(tagMatrixList[[i]])-cursor)
       }
       
     }else{
       
-      bioregionList <- bioregionList[vapply(bioregionList, function(x) length(x)>0, FUN.VALUE = logical(1))]
+      tagMatrixList <- tagMatrixList[vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))]
       
-      bioregionList <- lapply(bioregionList, function(x) x[vapply(x, function(y) length(y)>min_body_length,FUN.VALUE = logical(1))])
-      suppressWarnings(bioregionList <- do.call("rbind",bioregionList))
+      ## count the amount before filtering
+      pre_amount <- 0
+      for(i in 1:length(tagMatrixList)){
+        pre_amount <- pre_amount+length(tagMatrixList[[i]])
+      }
       
-      bioregionmatrix <- matrix(nrow = length(bioregionList),ncol = box)
+      tagMatrixList <- lapply(tagMatrixList, function(x) x[vapply(x, function(y) length(y)>min_body_length, FUN.VALUE = logical(1))])
       
-      for (i in 1:length(bioregionList)) {
+      ## count the amount after filtering
+      amount <- 0
+      for(i in 1:length(tagMatrixList)){
+        amount <- amount+length(tagMatrixList[[i]])
+      }
+      
+      cat(">> ",pre_amount-amount," peaks(",100*((pre_amount-amount)/pre_amount),
+          "%), having lengths smaller than ",filter_length,"bp, are filtered... ",
+          format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
+      
+      suppressWarnings(tagMatrixList <- do.call("rbind",tagMatrixList))
+      
+      tagMatrix  <- matrix(nrow = length(tagMatrixList),ncol = nbin)
+      
+      for (i in 1:length(tagMatrixList)) {
         
-        seq <- floor(length(bioregionList[[i]])/box)
+        seq <- floor(length(tagMatrixList[[i]])/nbin)
         cursor <- 1
         
-        for (j in 1:(box-1)) {
+        for (j in 1:(nbin-1)) {
           
           read <- 0
           
           for (k in cursor:(cursor+seq-1)) {
-            read <- read + bioregionList[[i]][k]
+            read <- read + tagMatrixList[[i]][k]
           }
           
-          bioregionmatrix[i,j] <- read/seq
+          tagMatrix [i,j] <- read/seq
           
           cursor <- cursor+seq
         }
         
         read <- 0
-        for (k in cursor:length(bioregionList[[i]])) {
-          read <- read+bioregionList[[i]][k]
+        for (k in cursor:length(tagMatrixList[[i]])) {
+          read <- read+tagMatrixList[[i]][k]
         }
         
-        bioregionmatrix[i,box] <- read/(length(bioregionList[[i]])-cursor)
+        tagMatrix [i,nbin] <- read/(length(tagMatrixList[[i]])-cursor)
       }
     }
     
   }
   
-  
-  ## assign attribute 
-  attr(bioregionmatrix, 'type') = attr(windows, 'type')
-  
-  return(bioregionmatrix)
+  return(tagMatrix)
 }
-
