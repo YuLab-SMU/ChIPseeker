@@ -1,7 +1,6 @@
-# ChIPseeker 1.29.1.991
+# ChIPseeker 1.29.1.992
 
-+ add `getTSSRegion` and `getEndRegion` to generate tag matrix for TTS and end site of other types (2021-10-07, Thu, @MingLi-292, #160)
-+ add function of plotting bioregion by bining (2021-09-28, Tue; @MingLi-929, #156)
++ extend functions for plotting peak profiles to support other types of bioregions (2021-10-15, Fri, @MingLi-292, #156, #160, #162)
 
 # ChIPseeker 1.29.1
 
