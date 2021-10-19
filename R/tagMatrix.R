@@ -109,8 +109,6 @@ getBioRegion <- function(TxDb=NULL,
     ## assign attribute 
     attr(regions, 'type') = type
     attr(regions, 'label') = label
-    attr(regions, 'upstream') = upstream
-    attr(regions, 'downstream') = downstream
     
     return(regions)
   }
@@ -176,8 +174,20 @@ getTagMatrix <- function(peak,
     
     type <- attr(windows, 'type')
     by <- attr(windows, 'by')
-    upstream <- attr(windows, 'upstream')
-    downstream <- attr(windows, 'downstream')
+    
+    if(type == "body"){
+      if(missingArg(upstream)){
+        upstream <- NULL
+      }
+      
+      if(missingArg(downstream)){
+        downstream <- NULL
+      }
+
+    }else{
+      upstream <- attr(windows, 'upstream')
+      downstream <- attr(windows, 'downstream')
+    }
   }
   
   ## check upstream and downstream parameter
