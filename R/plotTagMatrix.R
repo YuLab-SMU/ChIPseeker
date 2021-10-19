@@ -575,7 +575,7 @@ plotPeakProf2 <- function(peak,
                           facet = "none",
                           free_y = TRUE,
                           verbose = TRUE, 
-                          nbin = 800,
+                          nbin = NULL,
                           flip_minor_strand = T,
                           ...){
   

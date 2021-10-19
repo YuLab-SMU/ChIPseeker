@@ -18,7 +18,7 @@ plotPeakProf2(
   facet = "none",
   free_y = TRUE,
   verbose = TRUE,
-  nbin = 800,
+  nbin = NULL,
   flip_minor_strand = T,
   ...
 )
