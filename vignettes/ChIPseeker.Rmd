@@ -119,7 +119,7 @@ data("tagMatrixList")
 tagMatrix <- tagMatrixList[[4]]
 ```
 
-In the above code, you should notice that tagMatrix is not restricted to TSS regions. The regions can be other types that defined by the user.
+In the above code, you should notice that tagMatrix is not restricted to TSS regions. The regions can be other types that defined by the user. Referring to the [pull request#16](https://github.com/YuLab-SMU/ChIPseeker/pull/162), `r Biocpkg("ChIPseeker")` expanded the scope of region. Users can input the `type` and `by` parameters to get the regions they want.
 
 ### Heatmap of ChIP binding to TSS regions
 
@@ -156,10 +156,83 @@ plotAvgProf(tagMatrix, xlim=c(-3000, 3000), conf = 0.95, resample = 1000)
 
 ![](figures/plotAvgProf_boot.png)
 
-## Profile of ChIP peaks binding to start site of Exon/Intron
+## Profile of ChIP peaks binding to different regions
 
-Referring to the [issue #16](https://github.com/GuangchuangYu/ChIPseeker/issues/16), we developed `getBioRegion` function to support centering all peaks to the start region of Exon/Intron. Users can also create heatmap or average profile of ChIP peaks binding to these regions.
+Referring to the [issue #16](https://github.com/GuangchuangYu/ChIPseeker/issues/16) and [pull request#16](https://github.com/YuLab-SMU/ChIPseeker/pull/162), we developed and improved several functions support start site region, end site region and body region of Gene/Transcript/Exon/Intron/3UTR/5UTR. `getBioRegion` can prepare the different regions for ChIP peaks to bind. `getTagMatrix` can accept `type`, `by`, `upstream` and `downstream` parameters to get tagmatrix according to different needs. `plotPeakProf` and `plotPeakProf2` supports the plotting of profiles of peaks binding to different regions.Users can also create heatmap or average profile of ChIP peaks binding to these regions.
 
+In order to plot body regions, a new methond `binning`,was introduced to `getTagMatrix`. The idea of `binning` was derived from [deeptools](https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html)[@ramirez2016deeptools2]. `binning` scaled the regions having different lengths to the equal length by deviding the regions into the same amounts of boxes. Because the amount of boxes is equal, the regions can be thought of scaling to equal length [issue #156(comment)](https://github.com/YuLab-SMU/ChIPseeker/pull/156#issue-976786634).`binning` method can speed up the `getTagMatrix` by changing the precision from bp to box(several bps) [pull request #162(comment)](https://github.com/YuLab-SMU/ChIPseeker/pull/162#issuecomment-943113022).
+
+There are three ways to plot these regions. First, users can use `getBioRegion` to prepare the regions. Then align the peaks that are mapping to these regions, and generate the tagMatrix by `getTagMatrix`. At Last, plot the figures by `plotPeakProf`. Second, users can input `type` and `by` parameters to `getTagMatrix` to get the tagMatrix and plot the figures. Third, users can use `plotPeakProf2` to do everything in one step.
+
+### Binning method for profile of ChIP peaks binding to TSS regions
+Here uses the method of inputting `type` and `by` parameters. `type = "start_site"` means the start site region. `by = "gene"` means that it is the start site region of gene(TSS regions). If users want to use binning method, the `nbin` method must be set.
+```{r eval=F}
+## The results of binning method and normal method are nearly the same. 
+tagMatrix_binning <- getTagMatrix(peak = peak, TxDb = txdb, 
+                                  upstream = 3000, downstream = 3000, 
+                                  type = "start_site", by = "gene", 
+                                  weightCol = "V5", nbin = 800)
+```
+
+### Profile of ChIP peaks binding to body regions 
+Reffering to [issue #87](https://github.com/YuLab-SMU/ChIPseeker/issues/87), we improved and developed several functions to plot body region of Gene/Transcript/Exon/Intron/3UTR/5UTR. If users want to get more information from the body region, we added `upstream` and `downstream` parameters to functions in order to get flank extension of body regions. `upstream` and `downstream` can be NULL(default), rel object and actual numbers. NULL(default) reflects body regions with no flank extension. Rel object reflects the percentage of total length of body regions. Actual numbers reflects the actual length of flank extension. 
+
+```{r eval=F}
+## Here uses `plotPeakProf2` to do all things in one step.
+## Gene body regions having lengths smaller than nbin will be filtered
+## A message will be given to warning users about that.
+## >> 9 peaks(0.872093%), having lengths smaller than 800bp, are filtered...
+
+plotPeakProf2(peak = peak, upstream = rel(0.2), downstream = rel(0.2),
+              conf = 0.95, by = "gene", type = "body",
+              TxDb = txdb, weightCol = "V5")
+```
+![](figures/plotPeakProf2_body_extend.png)
+
+Users can also get the profile ChIP peaks binding to gene body regions with no flank extension or flank extension decided by actual length.
+```{r eval=F}
+## The first method using getBioRegion(), getTagMatrix() and plotPeakProf() to plot in three steps.
+genebody <- getBioRegion(TxDb = txdb,
+                         by = "gene",
+                         type = "body")
+
+matrix_no_flankextension <- getTagMatrix(peak,windows = genebody, nbin = 800)
+
+plotPeakProf(matrix_no_flankextension,conf = 0.95)
+
+## The second method of using getTagMatrix() and plotPeakProf() to plot in two steps
+matrix_actual_extension <- getTagMatrix(peak,windows = genebody, nbin = 800,
+                                        upstream = 1000,downstream = 1000)
+plotPeakProf(matrix_actual_extension,conf = 0.95)
+
+```
+
+Users can also get the body region of 5UTR/3UTR.
+```{r eval=F}
+five_UTR_body <- getTagMatrix(peak = peak, 
+                              TxDb = txdb,
+                              upstream = rel(0.2),
+                              downstream = rel(0.2), 
+                              type = "body",
+                              by = "5UTR",
+                              weightCol = "V5",
+                              nbin = 50)
+
+plotPeakProf(tagMatrix = five_UTR_body, conf = 0.95)
+```
+
+### Profile of ChIP peaks binding to TTS regions 
+```{r eval=F}
+TTS_matrix <- getTagMatrix(peak = peak, 
+                           TxDb = txdb,
+                           upstream = 3000,
+                           downstream = 3000, 
+                           type = "end_site",
+                           by = "gene",
+                           weightCol = "V5")
+
+plotPeakProf(tagMatrix = TTS_matrix, conf = 0.95)
+```
 
 # Peak Annotation
 ```{r}
@@ -274,7 +347,7 @@ More information can be found in the vignettes of Bioconductor packages `r Biocp
 
 ## Profile of several ChIP peak data binding to TSS region
 
-Function `plotAvgProf` and `tagHeatmap` can accept a list of `tagMatrix` and visualize profile or heatmap among several ChIP experiments, while `plotAvgProf2` and `peakHeatmap` can accept a list of bed files and perform the same task in one step.
+Function `plotAvgProf`, `tagHeatmap` and `plotPeakProf` can accept a list of `tagMatrix` and visualize profile or heatmap among several ChIP experiments, while `plotAvgProf2` , `peakHeatmap` and `plotPeakProf2` can accept a list of bed files and perform the same task in one step.
 
 
 ### Average profiles
@@ -294,12 +367,33 @@ plotAvgProf(tagMatrixList, xlim=c(-3000, 3000), conf=0.95,resample=500, facet="r
 
 ![](figures/plotAvgProf_boot_list.png)
 
+```{r eval=F}
+## normal method
+plotPeakProf2(files, upstream = 3000, downstream = 3000, conf = 0.95,
+              by = "gene", type = "start_site", TxDb = txdb,
+              facet = "row")
+
+## binning method 
+plotPeakProf2(files, upstream = 3000, downstream = 3000, conf = 0.95,
+              by = "gene", type = "start_site", TxDb = txdb,
+              facet = "row", nbin = 800)
+
+```
+
 ### Peak heatmaps
 
 ```{r eval=TRUE, fig.cap="Heatmap of ChIP peaks among different experiments", fig.align="center", fig.height=8, fig.width=7}
 tagHeatmap(tagMatrixList, xlim=c(-3000, 3000), color=NULL)
 ```
 
+## Profile of several ChIP peak data binding to body region
+Functions `plotPeakProf` and `plotPeakProf2` also support to plot profile of several ChIP peak data binding to body region.
+```{r eval=F}
+plotPeakProf2(files, upstream = rel(0.2), downstream = rel(0.2),
+              conf = 0.95, by = "gene", type = "body",
+              TxDb = txdb, facet = "row", nbin = 800)
+```
+![](figures/plotPeakProf_body_boot_list_.png)
 
 ## ChIP peak annotation comparision
 The `plotAnnoBar` and `plotDistToTSS` can also accept input of a named list of annotated peaks (output of `annotatePeak`).
