@@ -1,6 +1,6 @@
-# ChIPseeker 1.29.1.992
+# ChIPseeker 1.29.2
 
-+ extend functions for plotting peak profiles to support other types of bioregions (2021-10-15, Fri, @MingLi-292, #156, #160, #162)
++ extend functions for plotting peak profiles to support other types of bioregions (2021-10-15, Fri, @MingLi-292, #156, #160, #162, #163)
 
 # ChIPseeker 1.29.1
 
