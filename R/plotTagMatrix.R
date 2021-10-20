@@ -9,6 +9,7 @@
 ##' @param ylab y label
 ##' @param facet one of 'none', 'row' and 'column'
 ##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param ... additional parameter
 ##' @return ggplot object
 ##' @importFrom ggplot2 rel
 ##' @export
@@ -17,7 +18,8 @@ plotPeakProf <- function(tagMatrix,
                          xlab="Genomic Region (5'->3')",
                          ylab = "Peak Count Frequency",
                          facet="none", 
-                         free_y = TRUE){
+                         free_y = TRUE,
+                         ...){
   
   if(is(tagMatrix, "list")){
     upstream <- attr(tagMatrix[[1]], 'upstream')
@@ -43,7 +45,8 @@ plotPeakProf <- function(tagMatrix,
                         free_y = free_y,
                         upstream = upstream,
                         downstream = downstream,
-                        label = label)
+                        label = label,
+                        ...)
     
     
   }else{
@@ -56,7 +59,8 @@ plotPeakProf <- function(tagMatrix,
                  conf = conf,
                  facet = facet, 
                  free_y = free_y,
-                 origin_label = label)
+                 origin_label = label,
+                 ...)
     
   }
   
@@ -180,7 +184,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
   pos <- value <- .id <- Lower <- Upper <- NULL
   
   if ( listFlag ) {
-    tagCount <- lapply(tagMatrix, function(x) getTagCount(x, xlim = xlim, conf = conf))
+    tagCount <- lapply(tagMatrix, function(x) getTagCount(x, xlim = xlim, conf = conf, ...))
     tagCount <- list_to_dataframe(tagCount)
     tagCount$.id <- factor(tagCount$.id, levels=names(tagMatrix))
     p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
@@ -189,7 +193,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
                            linetype = 0, alpha = 0.2)
     }
   } else {
-    tagCount <- getTagCount(tagMatrix, xlim = xlim, conf = conf)
+    tagCount <- getTagCount(tagMatrix, xlim = xlim, conf = conf, ...)
     p <- ggplot(tagCount, aes(pos))
     if (!(is.na(conf))) {
       p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper),
@@ -277,7 +281,8 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
                 free_y = free_y,
                 verbose = verbose, 
                 nbin = 800,
-                flip_minor_strand = T)
+                flip_minor_strand = T,
+                ...)
   
 }
 
@@ -298,6 +303,7 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
 ##'                   integer reflects the actual length of flank extension or TSS region
 ##'                   NULL reflects the gene body with no extension
 ##' @param label label
+##' @param ... additional parameter
 ##' @return ggplot object
 ##' @importFrom ggplot2 rel
 plotAvgProf.binning <- function(tagMatrix, 
@@ -308,7 +314,8 @@ plotAvgProf.binning <- function(tagMatrix,
                                 free_y = TRUE,
                                 upstream = NULL,
                                 downstream = NULL,
-                                label) {
+                                label,
+                                ...) {
   
   ## S4Vectors change the behavior of ifelse
   ## see https://support.bioconductor.org/p/70871/
@@ -325,7 +332,8 @@ plotAvgProf.binning <- function(tagMatrix,
                                       free_y = free_y,
                                       upstream = upstream,
                                       downstream = downstream,
-                                      label = label)
+                                      label = label,
+                                      ...)
   } else {
     p <- plotAvgProf.binning.internal(tagMatrix , 
                                       xlab = xlab, 
@@ -334,7 +342,8 @@ plotAvgProf.binning <- function(tagMatrix,
                                       free_y = free_y, 
                                       upstream = upstream,
                                       downstream = downstream,
-                                      label = label)
+                                      label = label,
+                                      ...)
   }
   return(p)
 }
@@ -361,7 +370,8 @@ plotAvgProf.binning.internal <- function(tagMatrix,
                                          free_y = TRUE,
                                          upstream = NULL,
                                          downstream = NULL,
-                                         label) {
+                                         label,
+                                         ...) {
   
   listFlag <- FALSE
   if (is(tagMatrix, "list")) {
@@ -395,7 +405,7 @@ plotAvgProf.binning.internal <- function(tagMatrix,
   pos <- value <- .id <- Lower <- Upper <- NULL
   
   if ( listFlag ) {
-    tagCount <- lapply(tagMatrix , function(x) getTagCount(x, xlim = xlim, conf = conf))
+    tagCount <- lapply(tagMatrix , function(x) getTagCount(x, xlim = xlim, conf = conf, ...))
     tagCount <- list_to_dataframe(tagCount)
     tagCount$.id <- factor(tagCount$.id, levels=names(tagMatrix ))
     p <- ggplot(tagCount, aes(pos, group=.id, color=.id))
@@ -404,7 +414,7 @@ plotAvgProf.binning.internal <- function(tagMatrix,
                            linetype = 0, alpha = 0.2)
     }
   } else {
-    tagCount <- getTagCount(tagMatrix , xlim = xlim, conf = conf)
+    tagCount <- getTagCount(tagMatrix , xlim = xlim, conf = conf, ...)
     p <- ggplot(tagCount, aes(pos))
     if (!(is.na(conf))) {
       p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper),
@@ -565,7 +575,7 @@ plotPeakProf2 <- function(peak,
                           facet = "none",
                           free_y = TRUE,
                           verbose = TRUE, 
-                          nbin = 800,
+                          nbin = NULL,
                           flip_minor_strand = T,
                           ...){
   
@@ -600,14 +610,16 @@ plotPeakProf2 <- function(peak,
                       xlab = xlab,
                       ylab = ylab,
                       facet = facet, 
-                      free_y = free_y)
+                      free_y = free_y,
+                      ...)
     
   } else {
     p <- plotPeakProf(tagMatrix = tagMatrix,
                       xlab = xlab,
                       ylab = ylab,
                       facet= facet, 
-                      free_y = free_y)
+                      free_y = free_y,
+                      ...)
   }
   return(p)
   

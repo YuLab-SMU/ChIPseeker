@@ -121,6 +121,8 @@ getBioRegion <- function(TxDb=NULL,
   ## assign attribute 
   attr(bioRegion, 'type') = type
   attr(bioRegion, 'label') = label
+  attr(bioRegion, 'upstream') = upstream
+  attr(bioRegion, 'downstream') = downstream
   
   return(bioRegion)
 }
@@ -158,6 +160,36 @@ getTagMatrix <- function(peak,
                          verbose = TRUE,
                          flip_minor_strand=TRUE){
   
+  if(missingArg(windows)){
+    windows <- getBioRegion(TxDb=TxDb,
+                            upstream=upstream,
+                            downstream=downstream,
+                            by=by,
+                            type=type)
+  }else{
+    
+    if (! is(windows, "GRanges")) {
+      stop("windows should be a GRanges object...")
+    }
+    
+    type <- attr(windows, 'type')
+    by <- attr(windows, 'by')
+    
+    if(type == "body"){
+      if(missingArg(upstream)){
+        upstream <- NULL
+      }
+      
+      if(missingArg(downstream)){
+        downstream <- NULL
+      }
+
+    }else{
+      upstream <- attr(windows, 'upstream')
+      downstream <- attr(windows, 'downstream')
+    }
+  }
+  
   ## check upstream and downstream parameter
   check_upstream_and_downstream(upstream = upstream, downstream = downstream)
   
@@ -185,22 +217,6 @@ getTagMatrix <- function(peak,
   }else{
     
     is.binning <- F
-  }
-  
-  if(missingArg(windows)){
-    windows <- getBioRegion(TxDb=TxDb,
-                            upstream=upstream,
-                            downstream=downstream,
-                            by=by,
-                            type=type)
-  }else{
-    
-    if (! is(windows, "GRanges")) {
-      stop("windows should be a GRanges object...")
-    }
-    
-    type <- attr(windows, 'type')
-    by <- attr(windows, 'by')
   }
   
   if (verbose) {

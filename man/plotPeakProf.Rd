@@ -10,7 +10,8 @@ plotPeakProf(
   xlab = "Genomic Region (5'->3')",
   ylab = "Peak Count Frequency",
   facet = "none",
-  free_y = TRUE
+  free_y = TRUE,
+  ...
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ plotPeakProf(
 \item{facet}{one of 'none', 'row' and 'column'}
 
 \item{free_y}{if TRUE, y will be scaled by AvgProf}
+
+\item{...}{additional parameter}
 }
 \value{
 ggplot object

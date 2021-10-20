@@ -13,7 +13,8 @@ plotAvgProf.binning(
   free_y = TRUE,
   upstream = NULL,
   downstream = NULL,
-  label
+  label,
+  ...
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ integer reflects the actual length of flank extension or TSS region
 NULL reflects the gene body with no extension}
 
 \item{label}{label}
+
+\item{...}{additional parameter}
 }
 \value{
 ggplot object
