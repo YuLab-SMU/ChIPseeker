@@ -55,6 +55,109 @@ getAnnoStat <- function(x) {
 }
 
 
+
+##' Combine csAnno Object
+##'
+##'
+##' https://github.com/YuLab-SMU/ChIPseeker/issues/157
+##' @title combine_csAnno
+##' @param x csAnno object
+##' @param ... csAnno objects
+##' @return csAnno object
+##' @export
+combine_csAnno <- function(x, ...){
+    z <- list(x, ...)
+    
+    if(sum(vapply(z, function(x) !is(x, "csAnno"), FUN.VALUE = logical(1))) != 0){
+        stop("not supported...")
+    }
+    
+    if(length(z)<2){
+        stop("need two or more csAnno object...")
+    }
+    
+    
+    if(sum(!duplicated(lapply(z, function(x) x@tssRegion[1]))) != 1 
+       && sum(!duplicated(lapply(z, function(x) x@tssRegion[2]))) != 1){
+        stop("the tss regions of different csAnno objects should be the same...")
+    }
+    
+    if(sum(!duplicated(lapply(z, function(x) x@level))) != 1){
+        stop("the level of different csAnno object should be the same...")
+    }
+    
+    if(sum(!duplicated(lapply(z, function(x) x@hasGenomicAnnotation))) != 1){
+        stop("the status of GenomicAnnotation should be the same...")
+    }
+    
+    combine_tssRegion <- x@tssRegion
+    combine_level <- x@level
+    combine_hasGenomicAnnotation <- x@hasGenomicAnnotation
+    
+    combine_anno <- x@anno
+    for(i in 2:length(z)){
+        combine_anno <- c(combine_anno,z[[i]]@anno)
+    }
+    
+    combine_detailGenomicAnnotation <- lapply(z, function(x) x@detailGenomicAnnotation)
+    combine_detailGenomicAnnotation <- do.call("rbind",combine_detailGenomicAnnotation)
+    
+    combine_peakNum <- x@peakNum
+    for(i in 2:length(z)){
+        combine_peakNum <- combine_peakNum+z[[i]]@peakNum
+    }
+    
+    feature <- x@annoStat$Feature
+    for(i in 2:length(z)){
+        if(length(feature)<length(z[[i]]@annoStat$Feature)){
+            feature_levels <- levels(z[[i]]@annoStat$Feature)
+            feature <- c(as.vector(feature),as.vector(z[[i]]@annoStat$Feature))
+            feature <- feature[!duplicated(feature)]
+            feature <- factor(feature, 
+                              levels = feature_levels)
+            feature <- sort(feature)
+        }else{
+            feature_levels <- levels(feature)
+            feature <- c(as.vector(feature),as.vector(z[[i]]@annoStat$Feature))
+            feature <- feature[!duplicated(feature)]
+            feature <- factor(feature, 
+                              levels = feature_levels)
+            feature <- sort(feature)
+        }
+    }
+    
+    combine_annoStat <- data.frame(Feature=feature)
+    
+    for(i in 1:length(z)){
+        combine_annoStat <- merge(combine_annoStat, z[[i]]@annoStat, 
+                                  by = "Feature", all = T, sort = F)
+        combine_annoStat[is.na(combine_annoStat)] <- 0
+        combine_annoStat <- combine_annoStat[order(combine_annoStat$Feature),]
+    }
+    
+    total <- (ncol(combine_annoStat)-1)*100
+    combine_annoStat$sum <- rowSums(combine_annoStat[, 2:ncol(combine_annoStat)])
+    
+    
+    for (i in 1:length(combine_annoStat$sum)) {
+        combine_annoStat$result[i] <- (combine_annoStat$sum[i]/total)*100
+    }
+    
+    annoStat_result <- data.frame(Feature=combine_annoStat[,1],Frequency=combine_annoStat[,ncol(combine_annoStat)])
+    
+    res <- new("csAnno",
+               anno = combine_anno,
+               tssRegion = combine_tssRegion,
+               level = combine_level,
+               hasGenomicAnnotation = combine_hasGenomicAnnotation,
+               detailGenomicAnnotation = combine_detailGenomicAnnotation,
+               annoStat = annoStat_result,
+               peakNum = combine_peakNum
+    )
+    
+    return(res)
+}
+
 ##' vennpie method generics
 ##'
 ##' @name vennpie
