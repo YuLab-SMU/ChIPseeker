@@ -1,7 +1,6 @@
 PKGNAME := $(shell sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGVERS := $(shell sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGSRC  := $(shell basename `pwd`)
-BIOCOLD := RELEASE_3_13
 BIOCCUR := RELEASE_3_14
 
 
@@ -49,12 +48,11 @@ gitmaintain:
 	git prune -v;\
 	git fsck --full
 
-
-rmoldrelease:
-	git branch -D $(BIOCOLD)
+rmrelease:
+	git branch -D $(BIOCVER)
 
 release:
-	git checkout $(BIOCCUR);\
+	git checkout $(BIOCVER);\
 	git fetch --all
 
 
