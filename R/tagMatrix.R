@@ -400,6 +400,7 @@ getTagMatrix.binning.internal <- function(peak,
   
   min_body_length <- filter_length <- nbin
   peak.gr <- loadPeak(peak)
+  type <- attr(windows, 'type')
   
   ## users should set the upstream and downstream parameter equal
   ## if they want to flip minor strand
@@ -477,7 +478,7 @@ getTagMatrix.binning.internal <- function(peak,
                        unique(as.character(seqnames(windows))))
   
   windows <- as(windows, "IntegerRangesList")[chr.idx]
-  attr(windows,'type') <- attr(windows1, 'type')
+  attr(windows,'type') <- type
   
   peakView <- Views(peak.cov[chr.idx], 
                     windows)
