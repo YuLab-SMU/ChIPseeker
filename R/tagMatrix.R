@@ -424,8 +424,8 @@ getTagMatrix.binning.internal <- function(peak,
   if(inherits(upstream, 'rel')){
     
     windows1 <- windows
-    start(windows1) <- start(windows1) - floor(width(windows)*as.numeric(upstream))
-    end(windows1) <- end(windows1) + floor(width(windows)*as.numeric(downstream))
+    start(windows1) <- suppressWarnings(start(windows1) - floor(width(windows)*as.numeric(upstream)))
+    end(windows1) <- suppressWarnings(end(windows1) + floor(width(windows)*as.numeric(downstream)))
     windows <- windows1
     nbin <- floor(nbin*(1+as.numeric(downstream)+as.numeric(upstream)))
     min_body_length <- min_body_length*(1+as.numeric(upstream)+as.numeric(downstream))
@@ -450,8 +450,8 @@ getTagMatrix.binning.internal <- function(peak,
   ## extend the windows by actual number 
   if(!is.null(upstream) && !inherits(upstream, 'rel') && attr(windows, 'type')== 'body'){
     windows1 <- windows
-    start(windows1) <- start(windows1) - upstream
-    end(windows1) <- end(windows1) + downstream
+    start(windows1) <- suppressWarnings(start(windows1) - upstream)
+    end(windows1) <- suppressWarnings(end(windows1) + downstream)
     windows <- windows1
     upstreamPer <- floor(upstream/1000)*0.1
     downstreamPer <- floor(downstream/1000)*0.1
