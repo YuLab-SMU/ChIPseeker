@@ -297,7 +297,7 @@ getGene <- function(TxDb, by="gene") {
         if ( exists("Genes", envir=ChIPseekerEnv, inherits=FALSE) ) {
             features <- get("Genes", envir=ChIPseekerEnv)
         } else {
-            features <- suppressWarnings(genes(TxDb))
+            features <- suppressMessages(genes(TxDb))
             assign("Genes", features, envir=ChIPseekerEnv)
         }
     } else {
