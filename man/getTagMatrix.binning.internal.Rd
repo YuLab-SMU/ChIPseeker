@@ -10,7 +10,8 @@ getTagMatrix.binning.internal(
   windows,
   nbin = 800,
   upstream = NULL,
-  downstream = NULL
+  downstream = NULL,
+  flip_minor_strand = T
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ getTagMatrix.binning.internal(
 \item{upstream}{rel object, NULL or actual number}
 
 \item{downstream}{rel object, NULL or actual number}
+
+\item{flip_minor_strand}{whether flip the orientation of minor strand}
 }
 \value{
 tagMatrix

@@ -237,7 +237,8 @@ getTagMatrix <- function(peak,
                                                windows = windows, 
                                                nbin = nbin,
                                                upstream = upstream,
-                                               downstream = downstream)
+                                               downstream = downstream,
+                                               flip_minor_strand = flip_minor_strand)
   }else{
     
     if (verbose) {
@@ -343,7 +344,7 @@ getTagMatrix.internal <- function(peak,
                        IRanges(start=rep(1, length(cov.len)),
                                end=cov.len))
   windows <- subsetByOverlaps(windows, cov.width,
-                              type="within", ignore.strand=TRUE)
+                              type="within", ignore.strand=F)
   
   chr.idx <- intersect(names(peak.cov),
                        unique(as.character(seqnames(windows))))
@@ -385,6 +386,7 @@ getTagMatrix.internal <- function(peak,
 ##' @param nbin the amount of nbines needed to be splited and it should not be more than min_body_length
 ##' @param upstream rel object, NULL or actual number
 ##' @param downstream rel object, NULL or actual number
+##' @param flip_minor_strand whether flip the orientation of minor strand
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges 
 ##' @importFrom ggplot2 rel
 ##' @return tagMatrix 
@@ -393,10 +395,18 @@ getTagMatrix.binning.internal <- function(peak,
                                           windows, 
                                           nbin = 800,
                                           upstream = NULL,
-                                          downstream = NULL){
+                                          downstream = NULL,
+                                          flip_minor_strand = T){
   
   min_body_length <- filter_length <- nbin
   peak.gr <- loadPeak(peak)
+  
+  ## users should set the upstream and downstream parameter equal
+  ## if they want to flip minor strand
+  if(!identical(upstream, downstream) && flip_minor_strand){
+    stop('users should set the upstream and downstream parameter equal',
+         'if they want to flip minor strand...')
+  }
   
   if (!is(windows, "GRanges")) {
     stop("windows should be a GRanges object...")
@@ -418,7 +428,7 @@ getTagMatrix.binning.internal <- function(peak,
   windows <- subsetByOverlaps(windows, 
                               cov.width,
                               type="within", 
-                              ignore.strand=TRUE)
+                              ignore.strand=F)
   
   ## extend the windows by rel object
   if(inherits(upstream, 'rel')){
@@ -466,10 +476,21 @@ getTagMatrix.binning.internal <- function(peak,
   chr.idx <- intersect(names(peak.cov),
                        unique(as.character(seqnames(windows))))
   
-  peakView <- Views(peak.cov[chr.idx], as(windows, "IntegerRangesList")[chr.idx])
+  windows <- as(windows, "IntegerRangesList")[chr.idx]
+  attr(windows,'type') <- attr(windows1, 'type')
+  
+  peakView <- Views(peak.cov[chr.idx], 
+                    windows)
   
   ## remove the gene that has no binding proteins
-  peakView <- lapply(peakView, function(x) x <- x[viewSums(x)!=0])
+  for (i in 1:length(peakView)) {
+    
+    index <- viewSums(peakView[[i]])!= 0
+    peakView[[i]] <- peakView[[i]][index]
+    windows[[i]] <- windows[[i]][index]
+  } 
+  
+  peakView <- lapply(peakView, function(x) x <- x[viewSums(x)!=0] )
   
   tagMatrixList <- lapply(peakView, function(x) viewApply(x, as.vector))
   
@@ -477,49 +498,61 @@ getTagMatrix.binning.internal <- function(peak,
     
     tagMatrixList <- lapply(tagMatrixList, function(x) t(x))
     
-    # to remove the chromosome that has no binding protein
-    tagMatrixList <- tagMatrixList[vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))]
-    suppressWarnings(tagMatrixList <- do.call("rbind", tagMatrixList))
+    # to remove the chromosome that do not bind protein
+    index <- vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))
+    tagMatrixList <- tagMatrixList[index]
+    windows <- windows[index]
     
-    ## create a matrix to receive binning result                 
-    tagMatrix  <- matrix(nrow = dim(tagMatrixList)[1],ncol = nbin)
+    ## create a matrix to receive binning results
+    tagMatrix <- list()
     
-    ## this circulation is to deal with different gene             
-    for (i in 1:dim(tagMatrixList)[1]) {
+    ## this circulation is to deal with different chromosomes
+    for (i in 1:length(tagMatrixList)) {
       
-      ## seq is the distance between different nbines
-      seq <- floor(length(tagMatrixList[i,])/nbin)
+      tagMatrix[[i]] <- matrix(nrow = nrow(tagMatrixList[[i]]),ncol = nbin)
       
-      ## cursor record the position of calculation
-      cursor <- 1
-      
-      ## the third circulation is to calculate the bingding strength
-      ## it has two parts
-      ## the first part is to for the nbin(1:nbin-1)
-      ## because the seq is not derived from exact division
-      ## the second part is to compensate the loss of non-exact-division
-      
-      ## this the first part for 1:(nbin-1)
-      for (j in 1:(nbin-1)) {
+      ## this circulation is to deal with different genes
+      for (j in 1:nrow(tagMatrixList[[i]])) {
         
-        read <- 0
+        ## seq is the distance between different bins
+        seq <- floor(length(tagMatrixList[[i]][j,])/nbin)
         
-        for (k in cursor:(cursor+seq-1)) {
-          read <- read + tagMatrixList[i,k]
+        ## cursor record the position of calculation
+        cursor <- 1
+        
+        ## the third circulation is to calculate the binding strength
+        ## it has two parts
+        ## the first part is to for the nbin(1:nbin-1)
+        ## because the seq is not derived from exact division
+        ## the second part is to compensate the loss of non-exact-division
+        
+        ## this the first part for 1:(nbin-1)
+        for (k in 1:(nbin-1)) {
+          
+          read <- 0
+          
+          for (z in cursor:(cursor+seq-1)) {
+            read <- read + tagMatrixList[[i]][j,z]
+          }
+          
+          tagMatrix[[i]][j,k] <- read/seq
+          
+          cursor <- cursor+seq
         }
         
-        tagMatrix [i,j] <- read/seq
+        ## this the second part to to compensate the loss of non-exact-division
+        read <- 0
+        for (z in cursor:length(tagMatrixList[[i]][j,])) {
+          read <- read+tagMatrixList[[i]][j,z]
+        }
         
-        cursor <- cursor+seq
+        tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][j,])-cursor)
       }
       
-      ## this the second part to to compensate the loss of non-exact-division
-      read <- 0
-      for (k in cursor:length(tagMatrixList[i,])) {
-        read <- read+tagMatrixList[i,k]
+      if(flip_minor_strand){
+        minus.idx <- which(as.character(mcols(windows[[i]])[["strand"]]) == "-")
+        tagMatrix[[i]][minus.idx,] <- tagMatrix[[i]][minus.idx, ncol(tagMatrix[[i]]):1]
       }
-      
-      tagMatrix [i,nbin] <- read/(length(tagMatrixList[i,])-cursor)
     }
     
   }else{
@@ -527,7 +560,9 @@ getTagMatrix.binning.internal <- function(peak,
     ## extend genebody by atual number
     if(!is.null(upstream) & !inherits(upstream, 'rel')){
       
-      tagMatrixList <- tagMatrixList[vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))]
+      index <- vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))
+      tagMatrixList <- tagMatrixList[index]
+      windows <- windows[index]
       
       ## count the amount before filtering
       pre_amount <- 0
@@ -535,7 +570,12 @@ getTagMatrix.binning.internal <- function(peak,
         pre_amount <- pre_amount+length(tagMatrixList[[i]])
       }
       
-      tagMatrixList <- lapply(tagMatrixList, function(x) x[vapply(x, function(y) length(y)>min_body_length,FUN.VALUE = logical(1))])
+      for (i in 1:length(tagMatrixList)) {
+        
+        index <- vapply(tagMatrixList[[i]], function(y) length(y)>min_body_length,FUN.VALUE = logical(1))
+        tagMatrixList[[i]] <- tagMatrixList[[i]][index]
+        windows[[i]] <- windows[[i]][index]
+      }
       
       ## count the amount after filtering
       amount <- 0
@@ -546,102 +586,112 @@ getTagMatrix.binning.internal <- function(peak,
       cat(">> ",pre_amount-amount," peaks(",100*((pre_amount-amount)/pre_amount),
           "%), having lengths smaller than ",filter_length,"bp, are filtered... ",
           format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
-      
-      suppressWarnings(tagMatrixList <- do.call("rbind",tagMatrixList))
-      
-      tagMatrix  <- matrix(nrow = length(tagMatrixList),ncol = nbin)
       
       upstreamnbin <- floor(nbin*(upstreamPer/(1+upstreamPer+downstreamPer)))
       bodynbin <- floor(nbin*(1/(1+upstreamPer+downstreamPer)))
       downstreamnbin <- floor(nbin*(downstreamPer/(1+upstreamPer+downstreamPer)))
       
-      # count the upstream 
+      tagMatrix <- list()
+      
       for (i in 1:length(tagMatrixList)) {
         
-        seq <- floor(upstream/upstreamnbin)
-        cursor <- 1
+        tagMatrix[[i]] <- matrix(nrow = length(tagMatrixList[[i]]),ncol = nbin)
         
-        for (j in 1:(upstreamnbin-1)) {
+        ## count the upstream 
+        for (j in 1:length(tagMatrixList[[i]])) {
           
-          read <- 0
+          seq <- floor(upstream/upstreamnbin)
+          cursor <- 1
           
-          for (k in cursor:(cursor+seq-1)) {
-            read <- read + tagMatrixList[[i]][k]
+          for (k in 1:(upstreamnbin-1)) {
+            
+            read <- 0
+            
+            for (z in cursor:(cursor+seq-1)) {
+              read <- read + tagMatrixList[[i]][[j]][z]
+            }
+            
+            tagMatrix[[i]][j,k] <- read/seq
+            
+            cursor <- cursor+seq
           }
           
-          tagMatrix [i,j] <- read/seq
-          
-          cursor <- cursor+seq
-        }
-        
-        
-        read <- 0
-        for (k in cursor:upstream) {
-          read <- read+tagMatrixList[[i]][k]
-        }
-        
-        tagMatrix [i,upstreamnbin] <- read/(upstream-cursor)
-      }
-      
-      
-      ## count genebody
-      for (i in 1:length(tagMatrixList)) {
-        
-        seq <- floor((length(tagMatrixList[[i]])-upstream-downstream)/bodynbin)
-        cursor <- upstream+1
-        
-        for (j in (upstreamnbin+1):(upstreamnbin+bodynbin-1)) {
           
           read <- 0
-          
-          for (k in cursor:(cursor+seq-1)) {
-            read <- read + tagMatrixList[[i]][k]
+          for (z in cursor:upstream) {
+            read <- read+tagMatrixList[[i]][[j]][z]
           }
           
-          tagMatrix [i,j] <- read/seq
+          tagMatrix[[i]][j,upstreamnbin] <- read/(upstream-cursor)
           
-          cursor <- cursor+seq
         }
         
-        read <- 0
-        for (k in cursor:(length(tagMatrixList[[i]])-downstream)) {
-          read <- read+tagMatrixList[[i]][k]
-        }
-        
-        tagMatrix [i,bodynbin+upstreamnbin] <- read/(length(tagMatrixList[[i]])-downstream-cursor)
-      }
-      
-      
-      ## count downstream
-      for (i in 1:length(tagMatrixList)) {
-        
-        seq <- floor(downstream/downstreamnbin)
-        cursor <- length(tagMatrixList[[i]])-downstream+1
-        
-        for (j in (upstreamnbin+bodynbin+1):(nbin-1)) {
+        ## count genebody
+        for (j in 1:length(tagMatrixList[[i]])) {
+          
+          seq <- floor((length(tagMatrixList[[i]][[j]])-upstream-downstream)/bodynbin)
+          cursor <- upstream+1
+          
+          for (k in (upstreamnbin+1):(upstreamnbin+bodynbin-1)) {
+            
+            read <- 0
+            
+            for (z in cursor:(cursor+seq-1)) {
+              read <- read + tagMatrixList[[i]][[j]][z]
+            }
+            
+            tagMatrix[[i]][j,k] <- read/seq
+            
+            cursor <- cursor+seq
+          }
           
           read <- 0
-          
-          for (k in cursor:(cursor+seq-1)) {
-            read <- read + tagMatrixList[[i]][k]
+          for (z in cursor:(length(tagMatrixList[[i]][[j]])-downstream)) {
+            read <- read+tagMatrixList[[i]][[j]][z]
           }
           
-          tagMatrix [i,j] <- read/seq
+          tagMatrix[[i]][j,bodynbin+upstreamnbin] <- read/(length(tagMatrixList[[i]][[j]])-downstream-cursor)
+        }
+        
+        ## count downstream
+        for (j in 1:length(tagMatrixList[[i]])) {
           
-          cursor <- cursor+seq
+          seq <- floor(downstream/downstreamnbin)
+          cursor <- length(tagMatrixList[[i]][[j]])-downstream+1
+          
+          for (k in (upstreamnbin+bodynbin+1):(nbin-1)) {
+            
+            read <- 0
+            
+            for (z in cursor:(cursor+seq-1)) {
+              read <- read + tagMatrixList[[i]][[j]][z]
+            }
+            
+            tagMatrix[[i]][j,k] <- read/seq
+            
+            cursor <- cursor+seq
+          }
+          
+          read <- 0
+          for (z in cursor:length(tagMatrixList[[i]][[j]])) {
+            read <- read+tagMatrixList[[i]][[j]][z]
+          }
+          
+          tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][[j]])-cursor)
         }
         
-        read <- 0
-        for (k in cursor:length(tagMatrixList[[i]])) {
-          read <- read+tagMatrixList[[i]][k]
+        if(flip_minor_strand){
+          minus.idx <- which(as.character(mcols(windows[[i]])[["strand"]]) == "-")
+          tagMatrix[[i]][minus.idx,] <- tagMatrix[[i]][minus.idx, ncol(tagMatrix[[i]]):1]
         }
         
-        tagMatrix [i,nbin] <- read/(length(tagMatrixList[[i]])-cursor)
       }
       
     }else{
       
-      tagMatrixList <- tagMatrixList[vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))]
+      index <- vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))
+      tagMatrixList <- tagMatrixList[index]
+      windows <- windows[index]
       
       ## count the amount before filtering
       pre_amount <- 0
@@ -649,7 +699,12 @@ getTagMatrix.binning.internal <- function(peak,
         pre_amount <- pre_amount+length(tagMatrixList[[i]])
       }
       
-      tagMatrixList <- lapply(tagMatrixList, function(x) x[vapply(x, function(y) length(y)>min_body_length, FUN.VALUE = logical(1))])
+      for (i in 1:length(tagMatrixList)) {
+        
+        index <- vapply(tagMatrixList[[i]], function(y) length(y)>min_body_length,FUN.VALUE = logical(1))
+        tagMatrixList[[i]] <- tagMatrixList[[i]][index]
+        windows[[i]] <- windows[[i]][index]
+      }
       
       ## count the amount after filtering
       amount <- 0
@@ -660,39 +715,52 @@ getTagMatrix.binning.internal <- function(peak,
       cat(">> ",pre_amount-amount," peaks(",100*((pre_amount-amount)/pre_amount),
           "%), having lengths smaller than ",filter_length,"bp, are filtered... ",
           format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
-      
-      suppressWarnings(tagMatrixList <- do.call("rbind",tagMatrixList))
-      
-      tagMatrix  <- matrix(nrow = length(tagMatrixList),ncol = nbin)
+  
+      tagMatrix <- list()
       
       for (i in 1:length(tagMatrixList)) {
         
-        seq <- floor(length(tagMatrixList[[i]])/nbin)
-        cursor <- 1
+        tagMatrix[[i]] <- matrix(nrow = length(tagMatrixList[[i]]),ncol = nbin)
         
-        for (j in 1:(nbin-1)) {
+        for (j in 1:length(tagMatrixList[[i]])) {
           
-          read <- 0
+          seq <- floor(length(tagMatrixList[[i]][[j]])/nbin)
+          cursor <- 1
           
-          for (k in cursor:(cursor+seq-1)) {
-            read <- read + tagMatrixList[[i]][k]
+          for (k in 1:(nbin-1)) {
+            
+            read <- 0
+            
+            for (z in cursor:(cursor+seq-1)) {
+              read <- read + tagMatrixList[[i]][[j]][z]
+            }
+            
+            tagMatrix[[i]][j,k] <- read/seq
+            
+            cursor <- cursor+seq
           }
           
-          tagMatrix [i,j] <- read/seq
+          read <- 0
+          for (z in cursor:length(tagMatrixList[[i]][[j]])) {
+            read <- read+tagMatrixList[[i]][[j]][z]
+          }
           
-          cursor <- cursor+seq
+          tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][[j]])-cursor)
+          
         }
         
-        read <- 0
-        for (k in cursor:length(tagMatrixList[[i]])) {
-          read <- read+tagMatrixList[[i]][k]
+        if(flip_minor_strand){
+          minus.idx <- which(as.character(mcols(windows[[i]])[["strand"]]) == "-")
+          tagMatrix[[i]][minus.idx,] <- tagMatrix[[i]][minus.idx, ncol(tagMatrix[[i]]):1]
         }
-        
-        tagMatrix [i,nbin] <- read/(length(tagMatrixList[[i]])-cursor)
       }
+      
     }
     
   }
+  
+  ## combine the results
+  tagMatrix <- do.call("rbind",tagMatrix)
   
   return(tagMatrix)
 }
