@@ -692,7 +692,7 @@ peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
   if (listFlag) {
     tagMatrix <- lapply(peak, getTagMatrix, weightCol=weightCol, windows=promoter)
   } else {
-    tagMatrix <- getTagMatrix(peak, weightCol, promoter)
+    tagMatrix <- getTagMatrix(peak, weightCol = weightCol, windows = promoter)
   }
   
   if (verbose) {
