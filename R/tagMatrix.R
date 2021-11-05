@@ -491,8 +491,6 @@ getTagMatrix.binning.internal <- function(peak,
     windows[[i]] <- windows[[i]][index]
   } 
   
-  peakView <- lapply(peakView, function(x) x <- x[viewSums(x)!=0] )
-  
   tagMatrixList <- lapply(peakView, function(x) viewApply(x, as.vector))
   
   if(!attr(windows, 'type') == 'body'){
