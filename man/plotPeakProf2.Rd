@@ -19,7 +19,7 @@ plotPeakProf2(
   free_y = TRUE,
   verbose = TRUE,
   nbin = NULL,
-  flip_minor_strand = T,
+  ignore_strand = F,
   ...
 )
 }
@@ -52,7 +52,7 @@ plotPeakProf2(
 
 \item{nbin}{the amount of nbines}
 
-\item{flip_minor_strand}{whether flip the orientation of minor strand}
+\item{ignore_strand}{whether flip the orientation of minor strand}
 
 \item{...}{additional parameter}
 }

@@ -193,14 +193,6 @@ getTagMatrix <- function(peak,
   ## check upstream and downstream parameter
   check_upstream_and_downstream(upstream = upstream, downstream = downstream)
   
-  
-  ## users should set the upstream and downstream parameter equal
-  ## if they want to flip minor strand for non-body regions
-  if(!identical(upstream, downstream) && !ignore_strand && type != "body"){
-    stop('users should set the upstream and downstream parameter equal',
-         'if they want to flip minor strand...')
-  }
-  
   if(type != 'body'){
     if(inherits(upstream, 'rel') || is.null(upstream)){
       stop("upstream and downstream for site region should be actual number...")
@@ -370,9 +362,6 @@ getTagMatrix.internal <- function(peak,
   
   ## minus strand
   if (!ignore_strand) {
-    ## should set to FALSE if upstream is not equal to downstream
-    ## can set to FALSE if e.g. 3k-TSS-3k
-    ## should set to TRUE if e.g. 3k-TSS-100
     minus.idx <- which(as.character(strand(windows)) == "-")
     tagMatrix[minus.idx,] <- tagMatrix[minus.idx, ncol(tagMatrix):1]
   }

@@ -281,7 +281,7 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
                 free_y = free_y,
                 verbose = verbose, 
                 nbin = 800,
-                flip_minor_strand = T,
+                ignore_strand = F,
                 ...)
   
 }
@@ -557,7 +557,7 @@ plotAvgProf.binning.internal <- function(tagMatrix,
 ##' @param free_y if TRUE, y will be scaled by AvgProf
 ##' @param verbose print message or not
 ##' @param nbin the amount of nbines 
-##' @param flip_minor_strand whether flip the orientation of minor strand
+##' @param ignore_strand whether flip the orientation of minor strand
 ##' @param ... additional parameter
 ##' @return ggplot object
 ##' @export
@@ -576,7 +576,7 @@ plotPeakProf2 <- function(peak,
                           free_y = TRUE,
                           verbose = TRUE, 
                           nbin = NULL,
-                          flip_minor_strand = T,
+                          ignore_strand = F,
                           ...){
   
   if ( is(peak, "list") ) {
@@ -589,7 +589,7 @@ plotPeakProf2 <- function(peak,
                         weightCol = weightCol, 
                         nbin = nbin,
                         verbose = verbose,
-                        flip_minor_strand = flip_minor_strand)
+                        ignore_strand = ignore_strand)
   } else {
     tagMatrix <- getTagMatrix(peak = peak, 
                               upstream = upstream,
@@ -600,7 +600,7 @@ plotPeakProf2 <- function(peak,
                               weightCol = weightCol, 
                               nbin = nbin,
                               verbose = verbose,
-                              flip_minor_strand = flip_minor_strand)
+                              ignore_strand = ignore_strand)
   }
   
   
