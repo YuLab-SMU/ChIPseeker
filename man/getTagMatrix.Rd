@@ -15,7 +15,7 @@ getTagMatrix(
   weightCol = NULL,
   nbin = NULL,
   verbose = TRUE,
-  flip_minor_strand = TRUE
+  ignore_strand = FALSE
 )
 }
 \arguments{
@@ -39,7 +39,7 @@ getTagMatrix(
 
 \item{verbose}{print message or not}
 
-\item{flip_minor_strand}{whether flip the orientation of minor strand}
+\item{ignore_strand}{whether flip the orientation of minor strand}
 }
 \value{
 tagMatrix

@@ -4,12 +4,7 @@
 \alias{getTagMatrix.internal}
 \title{getTagMatrix.internal}
 \usage{
-getTagMatrix.internal(
-  peak,
-  weightCol = NULL,
-  windows,
-  flip_minor_strand = TRUE
-)
+getTagMatrix.internal(peak, weightCol = NULL, windows, ignore_strand = FALSE)
 }
 \arguments{
 \item{peak}{peak file or GRanges object}
@@ -18,7 +13,7 @@ getTagMatrix.internal(
 
 \item{windows}{a collection of region with equal size, eg. promoter region.}
 
-\item{flip_minor_strand}{whether flip the orientation of minor strand}
+\item{ignore_strand}{whether flip the orientation of minor strand}
 }
 \value{
 tagMatrix
