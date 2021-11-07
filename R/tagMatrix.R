@@ -144,7 +144,7 @@ getBioRegion <- function(TxDb=NULL,
 ##' @param weightCol column name of weight, default is NULL
 ##' @param nbin the amount of nbines 
 ##' @param verbose print message or not
-##' @param flip_minor_strand whether flip the orientation of minor strand
+##' @param ignore_strand whether flip the orientation of minor strand
 ##' @return tagMatrix
 ##' @importFrom ggplot2 rel
 ##' @export
@@ -158,7 +158,7 @@ getTagMatrix <- function(peak,
                          weightCol = NULL, 
                          nbin = NULL,
                          verbose = TRUE,
-                         flip_minor_strand=TRUE){
+                         ignore_strand= FALSE){
   
   if(missingArg(windows)){
     windows <- getBioRegion(TxDb=TxDb,
@@ -238,7 +238,7 @@ getTagMatrix <- function(peak,
                                                nbin = nbin,
                                                upstream = upstream,
                                                downstream = downstream,
-                                               flip_minor_strand = flip_minor_strand)
+                                               ignore_strand = ignore_strand)
   }else{
     
     if (verbose) {
@@ -249,7 +249,7 @@ getTagMatrix <- function(peak,
     tagMatrix <- getTagMatrix.internal(peak=peak, 
                                        weightCol=weightCol, 
                                        windows=windows, 
-                                       flip_minor_strand=flip_minor_strand)
+                                       ignore_strand=ignore_strand)
   }
   
   ## assign attribute 
@@ -270,14 +270,14 @@ getTagMatrix <- function(peak,
 ##' @param peak peak file or GRanges object
 ##' @param weightCol column name of weight, default is NULL
 ##' @param windows a collection of region with equal size, eg. promoter region.
-##' @param flip_minor_strand whether flip the orientation of minor strand
+##' @param ignore_strand whether flip the orientation of minor strand
 ##' @return tagMatrix
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
 ##' @author G Yu
 getTagMatrix.internal <- function(peak, 
                                   weightCol=NULL, 
                                   windows, 
-                                  flip_minor_strand=TRUE) {
+                                  ignore_strand= FALSE) {
   peak.gr <- loadPeak(peak)
   
   if (! is(windows, "GRanges")) {
@@ -361,10 +361,10 @@ getTagMatrix.internal <- function(peak,
   tagMatrix <- tagMatrix[order(idx),]
   
   ## minus strand
-  if (flip_minor_strand) {
+  if (!ignore_strand) {
     ## should set to FALSE if upstream is not equal to downstream
-    ## can set to TRUE if e.g. 3k-TSS-3k
-    ## should set to FALSE if e.g. 3k-TSS-100
+    ## can set to FALSE if e.g. 3k-TSS-3k
+    ## should set to TRUE if e.g. 3k-TSS-100
     minus.idx <- which(as.character(strand(windows)) == "-")
     tagMatrix[minus.idx,] <- tagMatrix[minus.idx, ncol(tagMatrix):1]
   }
@@ -386,7 +386,7 @@ getTagMatrix.internal <- function(peak,
 ##' @param nbin the amount of nbines needed to be splited and it should not be more than min_body_length
 ##' @param upstream rel object, NULL or actual number
 ##' @param downstream rel object, NULL or actual number
-##' @param flip_minor_strand whether flip the orientation of minor strand
+##' @param ignore_strand whether flip the orientation of minor strand
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges 
 ##' @importFrom ggplot2 rel
 ##' @return tagMatrix 
@@ -396,7 +396,7 @@ getTagMatrix.binning.internal <- function(peak,
                                           nbin = 800,
                                           upstream = NULL,
                                           downstream = NULL,
-                                          flip_minor_strand = T){
+                                          ignore_strand = FALSE){
   
   min_body_length <- filter_length <- nbin
   peak.gr <- loadPeak(peak)
@@ -404,7 +404,7 @@ getTagMatrix.binning.internal <- function(peak,
   
   ## users should set the upstream and downstream parameter equal
   ## if they want to flip minor strand
-  if(!identical(upstream, downstream) && flip_minor_strand){
+  if(!identical(upstream, downstream) && !ignore_strand){
     stop('users should set the upstream and downstream parameter equal',
          'if they want to flip minor strand...')
   }
@@ -548,7 +548,7 @@ getTagMatrix.binning.internal <- function(peak,
         tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][j,])-cursor)
       }
       
-      if(flip_minor_strand){
+      if(!ignore_strand){
         minus.idx <- which(as.character(mcols(windows[[i]])[["strand"]]) == "-")
         tagMatrix[[i]][minus.idx,] <- tagMatrix[[i]][minus.idx, ncol(tagMatrix[[i]]):1]
       }
@@ -679,7 +679,7 @@ getTagMatrix.binning.internal <- function(peak,
           tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][[j]])-cursor)
         }
         
-        if(flip_minor_strand){
+        if(!ignore_strand){
           minus.idx <- which(as.character(mcols(windows[[i]])[["strand"]]) == "-")
           tagMatrix[[i]][minus.idx,] <- tagMatrix[[i]][minus.idx, ncol(tagMatrix[[i]]):1]
         }
@@ -748,7 +748,7 @@ getTagMatrix.binning.internal <- function(peak,
           
         }
         
-        if(flip_minor_strand){
+        if(!ignore_strand){
           minus.idx <- which(as.character(mcols(windows[[i]])[["strand"]]) == "-")
           tagMatrix[[i]][minus.idx,] <- tagMatrix[[i]][minus.idx, ncol(tagMatrix[[i]]):1]
         }
