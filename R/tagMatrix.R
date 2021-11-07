@@ -402,12 +402,6 @@ getTagMatrix.binning.internal <- function(peak,
   peak.gr <- loadPeak(peak)
   type <- attr(windows, 'type')
   
-  ## users should set the upstream and downstream parameter equal
-  ## if they want to flip minor strand
-  if(!identical(upstream, downstream) && !ignore_strand){
-    stop('users should set the upstream and downstream parameter equal',
-         'if they want to flip minor strand...')
-  }
   
   if (!is(windows, "GRanges")) {
     stop("windows should be a GRanges object...")
