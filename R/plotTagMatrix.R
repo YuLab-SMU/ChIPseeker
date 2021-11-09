@@ -92,7 +92,7 @@ plotAvgProf <- function(tagMatrix, xlim,
                         facet="none", 
                         free_y = TRUE, 
                         origin_label = "TSS",
-                        verbose = T,
+                        verbose = TRUE,
                         ...) {
   
   ## S4Vectors change the behavior of ifelse
@@ -254,6 +254,7 @@ plotAvgProf.internal <- function(tagMatrix, conf,
 ##' @param facet one of 'none', 'row' and 'column'
 ##' @param free_y if TRUE, y will be scaled by AvgProf
 ##' @param verbose print message or not
+##' @param ignore_strand ignore the strand information or not
 ##' @param ... additional parameter
 ##' @return ggplot object
 ##' @export
@@ -265,7 +266,9 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
                          conf,
                          facet = "none",
                          free_y = TRUE,
-                         verbose = TRUE, ...) {
+                         verbose = TRUE, 
+                         ignore_strand = FALSE,
+                         ...) {
   
   plotPeakProf2(peak = peak, 
                 upstream = upstream, 
@@ -281,7 +284,7 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
                 free_y = free_y,
                 verbose = verbose, 
                 nbin = 800,
-                ignore_strand = F,
+                ignore_strand = ignore_strand,
                 ...)
   
 }
@@ -557,7 +560,7 @@ plotAvgProf.binning.internal <- function(tagMatrix,
 ##' @param free_y if TRUE, y will be scaled by AvgProf
 ##' @param verbose print message or not
 ##' @param nbin the amount of nbines 
-##' @param ignore_strand whether flip the orientation of minor strand
+##' @param ignore_strand ignore the strand information or not
 ##' @param ... additional parameter
 ##' @return ggplot object
 ##' @export
@@ -576,7 +579,7 @@ plotPeakProf2 <- function(peak,
                           free_y = TRUE,
                           verbose = TRUE, 
                           nbin = NULL,
-                          ignore_strand = F,
+                          ignore_strand = FALSE,
                           ...){
   
   if ( is(peak, "list") ) {

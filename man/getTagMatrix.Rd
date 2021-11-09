@@ -39,7 +39,7 @@ getTagMatrix(
 
 \item{verbose}{print message or not}
 
-\item{ignore_strand}{whether flip the orientation of minor strand}
+\item{ignore_strand}{ignore the strand information or not}
 }
 \value{
 tagMatrix

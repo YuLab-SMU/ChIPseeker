@@ -144,7 +144,7 @@ getBioRegion <- function(TxDb=NULL,
 ##' @param weightCol column name of weight, default is NULL
 ##' @param nbin the amount of nbines 
 ##' @param verbose print message or not
-##' @param ignore_strand whether flip the orientation of minor strand
+##' @param ignore_strand ignore the strand information or not
 ##' @return tagMatrix
 ##' @importFrom ggplot2 rel
 ##' @export
@@ -213,10 +213,10 @@ getTagMatrix <- function(peak,
     cat(">> binning method is used...",
         format(Sys.time(), "%Y-%m-%d %X"), "\n",sep = "")
     
-    is.binning <- T
+    is.binning <- TRUE
   }else{
     
-    is.binning <- F
+    is.binning <- FALSE
   }
   
   if (verbose) {
@@ -270,7 +270,7 @@ getTagMatrix <- function(peak,
 ##' @param peak peak file or GRanges object
 ##' @param weightCol column name of weight, default is NULL
 ##' @param windows a collection of region with equal size, eg. promoter region.
-##' @param ignore_strand whether flip the orientation of minor strand
+##' @param ignore_strand ignore the strand information or not
 ##' @return tagMatrix
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges
 ##' @author G Yu
@@ -344,7 +344,7 @@ getTagMatrix.internal <- function(peak,
                        IRanges(start=rep(1, length(cov.len)),
                                end=cov.len))
   windows <- subsetByOverlaps(windows, cov.width,
-                              type="within", ignore.strand=F)
+                              type="within", ignore.strand=FALSE)
   
   chr.idx <- intersect(names(peak.cov),
                        unique(as.character(seqnames(windows))))
@@ -383,7 +383,7 @@ getTagMatrix.internal <- function(peak,
 ##' @param nbin the amount of nbines needed to be splited and it should not be more than min_body_length
 ##' @param upstream rel object, NULL or actual number
 ##' @param downstream rel object, NULL or actual number
-##' @param ignore_strand whether flip the orientation of minor strand
+##' @param ignore_strand ignore the strand information or not
 ##' @import BiocGenerics S4Vectors IRanges GenomeInfoDb GenomicRanges 
 ##' @importFrom ggplot2 rel
 ##' @return tagMatrix 
@@ -420,7 +420,7 @@ getTagMatrix.binning.internal <- function(peak,
   windows <- subsetByOverlaps(windows, 
                               cov.width,
                               type="within", 
-                              ignore.strand=F)
+                              ignore.strand=FALSE)
   
   ## extend the windows by rel object
   if(inherits(upstream, 'rel')){

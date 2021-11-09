@@ -27,7 +27,7 @@ getTagMatrix.binning.internal(
 
 \item{downstream}{rel object, NULL or actual number}
 
-\item{ignore_strand}{whether flip the orientation of minor strand}
+\item{ignore_strand}{ignore the strand information or not}
 }
 \value{
 tagMatrix

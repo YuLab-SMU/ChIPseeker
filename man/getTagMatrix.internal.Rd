@@ -13,7 +13,7 @@ getTagMatrix.internal(peak, weightCol = NULL, windows, ignore_strand = FALSE)
 
 \item{windows}{a collection of region with equal size, eg. promoter region.}
 
-\item{ignore_strand}{whether flip the orientation of minor strand}
+\item{ignore_strand}{ignore the strand information or not}
 }
 \value{
 tagMatrix
