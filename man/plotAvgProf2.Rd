@@ -16,6 +16,7 @@ plotAvgProf2(
   facet = "none",
   free_y = TRUE,
   verbose = TRUE,
+  ignore_strand = FALSE,
   ...
 )
 }
@@ -41,6 +42,8 @@ plotAvgProf2(
 \item{free_y}{if TRUE, y will be scaled by AvgProf}
 
 \item{verbose}{print message or not}
+
+\item{ignore_strand}{ignore the strand information or not}
 
 \item{...}{additional parameter}
 }

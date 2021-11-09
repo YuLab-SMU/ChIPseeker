@@ -13,7 +13,7 @@ plotAvgProf(
   facet = "none",
   free_y = TRUE,
   origin_label = "TSS",
-  verbose = T,
+  verbose = TRUE,
   ...
 )
 }

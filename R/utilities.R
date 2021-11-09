@@ -297,7 +297,7 @@ getGene <- function(TxDb, by="gene") {
         if ( exists("Genes", envir=ChIPseekerEnv, inherits=FALSE) ) {
             features <- get("Genes", envir=ChIPseekerEnv)
         } else {
-            features <- genes(TxDb)
+            features <- suppressMessages(genes(TxDb))
             assign("Genes", features, envir=ChIPseekerEnv)
         }
     } else {
@@ -449,8 +449,8 @@ GenomicRanges::GRangesList
 ##' @importFrom ggplot2 rel
 check_upstream_and_downstream <- function(upstream, downstream){
     
-    ## upstream and downstream should be the same
-    if(!identical(upstream,downstream)){
+    ## upstream and downstream should be the same type
+    if(class(upstream) != class(downstream)){
         stop("the type of upstream and downstream should be the same...")
     }
     
