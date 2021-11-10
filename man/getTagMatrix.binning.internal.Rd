@@ -10,7 +10,8 @@ getTagMatrix.binning.internal(
   windows,
   nbin = 800,
   upstream = NULL,
-  downstream = NULL
+  downstream = NULL,
+  ignore_strand = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ getTagMatrix.binning.internal(
 \item{upstream}{rel object, NULL or actual number}
 
 \item{downstream}{rel object, NULL or actual number}
+
+\item{ignore_strand}{ignore the strand information or not}
 }
 \value{
 tagMatrix
