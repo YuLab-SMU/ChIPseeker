@@ -1,3 +1,11 @@
+# ChIPseeker 1.31.1
+
++ bug fixed to take strand information (2021-11-10, Wed, #167)
+
+# ChIPseeker 1.30.0
+
++ Bioconductor 3.14 release
+
 # ChIPseeker 1.29.2
 
 + extend functions for plotting peak profiles to support other types of bioregions (2021-10-15, Fri, @MingLi-292, #156, #160, #162, #163)
