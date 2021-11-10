@@ -119,7 +119,7 @@ data("tagMatrixList")
 tagMatrix <- tagMatrixList[[4]]
 ```
 
-In the above code, you should notice that tagMatrix is not restricted to TSS regions. The regions can be other types that defined by the user. Referring to the [pull request#16](https://github.com/YuLab-SMU/ChIPseeker/pull/162), `r Biocpkg("ChIPseeker")` expanded the scope of region. Users can input the `type` and `by` parameters to get the regions they want.
+In the above code, you should notice that tagMatrix is not restricted to TSS regions. The regions can be other types that defined by the user. `r Biocpkg("ChIPseeker")` expanded the scope of region. Users can input the `type` and `by` parameters to get the regions they want.
 
 ### Heatmap of ChIP binding to TSS regions
 
@@ -158,9 +158,9 @@ plotAvgProf(tagMatrix, xlim=c(-3000, 3000), conf = 0.95, resample = 1000)
 
 ## Profile of ChIP peaks binding to different regions
 
-Referring to the [issue #16](https://github.com/GuangchuangYu/ChIPseeker/issues/16) and [pull request#16](https://github.com/YuLab-SMU/ChIPseeker/pull/162), we developed and improved several functions support start site region, end site region and body region of Gene/Transcript/Exon/Intron/3UTR/5UTR. `getBioRegion` can prepare the different regions for ChIP peaks to bind. `getTagMatrix` can accept `type`, `by`, `upstream` and `downstream` parameters to get tagmatrix according to different needs. `plotPeakProf` and `plotPeakProf2` supports the plotting of profiles of peaks binding to different regions.Users can also create heatmap or average profile of ChIP peaks binding to these regions.
+Referring to the [issue #16](https://github.com/GuangchuangYu/ChIPseeker/issues/16) , we developed and improved several functions support start site region, end site region and body region of Gene/Transcript/Exon/Intron/3UTR/5UTR. `getBioRegion` can prepare the different regions for ChIP peaks to bind. `getTagMatrix` can accept `type`, `by`, `upstream` and `downstream` parameters to get tagmatrix according to different needs. `plotPeakProf` and `plotPeakProf2` supports the plotting of profiles of peaks binding to different regions.Users can also create heatmap or average profile of ChIP peaks binding to these regions.
 
-In order to plot body regions, a new methond `binning`,was introduced to `getTagMatrix`. The idea of `binning` was derived from [deeptools](https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html)[@ramirez2016deeptools2]. `binning` scaled the regions having different lengths to the equal length by deviding the regions into the same amounts of boxes. Because the amount of boxes is equal, the regions can be thought of scaling to equal length [issue #156(comment)](https://github.com/YuLab-SMU/ChIPseeker/pull/156#issue-976786634).`binning` method can speed up the `getTagMatrix` by changing the precision from bp to box(several bps) [pull request #162(comment)](https://github.com/YuLab-SMU/ChIPseeker/pull/162#issuecomment-943113022).
+In order to plot body regions, a new methond `binning`,was introduced to `getTagMatrix`. The idea of `binning` was derived from [deeptools](https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html)[@ramirez2016deeptools2]. `binning` scaled the regions having different lengths to the equal length by deviding the regions into the same amounts of boxes. Because the amount of boxes is equal, the regions can be thought of scaling to equal length.`binning` method can speed up the `getTagMatrix` by changing the precision from bp to box(several bps).
 
 There are three ways to plot these regions. First, users can use `getBioRegion` to prepare the regions. Then align the peaks that are mapping to these regions, and generate the tagMatrix by `getTagMatrix`. At Last, plot the figures by `plotPeakProf`. Second, users can input `type` and `by` parameters to `getTagMatrix` to get the tagMatrix and plot the figures. Third, users can use `plotPeakProf2` to do everything in one step.
 
@@ -175,7 +175,7 @@ tagMatrix_binning <- getTagMatrix(peak = peak, TxDb = txdb,
 ```
 
 ### Profile of ChIP peaks binding to body regions 
-Reffering to [issue #87](https://github.com/YuLab-SMU/ChIPseeker/issues/87), we improved and developed several functions to plot body region of Gene/Transcript/Exon/Intron/3UTR/5UTR. If users want to get more information from the body region, we added `upstream` and `downstream` parameters to functions in order to get flank extension of body regions. `upstream` and `downstream` can be NULL(default), rel object and actual numbers. NULL(default) reflects body regions with no flank extension. Rel object reflects the percentage of total length of body regions. Actual numbers reflects the actual length of flank extension. 
+We improved and developed several functions to plot body region of Gene/Transcript/Exon/Intron/3UTR/5UTR. If users want to get more information from the body region, we added `upstream` and `downstream` parameters to functions in order to get flank extension of body regions. `upstream` and `downstream` can be NULL(default), rel object and actual numbers. NULL(default) reflects body regions with no flank extension. Rel object reflects the percentage of total length of body regions. Actual numbers reflects the actual length of flank extension. 
 
 ```{r eval=F}
 ## Here uses `plotPeakProf2` to do all things in one step.
