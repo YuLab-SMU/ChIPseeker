@@ -584,6 +584,12 @@ getTagMatrix.binning.internal <- function(peak,
     ## extend genebody by atual number
     if(!is.null(upstream) & !inherits(upstream, 'rel')){
       
+      for (i in 1:length(tagMatrixList)) {
+        if (length(class(tagMatrixList[[i]])) != 1) {
+          tagMatrixList[[i]] <- list(as.vector(tagMatrixList[[i]]))
+        }
+      }
+      
       index <- vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))
       tagMatrixList <- tagMatrixList[index]
       windows <- windows[index]
@@ -712,6 +718,12 @@ getTagMatrix.binning.internal <- function(peak,
       }
       
     }else{
+      
+      for (i in 1:length(tagMatrixList)) {
+        if (length(class(tagMatrixList[[i]])) != 1) {
+          tagMatrixList[[i]] <- list(as.vector(tagMatrixList[[i]]))
+        }
+      }
       
       index <- vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))
       tagMatrixList <- tagMatrixList[index]

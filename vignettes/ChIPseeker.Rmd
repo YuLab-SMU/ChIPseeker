@@ -183,9 +183,11 @@ Reffering to [issue #87](https://github.com/YuLab-SMU/ChIPseeker/issues/87), we 
 ## A message will be given to warning users about that.
 ## >> 9 peaks(0.872093%), having lengths smaller than 800bp, are filtered...
 
+## the ignore_strand is FALSE in default. We put here to emphasize that.
+## We will not show it again in the below example
 plotPeakProf2(peak = peak, upstream = rel(0.2), downstream = rel(0.2),
-              conf = 0.95, by = "gene", type = "body",
-              TxDb = txdb, weightCol = "V5")
+              conf = 0.95, by = "gene", type = "body", nbin = 800,
+              TxDb = txdb, weightCol = "V5",ignore_strand = F)
 ```
 ![](figures/plotPeakProf2_body_extend.png)
 
