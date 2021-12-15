@@ -113,8 +113,12 @@ getBioRegion <- function(TxDb=NULL,
     return(regions)
   }
   
+  ## issue and code obtained from Chen Ting(NIH/NCI)
+  start_site <- ifelse(strand(regions) == "+",coordinate-upstream, coordinate-downstream)
+  end_site <- ifelse(strand(regions) == "+", coordinate+downstream, coordinate+upstream)
+  
   bioRegion <- GRanges(seqnames=seqnames(regions),
-                       ranges=IRanges(coordinate-upstream, coordinate+downstream),
+                       ranges=IRanges(start_site, end_site),
                        strand=strand(regions))
   bioRegion <- unique(bioRegion)
   
