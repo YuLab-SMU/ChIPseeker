@@ -1,3 +1,11 @@
+# ChIPseeker 1.31.3
+
++ bug fixed of determing promoter region in minus strand (2021-12-16, Thu, #172)
+
+# ChIPseeker 1.32.2
+
++ update vignette
+
 # ChIPseeker 1.31.1
 
 + bug fixed to take strand information (2021-11-10, Wed, #167)
