@@ -1,3 +1,27 @@
+# ChIPseeker 1.31.3.900
+
++ `readPeakFile` now supports `.broadPeak` and `.gappedPeak` files (2021-12-17, Fri, #173) 
+
+# ChIPseeker 1.31.3
+
++ bug fixed of determing promoter region in minus strand (2021-12-16, Thu, #172)
+
+# ChIPseeker 1.32.2
+
++ update vignette
+
+# ChIPseeker 1.31.1
+
++ bug fixed to take strand information (2021-11-10, Wed, #167)
+
+# ChIPseeker 1.30.0
+
++ Bioconductor 3.14 release
+
+# ChIPseeker 1.29.2
+
++ extend functions for plotting peak profiles to support other types of bioregions (2021-10-15, Fri, @MingLi-292, #156, #160, #162, #163)
+
 # ChIPseeker 1.29.1
 
 + add example for `seq2gene` function (2021-05-21, Fri)
