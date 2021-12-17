@@ -1,3 +1,7 @@
+# ChIPseeker 1.31.3.900
+
++ `readPeakFile` now supports `.broadPeak` and `.gappedPeak` files (2021-12-17, Fri, #173) 
+
 # ChIPseeker 1.31.3
 
 + bug fixed of determing promoter region in minus strand (2021-12-16, Thu, #172)
