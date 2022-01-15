@@ -4,7 +4,7 @@
 
 # ChIPseeker 1.31.3
 
-+ bug fixed of determing promoter region in minus strand (2021-12-16, Thu, #172)
++ bug fixed of determining promoter region in minus strand (2021-12-16, Thu, #172)
 
 # ChIPseeker 1.32.2
 
@@ -20,7 +20,7 @@
 
 # ChIPseeker 1.29.2
 
-+ extend functions for plotting peak profiles to support other types of bioregions (2021-10-15, Fri, @MingLi-292, #156, #160, #162, #163)
++ extend functions for plotting peak profiles to support other types of bioregions (2021-10-15, Fri, @MingLi-929, #156, #160, #162, #163)
 
 # ChIPseeker 1.29.1
 
