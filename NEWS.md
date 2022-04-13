@@ -1,4 +1,4 @@
-# ChIPseeker 1.31.3.900
+# ChIPseeker 1.31.4
 
 + `readPeakFile` now supports `.broadPeak` and `.gappedPeak` files (2021-12-17, Fri, #173) 
 
