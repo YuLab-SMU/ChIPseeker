@@ -15,6 +15,7 @@
 ##' @import GenomeInfoDb
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 geom_segment
+##' @importFrom ggplot2 geom_blank
 ##' @importFrom ggplot2 geom_rect
 ##' @importFrom ggplot2 facet_grid
 ##' @importFrom ggplot2 theme
