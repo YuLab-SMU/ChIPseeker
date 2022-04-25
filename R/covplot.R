@@ -52,15 +52,20 @@ covplot <- function(peak, weightCol=NULL,
     
     chr <- start <- end <- value <- .id <- NULL
    
-    p <- ggplot(tm, aes(start, value))
-    ## p <- p + geom_segment(aes(x=start, y=0, xend=end, yend= value))
-    if (isList) {
-        p <- p + geom_rect(aes(xmin=start, ymin=0, xmax=end, ymax=value, fill=.id, color=.id)) 
+    if(length(tm$chr) == 0){
+        p <- ggplot(data.frame(x = 1)) + geom_blank()
     } else {
-        p <- p + geom_rect(aes(xmin=start, ymin=0, xmax=end, ymax=value), fill='black', color='black')
-    }
-    if(length(unique(tm$chr)) > 1) {
-        p <- p + facet_grid(chr ~., scales="free")
+        p <- ggplot(tm, aes(start, value))
+        
+        ## p <- p + geom_segment(aes(x=start, y=0, xend=end, yend= value))
+        if (isList) {
+            p <- p + geom_rect(aes(xmin=start, ymin=0, xmax=end, ymax=value, fill=.id, color=.id)) 
+        } else {
+            p <- p + geom_rect(aes(xmin=start, ymin=0, xmax=end, ymax=value), fill='black', color='black')
+        }
+        if(length(unique(tm$chr)) > 1) {
+            p <- p + facet_grid(chr ~., scales="free")
+        }
     }
     
     p <- p + theme_classic()
