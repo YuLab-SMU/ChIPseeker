@@ -12,7 +12,8 @@ covplot(
   title = "ChIP Peaks over Chromosomes",
   chrs = NULL,
   xlim = NULL,
-  lower = 1
+  lower = 1,
+  fill_color = NULL
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ covplot(
 \item{xlim}{ranges to plot, default is whole chromosome}
 
 \item{lower}{lower cutoff of coverage signal}
+
+\item{fill_color}{specify the color for the plot. Order matters}
 }
 \value{
 ggplot2 object
