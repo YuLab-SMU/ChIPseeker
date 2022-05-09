@@ -11,6 +11,7 @@
 ##' @param chrs selected chromosomes to plot, all chromosomes by default
 ##' @param xlim ranges to plot, default is whole chromosome
 ##' @param lower lower cutoff of coverage signal
+##' @param fill_color specify the color for the plot. Order matters
 ##' @return ggplot2 object
 ##' @import GenomeInfoDb
 ##' @importFrom ggplot2 ggplot
@@ -33,11 +34,21 @@ covplot <- function(peak, weightCol=NULL,
                     title = "ChIP Peaks over Chromosomes",
                     chrs  = NULL,
                     xlim  = NULL,
-                    lower = 1) {
-
+                    lower = 1,
+                    fill_color = NULL) {
+    
     isList <- FALSE
     if(is(peak, "GRanges") || length(peak) == 1) {
         tm <- getChrCov(peak=peak, weightCol=weightCol, chrs, xlim, lower=lower)
+        
+        if(is.null(fill_color)){
+            fill_color = 'black'
+        }else{
+            if(length(fill_color) != 1){
+                stop('pls input fill_color parameter with correct length...')
+            }
+        }
+        
     } else {
         isList <- TRUE
         ltm <- lapply(peak, getChrCov, weightCol=weightCol, chrs=chrs, xlim=xlim, lower=lower)
@@ -49,10 +60,14 @@ covplot <- function(peak, weightCol=NULL,
         tm <- list_to_dataframe(ltm)
         chr.sorted <- sortChrName(as.character(unique(tm$chr)))
         tm$chr <- factor(tm$chr, levels = chr.sorted)
+        
+        if(!is.null(fill_color) && length(fill_color) != length(unique(tm$.id))){
+            stop('pls input fill_color parameter with correct length...')
+        }
     }
     
     chr <- start <- end <- value <- .id <- NULL
-   
+    
     if(length(tm$chr) == 0){
         p <- ggplot(data.frame(x = 1)) + geom_blank()
     } else {
@@ -60,24 +75,31 @@ covplot <- function(peak, weightCol=NULL,
         
         ## p <- p + geom_segment(aes(x=start, y=0, xend=end, yend= value))
         if (isList) {
+            
             p <- p + geom_rect(aes(xmin=start, ymin=0, xmax=end, ymax=value, fill=.id, color=.id)) 
+            if(!is.null(fill_color)){
+                p <- p + scale_fill_manual(values = fill_color) + scale_color_manual(values = fill_color)
+            }
+            
         } else {
-            p <- p + geom_rect(aes(xmin=start, ymin=0, xmax=end, ymax=value), fill='black', color='black')
+            p <- p + geom_rect(aes(xmin=start, ymin=0, xmax=end, ymax=value), fill=fill_color, color=fill_color)
         }
+        
         if(length(unique(tm$chr)) > 1) {
             p <- p + facet_grid(chr ~., scales="free")
         }
+        
     }
     
     p <- p + theme_classic()
     p <- p + xlab(xlab) + ylab(ylab) + ggtitle(title)
     p <- p + scale_y_continuous(expand=c(0,0))
     p <- p + theme(strip.text.y=element_text(angle=360))
-
+    
     if (!is.null(xlim) && !all(is.na(xlim)) && is.numeric(xlim) && length(xlim) == 2) {
         p <- p + xlim(xlim)
     }
-
+    
     return(p)
 }
 
