@@ -1,3 +1,11 @@
+# ChIPseeker 1.33.0.900
+
++ allow specify colors in `covplot()` (2022-05-09, Mon, #185, #188)
+
+# ChIPseeker 1.32.0
+
++ Bioconductor 3.15 release
+
 # ChIPseeker 1.31.4
 
 + `readPeakFile` now supports `.broadPeak` and `.gappedPeak` files (2021-12-17, Fri, #173) 
