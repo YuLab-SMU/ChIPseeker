@@ -19,7 +19,7 @@ getBioRegion(
 
 \item{downstream}{downstream from start site}
 
-\item{by}{one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'}
+\item{by}{one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'}
 
 \item{type}{one of "start_site", "end_site", "body"}
 }

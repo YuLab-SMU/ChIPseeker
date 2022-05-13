@@ -31,7 +31,7 @@ getPromoters <- function(TxDb=NULL,
 ##' @param TxDb TxDb
 ##' @param upstream upstream from start site
 ##' @param downstream downstream from start site
-##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'
+##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'
 ##' @param type one of "start_site", "end_site", "body"
 ##' @return GRanges object
 ##' @import BiocGenerics IRanges GenomicRanges
@@ -43,7 +43,7 @@ getBioRegion <- function(TxDb=NULL,
                          by="gene",
                          type="start_site"){
   
-  by <- match.arg(by, c('gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'))
+  by <- match.arg(by, c('gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR','UTR'))
   type <- match.arg(type, c("start_site", "end_site", "body"))
   
   TxDb <- loadTxDb(TxDb)
@@ -75,6 +75,14 @@ getBioRegion <- function(TxDb=NULL,
   if (by == "5UTR") {
     fiveUTRList <- fiveUTRsByTranscript(TxDb)
     regions <- unlist(fiveUTRList)
+  }
+  
+  if (by == 'UTR'){
+    three_URT <- threeUTRsByTranscript(TxDb)
+    three_UTR_regions <- unlist(three_URT)
+    five_UTR <- fiveUTRsByTranscript(TxDb)
+    five_UTR_regions <- unlist(five_UTR)
+    regions <- c(three_UTR_regions,five_UTR_regions)
   }
   
   if(type == "start_site"){
