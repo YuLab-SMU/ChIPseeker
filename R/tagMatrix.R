@@ -23,14 +23,30 @@ getPromoters <- function(TxDb=NULL,
 
 ##' prepare a bioregion of selected feature
 ##' 
-##' this function combined previous functions getPromoters(),getBioRegion(),getGeneBody()
-##' https://github.com/GuangchuangYu/ChIPseeker/issues/16
-##' https://github.com/GuangchuangYu/ChIPseeker/issues/87
+##' this function combined previous functions getPromoters(), getBioRegion() and getGeneBody() in order
+##' to solve the following issues.
+##' 
+##' (1) \url{https://github.com/GuangchuangYu/ChIPseeker/issues/16}
+##' 
+##' (2) \url{https://github.com/GuangchuangYu/ChIPseeker/issues/87}
+##' 
+##' The getBioRegion() function can prevoid a region of interest from
+##' \code{txdb} object. There are three kinds of regions, \code{start_site},
+##' \code{end_site} and \code{body}. 
+##' 
+##' We take transcript region to expain the differences of these three regions.
+##' tx: chr1 1000 1400. 
+##' 
+##' \code{body} region refers to the 1000-1400bp.
+##' 
+##' \code{start_site} region with \code{upstream = 100, downstream = 100} refers to 900-1100bp. 
+##' 
+##' \code{end_site} region with \code{upstream = 100, downstream = 100} refers to 1300-1500bp.
 ##'
 ##' @title getBioRegion
 ##' @param TxDb TxDb
-##' @param upstream upstream from start site
-##' @param downstream downstream from start site
+##' @param upstream upstream from start site or end site
+##' @param downstream downstream from start site or end site
 ##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'
 ##' @param type one of "start_site", "end_site", "body"
 ##' @return GRanges object
