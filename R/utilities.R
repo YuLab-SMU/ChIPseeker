@@ -480,3 +480,35 @@ check_upstream_and_downstream <- function(upstream, downstream){
 ##' @export
 ggplot2::rel
 
+
+##‘ make label for figures
+make_label <- function(type, by){
+    
+    if(type == 'body'){
+        if(by %in% c('gene', 'transcript', 'exon', 'intron')){
+            label_SS <- paste0("T","SS")
+            label_TS <- paste0("T","TS")
+            label <- c(label_SS,label_TS)
+        }else{
+            label_SS <- paste0(by,"_SS")
+            label_TS <- paste0(by,"_TS")
+            label <- c(label_SS,label_TS)
+        }
+        
+    }else if(type == "start_site"){
+        if(by %in% c('gene', 'transcript', 'exon', 'intron')){
+            label <- paste0("T","SS")
+        }else{
+            label <- paste0(by,"_SS") 
+        }
+        
+    }else{
+        if(by %in% c('gene', 'transcript', 'exon', 'intron')){
+            label <- paste0("T","TS")
+        }else{
+            label <- paste0(by,"_TS")
+        }
+    }
+    
+    return(label)
+}

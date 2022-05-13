@@ -50,31 +50,7 @@ getBioRegion <- function(TxDb=NULL,
   .ChIPseekerEnv(TxDb)
   ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
   
-  if(type == 'body'){
-    if(by %in% c('gene', 'transcript', 'exon', 'intron')){
-      label_SS <- paste0("T","SS")
-      label_TS <- paste0("T","TS")
-      label <- c(label_SS,label_TS)
-    }else{
-      label_SS <- paste0(by,"_SS")
-      label_TS <- paste0(by,"_TS")
-      label <- c(label_SS,label_TS)
-    }
-    
-  }else if(type == "start_site"){
-    if(by %in% c('gene', 'transcript', 'exon', 'intron')){
-      label <- paste0("T","SS")
-    }else{
-      label <- paste0(by,"_SS") 
-    }
-    
-  }else{
-    if(by %in% c('gene', 'transcript', 'exon', 'intron')){
-      label <- paste0("T","TS")
-    }else{
-      label <- paste0(by,"_TS")
-    }
-  }
+  label <- make_label(type = type, by = by)
   
   
   if(by == 'gene' || by == 'transcript'){
@@ -124,7 +100,11 @@ getBioRegion <- function(TxDb=NULL,
   
   ## assign attribute 
   attr(bioRegion, 'type') = type
+  
+  ## different region have different label to be added to the figures
+  ## so we attach label to the Granges object
   attr(bioRegion, 'label') = label
+  
   attr(bioRegion, 'upstream') = upstream
   attr(bioRegion, 'downstream') = downstream
   
