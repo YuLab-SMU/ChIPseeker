@@ -108,6 +108,7 @@ getBioRegion <- function(TxDb=NULL,
   }else{
     ## assign attribute 
     attr(regions, 'type') = type
+    attr(regions, 'by') = by
     attr(regions, 'label') = label
     
     return(regions)
@@ -124,6 +125,7 @@ getBioRegion <- function(TxDb=NULL,
   
   ## assign attribute 
   attr(bioRegion, 'type') = type
+  attr(bioRegion, 'by') = by
   
   ## different region have different label to be added to the figures
   ## so we attach label to the Granges object
@@ -195,6 +197,7 @@ makeBioRegionFromGranges <- function(gr,
   }else{
     ## assign attribute 
     attr(regions, 'type') = type
+    attr(regions, 'by') = by
     attr(regions, 'label') = label
     
     return(regions)
@@ -211,6 +214,7 @@ makeBioRegionFromGranges <- function(gr,
   
   ## assign attribute 
   attr(bioRegion, 'type') = type
+  attr(bioRegion, 'by') = by
   attr(bioRegion, 'label') = label
   attr(bioRegion, 'upstream') = upstream
   attr(bioRegion, 'downstream') = downstream
@@ -333,19 +337,21 @@ getTagMatrix <- function(peak,
     type <- attr(windows, 'type')
     by <- attr(windows, 'by')
     
-    if(type == "body"){
-      if(missingArg(upstream)){
-        upstream <- NULL
-      }
-      
-      if(missingArg(downstream)){
-        downstream <- NULL
-      }
-
-    }else{
-      upstream <- attr(windows, 'upstream')
-      downstream <- attr(windows, 'downstream')
+  }
+  
+  # check the upstream and downstream parameter
+  if(type == "body"){
+    if(missingArg(upstream)){
+      upstream <- NULL
     }
+    
+    if(missingArg(downstream)){
+      downstream <- NULL
+    }
+    
+  }else{
+    upstream <- attr(windows, 'upstream')
+    downstream <- attr(windows, 'downstream')
   }
   
   ## check upstream and downstream parameter
