@@ -11,7 +11,7 @@ getTagMatrix(
   windows,
   type,
   by,
-  gr,
+  gr = NULL,
   TxDb = NULL,
   weightCol = NULL,
   nbin = NULL,

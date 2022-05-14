@@ -13,7 +13,7 @@ plotPeakProf2(
   type,
   weightCol = NULL,
   TxDb = NULL,
-  gr,
+  gr = NULL,
   xlab = "Genomic Region (5'->3')",
   ylab = "Peak Count Frequency",
   facet = "none",
