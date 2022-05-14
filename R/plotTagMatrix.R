@@ -666,6 +666,8 @@ plotPeakProf2 <- function(peak,
                           ...){
   
   conf <- if(missingArg(conf)) NA else conf
+  upstream <- if(missingArg(upstream)) NULL else upstream
+  downstream <- if(missingArg(downstream)) NULL else downstream
   
   if ( is(peak, "list") ) {
     tagMatrix <- lapply(peak, getTagMatrix, 
