@@ -37,30 +37,63 @@ plotPeakProf <- function(tagMatrix,
   
   if(attr(tagMatrix, 'is.binning')){
     
-    plotAvgProf.binning(tagMatrix = tagMatrix, 
-                        xlab = xlab,
-                        ylab = ylab,
-                        conf = conf,
-                        facet = facet, 
-                        free_y = free_y,
-                        upstream = upstream,
-                        downstream = downstream,
-                        label = label,
-                        ...)
+    if (!(missingArg(conf) || is.na(conf))){
+      
+      plotAvgProf.binning(tagMatrix = tagMatrix, 
+                          xlab = xlab,
+                          ylab = ylab,
+                          conf = conf,
+                          facet = facet, 
+                          free_y = free_y,
+                          upstream = upstream,
+                          downstream = downstream,
+                          label = label,
+                          ...)
+      
+    }else{
+      
+      plotAvgProf.binning(tagMatrix = tagMatrix, 
+                          xlab = xlab,
+                          ylab = ylab,
+                          facet = facet, 
+                          free_y = free_y,
+                          upstream = upstream,
+                          downstream = downstream,
+                          label = label,
+                          ...)
+      
+    }
     
     
   }else{
     
     xlim <- c(-upstream, downstream)
-    plotAvgProf (tagMatrix = tagMatrix, 
-                 xlim = xlim,
-                 xlab = xlab,
-                 ylab = ylab,
-                 conf = conf,
-                 facet = facet, 
-                 free_y = free_y,
-                 origin_label = label,
-                 ...)
+    
+    if (!(missingArg(conf) || is.na(conf))){
+      
+      plotAvgProf (tagMatrix = tagMatrix, 
+                   xlim = xlim,
+                   xlab = xlab,
+                   ylab = ylab,
+                   conf = conf,
+                   facet = facet, 
+                   free_y = free_y,
+                   origin_label = label,
+                   ...)
+      
+    }else{
+      
+      plotAvgProf (tagMatrix = tagMatrix, 
+                   xlim = xlim,
+                   xlab = xlab,
+                   ylab = ylab,
+                   facet = facet, 
+                   free_y = free_y,
+                   origin_label = label,
+                   ...)
+      
+    }
+    
     
   }
   
@@ -622,7 +655,7 @@ plotPeakProf2 <- function(peak,
                           type,
                           weightCol = NULL, 
                           TxDb = NULL,
-                          gr,
+                          gr=NULL,
                           xlab = "Genomic Region (5'->3')",
                           ylab = "Peak Count Frequency",
                           facet = "none",
@@ -631,6 +664,8 @@ plotPeakProf2 <- function(peak,
                           nbin = NULL,
                           ignore_strand = FALSE,
                           ...){
+  
+  conf <- if(missingArg(conf)) NA else conf
   
   if ( is(peak, "list") ) {
     tagMatrix <- lapply(peak, getTagMatrix, 

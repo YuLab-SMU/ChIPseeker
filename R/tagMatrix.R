@@ -297,7 +297,7 @@ getTagMatrix <- function(peak,
                          windows,
                          type,
                          by,
-                         gr,
+                         gr=NULL,
                          TxDb=NULL,
                          weightCol = NULL, 
                          nbin = NULL,
@@ -306,7 +306,7 @@ getTagMatrix <- function(peak,
   
   if(missingArg(windows)){
     
-    if(missingArg(gr)){
+    if(is.null(gr)){
       
       ## make windows from txdb object
       windows <- getBioRegion(TxDb=TxDb,
