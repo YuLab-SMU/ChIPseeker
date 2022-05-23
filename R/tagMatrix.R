@@ -964,3 +964,223 @@ getTagMatrix.binning.internal <- function(peak,
   
   return(tagMatrix)
 }
+
+
+##' Nested function for getTagMatrix() to deal with multiple windows
+##' 
+##' This is an internal function.
+##' @importFrom ggplot2 rel
+getTagMatrix2 <- function(peak, 
+                          upstream,
+                          downstream,
+                          windows_name,
+                          type,
+                          by,
+                          gr=NULL,
+                          TxDb=NULL,
+                          weightCol = NULL, 
+                          nbin = NULL,
+                          verbose = TRUE,
+                          ignore_strand= FALSE){
+  
+  by_type <- sapply(as.list(by), function(x){
+    
+    if(x %in% c('gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR')){
+      result <- "txdb"
+    }else{
+      result <- "gr"
+    }
+    
+    return(result)
+    
+  })
+  
+  names(by) <- by_type
+  names(gr) <- by[which(names(by) == "gr")]
+  
+  windows <- lapply(as.list(by), function(x){
+    
+    if(x %in% c('gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR')){
+      
+      result <- getBioRegion(TxDb=TxDb,
+                             upstream=upstream,
+                             downstream=downstream,
+                             by=x,
+                             type=type)
+    }else{
+      
+      result <- makeBioRegionFromGranges(gr=gr[[x]],
+                                         by=x,
+                                         type=type,
+                                         upstream=upstream,
+                                         downstream=downstream)
+      
+    }
+    
+    return(result)
+    
+  })
+  
+  names(windows) <- windows_name
+  
+  ## check windows attributes
+  check_upstream <- attr(windows[[1]],"upstream")
+  check_downstream <- attr(windows[[1]],"downstream")
+  lapply(windows, function(x){
+    
+    if(attr(x,"upstream") != check_upstream){
+      stop("the upstream of windows should be the same...")
+    }
+    
+    if(attr(x,"downstream") != check_downstream){
+      stop("the downstream of windows should be the same...")
+    }
+    
+  })
+  
+  # check the upstream and downstream parameter for body
+  if(type == "body"){
+    if(missingArg(upstream)){
+      upstream <- NULL
+    }
+    
+    if(missingArg(downstream)){
+      downstream <- NULL
+    }
+    
+  }else{
+    upstream <- attr(windows[[1]], 'upstream')
+    downstream <- attr(windows[[1]], 'downstream')
+  }
+  
+  ## check upstream and downstream parameter
+  check_upstream_and_downstream(upstream = upstream, downstream = downstream)
+  
+  if(type != 'body'){
+    if(inherits(upstream, 'rel') || is.null(upstream)){
+      stop("upstream and downstream for site region should be actual number...")
+    }
+  }
+  
+  ## check nbin parameters
+  if(!is.null(nbin) && !is.numeric(nbin)){
+    stop('nbin should be NULL or numeric...')
+  }
+  
+  if(type == 'body' && is.null(nbin)){
+    stop('plotting body region should set the nbin parameter...')
+  }
+  
+  ## check nbin parameter
+  if(!is.null(nbin)){
+    cat(">> binning method is used...",
+        format(Sys.time(), "%Y-%m-%d %X"), "\n",sep = "")
+    
+    is.binning <- TRUE
+  }else{
+    
+    is.binning <- FALSE
+  }
+  
+  if (verbose) {
+    cat(">> preparing ",type," regions"," by ",paste(by,collapse = " "),"... ",
+        format(Sys.time(), "%Y-%m-%d %X"), "\n",sep = "")
+  }
+  
+  
+  if(is.binning){
+    
+    if (verbose) {
+      cat(">> preparing tag matrix by binning... ",
+          format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    }
+    
+    tagMatrix <- getTagMatrix2.binning.internal(peak = peak, 
+                                                weightCol = weightCol, 
+                                                windows = windows, 
+                                                windows_name=windows_name,
+                                                nbin = nbin,
+                                                upstream = upstream,
+                                                downstream = downstream,
+                                                ignore_strand = ignore_strand)
+  }else{
+    
+    if (verbose) {
+      cat(">> preparing tag matrix... ",
+          format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    }
+    
+    tagMatrix <- getTagMatrix2.internal(peak=peak, 
+                                        weightCol=weightCol,
+                                        windows=windows,
+                                        windows_name=windows_name,
+                                        ignore_strand=ignore_strand)
+  }
+  
+  names(tagMatrix) <- windows_name
+  
+  ## assign attribute 
+  tagMatrix <- lapply(tagMatrix, function(x){
+    attr(x, 'upstream') = upstream
+    attr(x, 'downstream') = downstream
+    attr(x, 'type') = attr(windows[[1]], 'type')
+    attr(x, 'label') = attr(windows[[1]], 'label')
+    attr(x, "is.binning") <- is.binning
+    return(x)
+  })
+  
+  return(tagMatrix)
+  
+}
+
+
+getTagMatrix2.internal <- function(peak, 
+                                   weightCol=NULL,
+                                   windows,
+                                   windows_name,
+                                   ignore_strand= FALSE) {
+  
+  mt_list <- lapply(windows_name, function(x){
+    
+    windows_tmp <- windows[[x]]
+    
+    mt <- getTagMatrix.internal(peak=peak, 
+                                weightCol=weightCol, 
+                                windows=windows_tmp, 
+                                ignore_strand=ignore_strand)
+    
+    return(mt)
+  })
+  
+  return(mt_list)
+}
+
+##' internal function
+getTagMatrix2.binning.internal <- function(peak, 
+                                           weightCol = NULL, 
+                                           windows, 
+                                           windows_name,
+                                           nbin = 800,
+                                           upstream = NULL,
+                                           downstream = NULL,
+                                           ignore_strand = FALSE){
+  
+  mt_list <- lapply(windows_name, function(x){
+    
+    windows_tmp <- windows[[x]]
+    
+    mt <- getTagMatrix.binning.internal(peak = peak, 
+                                        weightCol = weightCol, 
+                                        windows = windows, 
+                                        windows_name=windows_name,
+                                        nbin = nbin,
+                                        upstream = upstream,
+                                        downstream = downstream,
+                                        ignore_strand = ignore_strand)
+    
+    return(mt)
+  })
+  
+  return(mt_list)
+  
+}
