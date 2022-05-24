@@ -886,33 +886,38 @@ plotMultiProf <- function(tagMatrix,
                           free_y = TRUE,
                           ...){
   
+  
   if(is.null(attr(tagMatrix[[1]],'upstream'))){
     upstream <- attr(tagMatrix[[1]][[1]], 'upstream')
     downstream <- attr(tagMatrix[[1]][[1]], 'downstream')
-    attr(tagMatrix, 'type') <- attr(tagMatrix[[1]][[1]], 'type')
-    attr(tagMatrix, 'is.binning') <- attr(tagMatrix[[1]][[1]], 'is.binning')
+    # attr(tagMatrix, 'type') <- attr(tagMatrix[[1]][[1]], 'type')
+    # attr(tagMatrix, 'is.binning') <- attr(tagMatrix[[1]][[1]], 'is.binning')
+    binFlag <- attr(tagMatrix[[1]][[1]], 'is.binning')
+    type <- attr(tagMatrix[[1]][[1]], 'type')
     
   }else{
     upstream <- attr(tagMatrix[[1]], 'upstream')
     downstream <- attr(tagMatrix[[1]], 'downstream')
+    binFlag <- attr(tagMatrix[[1]], 'is.binning')
+    type <- attr(tagMatrix[[1]], 'type')
   }
   
   if(type == "body"){
     
-    label <- c("start_site","end_site")
+    label <- c("SS","TS")
     
   }else if(type == "start_site"){
     
-    label <- "start_site"
+    label <- "SS"
     
   }else{
     
-    label <- "end_site"
+    label <- "TS"
     
   }
   
   
-  if(attr(tagMatrix[[1]], 'is.binning')){
+  if(binFlag){
     
     if (!(missingArg(conf) || is.na(conf))){
       
@@ -1058,11 +1063,11 @@ plotMultiProf.normal.internal <- function(tagMatrix, conf,
   
   if ( listFlag ) {
     facet <- match.arg(facet, c("none", "row", "column"))
-    if ( (xlim[2]-xlim[1]+2) != ncol(tagMatrix[[1]][[1]]) ) {
+    if ( (xlim[2]-xlim[1]+1) != ncol(tagMatrix[[1]][[1]]) ) {
       stop("please specify appropreate xcoordinations...")
     }
   } else {
-    if ( (xlim[2]-xlim[1]+2) != ncol(tagMatrix[[1]]) ) {
+    if ( (xlim[2]-xlim[1]+1) != ncol(tagMatrix[[1]]) ) {
       stop("please specify appropreate xcoordinations...")
     }
   }
@@ -1113,7 +1118,7 @@ plotMultiProf.normal.internal <- function(tagMatrix, conf,
     
     tagCount <- do.call("rbind",tagCount)
     
-    p <- ggplot(tagCount, aes(pos,group=type,color=type))
+    p <- ggplot(tagCount, aes(x = pos))
     if (!(is.na(conf))) {
       p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper,fill = type),
                            linetype = 0, alpha = 0.2)
@@ -1153,9 +1158,11 @@ plotMultiProf.normal.internal <- function(tagMatrix, conf,
   
   p <- p+xlab(xlab)+ylab(ylab)
   p <- p + theme_bw() + theme(legend.title=element_blank())
-  if(facet != "none") {
-    p <- p + theme(legend.position="none")
-  }
+
+  # if(facet != "none") {
+  #   p <- p + theme(legend.position="none")
+  # }
+  
   return(p)
 }
 
