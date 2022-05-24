@@ -2,7 +2,7 @@
 % Please edit documentation in R/tagMatrix.R
 \name{getTagMatrix2}
 \alias{getTagMatrix2}
-\title{Nested function for getTagMatrix() to deal with multiple windows}
+\title{getTagMatrix2}
 \usage{
 getTagMatrix2(
   peak,
@@ -19,6 +19,37 @@ getTagMatrix2(
   ignore_strand = FALSE
 )
 }
+\arguments{
+\item{peak}{peak peak file or GRanges object}
+
+\item{upstream}{the distance of upstream extension}
+
+\item{downstream}{the distance of downstream extension}
+
+\item{windows_name}{the names of windows}
+
+\item{type}{one of "start_site", "end_site", "body"}
+
+\item{by}{one of 'gene', 'transcript', 'exon', 'intron', '3UTR' , '5UTR', or specified by users}
+
+\item{gr}{self-made granges object, served as txdb}
+
+\item{TxDb}{TxDb}
+
+\item{weightCol}{column name of weight, default is NULL}
+
+\item{nbin}{the amount of nbines}
+
+\item{verbose}{print message or not}
+
+\item{ignore_strand}{ignore the strand information or not}
+}
+\value{
+tagMatrix
+}
 \description{
+Nested function for getTagMatrix() to deal with multiple windows
+}
+\details{
 This is an internal function.
 }

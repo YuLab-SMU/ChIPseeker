@@ -17,6 +17,27 @@ plotMultiProf.normal(
   ...
 )
 }
+\arguments{
+\item{tagMatrix}{tagMatrix}
+
+\item{xlim}{xlim}
+
+\item{xlab}{xlab}
+
+\item{ylab}{ylab}
+
+\item{conf}{confidence interval}
+
+\item{facet}{one of 'none', 'row' and 'column'}
+
+\item{free_y}{if TRUE, y will be scaled by AvgProf}
+
+\item{origin_label}{the label of the center}
+
+\item{verbose}{print message or not}
+
+\item{...}{additional parameter}
+}
 \description{
 internal function
 }

@@ -14,6 +14,21 @@ plotMultiProf(
   ...
 )
 }
+\arguments{
+\item{tagMatrix}{tagMatrix}
+
+\item{conf}{confidence interval}
+
+\item{xlab}{xlab}
+
+\item{ylab}{ylab}
+
+\item{facet}{one of 'none', 'row' and 'column'}
+
+\item{free_y}{if TRUE, y will be scaled by AvgProf}
+
+\item{...}{additional parameter}
+}
 \description{
 internal function for plotPeakProf3
 }

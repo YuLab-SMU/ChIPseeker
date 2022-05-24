@@ -878,6 +878,13 @@ plotPeakProf3 <- function(peak,
 
 ##' internal function for plotPeakProf3
 ##' 
+##' @param tagMatrix tagMatrix
+##' @param xlab xlab
+##' @param ylab ylab
+##' @param conf confidence interval
+##' @param facet one of 'none', 'row' and 'column'
+##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param ... additional parameter
 plotMultiProf <- function(tagMatrix,
                           conf,
                           xlab="Genomic Region (5'->3')",
@@ -979,6 +986,16 @@ plotMultiProf <- function(tagMatrix,
 
 ##' internal function
 ##' 
+##' @param tagMatrix tagMatrix
+##' @param xlim xlim
+##' @param xlab xlab
+##' @param ylab ylab
+##' @param conf confidence interval
+##' @param facet one of 'none', 'row' and 'column'
+##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param origin_label the label of the center
+##' @param verbose print message or not
+##' @param ... additional parameter
 plotMultiProf.normal <- function(tagMatrix, xlim,
                                  xlab="Genomic Region (5'->3')",
                                  ylab = "Peak Count Frequency",
@@ -1028,7 +1045,18 @@ plotMultiProf.normal <- function(tagMatrix, xlim,
   return(p)
 }
 
-
+##' internal function
+##' 
+##' 
+##' @param tagMatrix tagMatrix
+##' @param xlim xlim
+##' @param xlab xlab
+##' @param ylab ylab
+##' @param conf confidence interval
+##' @param facet one of 'none', 'row' and 'column'
+##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param origin_label the label of the center
+##' @param ... additional parameter
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 geom_line
 ##' @importFrom ggplot2 geom_vline
@@ -1167,6 +1195,17 @@ plotMultiProf.normal.internal <- function(tagMatrix, conf,
 }
 
 ##' internal function
+##' 
+##' @param tagMatrix tagMatrix
+##' @param xlab xlab
+##' @param ylab ylab
+##' @param conf confidence interval
+##' @param facet one of 'none', 'row' and 'column'
+##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param upstream the upstream extension
+##' @param downstream the downstream extension
+##' @param label the label of the center
+##' @param ... additional parameter
 plotMultiProf.binning <- function(tagMatrix, 
                                   xlab = "Genomic Region (5'->3')",
                                   ylab = "Peak Count Frequency",
@@ -1210,6 +1249,17 @@ plotMultiProf.binning <- function(tagMatrix,
 }
 
 ##' internal function
+##' 
+##' @param tagMatrix tagMatrix
+##' @param xlab xlab
+##' @param ylab ylab
+##' @param conf confidence interval
+##' @param facet one of 'none', 'row' and 'column'
+##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param upstream the upstream extension
+##' @param downstream the downstream extension
+##' @param label the label of the center
+##' @param ... additional parameter
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 geom_line
 ##' @importFrom ggplot2 geom_vline

@@ -969,6 +969,21 @@ getTagMatrix.binning.internal <- function(peak,
 ##' Nested function for getTagMatrix() to deal with multiple windows
 ##' 
 ##' This is an internal function.
+##' @title getTagMatrix2
+##'
+##' @param peak peak peak file or GRanges object
+##' @param upstream the distance of upstream extension
+##' @param downstream the distance of downstream extension
+##' @param windows_name the names of windows
+##' @param type one of "start_site", "end_site", "body"
+##' @param by one of 'gene', 'transcript', 'exon', 'intron', '3UTR' , '5UTR', or specified by users
+##' @param gr self-made granges object, served as txdb
+##' @param TxDb TxDb
+##' @param weightCol column name of weight, default is NULL
+##' @param nbin the amount of nbines 
+##' @param verbose print message or not
+##' @param ignore_strand ignore the strand information or not
+##' @return tagMatrix
 ##' @importFrom ggplot2 rel
 getTagMatrix2 <- function(peak, 
                           upstream,
@@ -1133,7 +1148,13 @@ getTagMatrix2 <- function(peak,
   
 }
 
-
+##' @title getTagMatrix2.internal
+##'
+##' @param peak peak peak file or GRanges object
+##' @param windows a collection of region
+##' @param windows_name the name of windows
+##' @param weightCol column name of weight, default is NULL
+##' @param ignore_strand ignore the strand information or not
 getTagMatrix2.internal <- function(peak, 
                                    weightCol=NULL,
                                    windows,
@@ -1156,6 +1177,15 @@ getTagMatrix2.internal <- function(peak,
 }
 
 ##' internal function
+##' 
+##' @param peak peak peak file or GRanges object
+##' @param upstream the distance of upstream extension
+##' @param downstream the distance of downstream extension
+##' @param windows a collection of region
+##' @param windows_name the name of windows
+##' @param weightCol column name of weight, default is NULL
+##' @param nbin the amount of nbines 
+##' @param ignore_strand ignore the strand information or not
 getTagMatrix2.binning.internal <- function(peak, 
                                            weightCol = NULL, 
                                            windows, 
@@ -1172,7 +1202,6 @@ getTagMatrix2.binning.internal <- function(peak,
     mt <- getTagMatrix.binning.internal(peak = peak, 
                                         weightCol = weightCol, 
                                         windows = windows, 
-                                        windows_name=windows_name,
                                         nbin = nbin,
                                         upstream = upstream,
                                         downstream = downstream,
