@@ -62,3 +62,61 @@ test_that("input gr and txdb input",{
   
   expect_is(p,"gg")
 })
+
+
+test_that("check body region",{
+  
+  p <- plotPeakProf3(peak = peak,
+                     gr = gr,
+                     conf = 0.95,
+                     by = c("enhancer","gene"),
+                     windows_name = c("enhancer","gene"),
+                     weightCol = "V5",
+                     type = "body",
+                     upstream = 1000,
+                     downstream = 1000,
+                     TxDb = txdb,
+                     nbin = 800)
+  
+  expect_is(p,"gg")
+  
+  p <- plotPeakProf3(peak = peak,
+                     gr = gr,
+                     conf = 0.95,
+                     by = c("enhancer","gene"),
+                     windows_name = c("enhancer","gene"),
+                     weightCol = "V5",
+                     type = "body",
+                     TxDb = txdb,
+                     nbin = 800)
+  
+  expect_is(p,"gg")
+  
+  p <- plotPeakProf3(peak = peak,
+                     gr = gr,
+                     conf = 0.95,
+                     by = c("enhancer","gene"),
+                     windows_name = c("enhancer","gene"),
+                     weightCol = "V5",
+                     type = "body",
+                     upstream = rel(0.2),
+                     downstream = rel(0.2),
+                     TxDb = txdb,
+                     nbin = 800)
+  
+  expect_is(p,"gg")
+  
+  p <- plotPeakProf3(peak = peak_list,
+                     gr = gr,
+                     conf = 0.95,
+                     by = c("enhancer","gene"),
+                     windows_name = c("enhancer","gene"),
+                     weightCol = "V5",
+                     type = "body",
+                     upstream = rel(0.2),
+                     downstream = rel(0.2),
+                     TxDb = txdb,
+                     nbin = 800)
+  
+  expect_is(p,"gg")
+})

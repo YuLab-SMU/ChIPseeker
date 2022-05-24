@@ -1038,20 +1038,20 @@ getTagMatrix2 <- function(peak,
   
   names(windows) <- windows_name
   
-  ## check windows attributes
-  check_upstream <- attr(windows[[1]],"upstream")
-  check_downstream <- attr(windows[[1]],"downstream")
-  lapply(windows, function(x){
-    
-    if(attr(x,"upstream") != check_upstream){
-      stop("the upstream of windows should be the same...")
-    }
-    
-    if(attr(x,"downstream") != check_downstream){
-      stop("the downstream of windows should be the same...")
-    }
-    
-  })
+  # ## check windows attributes
+  # check_upstream <- attr(windows[[1]],"upstream")
+  # check_downstream <- attr(windows[[1]],"downstream")
+  # lapply(windows, function(x){
+  #   
+  #   if(attr(x,"upstream") != check_upstream){
+  #     stop("the upstream of windows should be the same...")
+  #   }
+  #   
+  #   if(attr(x,"downstream") != check_downstream){
+  #     stop("the downstream of windows should be the same...")
+  #   }
+  #   
+  # })
   
   # check the upstream and downstream parameter for body
   if(type == "body"){
@@ -1201,7 +1201,7 @@ getTagMatrix2.binning.internal <- function(peak,
     
     mt <- getTagMatrix.binning.internal(peak = peak, 
                                         weightCol = weightCol, 
-                                        windows = windows, 
+                                        windows = windows_tmp, 
                                         nbin = nbin,
                                         upstream = upstream,
                                         downstream = downstream,

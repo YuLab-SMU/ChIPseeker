@@ -894,7 +894,7 @@ plotMultiProf <- function(tagMatrix,
                           ...){
   
   
-  if(is.null(attr(tagMatrix[[1]],'upstream'))){
+  if(is(tagMatrix[[1]][[1]],"matrix")){
     upstream <- attr(tagMatrix[[1]][[1]], 'upstream')
     downstream <- attr(tagMatrix[[1]][[1]], 'downstream')
     # attr(tagMatrix, 'type') <- attr(tagMatrix[[1]][[1]], 'type')
@@ -1224,26 +1224,26 @@ plotMultiProf.binning <- function(tagMatrix,
   conf <- if(missingArg(conf)) NA else conf
   
   if (!(missingArg(conf) || is.na(conf))){
-    p <- plotAvgProf.binning.internal(tagMatrix , 
-                                      conf = conf, 
-                                      xlab = xlab, 
-                                      ylab = ylab,
-                                      facet = facet, 
-                                      free_y = free_y,
-                                      upstream = upstream,
-                                      downstream = downstream,
-                                      label = label,
-                                      ...)
+    p <- plotMultiProf.binning.internal(tagMatrix , 
+                                        conf = conf, 
+                                        xlab = xlab, 
+                                        ylab = ylab,
+                                        facet = facet, 
+                                        free_y = free_y,
+                                        upstream = upstream,
+                                        downstream = downstream,
+                                        label = label,
+                                        ...)
   } else {
-    p <- plotAvgProf.binning.internal(tagMatrix , 
-                                      xlab = xlab, 
-                                      ylab = ylab,
-                                      facet = facet, 
-                                      free_y = free_y, 
-                                      upstream = upstream,
-                                      downstream = downstream,
-                                      label = label,
-                                      ...)
+    p <- plotMultiProf.binning.internal(tagMatrix , 
+                                        xlab = xlab, 
+                                        ylab = ylab,
+                                        facet = facet, 
+                                        free_y = free_y, 
+                                        upstream = upstream,
+                                        downstream = downstream,
+                                        label = label,
+                                        ...)
   }
   return(p)
 }
@@ -1285,7 +1285,7 @@ plotMultiProf.binning.internal <- function(tagMatrix,
                                            ...) {
   
   listFlag <- FALSE
-  if (is.null(attr(tagMatrix[[1]],'upstream'))) {
+  if (is(tagMatrix[[1]][[1]],"matrix")) {
     if ( is.null(names(tagMatrix)) ) {
       nn <- paste0("peak", seq_along(tagMatrix))
       warning("input is not a named list, set the name automatically to ", paste(nn, collapse=' '))
@@ -1470,9 +1470,9 @@ plotMultiProf.binning.internal <- function(tagMatrix,
   }
   p <- p+xlab(xlab)+ylab(ylab)
   p <- p + theme_bw() + theme(legend.title=element_blank())
-  if(facet != "none") {
-    p <- p + theme(legend.position="none")
-  }
+  # if(facet != "none") {
+  #   p <- p + theme(legend.position="none")
+  # }
   return(p)
 }
 
