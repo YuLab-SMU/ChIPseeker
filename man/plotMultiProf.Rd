@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotTagMatrix.R
 \name{plotMultiProf}
 \alias{plotMultiProf}
-\title{internal function for plotPeakProf3}
+\title{internal function for plotPeakProf_MultiWindows}
 \usage{
 plotMultiProf(
   tagMatrix,
@@ -30,5 +30,5 @@ plotMultiProf(
 \item{...}{additional parameter}
 }
 \description{
-internal function for plotPeakProf3
+internal function for plotPeakProf_MultiWindows
 }

@@ -227,26 +227,30 @@ makeBioRegionFromGranges <- function(gr,
 ##' calculate the tag matrix
 ##' 
 ##' \code{getTagMatrix()} function can produce the matrix for visualization.
-##' \code{peak} stands for the peak file. \code{window} stands for a collection of regions
-##' that users want to look into. Users can use \code{window} to capture the peak of interest.
+##' \code{peak} stands for the peak file. 
+##' \code{window} stands for a collection of regions that users want to look into. 
+##' Users can use \code{window} to capture the peak of interest.
 ##' There are two ways to input \code{window}. 
 ##' 
 ##' The first way is that users can use
-##' \code{getPromoters()/getBioRegion()/makeBioRegionFromGranges()} to get \code{window} and
-##' put it into \code{getTagMatrix()}. 
+##' \code{getPromoters()/getBioRegion()/makeBioRegionFromGranges()} to 
+##' get \code{window} and put it into \code{getTagMatrix()}. 
 ##' 
 ##' The second way is that users can use \code{getTagMatrix()} to
 ##' call \code{getPromoters()/getBioRegion()/makeBioRegionFromGranges()}. In this way
 ##' users do not need to input \code{window} parameter but they need to input
-##' \code{txdb} or \code{gr (self-made granges object)}. 
+##' \code{txdb}. 
 ##' 
 ##' \code{txdb} is a set of packages contained annotation 
 ##' of regions of different genomes. Users can
 ##' get the regions of interest through specific functions. These specific functions
 ##' are built in \code{getPromoters()/getBioRegion()}. Many regions can not be gain
-##' through \code{txdb}, like insulator and enhancer regions. Users can provide these
-##' regions in the form of granges object. These self-made granges object will be passed
-##' to \code{makeBioRegionFromGranges()} to produce the \code{window}.
+##' through \code{txdb}, like insulator and enhancer regions. 
+##' Users can provide these regions in the form of granges object. 
+##' These self-made granges object will be passed to \code{TxDb} parameter and they will
+##' be passed to \code{makeBioRegionFromGranges()} to produce the \code{window}.
+##' In a word, \code{TxDb} parameter is a reference information. Users can
+##' pass \code{txdb object} or self-made granges into it.
 ##' 
 ##' Details see \code{\link{getPromoters}},\code{\link{getBioRegion}} and \code{\link{makeBioRegionFromGranges}}
 ##' 
@@ -282,8 +286,7 @@ makeBioRegionFromGranges <- function(gr,
 ##' @param windows a collection of region
 ##' @param type one of "start_site", "end_site", "body"
 ##' @param by one of 'gene', 'transcript', 'exon', 'intron', '3UTR' , '5UTR', or specified by users
-##' @param gr self-made granges object, served as txdb
-##' @param TxDb TxDb
+##' @param TxDb TxDb or self-made granges object, served as txdb
 ##' @param weightCol column name of weight, default is NULL
 ##' @param nbin the amount of nbines 
 ##' @param verbose print message or not
@@ -297,16 +300,21 @@ getTagMatrix <- function(peak,
                          windows,
                          type,
                          by,
-                         gr=NULL,
                          TxDb=NULL,
                          weightCol = NULL, 
                          nbin = NULL,
                          verbose = TRUE,
                          ignore_strand= FALSE){
   
+  is_GRanges_of_TxDb <- FALSE
+  if (is(TxDb, "TxDb")) {
+    is_GRanges_of_TxDb <- TRUE
+    message("#\n#.. 'TxDb' is a self-defined 'GRanges' object...\n#")
+  }
+  
   if(missingArg(windows)){
     
-    if(is.null(gr)){
+    if(is_GRanges_of_TxDb){
       
       ## make windows from txdb object
       windows <- getBioRegion(TxDb=TxDb,
@@ -316,7 +324,7 @@ getTagMatrix <- function(peak,
                               type=type)
     }else{
       ## make windows from self-made granges object
-      windows <- makeBioRegionFromGranges(gr=gr,
+      windows <- makeBioRegionFromGranges(gr=TxDb,
                                           by=by,
                                           type=type,
                                           upstream=upstream,
@@ -977,8 +985,7 @@ getTagMatrix.binning.internal <- function(peak,
 ##' @param windows_name the names of windows
 ##' @param type one of "start_site", "end_site", "body"
 ##' @param by one of 'gene', 'transcript', 'exon', 'intron', '3UTR' , '5UTR', or specified by users
-##' @param gr self-made granges object, served as txdb
-##' @param TxDb TxDb
+##' @param TxDb TxDb or self-made granges object, served as txdb
 ##' @param weightCol column name of weight, default is NULL
 ##' @param nbin the amount of nbines 
 ##' @param verbose print message or not
@@ -991,40 +998,26 @@ getTagMatrix2 <- function(peak,
                           windows_name,
                           type,
                           by,
-                          gr=NULL,
                           TxDb=NULL,
                           weightCol = NULL, 
                           nbin = NULL,
                           verbose = TRUE,
                           ignore_strand= FALSE){
   
-  by_type <- sapply(as.list(by), function(x){
-    
-    if(x %in% c('gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR')){
-      result <- "txdb"
-    }else{
-      result <- "gr"
-    }
-    
-    return(result)
-    
-  })
-  
-  names(by) <- by_type
-  names(gr) <- by[which(names(by) == "gr")]
+  names(TxDb) <- by
   
   windows <- lapply(as.list(by), function(x){
     
     if(x %in% c('gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR')){
       
-      result <- getBioRegion(TxDb=TxDb,
+      result <- getBioRegion(TxDb=TxDb[[x]],
                              upstream=upstream,
                              downstream=downstream,
                              by=x,
                              type=type)
     }else{
       
-      result <- makeBioRegionFromGranges(gr=gr[[x]],
+      result <- makeBioRegionFromGranges(gr=TxDb[[x]],
                                          by=x,
                                          type=type,
                                          upstream=upstream,
@@ -1037,21 +1030,6 @@ getTagMatrix2 <- function(peak,
   })
   
   names(windows) <- windows_name
-  
-  # ## check windows attributes
-  # check_upstream <- attr(windows[[1]],"upstream")
-  # check_downstream <- attr(windows[[1]],"downstream")
-  # lapply(windows, function(x){
-  #   
-  #   if(attr(x,"upstream") != check_upstream){
-  #     stop("the upstream of windows should be the same...")
-  #   }
-  #   
-  #   if(attr(x,"downstream") != check_downstream){
-  #     stop("the downstream of windows should be the same...")
-  #   }
-  #   
-  # })
   
   # check the upstream and downstream parameter for body
   if(type == "body"){

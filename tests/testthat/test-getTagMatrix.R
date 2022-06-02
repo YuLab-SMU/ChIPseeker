@@ -157,7 +157,7 @@ test_that("getTagMatrix function for single peak file",{
   # make window through self-made grange object
   mt4 <- getTagMatrix(peak = peak,
                       weightCol = "V5",
-                      gr = enhancer,
+                      TxDb = enhancer,
                       by = "gene",
                       type = "start_site",
                       upstream = 1000,
@@ -177,7 +177,7 @@ test_that("getTagMatrix function for single peak file",{
   
   # extend flank by rel object
   mt5_2 <- getTagMatrix(peak = peak,
-                        gr = enhancer,
+                        TxDb = enhancer,
                         weightCol = "V5",
                         by = "enhancer",
                         type = "body",

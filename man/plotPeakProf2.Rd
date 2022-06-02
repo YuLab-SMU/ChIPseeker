@@ -13,7 +13,6 @@ plotPeakProf2(
   type,
   weightCol = NULL,
   TxDb = NULL,
-  gr = NULL,
   xlab = "Genomic Region (5'->3')",
   ylab = "Peak Count Frequency",
   facet = "none",
@@ -39,9 +38,7 @@ plotPeakProf2(
 
 \item{weightCol}{column name of weight}
 
-\item{TxDb}{TxDb object}
-
-\item{gr}{self-made granges object}
+\item{TxDb}{TxDb object, or self-made granges object}
 
 \item{xlab}{xlab}
 
@@ -94,8 +91,10 @@ see \url{https://github.com/YuLab-SMU/ChIPseeker/issues/15}
 \code{nbin} refers to the number of bins, providing a binning method
 to get the tag matrix.
 
-\code{gr} many regions can not be obtained by txdb object. In this case,
-Users can provide self-made granges served the same role as txdb object.
+\code{TxDb} parameter can accept txdb object.
+But many regions can not be obtained by txdb object. In this case,
+Users can provide self-made granges served the same role 
+as txdb object and pass to \code{TxDb} object.
 
 \code{plotPeakProf2()} is different from the \code{plotPeakProf()}. \code{plotPeakProf2()} do not
 need to provide \code{window} parameter, which means \code{plotPeakProf2()} will call relevent

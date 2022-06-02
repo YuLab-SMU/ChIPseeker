@@ -11,7 +11,6 @@ getTagMatrix(
   windows,
   type,
   by,
-  gr = NULL,
   TxDb = NULL,
   weightCol = NULL,
   nbin = NULL,
@@ -32,9 +31,7 @@ getTagMatrix(
 
 \item{by}{one of 'gene', 'transcript', 'exon', 'intron', '3UTR' , '5UTR', or specified by users}
 
-\item{gr}{self-made granges object, served as txdb}
-
-\item{TxDb}{TxDb}
+\item{TxDb}{TxDb or self-made granges object, served as txdb}
 
 \item{weightCol}{column name of weight, default is NULL}
 
@@ -52,26 +49,30 @@ calculate the tag matrix
 }
 \details{
 \code{getTagMatrix()} function can produce the matrix for visualization.
-\code{peak} stands for the peak file. \code{window} stands for a collection of regions
-that users want to look into. Users can use \code{window} to capture the peak of interest.
+\code{peak} stands for the peak file. 
+\code{window} stands for a collection of regions that users want to look into. 
+Users can use \code{window} to capture the peak of interest.
 There are two ways to input \code{window}. 
 
 The first way is that users can use
-\code{getPromoters()/getBioRegion()/makeBioRegionFromGranges()} to get \code{window} and
-put it into \code{getTagMatrix()}. 
+\code{getPromoters()/getBioRegion()/makeBioRegionFromGranges()} to 
+get \code{window} and put it into \code{getTagMatrix()}. 
 
 The second way is that users can use \code{getTagMatrix()} to
 call \code{getPromoters()/getBioRegion()/makeBioRegionFromGranges()}. In this way
 users do not need to input \code{window} parameter but they need to input
-\code{txdb} or \code{gr (self-made granges object)}. 
+\code{txdb}. 
 
 \code{txdb} is a set of packages contained annotation 
 of regions of different genomes. Users can
 get the regions of interest through specific functions. These specific functions
 are built in \code{getPromoters()/getBioRegion()}. Many regions can not be gain
-through \code{txdb}, like insulator and enhancer regions. Users can provide these
-regions in the form of granges object. These self-made granges object will be passed
-to \code{makeBioRegionFromGranges()} to produce the \code{window}.
+through \code{txdb}, like insulator and enhancer regions. 
+Users can provide these regions in the form of granges object. 
+These self-made granges object will be passed to \code{TxDb} parameter and they will
+be passed to \code{makeBioRegionFromGranges()} to produce the \code{window}.
+In a word, \code{TxDb} parameter is a reference information. Users can
+pass \code{txdb object} or self-made granges into it.
 
 Details see \code{\link{getPromoters}},\code{\link{getBioRegion}} and \code{\link{makeBioRegionFromGranges}}
 

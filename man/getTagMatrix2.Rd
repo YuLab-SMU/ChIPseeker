@@ -11,7 +11,6 @@ getTagMatrix2(
   windows_name,
   type,
   by,
-  gr = NULL,
   TxDb = NULL,
   weightCol = NULL,
   nbin = NULL,
@@ -32,9 +31,7 @@ getTagMatrix2(
 
 \item{by}{one of 'gene', 'transcript', 'exon', 'intron', '3UTR' , '5UTR', or specified by users}
 
-\item{gr}{self-made granges object, served as txdb}
-
-\item{TxDb}{TxDb}
+\item{TxDb}{TxDb or self-made granges object, served as txdb}
 
 \item{weightCol}{column name of weight, default is NULL}
 

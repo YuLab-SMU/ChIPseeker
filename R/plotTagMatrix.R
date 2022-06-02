@@ -1,102 +1,231 @@
 ##' plot the profile of peaks
+##'`
+##' \code{plotPeakProf_MultiWindows()} is almost the same as \code{plotPeakProf2()}, having
+##' the main difference of accepting two or more granges objects. Accepting more
+##' granges objects can help compare the same peaks in different windows.
 ##' 
-##' this function combined previous function plotAvgProf()
+##' \code{TxDb} parameter can accept txdb object.
+##' But many regions can not be obtained by txdb object. In this case,
+##' Users can provide self-made granges served the same role 
+##' as txdb object and pass to \code{TxDb} object.
+##' 
+##' \code{by} the features of interest. 
+##' 
+##' (1) if users use \code{txdb}, \code{by} can be one of 'gene', 'transcript', 'exon', 
+##' 'intron' , '3UTR' , '5UTR', 'UTR'. These features can be obtained by functions from txdb object.
+##' 
+##' (2) if users use self-made granges object, \code{by} can be everything. Because this \code{by}
+##' will not pass to functions to get features, which is different from the case of using 
+##' txdb object. This \code{by} is only used to made labels showed in picture.
+##' 
+##' \code{type} means the property of the region. one of the "start site",
+##' "end site" and "body".
+##' 
+##' \code{upstream} and \code{downstream} parameter have different usages:
+##' 
+##' (1) if \code{type == 'body'}, \code{upstream} and \code{downstream} can use to extend 
+##' the flank of body region.
+##' 
+##' (2) if \code{type == 'start_site'/'end_site'}, \code{upstream} and \code{downstream} refer to
+##' the upstream and downstream of the start_site or the end_site.
+##' 
+##' \code{weightCol} refers to column in peak file. This column acts as a weight value. Details
+##' see \url{https://github.com/YuLab-SMU/ChIPseeker/issues/15}
+##' 
+##' \code{nbin} refers to the number of bins. \code{getTagMatrix()} provide a binning method
+##' to get the tag matrix.
+##' 
+##' There are two ways input a list of window.
+##' 
+##' (1) Users can input a list of self-made granges objects
+##' 
+##' (2) Users can input a list of \code{by} and only one \code{type}. In this way, 
+##' \code{plotPeakProf_MultiWindows()} can made a list of window from txdb object based on \code{by} and \code{type}.
+##' 
+##' Warning: 
+##' 
+##' (1) All of these window should be the same type. It means users can only
+##' compare a list of "start site"/"end site"/"body region" with the same upstream
+##' and downstream.
+##' 
+##' (2) So it will be only one \code{type} and several \code{by}.
+##' 
+##' (3) Users can make window by txdb object or self-made granges object. Users can only
+##' choose one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR' or 'UTR' in the
+##' way of using txdb object. User can input any \code{by} in the way of using 
+##' self-made granges object.
+##' 
+##' (4) Users can mingle the \code{by} designed for the two ways. \code{plotPeakProf_MultiWindows} can
+##' accpet the hybrid \code{by}. But the above rules should be followed.
+##' 
+##' \url{https://github.com/YuLab-SMU/ChIPseeker/issues/189}
 ##'
-##' @title plotPeakProf
+##' @title plotPeakProf_MultiWindows
+##' 
 ##' @param tagMatrix tagMatrix or a list of tagMatrix
+##' @param peak peak file or GRanges object
+##' @param weightCol column name of weight
+##' @param TxDb TxDb object or self-made granges objects
+##' @param upstream upstream position
+##' @param downstream downstream position
+##' @param by feature of interest
+##' @param type one of "start_site", "end_site", "body"
+##' @param windows_name the name for each window, which will also be showed in the picture as labels
+##' @param xlab xlab
+##' @param ylab ylab
 ##' @param conf confidence interval
-##' @param xlab x label
-##' @param ylab y label
 ##' @param facet one of 'none', 'row' and 'column'
 ##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param verbose print message or not
+##' @param nbin the amount of bines 
+##' @param ignore_strand ignore the strand information or not
 ##' @param ... additional parameter
 ##' @return ggplot object
-##' @importFrom ggplot2 rel
 ##' @export
-plotPeakProf <- function(tagMatrix,
+plotPeakProf <- function(tagMatrix = NULL,
+                         peak,
+                         upstream,
+                         downstream,
                          conf,
-                         xlab="Genomic Region (5'->3')",
+                         by,
+                         type,
+                         windows_name = NULL,
+                         weightCol = NULL,
+                         TxDb = NULL,
+                         xlab = "Genomic Region (5'->3')",
                          ylab = "Peak Count Frequency",
-                         facet="none", 
+                         facet = "row",
                          free_y = TRUE,
+                         verbose = TRUE,
+                         nbin = NULL,
+                         ignore_strand = FALSE,
                          ...){
   
-  if(is(tagMatrix, "list")){
-    upstream <- attr(tagMatrix[[1]], 'upstream')
-    downstream <- attr(tagMatrix[[1]], 'downstream')
-    label <- attr(tagMatrix[[1]], 'label')
-    attr(tagMatrix, 'type') <- attr(tagMatrix[[1]], 'type')
-    attr(tagMatrix, 'is.binning') <- attr(tagMatrix[[1]], 'is.binning')
+  if(is.null(tagMatrix)){
     
-  }else{
-    upstream <- attr(tagMatrix, 'upstream')
-    downstream <- attr(tagMatrix, 'downstream')
-    label <- attr(tagMatrix, 'label')
-  }
-  
-  
-  if(attr(tagMatrix, 'is.binning')){
+    conf <- if(missingArg(conf)) NA else conf
+    upstream <- if(missingArg(upstream)) NULL else upstream
+    downstream <- if(missingArg(downstream)) NULL else downstream
     
-    if (!(missingArg(conf) || is.na(conf))){
+    if(length(by) == 1){
       
-      plotAvgProf.binning(tagMatrix = tagMatrix, 
-                          xlab = xlab,
-                          ylab = ylab,
-                          conf = conf,
-                          facet = facet, 
-                          free_y = free_y,
-                          upstream = upstream,
-                          downstream = downstream,
-                          label = label,
-                          ...)
+      plotPeakProf2(peak = peak, 
+                    upstream = upstream, 
+                    downstream = downstream,
+                    conf = conf,
+                    by = by,
+                    type = type,
+                    weightCol = weightCol, 
+                    TxDb = TxDb,
+                    xlab = xlab,
+                    ylab = ylab,
+                    facet = facet,
+                    free_y = free_y,
+                    verbose = verbose, 
+                    nbin = nbin,
+                    ignore_strand = ignore_strand,
+                    ...)
       
     }else{
       
-      plotAvgProf.binning(tagMatrix = tagMatrix, 
-                          xlab = xlab,
-                          ylab = ylab,
-                          facet = facet, 
-                          free_y = free_y,
-                          upstream = upstream,
-                          downstream = downstream,
-                          label = label,
-                          ...)
+      plotPeakProf_MultiWindows(peak = peak,
+                                upstream = upstream,
+                                downstream = downstream,
+                                conf = conf,
+                                by = by,
+                                type = type,
+                                windows_name = windows_name,
+                                weightCol = weightCol,
+                                TxDb = TxDb,
+                                xlab = xlab,
+                                ylab = ylab,
+                                facet = facet,
+                                free_y = free_y,
+                                verbose = verbose,
+                                nbin = nbin,
+                                ignore_strand = ignore_strand,
+                                ...)
       
     }
-    
     
   }else{
     
-    xlim <- c(-upstream, downstream)
-    
-    if (!(missingArg(conf) || is.na(conf))){
-      
-      plotAvgProf (tagMatrix = tagMatrix, 
-                   xlim = xlim,
-                   xlab = xlab,
-                   ylab = ylab,
-                   conf = conf,
-                   facet = facet, 
-                   free_y = free_y,
-                   origin_label = label,
-                   ...)
+    if(is(tagMatrix, "list")){
+      upstream <- attr(tagMatrix[[1]], 'upstream')
+      downstream <- attr(tagMatrix[[1]], 'downstream')
+      label <- attr(tagMatrix[[1]], 'label')
+      attr(tagMatrix, 'type') <- attr(tagMatrix[[1]], 'type')
+      attr(tagMatrix, 'is.binning') <- attr(tagMatrix[[1]], 'is.binning')
       
     }else{
-      
-      plotAvgProf (tagMatrix = tagMatrix, 
-                   xlim = xlim,
-                   xlab = xlab,
-                   ylab = ylab,
-                   facet = facet, 
-                   free_y = free_y,
-                   origin_label = label,
-                   ...)
-      
+      upstream <- attr(tagMatrix, 'upstream')
+      downstream <- attr(tagMatrix, 'downstream')
+      label <- attr(tagMatrix, 'label')
     }
     
     
+    if(attr(tagMatrix, 'is.binning')){
+      
+      if (!(missingArg(conf) || is.na(conf))){
+        
+        plotAvgProf.binning(tagMatrix = tagMatrix, 
+                            xlab = xlab,
+                            ylab = ylab,
+                            conf = conf,
+                            facet = facet, 
+                            free_y = free_y,
+                            upstream = upstream,
+                            downstream = downstream,
+                            label = label,
+                            ...)
+        
+      }else{
+        
+        plotAvgProf.binning(tagMatrix = tagMatrix, 
+                            xlab = xlab,
+                            ylab = ylab,
+                            facet = facet, 
+                            free_y = free_y,
+                            upstream = upstream,
+                            downstream = downstream,
+                            label = label,
+                            ...)
+        
+      }
+      
+      
+    }else{
+      
+      xlim <- c(-upstream, downstream)
+      
+      if (!(missingArg(conf) || is.na(conf))){
+        
+        plotAvgProf (tagMatrix = tagMatrix, 
+                     xlim = xlim,
+                     xlab = xlab,
+                     ylab = ylab,
+                     conf = conf,
+                     facet = facet, 
+                     free_y = free_y,
+                     origin_label = label,
+                     ...)
+        
+      }else{
+        
+        plotAvgProf (tagMatrix = tagMatrix, 
+                     xlim = xlim,
+                     xlab = xlab,
+                     ylab = ylab,
+                     facet = facet, 
+                     free_y = free_y,
+                     origin_label = label,
+                     ...)
+        
+      }
+      
+      
+    }
   }
-  
   
 }
 
@@ -607,8 +736,10 @@ plotAvgProf.binning.internal <- function(tagMatrix,
 ##' \code{nbin} refers to the number of bins, providing a binning method
 ##' to get the tag matrix.
 ##' 
-##' \code{gr} many regions can not be obtained by txdb object. In this case,
-##' Users can provide self-made granges served the same role as txdb object.
+##' \code{TxDb} parameter can accept txdb object.
+##' But many regions can not be obtained by txdb object. In this case,
+##' Users can provide self-made granges served the same role 
+##' as txdb object and pass to \code{TxDb} object.
 ##' 
 ##' \code{plotPeakProf2()} is different from the \code{plotPeakProf()}. \code{plotPeakProf2()} do not
 ##' need to provide \code{window} parameter, which means \code{plotPeakProf2()} will call relevent
@@ -617,8 +748,7 @@ plotAvgProf.binning.internal <- function(tagMatrix,
 ##' @title plotPeakProf2
 ##' @param peak peak file or GRanges object
 ##' @param weightCol column name of weight
-##' @param TxDb TxDb object
-##' @param gr self-made granges object
+##' @param TxDb TxDb object, or self-made granges object
 ##' @param upstream upstream position
 ##' @param downstream downstream position
 ##' @param by e.g. 'gene', 'transcript', 'exon' or features of interest(e.g. "enhancer")
@@ -643,7 +773,6 @@ plotPeakProf2 <- function(peak,
                           type,
                           weightCol = NULL, 
                           TxDb = NULL,
-                          gr=NULL,
                           xlab = "Genomic Region (5'->3')",
                           ylab = "Peak Count Frequency",
                           facet = "none",
@@ -663,7 +792,6 @@ plotPeakProf2 <- function(peak,
                         downstream = downstream, 
                         type = type,
                         TxDb = TxDb,
-                        gr = gr,
                         by = by,
                         weightCol = weightCol, 
                         nbin = nbin,
@@ -675,7 +803,6 @@ plotPeakProf2 <- function(peak,
                               downstream = downstream, 
                               type = type,
                               by = by,
-                              gr = gr,
                               TxDb = TxDb,
                               weightCol = weightCol, 
                               nbin = nbin,
@@ -711,9 +838,14 @@ plotPeakProf2 <- function(peak,
 ##'
 ##' This function comes from \url{https://github.com/YuLab-SMU/ChIPseeker/issues/189}
 ##'`
-##' \code{plotPeakProf3()} is almost the same as \code{plotPeakProf2()}, having
+##' \code{plotPeakProf_MultiWindows()} is almost the same as \code{plotPeakProf2()}, having
 ##' the main difference of accepting two or more granges objects. Accepting more
 ##' granges objects can help compare the same peaks in different windows.
+##' 
+##' \code{TxDb} parameter can accept txdb object.
+##' But many regions can not be obtained by txdb object. In this case,
+##' Users can provide self-made granges served the same role 
+##' as txdb object and pass to \code{TxDb} object.
 ##' 
 ##' \code{by} the features of interest. 
 ##' 
@@ -746,7 +878,7 @@ plotPeakProf2 <- function(peak,
 ##' (1) Users can input a list of self-made granges objects
 ##' 
 ##' (2) Users can input a list of \code{by} and only one \code{type}. In this way, 
-##' \code{plotPeakProf3()} can made a list of window from txdb object based on \code{by} and \code{type}.
+##' \code{plotPeakProf_MultiWindows()} can made a list of window from txdb object based on \code{by} and \code{type}.
 ##' 
 ##' Warning: 
 ##' 
@@ -761,15 +893,14 @@ plotPeakProf2 <- function(peak,
 ##' way of using txdb object. User can input any \code{by} in the way of using 
 ##' self-made granges object.
 ##' 
-##' (4) Users can mingle the \code{by} designed for the two ways. \code{plotPeakProf3} can
+##' (4) Users can mingle the \code{by} designed for the two ways. \code{plotPeakProf_MultiWindows} can
 ##' accpet the hybrid \code{by}. But the above rules should be followed.
 ##' 
 ##'
-##' @title plotPeakProf3
+##' @title plotPeakProf_MultiWindows
 ##' @param peak peak file or GRanges object
 ##' @param weightCol column name of weight
-##' @param TxDb TxDb object
-##' @param gr self-made granges objects
+##' @param TxDb TxDb object or self-made granges objects
 ##' @param upstream upstream position
 ##' @param downstream downstream position
 ##' @param by feature of interest
@@ -785,25 +916,23 @@ plotPeakProf2 <- function(peak,
 ##' @param ignore_strand ignore the strand information or not
 ##' @param ... additional parameter
 ##' @return ggplot object
-##' @export
-plotPeakProf3 <- function(peak, 
-                          upstream, 
-                          downstream,
-                          conf,
-                          by,
-                          type,
-                          windows_name = NULL,
-                          weightCol = NULL, 
-                          TxDb = NULL,
-                          gr=NULL,
-                          xlab = "Genomic Region (5'->3')",
-                          ylab = "Peak Count Frequency",
-                          facet = "row",
-                          free_y = TRUE,
-                          verbose = TRUE, 
-                          nbin = NULL,
-                          ignore_strand = FALSE,
-                          ...){
+plotPeakProf_MultiWindows <- function(peak,
+                                      upstream,
+                                      downstream,
+                                      conf,
+                                      by,
+                                      type,
+                                      windows_name = NULL,
+                                      weightCol = NULL,
+                                      TxDb = NULL,
+                                      xlab = "Genomic Region (5'->3')",
+                                      ylab = "Peak Count Frequency",
+                                      facet = "row",
+                                      free_y = TRUE,
+                                      verbose = TRUE,
+                                      nbin = NULL,
+                                      ignore_strand = FALSE,
+                                      ...){
   
   conf <- if(missingArg(conf)) NA else conf
   upstream <- if(missingArg(upstream)) NULL else upstream
@@ -833,7 +962,6 @@ plotPeakProf3 <- function(peak,
                         windows_name=windows_name,
                         type=type,
                         by=by,
-                        gr=gr,
                         TxDb=TxDb,
                         weightCol = weightCol, 
                         nbin = nbin,
@@ -846,7 +974,6 @@ plotPeakProf3 <- function(peak,
                                windows_name=windows_name,
                                type=type,
                                by=by,
-                               gr=gr,
                                TxDb=TxDb,
                                weightCol = weightCol, 
                                nbin = nbin,
@@ -876,7 +1003,7 @@ plotPeakProf3 <- function(peak,
 }
 
 
-##' internal function for plotPeakProf3
+##' internal function for plotPeakProf_MultiWindows
 ##' 
 ##' @param tagMatrix tagMatrix
 ##' @param xlab xlab
