@@ -23,15 +23,31 @@ getPromoters <- function(TxDb=NULL,
 
 ##' prepare a bioregion of selected feature
 ##' 
-##' this function combined previous functions getPromoters(),getBioRegion(),getGeneBody()
-##' https://github.com/GuangchuangYu/ChIPseeker/issues/16
-##' https://github.com/GuangchuangYu/ChIPseeker/issues/87
+##' this function combined previous functions getPromoters(), getBioRegion() and getGeneBody() in order
+##' to solve the following issues.
+##' 
+##' (1) \url{https://github.com/GuangchuangYu/ChIPseeker/issues/16}
+##' 
+##' (2) \url{https://github.com/GuangchuangYu/ChIPseeker/issues/87}
+##' 
+##' The getBioRegion() function can prevoid a region of interest from
+##' \code{txdb} object. There are three kinds of regions, \code{start_site},
+##' \code{end_site} and \code{body}. 
+##' 
+##' We take transcript region to expain the differences of these three regions.
+##' tx: chr1 1000 1400. 
+##' 
+##' \code{body} region refers to the 1000-1400bp.
+##' 
+##' \code{start_site} region with \code{upstream = 100, downstream = 100} refers to 900-1100bp. 
+##' 
+##' \code{end_site} region with \code{upstream = 100, downstream = 100} refers to 1300-1500bp.
 ##'
 ##' @title getBioRegion
 ##' @param TxDb TxDb
-##' @param upstream upstream from start site
-##' @param downstream downstream from start site
-##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'
+##' @param upstream upstream from start site or end site
+##' @param downstream downstream from start site or end site
+##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'
 ##' @param type one of "start_site", "end_site", "body"
 ##' @return GRanges object
 ##' @import BiocGenerics IRanges GenomicRanges
@@ -43,38 +59,14 @@ getBioRegion <- function(TxDb=NULL,
                          by="gene",
                          type="start_site"){
   
-  by <- match.arg(by, c('gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'))
+  by <- match.arg(by, c('gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR','UTR'))
   type <- match.arg(type, c("start_site", "end_site", "body"))
   
   TxDb <- loadTxDb(TxDb)
   .ChIPseekerEnv(TxDb)
   ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
   
-  if(type == 'body'){
-    if(by %in% c('gene', 'transcript', 'exon', 'intron')){
-      label_SS <- paste0("T","SS")
-      label_TS <- paste0("T","TS")
-      label <- c(label_SS,label_TS)
-    }else{
-      label_SS <- paste0(by,"_SS")
-      label_TS <- paste0(by,"_TS")
-      label <- c(label_SS,label_TS)
-    }
-    
-  }else if(type == "start_site"){
-    if(by %in% c('gene', 'transcript', 'exon', 'intron')){
-      label <- paste0("T","SS")
-    }else{
-      label <- paste0(by,"_SS") 
-    }
-    
-  }else{
-    if(by %in% c('gene', 'transcript', 'exon', 'intron')){
-      label <- paste0("T","TS")
-    }else{
-      label <- paste0(by,"_TS")
-    }
-  }
+  label <- make_label(type = type, by = by)
   
   
   if(by == 'gene' || by == 'transcript'){
@@ -101,6 +93,14 @@ getBioRegion <- function(TxDb=NULL,
     regions <- unlist(fiveUTRList)
   }
   
+  if (by == 'UTR'){
+    three_URT <- threeUTRsByTranscript(TxDb)
+    three_UTR_regions <- unlist(three_URT)
+    five_UTR <- fiveUTRsByTranscript(TxDb)
+    five_UTR_regions <- unlist(five_UTR)
+    regions <- c(three_UTR_regions,five_UTR_regions)
+  }
+  
   if(type == "start_site"){
     coordinate<- ifelse(strand(regions) == "+", start(regions), end(regions))
   }else if(type == "end_site"){
@@ -108,6 +108,7 @@ getBioRegion <- function(TxDb=NULL,
   }else{
     ## assign attribute 
     attr(regions, 'type') = type
+    attr(regions, 'by') = by
     attr(regions, 'label') = label
     
     return(regions)
@@ -124,17 +125,158 @@ getBioRegion <- function(TxDb=NULL,
   
   ## assign attribute 
   attr(bioRegion, 'type') = type
+  attr(bioRegion, 'by') = by
+  
+  ## different region have different label to be added to the figures
+  ## so we attach label to the Granges object
   attr(bioRegion, 'label') = label
+  
   attr(bioRegion, 'upstream') = upstream
   attr(bioRegion, 'downstream') = downstream
   
   return(bioRegion)
 }
 
+##' make windows from granges object
+##' 
+##' \code{makeBioRegionFromGranges()} function can make bioregion from granges object.
+##' 
+##' The differences between \code{makeBioRegionFromGranges()} and \code{getBioRegion()} is that
+##' \code{getBioRegion()} get the region object from \code{txdb} object but
+##' \code{makeBioRegionFromGranges()} get the region from the granges object provided by users.
+##' For example, \code{txdb} object do not contain insulator or enhancer regions. Users can
+##' provide these regions through self-made granges object
+##' 
+##' There are three kinds of regions, \code{start_site}, \code{end_site} and \code{body}. 
+##' 
+##' We take enhancer region to explain the differences of these three regions.
+##' enhancer: chr1 1000 1400. 
+##' 
+##' \code{body} region refers to the 1000-1400bp.
+##' 
+##' \code{start_site} region with \code{upstream = 100, downstream = 100} refers to 900-1100bp. 
+##' 
+##' \code{end_site} region with \code{upstream = 100, downstream = 100} refers to 1300-1500bp.
+##'
+##' In \code{makeBioRegionFromGranges()}, \code{upstream} and \code{downstream} can be
+##' \code{NULL} if the \code{type == 'body'}. \code{by} should be specified by users and 
+##' can not be omitted. \code{by} parameter will be used to made labels. \code{type} should also
+##' be specified.
+##' 
+##' \url{https://github.com/YuLab-SMU/ChIPseeker/issues/189}
+##' 
+##' @title makeBioRegionFromGranges
+##' 
+##' @param gr a grange object contain region of interest
+##' @param upstream upstream from start site or end site, can be NULL if the type == 'body'
+##' @param downstream downstream from start site or end site, can be NULL if the type == 'body'
+##' @param by specify be users, e.g. gene, insulator, enhancer
+##' @param type one of "start_site", "end_site", "body"
+##' @return GRanges object
+##' @import BiocGenerics IRanges GenomicRanges
+##' @export
+makeBioRegionFromGranges <- function(gr,
+                                     by,
+                                     type,
+                                     upstream=1000,
+                                     downstream=1000){
+  
+  if (!is(gr, "GRanges")) {
+    stop("windows should be a GRanges object...")
+  }
+  
+  type <- match.arg(type, c("start_site", "end_site", "body"))
+  
+  label <- make_label(type = type, by = by)
+  regions <- gr
+  
+  if(type == "start_site"){
+    coordinate<- ifelse(strand(regions) == "+", start(regions), end(regions))
+  }else if(type == "end_site"){
+    coordinate<- ifelse(strand(regions) == "+", end(regions), start(regions))
+  }else{
+    ## assign attribute 
+    attr(regions, 'type') = type
+    attr(regions, 'by') = by
+    attr(regions, 'label') = label
+    
+    return(regions)
+  }
+  
+  ## issue and code obtained from Chen Ting(NIH/NCI)
+  start_site <- ifelse(strand(regions) == "+",coordinate-upstream, coordinate-downstream)
+  end_site <- ifelse(strand(regions) == "+", coordinate+downstream, coordinate+upstream)
+  
+  bioRegion <- GRanges(seqnames=seqnames(regions),
+                       ranges=IRanges(start_site, end_site),
+                       strand=strand(regions))
+  bioRegion <- unique(bioRegion)
+  
+  ## assign attribute 
+  attr(bioRegion, 'type') = type
+  attr(bioRegion, 'by') = by
+  attr(bioRegion, 'label') = label
+  attr(bioRegion, 'upstream') = upstream
+  attr(bioRegion, 'downstream') = downstream
+  
+  return(bioRegion)
+  
+}
 
 
 ##' calculate the tag matrix
 ##' 
+##' \code{getTagMatrix()} function can produce the matrix for visualization.
+##' \code{peak} stands for the peak file. 
+##' \code{window} stands for a collection of regions that users want to look into. 
+##' Users can use \code{window} to capture the peak of interest.
+##' There are two ways to input \code{window}. 
+##' 
+##' The first way is that users can use
+##' \code{getPromoters()/getBioRegion()/makeBioRegionFromGranges()} to 
+##' get \code{window} and put it into \code{getTagMatrix()}. 
+##' 
+##' The second way is that users can use \code{getTagMatrix()} to
+##' call \code{getPromoters()/getBioRegion()/makeBioRegionFromGranges()}. In this way
+##' users do not need to input \code{window} parameter but they need to input
+##' \code{txdb}. 
+##' 
+##' \code{txdb} is a set of packages contained annotation 
+##' of regions of different genomes. Users can
+##' get the regions of interest through specific functions. These specific functions
+##' are built in \code{getPromoters()/getBioRegion()}. Many regions can not be gain
+##' through \code{txdb}, like insulator and enhancer regions. 
+##' Users can provide these regions in the form of granges object. 
+##' These self-made granges object will be passed to \code{TxDb} parameter and they will
+##' be passed to \code{makeBioRegionFromGranges()} to produce the \code{window}.
+##' In a word, \code{TxDb} parameter is a reference information. Users can
+##' pass \code{txdb object} or self-made granges into it.
+##' 
+##' Details see \code{\link{getPromoters}},\code{\link{getBioRegion}} and \code{\link{makeBioRegionFromGranges}}
+##' 
+##' \code{upstream} and \code{downstream} parameter have different usages:
+##' 
+##' (1) \code{window} parameter is provided, 
+##' 
+##' if \code{type == 'body'}, \code{upstream} and \code{downstream} can use to extend 
+##' the flank of body region.
+##' 
+##' if \code{type == 'start_site'/'end_site'}, \code{upstream} and \code{downstream} do not
+##' play a role in \code{getTagMatrix()} function.
+##' 
+##' (2) \code{window} parameter is missing,
+##' 
+##' if \code{type == 'body'}, \code{upstream} and \code{downstream} can use to extend 
+##' the flank of body region.
+##' 
+##' if \code{type == 'start_site'/'end_site'}, \code{upstream} and \code{downstream} refer to
+##' the upstream and downstream of the start_site or the end_site.
+##' 
+##' \code{weightCol} refers to column in peak file. This column acts as a weight vaule. Details
+##' see \url{https://github.com/YuLab-SMU/ChIPseeker/issues/15}
+##' 
+##' \code{nbin} refers to the number of bins. \code{getTagMatrix()} provide a binning method
+##' to get the tag matrix.
 ##' 
 ##' @title getTagMatrix
 ##'
@@ -143,8 +285,8 @@ getBioRegion <- function(TxDb=NULL,
 ##' @param downstream the distance of downstream extension
 ##' @param windows a collection of region
 ##' @param type one of "start_site", "end_site", "body"
-##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'
-##' @param TxDb TxDb
+##' @param by one of 'gene', 'transcript', 'exon', 'intron', '3UTR' , '5UTR', or specified by users
+##' @param TxDb TxDb or self-made granges object, served as txdb
 ##' @param weightCol column name of weight, default is NULL
 ##' @param nbin the amount of nbines 
 ##' @param verbose print message or not
@@ -164,34 +306,60 @@ getTagMatrix <- function(peak,
                          verbose = TRUE,
                          ignore_strand= FALSE){
   
+  is_GRanges_of_TxDb <- FALSE
+  if (is(TxDb, "TxDb")) {
+    is_GRanges_of_TxDb <- TRUE
+    message("#\n#.. 'TxDb' is a self-defined 'GRanges' object...\n#")
+  }
+  
   if(missingArg(windows)){
-    windows <- getBioRegion(TxDb=TxDb,
-                            upstream=upstream,
-                            downstream=downstream,
-                            by=by,
-                            type=type)
+    
+    if(is_GRanges_of_TxDb){
+      
+      ## make windows from txdb object
+      windows <- getBioRegion(TxDb=TxDb,
+                              upstream=upstream,
+                              downstream=downstream,
+                              by=by,
+                              type=type)
+    }else{
+      ## make windows from self-made granges object
+      windows <- makeBioRegionFromGranges(gr=TxDb,
+                                          by=by,
+                                          type=type,
+                                          upstream=upstream,
+                                          downstream=downstream)
+      
+    }
+    
   }else{
     
-    if (! is(windows, "GRanges")) {
+    if (!is(windows, "GRanges")) {
       stop("windows should be a GRanges object...")
+    }
+    
+    if(is.null(attr(windows,'type'))){
+      stop("windows should be made from getPromoters()/getBioRegion()/makeBioRegionFromGranges()")
     }
     
     type <- attr(windows, 'type')
     by <- attr(windows, 'by')
     
-    if(type == "body"){
-      if(missingArg(upstream)){
-        upstream <- NULL
-      }
-      
-      if(missingArg(downstream)){
-        downstream <- NULL
-      }
-
-    }else{
-      upstream <- attr(windows, 'upstream')
-      downstream <- attr(windows, 'downstream')
+  }
+  
+  # check the upstream and downstream parameter
+  if(type == "body"){
+    if(missingArg(upstream)){
+      upstream <- NULL
     }
+    
+    if(missingArg(downstream)){
+      downstream <- NULL
+    }
+    
+  }else{
+    upstream <- attr(windows, 'upstream')
+    downstream <- attr(windows, 'downstream')
   }
   
   ## check upstream and downstream parameter
@@ -803,4 +971,223 @@ getTagMatrix.binning.internal <- function(peak,
   tagMatrix <- do.call("rbind",tagMatrix)
   
   return(tagMatrix)
+}
+
+
+##' Nested function for getTagMatrix() to deal with multiple windows
+##' 
+##' This is an internal function.
+##' @title getTagMatrix2
+##'
+##' @param peak peak peak file or GRanges object
+##' @param upstream the distance of upstream extension
+##' @param downstream the distance of downstream extension
+##' @param windows_name the names of windows
+##' @param type one of "start_site", "end_site", "body"
+##' @param by one of 'gene', 'transcript', 'exon', 'intron', '3UTR' , '5UTR', or specified by users
+##' @param TxDb TxDb or self-made granges object, served as txdb
+##' @param weightCol column name of weight, default is NULL
+##' @param nbin the amount of nbines 
+##' @param verbose print message or not
+##' @param ignore_strand ignore the strand information or not
+##' @return tagMatrix
+##' @importFrom ggplot2 rel
+getTagMatrix2 <- function(peak, 
+                          upstream,
+                          downstream,
+                          windows_name,
+                          type,
+                          by,
+                          TxDb=NULL,
+                          weightCol = NULL, 
+                          nbin = NULL,
+                          verbose = TRUE,
+                          ignore_strand= FALSE){
+  
+  names(TxDb) <- by
+  
+  windows <- lapply(as.list(by), function(x){
+    
+    if(x %in% c('gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR')){
+      
+      result <- getBioRegion(TxDb=TxDb[[x]],
+                             upstream=upstream,
+                             downstream=downstream,
+                             by=x,
+                             type=type)
+    }else{
+      
+      result <- makeBioRegionFromGranges(gr=TxDb[[x]],
+                                         by=x,
+                                         type=type,
+                                         upstream=upstream,
+                                         downstream=downstream)
+      
+    }
+    
+    return(result)
+    
+  })
+  
+  names(windows) <- windows_name
+  
+  # check the upstream and downstream parameter for body
+  if(type == "body"){
+    if(missingArg(upstream)){
+      upstream <- NULL
+    }
+    
+    if(missingArg(downstream)){
+      downstream <- NULL
+    }
+    
+  }else{
+    upstream <- attr(windows[[1]], 'upstream')
+    downstream <- attr(windows[[1]], 'downstream')
+  }
+  
+  ## check upstream and downstream parameter
+  check_upstream_and_downstream(upstream = upstream, downstream = downstream)
+  
+  if(type != 'body'){
+    if(inherits(upstream, 'rel') || is.null(upstream)){
+      stop("upstream and downstream for site region should be actual number...")
+    }
+  }
+  
+  ## check nbin parameters
+  if(!is.null(nbin) && !is.numeric(nbin)){
+    stop('nbin should be NULL or numeric...')
+  }
+  
+  if(type == 'body' && is.null(nbin)){
+    stop('plotting body region should set the nbin parameter...')
+  }
+  
+  ## check nbin parameter
+  if(!is.null(nbin)){
+    cat(">> binning method is used...",
+        format(Sys.time(), "%Y-%m-%d %X"), "\n",sep = "")
+    
+    is.binning <- TRUE
+  }else{
+    
+    is.binning <- FALSE
+  }
+  
+  if (verbose) {
+    cat(">> preparing ",type," regions"," by ",paste(by,collapse = " "),"... ",
+        format(Sys.time(), "%Y-%m-%d %X"), "\n",sep = "")
+  }
+  
+  
+  if(is.binning){
+    
+    if (verbose) {
+      cat(">> preparing tag matrix by binning... ",
+          format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    }
+    
+    tagMatrix <- getTagMatrix2.binning.internal(peak = peak, 
+                                                weightCol = weightCol, 
+                                                windows = windows, 
+                                                windows_name=windows_name,
+                                                nbin = nbin,
+                                                upstream = upstream,
+                                                downstream = downstream,
+                                                ignore_strand = ignore_strand)
+  }else{
+    
+    if (verbose) {
+      cat(">> preparing tag matrix... ",
+          format(Sys.time(), "%Y-%m-%d %X"), "\n")
+    }
+    
+    tagMatrix <- getTagMatrix2.internal(peak=peak, 
+                                        weightCol=weightCol,
+                                        windows=windows,
+                                        windows_name=windows_name,
+                                        ignore_strand=ignore_strand)
+  }
+  
+  names(tagMatrix) <- windows_name
+  
+  ## assign attribute 
+  tagMatrix <- lapply(tagMatrix, function(x){
+    attr(x, 'upstream') = upstream
+    attr(x, 'downstream') = downstream
+    attr(x, 'type') = attr(windows[[1]], 'type')
+    attr(x, 'label') = attr(windows[[1]], 'label')
+    attr(x, "is.binning") <- is.binning
+    return(x)
+  })
+  
+  return(tagMatrix)
+  
+}
+
+##' @title getTagMatrix2.internal
+##'
+##' @param peak peak peak file or GRanges object
+##' @param windows a collection of region
+##' @param windows_name the name of windows
+##' @param weightCol column name of weight, default is NULL
+##' @param ignore_strand ignore the strand information or not
+getTagMatrix2.internal <- function(peak, 
+                                   weightCol=NULL,
+                                   windows,
+                                   windows_name,
+                                   ignore_strand= FALSE) {
+  
+  mt_list <- lapply(windows_name, function(x){
+    
+    windows_tmp <- windows[[x]]
+    
+    mt <- getTagMatrix.internal(peak=peak, 
+                                weightCol=weightCol, 
+                                windows=windows_tmp, 
+                                ignore_strand=ignore_strand)
+    
+    return(mt)
+  })
+  
+  return(mt_list)
+}
+
+##' internal function
+##' 
+##' @param peak peak peak file or GRanges object
+##' @param upstream the distance of upstream extension
+##' @param downstream the distance of downstream extension
+##' @param windows a collection of region
+##' @param windows_name the name of windows
+##' @param weightCol column name of weight, default is NULL
+##' @param nbin the amount of nbines 
+##' @param ignore_strand ignore the strand information or not
+getTagMatrix2.binning.internal <- function(peak, 
+                                           weightCol = NULL, 
+                                           windows, 
+                                           windows_name,
+                                           nbin = 800,
+                                           upstream = NULL,
+                                           downstream = NULL,
+                                           ignore_strand = FALSE){
+  
+  mt_list <- lapply(windows_name, function(x){
+    
+    windows_tmp <- windows[[x]]
+    
+    mt <- getTagMatrix.binning.internal(peak = peak, 
+                                        weightCol = weightCol, 
+                                        windows = windows_tmp, 
+                                        nbin = nbin,
+                                        upstream = upstream,
+                                        downstream = downstream,
+                                        ignore_strand = ignore_strand)
+    
+    return(mt)
+  })
+  
+  return(mt_list)
+  
 }

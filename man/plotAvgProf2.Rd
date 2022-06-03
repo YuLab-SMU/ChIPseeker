@@ -53,6 +53,10 @@ ggplot object
 \description{
 plot the profile of peaks that align to flank sequences of TSS
 }
+\details{
+This function is the old function of \code{plotPeakProf2}. It can
+only plot the start site region of gene.
+}
 \author{
 G Yu, Ming L
 }

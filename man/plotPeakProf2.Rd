@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotTagMatrix.R
 \name{plotPeakProf2}
 \alias{plotPeakProf2}
-\title{plotAvgProf2}
+\title{plotPeakProf2}
 \usage{
 plotPeakProf2(
   peak,
@@ -32,13 +32,13 @@ plotPeakProf2(
 
 \item{conf}{confidence interval}
 
-\item{by}{one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR'}
+\item{by}{e.g. 'gene', 'transcript', 'exon' or features of interest(e.g. "enhancer")}
 
 \item{type}{one of "start_site", "end_site", "body"}
 
 \item{weightCol}{column name of weight}
 
-\item{TxDb}{TxDb object}
+\item{TxDb}{TxDb object, or self-made granges object}
 
 \item{xlab}{xlab}
 
@@ -61,6 +61,44 @@ ggplot object
 }
 \description{
 plot the profile of peaks automatically
+}
+\details{
+\code{peak} stands for the peak file. 
+
+\code{by} the features of interest. 
+
+(1) if users use \code{txdb}, \code{by} can be one of 'gene', 'transcript', 'exon', 
+'intron' , '3UTR' , '5UTR', 'UTR'. These features can be obtained by functions from txdb object.
+
+(2) if users use self-made granges object, \code{by} can be everything. Because this \code{by}
+will not pass to functions to get features, which is different from the case of using 
+txdb object. This \code{by} is only used to made labels showed in picture.
+
+\code{type} means the property of the region. one of the "start site",
+"end site" and "body".
+
+\code{upstream} and \code{downstream} parameter have different usages:
+
+(1) if \code{type == 'body'}, \code{upstream} and \code{downstream} can use to extend 
+the flank of body region.
+
+(2) if \code{type == 'start_site'/'end_site'}, \code{upstream} and \code{downstream} refer to
+the upstream and downstream of the start_site or the end_site.
+
+\code{weightCol} refers to column in peak file. This column acts as a weight vaule. Details
+see \url{https://github.com/YuLab-SMU/ChIPseeker/issues/15}
+
+\code{nbin} refers to the number of bins, providing a binning method
+to get the tag matrix.
+
+\code{TxDb} parameter can accept txdb object.
+But many regions can not be obtained by txdb object. In this case,
+Users can provide self-made granges served the same role 
+as txdb object and pass to \code{TxDb} object.
+
+\code{plotPeakProf2()} is different from the \code{plotPeakProf()}. \code{plotPeakProf2()} do not
+need to provide \code{window} parameter, which means \code{plotPeakProf2()} will call relevent
+functions to make \code{window} automatically.
 }
 \author{
 G Yu, Ming Li
