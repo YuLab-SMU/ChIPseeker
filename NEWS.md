@@ -1,5 +1,9 @@
-# ChIPseeker 1.33.0.900
+# ChIPseeker 1.33.1
 
++ `plotPeakProf()` allows passing GRanges object or a list of GRanges objects to TxDb parameter (2022-06-04, Sat)
++ add test files for `getTagMatrix()` and `plotTagMatrix()`
++ `getBioRegion()` supports UTR regions (3'UTR + 5'UTR)
++ `makeBioRegionFromGranges()` supports generating windoes from self-made GRanges object
 + allow specify colors in `covplot()` (2022-05-09, Mon, #185, #188)
 
 # ChIPseeker 1.32.0
