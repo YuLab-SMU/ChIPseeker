@@ -758,7 +758,8 @@ getTagMatrix.binning.internal <- function(peak,
       
       for (i in 1:length(tagMatrixList)) {
         if (length(class(tagMatrixList[[i]])) != 1) {
-          tagMatrixList[[i]] <- list(as.vector(tagMatrixList[[i]]))
+          sample <- tagMatrixList[[i]]
+          tagMatrixList[[i]] <- lapply(seq_len(ncol(sample)), function(i) sample[,i])  
         }
       }
       
@@ -893,7 +894,8 @@ getTagMatrix.binning.internal <- function(peak,
       
       for (i in 1:length(tagMatrixList)) {
         if (length(class(tagMatrixList[[i]])) != 1) {
-          tagMatrixList[[i]] <- list(as.vector(tagMatrixList[[i]]))
+          sample <- tagMatrixList[[i]]
+          tagMatrixList[[i]] <- lapply(seq_len(ncol(sample)), function(i) sample[,i])  
         }
       }
       
