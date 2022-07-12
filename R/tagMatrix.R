@@ -742,7 +742,7 @@ getTagMatrix.binning.internal <- function(peak,
           read <- read+tagMatrixList[[i]][j,z]
         }
         
-        tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][j,])-cursor)
+        tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][j,])-cursor+1)
       }
       
       if(!ignore_strand){
@@ -758,7 +758,8 @@ getTagMatrix.binning.internal <- function(peak,
       
       for (i in 1:length(tagMatrixList)) {
         if (length(class(tagMatrixList[[i]])) != 1) {
-          tagMatrixList[[i]] <- list(as.vector(tagMatrixList[[i]]))
+          sample <- tagMatrixList[[i]]
+          tagMatrixList[[i]] <- lapply(seq_len(ncol(sample)), function(i) sample[,i])  
         }
       }
       
@@ -879,7 +880,7 @@ getTagMatrix.binning.internal <- function(peak,
             read <- read+tagMatrixList[[i]][[j]][z]
           }
           
-          tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][[j]])-cursor)
+          tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][[j]])-cursor+1)
         }
         
         if(!ignore_strand){
@@ -893,7 +894,8 @@ getTagMatrix.binning.internal <- function(peak,
       
       for (i in 1:length(tagMatrixList)) {
         if (length(class(tagMatrixList[[i]])) != 1) {
-          tagMatrixList[[i]] <- list(as.vector(tagMatrixList[[i]]))
+          sample <- tagMatrixList[[i]]
+          tagMatrixList[[i]] <- lapply(seq_len(ncol(sample)), function(i) sample[,i])  
         }
       }
       
@@ -953,7 +955,7 @@ getTagMatrix.binning.internal <- function(peak,
             read <- read+tagMatrixList[[i]][[j]][z]
           }
           
-          tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][[j]])-cursor)
+          tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][[j]])-cursor+1)
           
         }
         
