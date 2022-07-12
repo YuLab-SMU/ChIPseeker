@@ -742,7 +742,7 @@ getTagMatrix.binning.internal <- function(peak,
           read <- read+tagMatrixList[[i]][j,z]
         }
         
-        tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][j,])-cursor)
+        tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][j,])-cursor+1)
       }
       
       if(!ignore_strand){
@@ -880,7 +880,7 @@ getTagMatrix.binning.internal <- function(peak,
             read <- read+tagMatrixList[[i]][[j]][z]
           }
           
-          tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][[j]])-cursor)
+          tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][[j]])-cursor+1)
         }
         
         if(!ignore_strand){
@@ -955,7 +955,7 @@ getTagMatrix.binning.internal <- function(peak,
             read <- read+tagMatrixList[[i]][[j]][z]
           }
           
-          tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][[j]])-cursor)
+          tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][[j]])-cursor+1)
           
         }
         
