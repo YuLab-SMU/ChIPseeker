@@ -8,6 +8,7 @@
 ##' from different experiments or gene annotation from
 ##' different peak files.
 ##' @importFrom gplots plot.venn
+##' @importFrom ggvenn ggvenn
 ## @importFrom Vennerable Venn
 ## @importFrom grid grid.newpage
 ## @importFrom RColorBrewer brewer.pal
@@ -22,7 +23,7 @@
 ##' ## vennplot(genes)
 ##' @export
 ##' @author G Yu
-vennplot <- function(Sets, by="gplots") {
+vennplot <- function(Sets, by="ggvenn") {
     if (is.null(names(Sets))) {
         nn <- paste0("Set", seq_along(Sets))
         warning("input is not a named list, set the name automatically to ", paste(nn, collapse = " "))
@@ -50,6 +51,8 @@ vennplot <- function(Sets, by="gplots") {
         vennCount <- as.matrix(overlapDF)
         class(vennCount) <- "venn"
         plot.venn(vennCount)
+    }else if(by == "ggvenn"){
+        ggvenn(Sets)
     } else {
         stop("not supported...")
     }

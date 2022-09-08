@@ -47,7 +47,8 @@ Imports:
     S4Vectors,
     stats,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
-    utils
+    utils,
+    ggvenn
 Suggests:
     clusterProfiler,
     ggimage,
@@ -68,4 +69,4 @@ VignetteBuilder: knitr
 ByteCompile: true
 License: Artistic-2.0
 biocViews: Annotation, ChIPSeq, Software, Visualization, MultipleComparison
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0

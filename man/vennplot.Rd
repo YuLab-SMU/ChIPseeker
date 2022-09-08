@@ -4,7 +4,7 @@
 \alias{vennplot}
 \title{vennplot}
 \usage{
-vennplot(Sets, by = "gplots")
+vennplot(Sets, by = "ggvenn")
 }
 \arguments{
 \item{Sets}{a list of object, can be vector or GRanges object}
