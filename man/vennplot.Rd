@@ -4,12 +4,14 @@
 \alias{vennplot}
 \title{vennplot}
 \usage{
-vennplot(Sets, by = "ggvenn")
+vennplot(Sets, by = "gplots")
 }
 \arguments{
 \item{Sets}{a list of object, can be vector or GRanges object}
 
 \item{by}{one of gplots or Vennerable}
+
+\item{...}{extra parameters using ggVennDiagram. Details see \link[ggVennDiagram]{ggVennDiagram}}
 }
 \value{
 venn plot that summarize the overlap of peaks
@@ -18,6 +20,20 @@ different peak files.
 }
 \description{
 plot the overlap of a list of object
+}
+\details{
+There are three ways to plot, which users can specify through `by`.
+
+The first way is to use `gplots` packages, by setting `by = gplots`. This method
+is default method. The venn plot produced through this way has no color.
+
+The second way is to use `ggvenn` packages, by setting `by = ggvenn`. 
+The venn plot produced through this way has specify colors but the maximun sets is 4.
+
+The second way is to use `ggVennDiagram` packages, by setting `by = ggVennDiagram`. 
+The venn plot produced through this way has colors which can be defined by users using
+ggplot2 grammer e.g.(scale_fill_distiller()). And users can specify any details, like digital number,
+text size and showing percentage or not, by inputting `...` extra parameters.
 }
 \examples{
 ## example not run

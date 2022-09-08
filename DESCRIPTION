@@ -48,7 +48,8 @@ Imports:
     stats,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
     utils,
-    ggvenn
+    ggvenn,
+    ggVennDiagram
 Suggests:
     clusterProfiler,
     ggimage,
