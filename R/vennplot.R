@@ -1,7 +1,7 @@
 ##' plot the overlap of a list of object
 ##'
 ##'
-##' There are three ways to plot, which users can specify through `by`.
+##' There are two ways to plot, which users can specify through `by`.
 ##' 
 ##' The first way is to use `gplots` packages, by setting `by = gplots`. This method
 ##' is default method. The venn plot produced through this way has no color.
