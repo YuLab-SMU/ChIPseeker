@@ -6,12 +6,9 @@
 ##' The first way is to use `gplots` packages, by setting `by = gplots`. This method
 ##' is default method. The venn plot produced through this way has no color.
 ##' 
-##' The second way is to use `ggvenn` packages, by setting `by = ggvenn`. 
-##' The venn plot produced through this way has specify colors but the maximun sets is 4.
-##' 
 ##' The second way is to use `ggVennDiagram` packages, by setting `by = ggVennDiagram`. 
 ##' The venn plot produced through this way has colors which can be defined by users using
-##' ggplot2 grammer e.g.(scale_fill_distiller()). And users can specify any details, like digital number,
+##' ggplot2 grammar e.g.(scale_fill_distiller()). And users can specify any details, like digital number,
 ##' text size and showing percentage or not, by inputting `...` extra parameters.
 ##' 
 ##' @title vennplot
@@ -22,7 +19,6 @@
 ##' from different experiments or gene annotation from
 ##' different peak files.
 ##' @importFrom gplots plot.venn
-##' @importFrom ggvenn ggvenn
 ##' @importFrom ggVennDiagram ggVennDiagram
 ## @importFrom Vennerable Venn
 ## @importFrom grid grid.newpage
@@ -66,8 +62,6 @@ vennplot <- function(Sets, by="gplots",...) {
         vennCount <- as.matrix(overlapDF)
         class(vennCount) <- "venn"
         plot.venn(vennCount)
-    }else if(by == "ggvenn"){
-        ggvenn(Sets)
     } else if(by == "ggVennDiagram"){
         ggVennDiagram(Sets, ...)
     }
