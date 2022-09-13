@@ -1,3 +1,7 @@
+# ChIPseeker 1.33.1.001
+
++ supports `by = "ggVennDiagram"` in `vennplot` function (2022-09-13, Tue)
+
 # ChIPseeker 1.33.1
 
 + `plotPeakProf()` allows passing GRanges object or a list of GRanges objects to TxDb parameter (2022-06-04, Sat)

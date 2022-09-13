@@ -19,7 +19,7 @@
 ##' from different experiments or gene annotation from
 ##' different peak files.
 ##' @importFrom gplots plot.venn
-##' @importFrom ggVennDiagram ggVennDiagram
+## @importFrom ggVennDiagram ggVennDiagram
 ## @importFrom Vennerable Venn
 ## @importFrom grid grid.newpage
 ## @importFrom RColorBrewer brewer.pal
@@ -63,7 +63,7 @@ vennplot <- function(Sets, by="gplots",...) {
         class(vennCount) <- "venn"
         plot.venn(vennCount)
     } else if(by == "ggVennDiagram"){
-        ggVennDiagram(Sets, ...)
+	ggVennDiagram::ggVennDiagram(Sets, ...)
     }
     else {
         stop("not supported...")
