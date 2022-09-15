@@ -9,7 +9,7 @@ vennplot(Sets, by = "gplots", ...)
 \arguments{
 \item{Sets}{a list of object, can be vector or GRanges object}
 
-\item{by}{one of gplots or Vennerable}
+\item{by}{one of gplots, ggVennDiagram or Vennerable}
 
 \item{...}{extra parameters using ggVennDiagram. Details see \link[ggVennDiagram]{ggVennDiagram}}
 }

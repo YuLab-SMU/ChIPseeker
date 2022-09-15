@@ -13,7 +13,7 @@
 ##' 
 ##' @title vennplot
 ##' @param Sets a list of object, can be vector or GRanges object
-##' @param by one of gplots or Vennerable
+##' @param by one of gplots, ggVennDiagram or Vennerable
 ##' @param ... extra parameters using ggVennDiagram. Details see \link[ggVennDiagram]{ggVennDiagram}
 ##' @return venn plot that summarize the overlap of peaks
 ##' from different experiments or gene annotation from
