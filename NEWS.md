@@ -1,4 +1,4 @@
-# ChIPseeker 1.33.1.001
+# ChIPseeker 1.33.2
 
 + supports `by = "ggVennDiagram"` in `vennplot` function (2022-09-13, Tue)
 
@@ -22,7 +22,7 @@
 
 + bug fixed of determining promoter region in minus strand (2021-12-16, Thu, #172)
 
-# ChIPseeker 1.32.2
+# ChIPseeker 1.31.2
 
 + update vignette
 
