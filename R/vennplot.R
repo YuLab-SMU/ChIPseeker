@@ -63,9 +63,8 @@ vennplot <- function(Sets, by="gplots",...) {
         class(vennCount) <- "venn"
         plot.venn(vennCount)
     } else if(by == "ggVennDiagram"){
-	ggVennDiagram::ggVennDiagram(Sets, ...)
-    }
-    else {
+	    ggVennDiagram::ggVennDiagram(Sets, ...)
+    } else {
         stop("not supported...")
     }
 }
