@@ -124,13 +124,25 @@ In the above code, you should notice that tagMatrix is not restricted to TSS reg
 ### Heatmap of ChIP binding to TSS regions
 
 ```{r fig.cap="Heatmap of ChIP peaks binding to TSS regions", fig.align="center", fig.height=12, fig.width=4}
-tagHeatmap(tagMatrix, xlim=c(-3000, 3000), color="red")
+tagHeatmap(tagMatrix, xlim=c(-3000, 3000))
 ```
 
 `r Biocpkg("ChIPseeker")` provide a one step function to generate this figure from bed file. The following function will generate the same figure as above.
 
 ```{r eval=FALSE}
-peakHeatmap(files[[4]], TxDb=txdb, upstream=3000, downstream=3000, color="red")
+peakHeatmap(files[[4]], TxDb=txdb, upstream=3000, downstream=3000)
+```
+
+Users can use `nbin` parameter to speed up.
+```{r eval=FALSE}
+peakHeatmap(files[[4]],TxDb = txdb,nbin = 800,upstream=3000, downstream=3000)
+
+```
+
+Users can also use ggplot method to change the details of the figures.
+```{r eval=FALSE}
+peakHeatmap(files[[4]],TxDb = txdb,nbin = 800,upstream=3000, downstream=3000) +
+  scale_fill_distiller(palette = "RdYlGn")
 ```
 
 ### Average Profile of ChIP peaks binding to TSS region
@@ -385,7 +397,7 @@ plotPeakProf2(files, upstream = 3000, downstream = 3000, conf = 0.95,
 ### Peak heatmaps
 
 ```{r eval=TRUE, fig.cap="Heatmap of ChIP peaks among different experiments", fig.align="center", fig.height=8, fig.width=7}
-tagHeatmap(tagMatrixList, xlim=c(-3000, 3000), color=NULL)
+tagHeatmap(tagMatrixList, xlim=c(-3000, 3000))
 ```
 
 ## Profile of several ChIP peak data binding to body region
