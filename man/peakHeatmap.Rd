@@ -13,8 +13,15 @@ peakHeatmap(
   xlab = "",
   ylab = "",
   title = NULL,
-  color = NULL,
-  verbose = TRUE
+  palette = NULL,
+  verbose = TRUE,
+  by = "gene",
+  type = "start_site",
+  nbin = NULL,
+  ignore_strand = FALSE,
+  windows,
+  ncol = NULL,
+  nrow = NULL
 )
 }
 \arguments{
@@ -34,9 +41,23 @@ peakHeatmap(
 
 \item{title}{title}
 
-\item{color}{color}
+\item{palette}{palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}}
 
 \item{verbose}{print message or not}
+
+\item{by}{one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'}
+
+\item{type}{one of "start_site", "end_site", "body"}
+
+\item{nbin}{the amount of nbines}
+
+\item{ignore_strand}{ignore the strand information or not}
+
+\item{windows}{a collection of region}
+
+\item{ncol}{the ncol of plotting a list of peak}
+
+\item{nrow}{the nrow of plotting a list of peak}
 }
 \value{
 figure

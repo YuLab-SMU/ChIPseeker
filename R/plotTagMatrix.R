@@ -1613,16 +1613,33 @@ plotMultiProf.binning.internal <- function(tagMatrix,
 ##' @param xlab xlab
 ##' @param ylab ylab
 ##' @param title title
-##' @param color color
+##' @param palette palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}
+##' @param nrow the nrow of plotting a list of peak
+##' @param ncol the ncol of plotting a list of peak
 ##' @return figure
 ##' @export
 ##' @author G Yu
-tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="red") {
+tagHeatmap <- function(tagMatrix, 
+                       xlim = NULL, 
+                       xlab="", 
+                       ylab="", 
+                       title=NULL, 
+                       palette="RdBu",
+                       nrow = NULL,
+                       ncol = NULL) {
   listFlag <- FALSE
   if (is(tagMatrix, "list")) {
     listFlag <- TRUE
   }
-  peakHeatmap.internal2(tagMatrix, xlim, listFlag, color, xlab, ylab, title)
+  peakHeatmap.internal2(tagMatrix = tagMatrix, 
+                        xlim = xlim, 
+                        listFlag = listFlag, 
+                        palette = palette, 
+                        xlab = xlab, 
+                        ylab = ylab, 
+                        title = title,
+                        ncol = ncol,
+                        nrow = nrow)
 }
 
 ##' plot the heatmap of peaks align to flank sequences of TSS
@@ -1637,15 +1654,25 @@ tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="red
 ##' @param xlab xlab
 ##' @param ylab ylab
 ##' @param title title
-##' @param color color
+##' @param palette palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}
 ##' @param verbose print message or not
+##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'
+##' @param type one of "start_site", "end_site", "body"
+##' @param nbin the amount of nbines 
+##' @param ignore_strand ignore the strand information or not
+##' @param windows a collection of region
+##' @param nrow the nrow of plotting a list of peak
+##' @param ncol the ncol of plotting a list of peak
 ##' @return figure
 ##' @export
 ##' @author G Yu
 peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
                         upstream=1000, downstream=1000,
                         xlab="", ylab="", title=NULL,
-                        color=NULL, verbose=TRUE) {
+                        palette=NULL, verbose=TRUE,
+                        by="gene", type="start_site",
+                        nbin = NULL,ignore_strand = FALSE,
+                        windows,ncol = NULL, nrow = NULL) {
   listFlag <- FALSE
   if ( is(peak, "list") ) {
     listFlag <- TRUE
@@ -1657,20 +1684,37 @@ peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
     cat(">> preparing promoter regions...\t",
         format(Sys.time(), "%Y-%m-%d %X"), "\n")
   }
-  promoter <- getBioRegion(TxDb=TxDb,
-                           upstream=upstream,
-                           downstream=downstream,
-                           by="gene",
-                           type="start_site")
   
   if (verbose) {
     cat(">> preparing tag matrix...\t\t",
         format(Sys.time(), "%Y-%m-%d %X"), "\n")
   }
+  
+  if(missing(windows)){
+    windows <- getBioRegion(TxDb=TxDb,
+                            upstream=upstream,
+                            downstream=downstream,
+                            by=by,
+                            type=type)
+  }
+  
+  
   if (listFlag) {
-    tagMatrix <- lapply(peak, getTagMatrix, weightCol=weightCol, windows=promoter)
+    tagMatrix <- lapply(peak, getTagMatrix, 
+                        weightCol=weightCol, 
+                        windows = windows,
+                        TxDb = TxDb,
+                        nbin = nbin,
+                        verbose = verbose,
+                        ignore_strand= ignore_strand)
   } else {
-    tagMatrix <- getTagMatrix(peak, weightCol = weightCol, windows = promoter)
+    tagMatrix <- getTagMatrix(peak, 
+                              weightCol=weightCol, 
+                              windows = windows,
+                              TxDb = TxDb,
+                              nbin = nbin,
+                              verbose = verbose,
+                              ignore_strand= ignore_strand)
   }
   
   if (verbose) {
@@ -1678,18 +1722,36 @@ peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
         format(Sys.time(), "%Y-%m-%d %X"), "\n")
   }
   
-  xlim=c(-upstream, downstream)
+  xlim <- NULL
   
-  peakHeatmap.internal2(tagMatrix, xlim, listFlag, color, xlab, ylab, title)
+  p <- peakHeatmap.internal2(tagMatrix = tagMatrix,
+                             xlim = xlim, 
+                             listFlag = listFlag, 
+                             palette = palette, 
+                             xlab = xlab,
+                             ylab = ylab, 
+                             title = title,
+                             nrow = nrow,
+                             ncol = ncol)
   
   if (verbose) {
     cat(">> done...\t\t\t",
         format(Sys.time(), "%Y-%m-%d %X"), "\n")
   }
   invisible(tagMatrix)
+  p
 }
 
-peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, title) {
+##' @importFrom aplot plot_list
+peakHeatmap.internal2 <- function(tagMatrix, 
+                                  xlim, 
+                                  listFlag, 
+                                  palette, 
+                                  xlab, 
+                                  ylab, 
+                                  title,
+                                  nrow,
+                                  ncol) {
   if ( is.null(xlab) || is.na(xlab))
     xlab <- ""
   if ( is.null(ylab) || is.na(ylab))
@@ -1697,12 +1759,12 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
   
   if (listFlag) {
     nc <- length(tagMatrix)
-    if ( is.null(color) || is.na(color) ) {
-      cols <- getCols(nc)
-    } else if (length(color) != nc) {
-      cols <- rep(color[1], nc)
+    if ( is.null(palette) || is.na(palette) ) {
+      palette <- getPalette(nc)
+    } else if (length(palette) != nc) {
+      palette <- rep(palette[1], nc)
     } else {
-      cols <- color
+      palette <- palette
     }
     
     if (is.null(title) || is.na(title))
@@ -1716,32 +1778,91 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
     if (length(title) != nc) {
       title <- rep(title[1], nc)
     }
-    par(mfrow=c(1, nc))
+    
+    tmp <- list()
+    
     for (i in 1:nc) {
-      peakHeatmap.internal(tagMatrix[[i]], xlim, cols[i], xlab[i], ylab[i], title[i])
+      
+      p <- peakHeatmap.internal(tagMatrix = tagMatrix[[i]], 
+                                xlim = xlim, 
+                                palette = palette[i], 
+                                xlab = xlab[i], 
+                                ylab = ylab[i], 
+                                title= title[i])
+      
+      tmp[[i]] <- p
     }
+    
+    if(is.null(nrow) && is.null(ncol))
+      nrow <- 1
+    
+    p <- plot_list(gglist = tmp,
+                   ncol = ncol,
+                   nrow = nrow)
+    return(p)
+    
   } else {
-    if (is.null(color) || is.na(color))
-      color <- "red"
+    if (is.null(palette) || is.na(palette))
+      palette <- "RdBu"
     if (is.null(title) || is.na(title))
       title <- ""
-    peakHeatmap.internal(tagMatrix, xlim, color, xlab, ylab, title)
+    peakHeatmap.internal(tagMatrix = tagMatrix, 
+                         xlim = xlim,
+                         palette = palette, 
+                         xlab = xlab, 
+                         ylab = ylab, 
+                         title = title)
   }
 }
 
 
 ##' @import BiocGenerics
 ##' @importFrom grDevices colorRampPalette
-peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", ylab="", title="") {
+##' @importFrom tibble rownames_to_column
+##' @importFrom tidyr pivot_longer
+##' @importFrom magrittr %>%
+##' @importFrom ggplot2 ggplot
+##' @importFrom ggplot2 aes
+##' @importFrom ggplot2 geom_tile
+##' @importFrom ggplot2 scale_fill_distiller
+##' @importFrom ggplot2 theme
+##' @importFrom ggplot2 element_blank
+peakHeatmap.internal <- function(tagMatrix, 
+                                 xlim=NULL,
+                                 palette="RdBu", 
+                                 xlab="", 
+                                 ylab="",
+                                 title="") {
+  
+  if (length(xlim) == 2) {
+    xlim <- seq(xlim[1], xlim[2])
+    
+    tagMatrix <- tagMatrix[,seq_len(length(xlim))]
+  }
+  
   tagMatrix <- t(apply(tagMatrix, 1, function(x) x/max(x)))
   ii <- order(rowSums(tagMatrix))
   tagMatrix <- tagMatrix[ii,]
-  cols <- colorRampPalette(c("white",color))(200)
-  if (is.null(xlim)) {
-    xlim <- 1:ncol(tagMatrix)
-  } else if (length(xlim) == 2) {
-    xlim <- seq(xlim[1], xlim[2])
-  }
-  image(x=xlim, y=1:nrow(tagMatrix),z=t(tagMatrix),useRaster=TRUE, col=cols, yaxt="n", ylab="", xlab=xlab, main=title)
+
+  colnames(tagMatrix) <- seq_len(dim(tagMatrix)[2])
+  rownames(tagMatrix) <- seq_len(dim(tagMatrix)[1])
+  tagMatrix <- tagMatrix %>% as.data.frame() %>% 
+    rownames_to_column("sample_ID") %>%
+    pivot_longer(-c(sample_ID),names_to = "coordinate", 
+                 values_to = "values")
+  
+  sample_ID <- coordinate <- NULL
+  
+  p <- ggplot(tagMatrix, aes(x = coordinate,y = sample_ID)) + 
+    geom_tile(aes(fill = values)) +
+    scale_fill_distiller(palette = palette)  +
+    theme(axis.title.x=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.x=element_blank(),
+          axis.title.y=element_blank(),
+          axis.text.y=element_blank(),
+          axis.ticks.y=element_blank())
+  
+  p
 }
 

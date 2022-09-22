@@ -47,7 +47,10 @@ Imports:
     S4Vectors,
     stats,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
-    utils
+    utils,
+    tibble,
+    tidyr,
+    aplot
 Suggests:
     clusterProfiler,
     ggimage,
@@ -58,8 +61,7 @@ Suggests:
     org.Hs.eg.db,
     knitr,
     rmarkdown,
-    testthat,
-    tibble
+    testthat
 Remotes:
     GuangchuangYu/enrichplot
 URL: https://guangchuangyu.github.io/software/ChIPseeker
