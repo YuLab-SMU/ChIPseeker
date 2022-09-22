@@ -1609,7 +1609,6 @@ plotMultiProf.binning.internal <- function(tagMatrix,
 ##'
 ##' @title tagHeatmap
 ##' @param tagMatrix tagMatrix or a list of tagMatrix
-##' @param xlim xlim
 ##' @param xlab xlab
 ##' @param ylab ylab
 ##' @param title title
@@ -1620,7 +1619,6 @@ plotMultiProf.binning.internal <- function(tagMatrix,
 ##' @export
 ##' @author G Yu
 tagHeatmap <- function(tagMatrix, 
-                       xlim = NULL, 
                        xlab="", 
                        ylab="", 
                        title=NULL, 
@@ -1632,7 +1630,6 @@ tagHeatmap <- function(tagMatrix,
     listFlag <- TRUE
   }
   peakHeatmap.internal2(tagMatrix = tagMatrix, 
-                        xlim = xlim, 
                         listFlag = listFlag, 
                         palette = palette, 
                         xlab = xlab, 
@@ -1725,7 +1722,6 @@ peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
   xlim <- NULL
   
   p <- peakHeatmap.internal2(tagMatrix = tagMatrix,
-                             xlim = xlim, 
                              listFlag = listFlag, 
                              palette = palette, 
                              xlab = xlab,
@@ -1744,7 +1740,6 @@ peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
 
 ##' @importFrom aplot plot_list
 peakHeatmap.internal2 <- function(tagMatrix, 
-                                  xlim, 
                                   listFlag, 
                                   palette, 
                                   xlab, 
@@ -1784,7 +1779,6 @@ peakHeatmap.internal2 <- function(tagMatrix,
     for (i in 1:nc) {
       
       p <- peakHeatmap.internal(tagMatrix = tagMatrix[[i]], 
-                                xlim = xlim, 
                                 palette = palette[i], 
                                 xlab = xlab[i], 
                                 ylab = ylab[i], 
@@ -1807,7 +1801,6 @@ peakHeatmap.internal2 <- function(tagMatrix,
     if (is.null(title) || is.na(title))
       title <- ""
     peakHeatmap.internal(tagMatrix = tagMatrix, 
-                         xlim = xlim,
                          palette = palette, 
                          xlab = xlab, 
                          ylab = ylab, 
@@ -1827,41 +1820,50 @@ peakHeatmap.internal2 <- function(tagMatrix,
 ##' @importFrom ggplot2 scale_fill_distiller
 ##' @importFrom ggplot2 theme
 ##' @importFrom ggplot2 element_blank
+##' @importFrom ggplot2 labs
+##' @importFrom ggplot2 scale_x_continuous
 peakHeatmap.internal <- function(tagMatrix, 
-                                 xlim=NULL,
                                  palette="RdBu", 
                                  xlab="", 
                                  ylab="",
                                  title="") {
   
-  if (length(xlim) == 2) {
-    xlim <- seq(xlim[1], xlim[2])
-    
-    tagMatrix <- tagMatrix[,seq_len(length(xlim))]
-  }
+  upstream <- attr(tagMatrix, "upstream")
+  downstream <- attr(tagMatrix, "downstream")
   
   tagMatrix <- t(apply(tagMatrix, 1, function(x) x/max(x)))
   ii <- order(rowSums(tagMatrix))
   tagMatrix <- tagMatrix[ii,]
-
+  
   colnames(tagMatrix) <- seq_len(dim(tagMatrix)[2])
   rownames(tagMatrix) <- seq_len(dim(tagMatrix)[1])
   tagMatrix <- tagMatrix %>% as.data.frame() %>% 
     rownames_to_column("sample_ID") %>%
     pivot_longer(-c(sample_ID),names_to = "coordinate", 
                  values_to = "values")
-  
+  tagMatrix$coordinate <- as.numeric(tagMatrix$coordinate)
+
   sample_ID <- coordinate <- NULL
   
   p <- ggplot(tagMatrix, aes(x = coordinate,y = sample_ID)) + 
     geom_tile(aes(fill = values)) +
     scale_fill_distiller(palette = palette)  +
-    theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank(),
-          axis.ticks.x=element_blank(),
-          axis.title.y=element_blank(),
-          axis.text.y=element_blank(),
-          axis.ticks.y=element_blank())
+    theme(axis.text.y=element_blank(),
+          axis.ticks.y=element_blank(),
+          axis.line.y = element_blank(),
+          panel.grid=element_blank(),
+          panel.background = element_blank()) +
+    labs(x = xlab, y = ylab, title = title) +
+    scale_x_continuous(breaks = c(1,
+                                  floor(downstream*0.5),
+                                  (downstream + 1),
+                                  (downstream + 1 + floor(upstream * 0.5)), 
+                                  upstream+downstream+1),
+                       labels = c((-1*downstream),
+                                  floor(-1*downstream*0.5),
+                                  0,
+                                  floor(upstream*0.5),
+                                  upstream))
   
   p
 }

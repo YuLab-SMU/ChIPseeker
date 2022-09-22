@@ -6,7 +6,6 @@
 \usage{
 tagHeatmap(
   tagMatrix,
-  xlim = NULL,
   xlab = "",
   ylab = "",
   title = NULL,
@@ -17,8 +16,6 @@ tagHeatmap(
 }
 \arguments{
 \item{tagMatrix}{tagMatrix or a list of tagMatrix}
-
-\item{xlim}{xlim}
 
 \item{xlab}{xlab}
 

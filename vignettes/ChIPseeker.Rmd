@@ -124,7 +124,7 @@ In the above code, you should notice that tagMatrix is not restricted to TSS reg
 ### Heatmap of ChIP binding to TSS regions
 
 ```{r fig.cap="Heatmap of ChIP peaks binding to TSS regions", fig.align="center", fig.height=12, fig.width=4}
-tagHeatmap(tagMatrix, xlim=c(-3000, 3000))
+tagHeatmap(tagMatrix)
 ```
 
 `r Biocpkg("ChIPseeker")` provide a one step function to generate this figure from bed file. The following function will generate the same figure as above.
@@ -397,7 +397,7 @@ plotPeakProf2(files, upstream = 3000, downstream = 3000, conf = 0.95,
 ### Peak heatmaps
 
 ```{r eval=TRUE, fig.cap="Heatmap of ChIP peaks among different experiments", fig.align="center", fig.height=8, fig.width=7}
-tagHeatmap(tagMatrixList, xlim=c(-3000, 3000))
+tagHeatmap(tagMatrixList)
 ```
 
 ## Profile of several ChIP peak data binding to body region
