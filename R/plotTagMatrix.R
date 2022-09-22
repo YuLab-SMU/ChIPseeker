@@ -1862,10 +1862,14 @@ peakHeatmap.internal <- function(tagMatrix,
   if(binning_Flag){
     
     p <- p + scale_x_continuous(breaks = c(1,
+                                           floor(nbin*(downstream*0.5/(downstream+upstream))),
                                            floor(nbin*(downstream/(downstream+upstream))),
+                                           floor(nbin*((downstream + upstream*0.5)/(downstream+upstream))),
                                            nbin),
                                 labels = c((-1*downstream),
+                                           floor(-1*downstream*0.5),
                                            0,
+                                           floor(upstream*0.5),
                                            upstream))
   }else{
     
