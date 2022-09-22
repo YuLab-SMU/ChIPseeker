@@ -307,7 +307,7 @@ getTagMatrix <- function(peak,
                          ignore_strand= FALSE){
   
   is_GRanges_of_TxDb <- FALSE
-  if (is(TxDb, "TxDb")) {
+  if (is(TxDb, "GRanges")) {
     is_GRanges_of_TxDb <- TRUE
     message("#\n#.. 'TxDb' is a self-defined 'GRanges' object...\n#")
   }
@@ -316,19 +316,22 @@ getTagMatrix <- function(peak,
     
     if(is_GRanges_of_TxDb){
       
-      ## make windows from txdb object
-      windows <- getBioRegion(TxDb=TxDb,
-                              upstream=upstream,
-                              downstream=downstream,
-                              by=by,
-                              type=type)
-    }else{
       ## make windows from self-made granges object
       windows <- makeBioRegionFromGranges(gr=TxDb,
                                           by=by,
                                           type=type,
                                           upstream=upstream,
                                           downstream=downstream)
+      
+    }else{
+      
+      ## make windows from txdb object
+      windows <- getBioRegion(TxDb=TxDb,
+                              upstream=upstream,
+                              downstream=downstream,
+                              by=by,
+                              type=type)
+      
       
     }
     
