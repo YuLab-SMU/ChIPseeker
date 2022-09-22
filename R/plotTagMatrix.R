@@ -1830,6 +1830,10 @@ peakHeatmap.internal <- function(tagMatrix,
   
   upstream <- attr(tagMatrix, "upstream")
   downstream <- attr(tagMatrix, "downstream")
+  binning_Flag <- attr(tagMatrix,"is.binning")
+  if(binning_Flag){
+    nbin <- dim(tagMatrix)[2]
+  }
   
   tagMatrix <- t(apply(tagMatrix, 1, function(x) x/max(x)))
   ii <- order(rowSums(tagMatrix))
@@ -1853,17 +1857,30 @@ peakHeatmap.internal <- function(tagMatrix,
           axis.line.y = element_blank(),
           panel.grid=element_blank(),
           panel.background = element_blank()) +
-    labs(x = xlab, y = ylab, title = title) +
-    scale_x_continuous(breaks = c(1,
-                                  floor(downstream*0.5),
-                                  (downstream + 1),
-                                  (downstream + 1 + floor(upstream * 0.5)), 
-                                  upstream+downstream+1),
-                       labels = c((-1*downstream),
-                                  floor(-1*downstream*0.5),
-                                  0,
-                                  floor(upstream*0.5),
-                                  upstream))
+    labs(x = xlab, y = ylab, title = title)
+
+  if(binning_Flag){
+    
+    p <- p + scale_x_continuous(breaks = c(1,
+                                           floor(nbin*(downstream/(downstream+upstream))),
+                                           nbin),
+                                labels = c((-1*downstream),
+                                           0,
+                                           upstream))
+  }else{
+    
+    p <- p + scale_x_continuous(breaks = c(1,
+                                           floor(downstream*0.5),
+                                           (downstream + 1),
+                                           (downstream + 1 + floor(upstream * 0.5)), 
+                                           upstream+downstream+1),
+                                labels = c((-1*downstream),
+                                           floor(-1*downstream*0.5),
+                                           0,
+                                           floor(upstream*0.5),
+                                           upstream))    
+   
+  }
   
   p
 }
