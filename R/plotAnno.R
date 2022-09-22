@@ -158,7 +158,7 @@ annoPie3D <- function(anno.df,
 }
 
 getGenomicAnnoStat <- function(peakAnno) {
-    if ( class(peakAnno) == "GRanges" )
+    if(inherits(peakAnno,"GRanges"))
         peakAnno <- as.data.frame(peakAnno)
     anno <- peakAnno$annotation
     ## anno <- sub(" \\(.+", "", anno)
