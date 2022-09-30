@@ -447,7 +447,6 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
                 facet = facet,
                 free_y = free_y,
                 verbose = verbose, 
-                nbin = 800,
                 ignore_strand = ignore_strand,
                 ...)
   
