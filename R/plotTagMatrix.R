@@ -107,6 +107,11 @@ plotPeakProf <- function(tagMatrix = NULL,
     upstream <- if(missingArg(upstream)) NULL else upstream
     downstream <- if(missingArg(downstream)) NULL else downstream
     
+    if(length(TxDb) != 1 && length(by) == 1){
+      tmp <- rep(by,length(TxDb))
+      by <- tmp
+    }
+    
     if(length(by) == 1){
       
       plotPeakProf2(peak = peak, 
@@ -127,6 +132,9 @@ plotPeakProf <- function(tagMatrix = NULL,
                     ...)
       
     }else{
+      
+      if(is.null(windows_name) && !is.null(names(TxDb)))
+        windows_name <- names(TxDb)
       
       plotPeakProf_MultiWindows(peak = peak,
                                 upstream = upstream,
