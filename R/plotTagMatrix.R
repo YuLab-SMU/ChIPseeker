@@ -1699,6 +1699,8 @@ peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
     tagMatrix <- lapply(peak, getTagMatrix, 
                         weightCol=weightCol, 
                         windows = windows,
+                        upstream=upstream,
+                        downstream=downstream,
                         TxDb = TxDb,
                         nbin = nbin,
                         verbose = verbose,
@@ -1708,6 +1710,8 @@ peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
                               weightCol=weightCol, 
                               windows = windows,
                               TxDb = TxDb,
+                              upstream=upstream,
+                              downstream=downstream,
                               nbin = nbin,
                               verbose = verbose,
                               ignore_strand= ignore_strand)
@@ -1830,6 +1834,14 @@ peakHeatmap.internal <- function(tagMatrix,
   upstream <- attr(tagMatrix, "upstream")
   downstream <- attr(tagMatrix, "downstream")
   binning_Flag <- attr(tagMatrix,"is.binning")
+  type <- attr(tagMatrix,"type")
+  
+  body_Flag <- FALSE
+  if(type == "body"){
+    body_Flag <- TRUE
+    label <- attr(tagMatrix,"label")
+  }
+  
   if(binning_Flag){
     nbin <- dim(tagMatrix)[2]
   }
@@ -1858,6 +1870,64 @@ peakHeatmap.internal <- function(tagMatrix,
           panel.background = element_blank()) +
     labs(x = xlab, y = ylab, title = title)
 
+  if(body_Flag){
+    
+    if(inherits(upstream, 'rel')){
+      
+      p <- p + scale_x_continuous(breaks=c(1, 
+                                           floor(nbin*(as.numeric(upstream)*100/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           floor(nbin*((as.numeric(upstream)*100+25)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           floor(nbin*((as.numeric(upstream)*100+50)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           floor(nbin*((as.numeric(upstream)*100+75)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           floor(nbin*((as.numeric(upstream)*100+100)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           nbin),
+                                  labels=c(paste0("-",as.numeric(upstream)*100,"%"), 
+                                           label[1],
+                                           "25%",
+                                           "50%",
+                                           "75%",
+                                           label[2],
+                                           paste0("+",as.numeric(downstream)*100,"%")))
+    }
+    
+    if(is.null(upstream)){
+      p <- p + scale_x_continuous(breaks=c(1, 
+                                           floor(nbin*0.25),
+                                           floor(nbin*0.5),
+                                           floor(nbin*0.75),
+                                           nbin),
+                                  labels=c(label[1], 
+                                           "25%",
+                                           "50%",
+                                           "75%",
+                                           label[2]))
+    }
+    
+    if(!is.null(upstream) & !inherits(upstream, 'rel')){
+      
+      upstreamPer <- floor(upstream/1000)*0.1
+      downstreamPer <- floor(downstream/1000)*0.1
+      
+      p <- p + scale_x_continuous(breaks=c(1, 
+                                           floor(nbin*(upstreamPer/(1+upstreamPer+downstreamPer))),
+                                           floor(nbin*((upstreamPer+0.25)/(1+upstreamPer+downstreamPer))),
+                                           floor(nbin*((upstreamPer+0.5)/(1+upstreamPer+downstreamPer))),
+                                           floor(nbin*((upstreamPer+0.75)/(1+upstreamPer+downstreamPer))),
+                                           floor(nbin*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
+                                           nbin),
+                                  labels=c(paste0("-",upstream,"bp"), 
+                                           label[1],
+                                           "25%",
+                                           "50%",
+                                           "75%",
+                                           label[2],
+                                           paste0(downstream,"bp")))
+    }
+    
+    return(p)
+    
+  }
+  
   if(binning_Flag){
     
     p <- p + scale_x_continuous(breaks = c(1,
@@ -1882,7 +1952,7 @@ peakHeatmap.internal <- function(tagMatrix,
                                            0,
                                            floor(upstream*0.5),
                                            upstream))    
-   
+    
   }
   
   p
