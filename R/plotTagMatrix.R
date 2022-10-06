@@ -2317,3 +2317,222 @@ peakHeatmap_multiple_Sets.internal <- function(tagMatrix,
   return(p)
   
 }
+
+
+
+
+##' plot peak heatmap and profile in a picture
+##' 
+##' 
+##' @title peak_Profile_Heatmap
+##' @param peak peak file or GRanges object
+##' @param weightCol column name of weight
+##' @param TxDb TxDb object
+##' @param upstream upstream position
+##' @param downstream downstream position
+##' @param xlab xlab
+##' @param ylab ylab
+##' @param title title
+##' @param palette palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}
+##' @param verbose print message or not
+##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'
+##' @param type one of "start_site", "end_site", "body"
+##' @param nbin the amount of nbines 
+##' @param ignore_strand ignore the strand information or not
+##' @param windows_name the name for each window, which will also be showed in the picture as labels
+##' @param nrow the nrow of plotting a list of peak
+##' @param ncol the ncol of plotting a list of peak
+##' @param facet_label_text_size the size of facet label text
+##' @param conf confidence interval
+##' @param facet one of 'none', 'row' and 'column'
+##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param height_proportion the proportion of profiling picture and heatmap
+##' @importFrom aplot insert_bottom
+##' @importFrom aplot plot_list
+peak_Profile_Heatmap <- function(peak, 
+                                 weightCol=NULL,
+                                 TxDb=NULL,
+                                 upstream=1000, 
+                                 downstream=1000,
+                                 xlab="", 
+                                 ylab="", 
+                                 title=NULL,
+                                 palette=NULL, 
+                                 verbose=TRUE,
+                                 by="gene", 
+                                 type="start_site",
+                                 nbin = NULL,
+                                 ignore_strand = FALSE,
+                                 windows_name = NULL,
+                                 ncol = NULL,
+                                 nrow = NULL,
+                                 facet_label_text_size = 12,
+                                 conf,
+                                 facet = "row",
+                                 free_y = TRUE,
+                                 height_proportion = 4){
+  
+  conf <- if(missingArg(conf)) NA else conf
+  
+  if(is(peak, "list")){
+    
+    nc <- length(peak)
+    
+    tmp <- list()
+    
+    if ( is.null(names(peak)) ) {
+      nn <- paste0("peak", seq_along(peak))
+      warning("input is not a named list, set the name automatically to ", paste(nn, collapse=' '))
+      names(peak) <- nn
+      ## stop("tagMatrix should be a named list...")
+    }
+    
+    if(is.null(palette)) palette <- getPalette(nc)
+    
+    if(is.null(title)) title_of_plot <- names(peak)
+    
+    for (i in 1:nc) {
+      peak_profile <- plotPeakProf(peak = peak[[i]],
+                                   upstream = upstream,
+                                   downstream = downstream,
+                                   conf = conf,
+                                   by = by,
+                                   type = type,
+                                   windows_name = windows_name,
+                                   weightCol = weightCol,
+                                   TxDb = TxDb,
+                                   xlab = xlab,
+                                   ylab = ylab,
+                                   facet = facet,
+                                   free_y = free_y,
+                                   verbose = verbose,
+                                   nbin = nbin,
+                                   ignore_strand = ignore_strand)
+      
+      peak_profile <- peak_profile + labs(title = title_of_plot[i]) +
+        theme(plot.title = element_text(hjust = 0.5))
+      
+      if(length(by) != 1){
+        peak_heatmap <- peakHeatmap_multiple_Sets(peak = peak[[i]], 
+                                                  weightCol=weightCol,
+                                                  TxDb=TxDb,
+                                                  upstream=upstream, 
+                                                  downstream=downstream,
+                                                  xlab=xlab, 
+                                                  ylab=ylab, 
+                                                  title=title,
+                                                  palette=palette[[i]], 
+                                                  verbose=verbose,
+                                                  by=by, 
+                                                  type=type,
+                                                  nbin = nbin,
+                                                  ignore_strand = ignore_strand,
+                                                  windows_name = windows_name,
+                                                  ncol = ncol,
+                                                  nrow = nrow,
+                                                  facet_label_text_size = facet_label_text_size)
+      }else{
+        
+        peak_heatmap <- peakHeatmap(peak[[i]], 
+                                    weightCol=weightCol, 
+                                    TxDb=TxDb,
+                                    upstream=upstream, 
+                                    downstream=downstream,
+                                    xlab=xlab, 
+                                    ylab=ylab, 
+                                    title=title,
+                                    palette=palette[[i]], 
+                                    verbose=verbose,
+                                    by=by, 
+                                    type=type,
+                                    nbin = nbin,
+                                    ignore_strand = ignore_strand,
+                                    ncol = ncol,
+                                    nrow = nrow)
+        
+      }
+      
+      p <- peak_profile %>% 
+        insert_bottom(peak_heatmap,height = height_proportion)
+      
+      p <- as.caplot(p)
+      
+      tmp[[i]] <- p
+    }
+    
+    if (is.null(ncol) && is.null(nrow))
+      nrow <- 1
+    
+    p <- plot_list(gglist = tmp,
+                   ncol = ncol,
+                   nrow = nrow)
+    
+    return(p)
+    
+  }
+  
+  peak_profile <- plotPeakProf(peak = peak,
+                               upstream = upstream,
+                               downstream = downstream,
+                               conf = conf,
+                               by = by,
+                               type = type,
+                               windows_name = windows_name,
+                               weightCol = weightCol,
+                               TxDb = TxDb,
+                               xlab = xlab,
+                               ylab = ylab,
+                               facet = facet,
+                               free_y = free_y,
+                               verbose = verbose,
+                               nbin = nbin,
+                               ignore_strand = ignore_strand)
+  
+  
+  if(length(by) != 1){
+    peak_heatmap <- peakHeatmap_multiple_Sets(peak = peak, 
+                                              weightCol=weightCol,
+                                              TxDb=TxDb,
+                                              upstream=upstream, 
+                                              downstream=downstream,
+                                              xlab=xlab, 
+                                              ylab=ylab, 
+                                              title=title,
+                                              palette=palette, 
+                                              verbose=verbose,
+                                              by=by, 
+                                              type=type,
+                                              nbin = nbin,
+                                              ignore_strand = ignore_strand,
+                                              windows_name = windows_name,
+                                              ncol = ncol,
+                                              nrow = nrow,
+                                              facet_label_text_size = facet_label_text_size)
+  }else{
+    
+    peak_heatmap <- peakHeatmap(peak = peak, 
+                                weightCol=weightCol, 
+                                TxDb=TxDb,
+                                upstream=upstream, 
+                                downstream=downstream,
+                                xlab=xlab, 
+                                ylab=ylab, 
+                                title=title,
+                                palette=palette, 
+                                verbose=verbose,
+                                by=by, 
+                                type=type,
+                                nbin = nbin,
+                                ignore_strand = ignore_strand,
+                                ncol = ncol,
+                                nrow = nrow)
+    
+  }
+  
+  p <- peak_profile %>% 
+    insert_bottom(peak_heatmap,height = height_proportion)
+  
+  p <- as.caplot(p)
+  
+  return(p)
+}

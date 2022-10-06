@@ -50,7 +50,8 @@ Imports:
     utils,
     tibble,
     tidyr,
-    aplot
+    aplot,
+    grid
 Suggests:
     clusterProfiler,
     ggimage,
