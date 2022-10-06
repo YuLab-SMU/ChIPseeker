@@ -51,7 +51,8 @@ Imports:
     tibble,
     tidyr,
     aplot,
-    grid
+    grid,
+    patchwork
 Suggests:
     clusterProfiler,
     ggimage,
