@@ -20,6 +20,7 @@ grid.draw.aplot <- function(x, recoding = TRUE) {
 
 ##' @importFrom ggplot2 ggplotGrob
 ##' @importFrom patchwork patchworkGrob
+##' @importFrom aplot as.patchwork
 aplotGrob <- function(x) {
   res <- as.patchwork(x,align="y")
   patchworkGrob(res)
