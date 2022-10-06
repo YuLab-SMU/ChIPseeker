@@ -2455,7 +2455,7 @@ peak_Profile_Heatmap <- function(peak,
       p <- peak_profile %>% 
         insert_bottom(peak_heatmap,height = height_proportion)
       
-      p <- as.caplot(p)
+      p <- aplotGrob(p)
       
       tmp[[i]] <- p
     }
@@ -2532,7 +2532,6 @@ peak_Profile_Heatmap <- function(peak,
   p <- peak_profile %>% 
     insert_bottom(peak_heatmap,height = height_proportion)
   
-  p <- as.caplot(p)
-  
+
   return(p)
 }
