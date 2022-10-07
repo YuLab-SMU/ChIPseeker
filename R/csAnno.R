@@ -48,6 +48,8 @@ as.GRanges <- function(x) {
 }
 
 
+##' x csAnno object
+##' @export
 getAnnoStat <- function(x) {
     if (!is(x, "csAnno"))
         stop("not supported...")
