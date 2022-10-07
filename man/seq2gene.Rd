@@ -27,11 +27,13 @@ annotate genomic regions to genes in many-to-many mapping
 This funciton associates genomic regions with coding genes in a many-to-many mapping. It first maps genomic regions to host genes (either located in exon or intron), proximal genes (located in promoter regions) and flanking genes (located in upstream and downstream within user specify distance).
 }
 \examples{
+\dontrun{
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 TxDb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 file <- getSampleFiles()[[1]] # a bed file
 gr <- readPeakFile(file)
 genes <- seq2gene(gr, tssRegion=c(-1000, 1000), flankDistance = 3000, TxDb) 
+}
 }
 \author{
 Guangchuang Yu
