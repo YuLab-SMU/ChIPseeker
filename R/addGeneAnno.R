@@ -1,4 +1,3 @@
-
 ##' get gene annotation, symbol, gene name etc.
 ##'
 ##'
@@ -6,10 +5,11 @@
 ##' @param annoDb annotation package
 ##' @param geneID query geneID
 ##' @param type gene ID type
+##' @param columns names of columns to be obtained from database
 ##' @return data.frame
 ##' @importFrom AnnotationDbi select
 ##' @author G Yu
-getGeneAnno <- function(annoDb, geneID, type){
+getGeneAnno <- function(annoDb, geneID, type, columns){
     kk <- unlist(geneID)
     require(annoDb, character.only = TRUE)
     annoDb <- eval(parse(text=annoDb))
@@ -29,7 +29,7 @@ getGeneAnno <- function(annoDb, geneID, type){
         suppressWarnings(select(annoDb,
                                 keys=unique(kk[i]),
                                 keytype=kt,
-                                columns=c("ENTREZID", "ENSEMBL", "SYMBOL", "GENENAME"))),
+                                columns=columns)),
         error = function(e) NULL)
 
     if (is.null(ann)) {
@@ -51,8 +51,8 @@ getGeneAnno <- function(annoDb, geneID, type){
 }
 
 
-addGeneAnno <- function(peak.gr, annoDb, type) {
-    geneAnno <- getGeneAnno(annoDb, peak.gr$geneId, type)
+addGeneAnno <- function(peak.gr, annoDb, type, columns) {
+    geneAnno <- getGeneAnno(annoDb, peak.gr$geneId, type, columns)
     if (! all(is.na(geneAnno))) {
         for(cn in colnames(geneAnno)[-1]) {
             mcols(peak.gr)[[cn]] <- geneAnno[, cn]
