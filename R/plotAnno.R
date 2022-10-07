@@ -93,7 +93,6 @@ plotAnnoPie.csAnno <- function(x,
     annoPie(anno.df, ndigit=ndigit, cex=cex, col=col, legend.position=legend.position, radius=radius, ...)
  }
 
-##' @importFrom RColorBrewer brewer.pal
 ##' @importFrom grDevices colorRampPalette
 ##' @importFrom graphics par
 ##' @importFrom graphics layout

@@ -42,7 +42,6 @@ Imports:
     dplyr,
     parallel,
     magrittr,
-    RColorBrewer,
     rtracklayer,
     S4Vectors,
     stats,
