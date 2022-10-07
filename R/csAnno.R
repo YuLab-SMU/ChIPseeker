@@ -48,7 +48,11 @@ as.GRanges <- function(x) {
 }
 
 
-##' x csAnno object
+##' getting status of annotation
+##' 
+##' 
+##' @title getAnnoStat
+##' @param x csAnno object
 ##' @export
 getAnnoStat <- function(x) {
     if (!is(x, "csAnno"))

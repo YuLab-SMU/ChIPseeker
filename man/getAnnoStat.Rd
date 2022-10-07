@@ -2,10 +2,13 @@
 % Please edit documentation in R/csAnno.R
 \name{getAnnoStat}
 \alias{getAnnoStat}
-\title{x csAnno object}
+\title{getAnnoStat}
 \usage{
 getAnnoStat(x)
 }
+\arguments{
+\item{x}{csAnno object}
+}
 \description{
-x csAnno object
+getting status of annotation
 }
