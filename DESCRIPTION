@@ -49,9 +49,7 @@ Imports:
     utils,
     tibble,
     tidyr,
-    aplot,
-    grid,
-    patchwork
+    aplot
 Suggests:
     clusterProfiler,
     ggimage,

@@ -2349,6 +2349,7 @@ peakHeatmap_multiple_Sets.internal <- function(tagMatrix,
 ##' @param height_proportion the proportion of profiling picture and heatmap
 ##' @importFrom aplot insert_bottom
 ##' @importFrom aplot plot_list
+##' @export
 peak_Profile_Heatmap <- function(peak, 
                                  weightCol=NULL,
                                  TxDb=NULL,
@@ -2454,8 +2455,6 @@ peak_Profile_Heatmap <- function(peak,
       
       p <- peak_profile %>% 
         insert_bottom(peak_heatmap,height = height_proportion)
-      
-      p <- aplotGrob(p)
       
       tmp[[i]] <- p
     }
