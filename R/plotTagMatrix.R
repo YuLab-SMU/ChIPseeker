@@ -2202,6 +2202,8 @@ peakHeatmap_multiple_Sets.internal <- function(tagMatrix,
       pivot_longer(-c(sample_ID),names_to = "coordinate", 
                    values_to = "values")
     tagMatrix[[x]]$coordinate <- as.numeric(tagMatrix[[x]]$coordinate)
+    tagMatrix[[x]]$sample_ID <- as.numeric(tagMatrix[[x]]$sample_ID)
+    
     tagMatrix[[x]]$sample <- x
     return(tagMatrix[[x]])
   })
