@@ -16,4 +16,8 @@
   options(ChIPseeker.ignore_1st_intron = FALSE)
   options(ChIPseeker.ignore_downstream = FALSE)
   options(ChIPseeker.ignore_promoter_subcategory= FALSE)
+  
+  options(aplot_align = 'y')
+
 }
+
