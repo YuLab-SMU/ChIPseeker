@@ -22,7 +22,6 @@
 ## @importFrom ggVennDiagram ggVennDiagram
 ## @importFrom Vennerable Venn
 ## @importFrom grid grid.newpage
-## @importFrom RColorBrewer brewer.pal
 ##' @examples
 ##' ## example not run
 ##' ## require(TxDb.Hsapiens.UCSC.hg19.knownGene)
