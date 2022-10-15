@@ -83,7 +83,7 @@ plotAnnoPie.csAnno <- function(x,
                         ...){
 
     anno.df <- getAnnoStat(x)
-    if (is.na(col)) {
+    if (is.na(col[1])) {
         col <- getCols(nrow(anno.df))
     }
 
