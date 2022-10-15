@@ -1,5 +1,10 @@
 ##' @importFrom plotrix floating.pie
-vennpie.csAnno <- function(x, r=0.2, cex = 1.2) {
+vennpie.csAnno <- function(x, 
+                           r = 0.2, 
+                           cex = 1.2,
+                           col = c(NO='white',Genic='#3182bd',Intergenic='#fec44f',
+                                   Intron='#fc9272',Exon='#9ecae1', Upstream='#ffeda0',
+                                   Downstream='#fee0d2',Distal_Intergenic='#d95f0e')) {
     detailGenomicAnnotation <- x@detailGenomicAnnotation
 
     distance <- as.data.frame(x)$distanceToTSS
@@ -17,9 +22,7 @@ vennpie.csAnno <- function(x, r=0.2, cex = 1.2) {
     Downstream <- sum(detailGenomicAnnotation$downstream)
 
     ## fiveUTR='#e5f5e0',threeUTR='#a1d99b',
-    cols <- c(NO='white',Genic='#3182bd',Intergenic='#fec44f',
-              Intron='#fc9272',Exon='#9ecae1', Upstream='#ffeda0',
-              Downstream='#fee0d2',Distal_Intergenic='#d95f0e')
+    cols <- col
 
     ##par(mai = c(0,0,0,0))
     ##layout(matrix(c(1,2), ncol=2), widths=c(0.7,0.3))
