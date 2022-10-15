@@ -17,6 +17,7 @@
 ##' @param ignoreDownstream logical, if True only annotate gene at the 5' of the peak.
 ##' @param overlap one of 'TSS' or 'all', if overlap="all", then gene overlap with peak will be reported as nearest gene, no matter the overlap is at TSS region or not.
 ##' @param verbose print message or not
+##' @param columns names of columns to be obtained from database
 ##' @return data.frame or GRanges object with columns of:
 ##'
 ##' all columns provided by input.
@@ -72,7 +73,8 @@ annotatePeak <- function(peak,
                          ignoreUpstream=FALSE,
                          ignoreDownstream=FALSE,
                          overlap = "TSS",
-                         verbose=TRUE) {
+                         verbose=TRUE,
+                         columns=c("ENTREZID", "ENSEMBL", "SYMBOL", "GENENAME")) {
 
     is_GRanges_of_TxDb <- FALSE
     if (is(TxDb, "GRanges")) {
@@ -234,7 +236,7 @@ annotatePeak <- function(peak,
         }
 
         if (!is.na(.idtype)) {
-            peak.gr %<>% addGeneAnno(annoDb, .idtype)
+            peak.gr %<>% addGeneAnno(annoDb, .idtype, columns)
         }
     }
 
