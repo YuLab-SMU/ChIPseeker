@@ -1963,6 +1963,8 @@ peakHeatmap.internal <- function(tagMatrix,
     
   }
   
+  p <- p + scale_y_continuous(expand = c(0,0))
+  
   p
 }
 
@@ -2315,7 +2317,8 @@ peakHeatmap_multiple_Sets.internal <- function(tagMatrix,
   p <-  p + facet_grid(sample ~ .,switch = "y",scales = "free_y",space = "free") +
     theme(strip.text.y.left = element_text(color = "black",face = "bold",
                                            size = facet_label_text_size),
-          strip.background = element_blank())
+          strip.background = element_blank()) +
+    scale_y_continuous(expand = c(0,0))
   
   return(p)
   
