@@ -1,9 +1,10 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.33.2
+Version: 1.33.3
 Authors@R: c( person(given = "Guangchuang", family = "Yu",       email = "guangchuangyu@gmail.com",      role  = c("aut", "cre"), comment = c(ORCID = "0000-0002-6485-8781")),
               person(given = "Ming",        family = "Li",       email = "limiang929@gmail.com",         role = "ctb"),
+              person(given = "Qianwen",        family = "Wang",       email = "treywea@gmail.com",         role = "ctb"),
               person(given = "Yun",         family = "Yan",      email = "youryanyun@gmail.com",         role = "ctb"),
               person(given = "Hervé",       family = "Pagès",    email = "hpages.on.github@gmail.com",   role  = "ctb"),
               person(given = "Michael",     family = "Kluge",    email = "michael.kluge@bio.ifi.lmu.de", role  = "ctb"),

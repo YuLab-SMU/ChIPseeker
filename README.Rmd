@@ -48,10 +48,6 @@ For details, please visit our project website, <https://guangchuangyu.github.io/
 + [Feedback](https://guangchuangyu.github.io/software/ChIPseeker/#feedback)
 
 
-[![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?hashtags=ChIPseeker&url=http://bioinformatics.oxfordjournals.org/content/31/14/2382&screen_name=guangchuangyu)
-`r badger::badge_custom("follow me on", "微信", "green", "https://guangchuangyu.github.io/blog_images/biobabble.jpg")`
-`r badger::badge_custom("打赏", "支付宝/微信", "green", "https://guangchuangyu.github.io/blog_images/pay_qrcode.png")`
-
 
 ------------------------------------------------------------------------
 
@@ -59,27 +55,10 @@ Please cite the following article when using `ChIPseeker`:
 
 __*Yu G*__, Wang LG and He QY^\*^. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. ***Bioinformatics*** 2015, 31(14):2382-2383.
 
-`r badge_doi("10.1093/bioinformatics/btv145", "green")`
+
 <!-- r badge_altmetric("3781087", "green") -->
 
 ------------------------------------------------------------------------
-
-
-### Citation
-
-
-
-<img src="https://guangchuangyu.github.io/software/citation_trend/ChIPseeker.png" width="890"/>
-
-
-### Download stats
-
-`r badge_download_bioc("ChIPseeker")`
-`r badge_bioc_download("ChIPseeker", "total", "blue")`
-`r badge_bioc_download("ChIPseeker", "month", "blue")`
-
-
-<img src="https://guangchuangyu.github.io/software/dlstats/ChIPseeker.png" width="890"/>
 
 
 ## Contributing

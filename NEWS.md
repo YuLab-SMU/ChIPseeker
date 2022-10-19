@@ -1,3 +1,9 @@
+# ChIPseeker 1.33.3
+
++ allows passing user defined color to `vennpie()` (2022-10-20, Thu, #202, #207)
++ add `columns` paramter to `annotatePeak()` to better support passing `EnsDb` to `annoDb` (#193, #205)
++ export `getAnnoStat()` (#200, #204)
+
 # ChIPseeker 1.33.2
 
 + supports `by = "ggVennDiagram"` in `vennplot` function (2022-09-13, Tue)

@@ -2,17 +2,17 @@
 
 <img src="https://raw.githubusercontent.com/Bioconductor/BiocStickers/master/ChIPseeker/ChIPseeker.png" height="200" align="right" />
 
-[![](https://img.shields.io/badge/release%20version-1.18.0-green.svg)](https://www.bioconductor.org/packages/ChIPseeker)
-[![](https://img.shields.io/badge/devel%20version-1.19.1-green.svg)](https://github.com/guangchuangyu/ChIPseeker)
+[![](https://img.shields.io/badge/release%20version-1.32.1-green.svg)](https://www.bioconductor.org/packages/ChIPseeker)
+[![](https://img.shields.io/badge/devel%20version-1.33.3-green.svg)](https://github.com/guangchuangyu/ChIPseeker)
 [![Bioc](http://www.bioconductor.org/shields/years-in-bioc/ChIPseeker.svg)](https://www.bioconductor.org/packages/devel/bioc/html/ChIPseeker.html#since)
 [![Say
-Thanks\!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/GuangchuangYu)
+Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/GuangchuangYu)
 
 [![Project Status: Active - The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![codecov](https://codecov.io/gh/GuangchuangYu/ChIPseeker/branch/master/graph/badge.svg)](https://codecov.io/gh/GuangchuangYu/ChIPseeker/)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2019--04--16-green.svg)](https://github.com/GuangchuangYu/ChIPseeker/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2022--10--20-green.svg)](https://github.com/GuangchuangYu/ChIPseeker/commits/master)
 [![GitHub
 forks](https://img.shields.io/github/forks/GuangchuangYu/ChIPseeker.svg)](https://github.com/GuangchuangYu/ChIPseeker/network)
 [![GitHub
@@ -40,43 +40,25 @@ of peaks or genes.
 For details, please visit our project website,
 <https://guangchuangyu.github.io/software/ChIPseeker>.
 
-  - [Documentation](https://guangchuangyu.github.io/software/ChIPseeker/documentation/)
-  - [Featured
+-   [Documentation](https://guangchuangyu.github.io/software/ChIPseeker/documentation/)
+-   [Featured
     Articles](https://guangchuangyu.github.io/software/ChIPseeker/featuredArticles/)
-  - [Feedback](https://guangchuangyu.github.io/software/ChIPseeker/#feedback)
+-   [Feedback](https://guangchuangyu.github.io/software/ChIPseeker/#feedback)
 
-[![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?hashtags=ChIPseeker&url=http://bioinformatics.oxfordjournals.org/content/31/14/2382&screen_name=guangchuangyu)
-[![](https://img.shields.io/badge/follow%20me%20on-微信-green.svg)](https://guangchuangyu.github.io/blog_images/biobabble.jpg)
-[![](https://img.shields.io/badge/打赏-支付宝/微信-green.svg)](https://guangchuangyu.github.io/blog_images/pay_qrcode.png)
-
------
+------------------------------------------------------------------------
 
 Please cite the following article when using `ChIPseeker`:
 
 ***Yu G***, Wang LG and He QY<sup>\*</sup>. ChIPseeker: an
 R/Bioconductor package for ChIP peak annotation, comparison and
-visualization. ***Bioinformatics*** 2015,
-31(14):2382-2383.
+visualization. ***Bioinformatics*** 2015, 31(14):2382-2383.
 
-[![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btv145-green.svg)](https://doi.org/10.1093/bioinformatics/btv145)
-[![](https://img.shields.io/badge/Altmetric-34-green.svg)](https://www.altmetric.com/details/3781087)
+<!-- r badge_altmetric("3781087", "green") -->
 
------
-
-### Citation
-
-<img src="https://guangchuangyu.github.io/software/citation_trend/ChIPseeker.png" width="890"/>
-
-### Download stats
-
-[![download](http://www.bioconductor.org/shields/downloads/ChIPseeker.svg)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
-[![](https://img.shields.io/badge/download-33391/total-blue.svg)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
-[![](https://img.shields.io/badge/download-997/month-blue.svg)](https://bioconductor.org/packages/stats/bioc/ChIPseeker)
-
-<img src="https://guangchuangyu.github.io/software/dlstats/ChIPseeker.png" width="890"/>
+------------------------------------------------------------------------
 
 ## Contributing
 
-We welcome any contributions\! By participating in this project you
-agree to abide by the terms outlined in the [Contributor Code of
+We welcome any contributions! By participating in this project you agree
+to abide by the terms outlined in the [Contributor Code of
 Conduct](CONDUCT.md).
