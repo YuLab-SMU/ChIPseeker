@@ -20,7 +20,8 @@ annotatePeak(
   ignoreUpstream = FALSE,
   ignoreDownstream = FALSE,
   overlap = "TSS",
-  verbose = TRUE
+  verbose = TRUE,
+  columns = c("ENTREZID", "ENSEMBL", "SYMBOL", "GENENAME")
 )
 }
 \arguments{
@@ -53,6 +54,8 @@ annotatePeak(
 \item{overlap}{one of 'TSS' or 'all', if overlap="all", then gene overlap with peak will be reported as nearest gene, no matter the overlap is at TSS region or not.}
 
 \item{verbose}{print message or not}
+
+\item{columns}{names of columns to be obtained from database}
 }
 \value{
 data.frame or GRanges object with columns of:

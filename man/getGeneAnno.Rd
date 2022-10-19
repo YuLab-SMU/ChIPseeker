@@ -4,7 +4,7 @@
 \alias{getGeneAnno}
 \title{getGeneAnno}
 \usage{
-getGeneAnno(annoDb, geneID, type)
+getGeneAnno(annoDb, geneID, type, columns)
 }
 \arguments{
 \item{annoDb}{annotation package}
@@ -12,6 +12,8 @@ getGeneAnno(annoDb, geneID, type)
 \item{geneID}{query geneID}
 
 \item{type}{gene ID type}
+
+\item{columns}{names of columns to be obtained from database}
 }
 \value{
 data.frame
