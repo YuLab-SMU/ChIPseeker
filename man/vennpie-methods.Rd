@@ -5,14 +5,16 @@
 \alias{vennpie}
 \title{vennpie method generics}
 \usage{
-vennpie(x, r = 0.2, ...)
+vennpie(x, r = 0.2, cex = 1.2, ...)
 
-vennpie(x, r=0.2, ...)
+vennpie(x, r = 0.2, cex=1.2, ...)
 }
 \arguments{
 \item{x}{A \code{csAnno} instance}
 
 \item{r}{initial radius}
+
+\item{cex}{value to adjust legend}
 
 \item{...}{additional parameter}
 }

@@ -5,7 +5,8 @@
 ##' @name vennpie
 ##' @rdname vennpie-methods
 ##' @export
-setGeneric("vennpie", function(x, r=0.2, ...) standardGeneric("vennpie"))
+setGeneric("vennpie", function(x, r = 0.2, cex = 1.2, ...) 
+  standardGeneric("vennpie"))
 
 
 ##' plotDistToTSS method generics

@@ -168,18 +168,22 @@ combine_csAnno <- function(x, ...){
 ##' @name vennpie
 ##' @docType methods
 ##' @rdname vennpie-methods
-##'
+##' 
 ##' @title vennpie method
 ##' @param x A \code{csAnno} instance
 ##' @param r initial radius
+##' @param cex value to adjust legend
 ##' @param ... additional parameter
 ##' @return plot
-##' @usage vennpie(x, r=0.2, ...)
+##' @usage vennpie(x, r = 0.2, cex=1.2, ...)
 ##' @exportMethod vennpie
 ##' @author Guangchuang Yu \url{https://guangchuangyu.github.io}
 setMethod("vennpie", signature(x="csAnno"),
-          function(x, r=0.2, ...) {
-              vennpie.csAnno(x, r, ...)
+          function(x, 
+                   r = 0.2, 
+                   cex = 1.2, 
+                   ...) {
+            vennpie.csAnno(x, r, cex, ...)
           }
           )
 
