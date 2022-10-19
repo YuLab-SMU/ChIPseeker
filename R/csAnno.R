@@ -47,7 +47,12 @@ as.GRanges <- function(x) {
     return(x@anno)
 }
 
-
+##' getting status of annotation
+##' 
+##' 
+##' @title getAnnoStat
+##' @param x csAnno object
+##' @export
 getAnnoStat <- function(x) {
     if (!is(x, "csAnno"))
         stop("not supported...")
