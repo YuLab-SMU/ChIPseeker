@@ -1,7 +1,7 @@
 Package: ChIPseeker
 Type: Package
 Title: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization
-Version: 1.33.3
+Version: 1.33.4
 Authors@R: c( person(given = "Guangchuang", family = "Yu",       email = "guangchuangyu@gmail.com",      role  = c("aut", "cre"), comment = c(ORCID = "0000-0002-6485-8781")),
               person(given = "Ming",        family = "Li",       email = "limiang929@gmail.com",         role = "ctb"),
               person(given = "Qianwen",        family = "Wang",       email = "treywea@gmail.com",         role = "ctb"),
@@ -63,7 +63,7 @@ Suggests:
     tibble
 Remotes:
     GuangchuangYu/enrichplot
-URL: https://guangchuangyu.github.io/software/ChIPseeker
+URL: https://onlinelibrary.wiley.com/share/author/GYJGUBYCTRMYJFN2JFZZ?target=10.1002/cpz1.585
 BugReports: https://github.com/YuLab-SMU/ChIPseeker/issues
 Encoding: UTF-8
 VignetteBuilder: knitr

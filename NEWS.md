@@ -1,3 +1,7 @@
+# ChIPseeker 1.33.4
+
++ add citation Q. Wang (2022) (2022-10-29, Sat)
+
 # ChIPseeker 1.33.3
 
 + allows passing user defined color to `vennpie()` (2022-10-20, Thu, #202, #207)

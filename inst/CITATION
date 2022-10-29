@@ -1,4 +1,34 @@
-citHeader("Please cite G. Yu (2015) for using ChIPseeker. In addition, please cite clusterProfiler/DOSE/ReactomePA when using functional enrichment analyses.")
+citHeader("Please cite Q. Wang (2022) or G. Yu (2015) for using ChIPseeker. In addition, please cite clusterProfiler/DOSE/ReactomePA when using functional enrichment analyses.")
+
+
+citEntry(entry  ="ARTICLE",
+         title  = "Exploring epigenomic datasets by ChIPseeker",
+         author = personList(
+             as.person("Qianwen Wang"),
+             as.person("Ming Li"),
+             as.person("Tianzhi Wu"),
+             as.person("Li Zhan"),
+             as.person("Lin Li"),
+             as.person("Meijun Chen"),
+             as.person("Wenqin Xie"),
+             as.person("Zijing Xie"),
+             as.person("Erqiang Hu"),
+             as.person("Shuangbin Xu"),
+             as.person("Guangchuang Yu")
+             ),
+         journal = "Current Protocols",
+         year    = "2022",
+         volume  = "2",
+         number  = "10",
+         pages   = "e585",
+         PMID    = "36286622",
+         doi     = "10.1002/cpz1.585",
+         url     = "https://onlinelibrary.wiley.com/share/author/GYJGUBYCTRMYJFN2JFZZ?target=10.1002/cpz1.585",
+         textVersion = paste("Qianwen Wang, Ming Li, Tianzhi Wu, Li Zhan, Lin Li, Meijun Chen, Wenqin Xie, Zijing Xie, Erqiang Hu, Shuangbin Xu, Guangchuang Yu.",
+         "Exploring epigenomic datasets by ChIPseeker.",
+         "Current Protocols 2022, 2(10): e585")
+         )
+
 
 citEntry(entry  ="ARTICLE",
          title  = "ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization",

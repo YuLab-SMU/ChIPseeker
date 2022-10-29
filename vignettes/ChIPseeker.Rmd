@@ -59,9 +59,9 @@ ChIPseeker is an R package for annotating ChIP-seq data analysis. It supports an
 
 If you use `r Biocpkg("ChIPseeker")`[@yu_chipseeker_2015] in published research, please cite:
 
++ Q Wang<sup>#</sup>, M Li<sup>#</sup>, T Wu, L Zhan, L Li, M Chen, W Xie, Z Xie, E Hu, S Xu, __G Yu__<sup>\*</sup>. [Exploring epigenomic datasets by ChIPseeker](https://onlinelibrary.wiley.com/share/author/GYJGUBYCTRMYJFN2JFZZ?target=10.1002/cpz1.585). __*Current Protocols*__, 2022, 2(10): e585. 
++ __G Yu__<sup>\*</sup>, LG Wang, QY He<sup>\*</sup>. [ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparision and visualization](http://bioinformatics.oxfordjournals.org/cgi/content/abstract/btv145). __*Bioinformatics*__. 2015, 31(14):2382-2383. 
 
-__*G Yu*__, LG Wang, QY He. ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization.
-Bioinformatics 2015, 31(14):2382-2383. doi:[10.1093/bioinformatics/btv145](http://dx.doi.org/10.1093/bioinformatics/btv145)
 
 # Introduction
 
