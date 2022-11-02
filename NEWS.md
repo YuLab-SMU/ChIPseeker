@@ -1,3 +1,8 @@
+# ChIPseeker
+
++ Bioconductor RELEASE_3_16 (2022-11-02, Wed)
+
+
 # ChIPseeker 1.33.4
 
 + add citation Q. Wang (2022) (2022-10-29, Sat)
