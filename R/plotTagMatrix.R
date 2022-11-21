@@ -81,6 +81,10 @@
 ##' @param ignore_strand ignore the strand information or not
 ##' @param ... additional parameter
 ##' @return ggplot object
+##' @importFrom methods is
+##' @importFrom methods as
+##' @importFrom methods missingArg
+##' @importFrom methods new
 ##' @export
 plotPeakProf <- function(tagMatrix = NULL,
                          peak,
