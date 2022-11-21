@@ -1,4 +1,8 @@
-# ChIPseeker
+# ChIPseeker 1.35.0.001
+
++ update startup message to display the 'Current Protocols (2022)' paper. 
+
+# ChIPseeker 1.34.0
 
 + Bioconductor RELEASE_3_16 (2022-11-02, Wed)
 

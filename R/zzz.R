@@ -5,9 +5,10 @@
                 "For help: https://guangchuangyu.github.io/software/", pkgname, "\n\n")
 
   citation <- paste0("If you use ", pkgname, " in published research, please cite:\n",
-                     "Guangchuang Yu, Li-Gen Wang, Qing-Yu He. ",
-                     "ChIPseeker: an R/Bioconductor package for ChIP peak annotation, comparison and visualization. ",
-                     "Bioinformatics 2015, 31(14):2382-2383")
+                     "Qianwen Wang, Ming Li, Tianzhi Wu, Li Zhan, Lin Li, Meijun Chen, Wenqin Xie, Zijing Xie, Erqiang Hu, Shuangbin Xu, Guangchuang Yu. ",
+                     "Exploring epigenomic datasets by ChIPseeker. ",
+                     "Current Protocols 2022, 2(10): e585")
+
 
   packageStartupMessage(paste0(msg, citation))
 
