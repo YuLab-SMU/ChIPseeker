@@ -47,9 +47,9 @@ Imports:
     stats,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
     utils,
-    tibble,
-    tidyr,
-    aplot
+    aplot,
+    yulab.utils,
+    tibble
 Suggests:
     clusterProfiler,
     ggimage,

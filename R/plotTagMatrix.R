@@ -1821,9 +1821,7 @@ peakHeatmap.internal2 <- function(tagMatrix,
 
 
 ##' @import BiocGenerics
-##' @importFrom tibble rownames_to_column
-##' @importFrom tidyr pivot_longer
-##' @importFrom magrittr %>%
+##' @importFrom yulab.utils mat2df
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 aes
 ##' @importFrom ggplot2 geom_tile
@@ -1859,12 +1857,9 @@ peakHeatmap.internal <- function(tagMatrix,
   
   colnames(tagMatrix) <- seq_len(dim(tagMatrix)[2])
   rownames(tagMatrix) <- seq_len(dim(tagMatrix)[1])
-  tagMatrix <- tagMatrix %>% as.data.frame() %>% 
-    rownames_to_column("sample_ID") %>%
-    pivot_longer(-c(sample_ID),names_to = "coordinate", 
-                 values_to = "values")
-  tagMatrix$coordinate <- as.numeric(tagMatrix$coordinate)
-  tagMatrix$sample_ID <- as.numeric(tagMatrix$sample_ID)
+  
+  tagMatrix <- mat2df(tagMatrix)
+  colnames(tagMatrix) <- c("values","sample_ID","coordinate")
 
   sample_ID <- coordinate <- NULL
   
@@ -1932,6 +1927,7 @@ peakHeatmap.internal <- function(tagMatrix,
                                            paste0(downstream,"bp")))
     }
     
+    p <- p + scale_y_continuous(expand = c(0,0))
     return(p)
     
   }
@@ -1990,9 +1986,6 @@ peakHeatmap.internal <- function(tagMatrix,
 ##' @param nrow the nrow of plotting a list of peak
 ##' @param ncol the ncol of plotting a list of peak
 ##' @param facet_label_text_size the size of facet label text
-##' @importFrom tibble rownames_to_column
-##' @importFrom tidyr pivot_longer
-##' @importFrom magrittr %>%
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 aes
 ##' @importFrom ggplot2 geom_tile
@@ -2154,9 +2147,7 @@ peakHeatmap_multiple_Sets <- function(peak,
 }
 
 
-##' @importFrom tibble rownames_to_column
-##' @importFrom tidyr pivot_longer
-##' @importFrom magrittr %>%
+##' @importFrom yulab.utils mat2df
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 aes
 ##' @importFrom ggplot2 geom_tile
@@ -2199,12 +2190,9 @@ peakHeatmap_multiple_Sets.internal <- function(tagMatrix,
     
     colnames(tagMatrix[[x]]) <- seq_len(dim(tagMatrix[[x]])[2])
     rownames(tagMatrix[[x]]) <- seq_len(dim(tagMatrix[[x]])[1])
-    tagMatrix[[x]] <- tagMatrix[[x]] %>% as.data.frame() %>% 
-      rownames_to_column("sample_ID") %>%
-      pivot_longer(-c(sample_ID),names_to = "coordinate", 
-                   values_to = "values")
-    tagMatrix[[x]]$coordinate <- as.numeric(tagMatrix[[x]]$coordinate)
-    tagMatrix[[x]]$sample_ID <- as.numeric(tagMatrix[[x]]$sample_ID)
+    
+    tagMatrix[[x]] <- mat2df(tagMatrix[[x]])
+    colnames(tagMatrix[[x]]) <- c("values","sample_ID","coordinate")
     
     tagMatrix[[x]]$sample <- x
     return(tagMatrix[[x]])
