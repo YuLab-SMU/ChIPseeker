@@ -43,12 +43,14 @@ Imports:
     dplyr,
     parallel,
     magrittr,
-    RColorBrewer,
     rtracklayer,
     S4Vectors,
     stats,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
-    utils
+    utils,
+    aplot,
+    yulab.utils,
+    tibble
 Suggests:
     clusterProfiler,
     ggimage,
@@ -59,8 +61,7 @@ Suggests:
     org.Hs.eg.db,
     knitr,
     rmarkdown,
-    testthat,
-    tibble
+    testthat
 Remotes:
     GuangchuangYu/enrichplot
 URL: https://onlinelibrary.wiley.com/share/author/GYJGUBYCTRMYJFN2JFZZ?target=10.1002/cpz1.585

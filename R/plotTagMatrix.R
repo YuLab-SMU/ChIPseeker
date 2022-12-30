@@ -132,6 +132,9 @@ plotPeakProf <- function(tagMatrix = NULL,
       
     }else{
       
+      if(is.null(windows_name) && !is.null(names(TxDb)))
+        windows_name <- names(TxDb)
+      
       plotPeakProf_MultiWindows(peak = peak,
                                 upstream = upstream,
                                 downstream = downstream,
@@ -451,7 +454,6 @@ plotAvgProf2 <- function(peak, weightCol = NULL, TxDb = NULL,
                 facet = facet,
                 free_y = free_y,
                 verbose = verbose, 
-                nbin = 800,
                 ignore_strand = ignore_strand,
                 ...)
   
@@ -1613,23 +1615,37 @@ plotMultiProf.binning.internal <- function(tagMatrix,
 ##'
 ##' @title tagHeatmap
 ##' @param tagMatrix tagMatrix or a list of tagMatrix
-##' @param xlim xlim
 ##' @param xlab xlab
 ##' @param ylab ylab
 ##' @param title title
-##' @param color color
+##' @param palette palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}
+##' @param nrow the nrow of plotting a list of peak
+##' @param ncol the ncol of plotting a list of peak
 ##' @return figure
 ##' @export
 ##' @author G Yu
-tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="red") {
+tagHeatmap <- function(tagMatrix, 
+                       xlab="", 
+                       ylab="", 
+                       title=NULL, 
+                       palette="RdBu",
+                       nrow = NULL,
+                       ncol = NULL) {
   listFlag <- FALSE
   if (is(tagMatrix, "list")) {
     listFlag <- TRUE
   }
-  peakHeatmap.internal2(tagMatrix, xlim, listFlag, color, xlab, ylab, title)
+  peakHeatmap.internal2(tagMatrix = tagMatrix, 
+                        listFlag = listFlag, 
+                        palette = palette, 
+                        xlab = xlab, 
+                        ylab = ylab, 
+                        title = title,
+                        ncol = ncol,
+                        nrow = nrow)
 }
 
-##' plot the heatmap of peaks align to flank sequences of TSS
+##' plot the heatmap of peaks 
 ##'
 ##'
 ##' @title peakHeatmap
@@ -1641,15 +1657,25 @@ tagHeatmap <- function(tagMatrix, xlim, xlab="", ylab="", title=NULL, color="red
 ##' @param xlab xlab
 ##' @param ylab ylab
 ##' @param title title
-##' @param color color
+##' @param palette palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}
 ##' @param verbose print message or not
+##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'
+##' @param type one of "start_site", "end_site", "body"
+##' @param nbin the amount of nbines 
+##' @param ignore_strand ignore the strand information or not
+##' @param windows a collection of region
+##' @param nrow the nrow of plotting a list of peak
+##' @param ncol the ncol of plotting a list of peak
 ##' @return figure
 ##' @export
 ##' @author G Yu
 peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
                         upstream=1000, downstream=1000,
                         xlab="", ylab="", title=NULL,
-                        color=NULL, verbose=TRUE) {
+                        palette=NULL, verbose=TRUE,
+                        by="gene", type="start_site",
+                        nbin = NULL,ignore_strand = FALSE,
+                        windows,ncol = NULL, nrow = NULL) {
   listFlag <- FALSE
   if ( is(peak, "list") ) {
     listFlag <- TRUE
@@ -1661,20 +1687,44 @@ peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
     cat(">> preparing promoter regions...\t",
         format(Sys.time(), "%Y-%m-%d %X"), "\n")
   }
-  promoter <- getBioRegion(TxDb=TxDb,
-                           upstream=upstream,
-                           downstream=downstream,
-                           by="gene",
-                           type="start_site")
   
   if (verbose) {
     cat(">> preparing tag matrix...\t\t",
         format(Sys.time(), "%Y-%m-%d %X"), "\n")
   }
+  
+  if(missing(windows)){
+    windows <- getBioRegion(TxDb=TxDb,
+                            upstream=upstream,
+                            downstream=downstream,
+                            by=by,
+                            type=type)
+  }
+  
+  
   if (listFlag) {
-    tagMatrix <- lapply(peak, getTagMatrix, weightCol=weightCol, windows=promoter)
+    tagMatrix <- lapply(peak, getTagMatrix, 
+                        weightCol=weightCol, 
+                        windows = windows,
+                        upstream=upstream,
+                        downstream=downstream,
+                        TxDb = TxDb,
+                        nbin = nbin,
+                        verbose = verbose,
+                        ignore_strand= ignore_strand)
+    
+    names(tagMatrix) <- names(peak)
+    
   } else {
-    tagMatrix <- getTagMatrix(peak, weightCol = weightCol, windows = promoter)
+    tagMatrix <- getTagMatrix(peak, 
+                              weightCol=weightCol, 
+                              windows = windows,
+                              TxDb = TxDb,
+                              upstream=upstream,
+                              downstream=downstream,
+                              nbin = nbin,
+                              verbose = verbose,
+                              ignore_strand= ignore_strand)
   }
   
   if (verbose) {
@@ -1682,18 +1732,34 @@ peakHeatmap <- function(peak, weightCol=NULL, TxDb=NULL,
         format(Sys.time(), "%Y-%m-%d %X"), "\n")
   }
   
-  xlim=c(-upstream, downstream)
+  xlim <- NULL
   
-  peakHeatmap.internal2(tagMatrix, xlim, listFlag, color, xlab, ylab, title)
+  p <- peakHeatmap.internal2(tagMatrix = tagMatrix,
+                             listFlag = listFlag, 
+                             palette = palette, 
+                             xlab = xlab,
+                             ylab = ylab, 
+                             title = title,
+                             nrow = nrow,
+                             ncol = ncol)
   
   if (verbose) {
     cat(">> done...\t\t\t",
         format(Sys.time(), "%Y-%m-%d %X"), "\n")
   }
   invisible(tagMatrix)
+  p
 }
 
-peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, title) {
+##' @importFrom aplot plot_list
+peakHeatmap.internal2 <- function(tagMatrix, 
+                                  listFlag, 
+                                  palette, 
+                                  xlab, 
+                                  ylab, 
+                                  title,
+                                  nrow,
+                                  ncol) {
   if ( is.null(xlab) || is.na(xlab))
     xlab <- ""
   if ( is.null(ylab) || is.na(ylab))
@@ -1701,12 +1767,12 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
   
   if (listFlag) {
     nc <- length(tagMatrix)
-    if ( is.null(color) || is.na(color) ) {
-      cols <- getCols(nc)
-    } else if (length(color) != nc) {
-      cols <- rep(color[1], nc)
+    if ( is.null(palette) || is.na(palette) ) {
+      palette <- getPalette(nc)
+    } else if (length(palette) != nc) {
+      palette <- rep(palette[1], nc)
     } else {
-      cols <- color
+      palette <- palette
     }
     
     if (is.null(title) || is.na(title))
@@ -1720,32 +1786,749 @@ peakHeatmap.internal2 <- function(tagMatrix, xlim, listFlag, color, xlab, ylab, 
     if (length(title) != nc) {
       title <- rep(title[1], nc)
     }
-    par(mfrow=c(1, nc))
+    
+    tmp <- list()
+    
     for (i in 1:nc) {
-      peakHeatmap.internal(tagMatrix[[i]], xlim, cols[i], xlab[i], ylab[i], title[i])
+      
+      p <- peakHeatmap.internal(tagMatrix = tagMatrix[[i]], 
+                                palette = palette[i], 
+                                xlab = xlab[i], 
+                                ylab = ylab[i], 
+                                title= title[i])
+      
+      p <- p + theme(plot.title = element_text(hjust = 0.5))
+      
+      tmp[[i]] <- p
     }
+    
+    if(is.null(nrow) && is.null(ncol))
+      nrow <- 1
+    
+    p <- plot_list(gglist = tmp,
+                   ncol = ncol,
+                   nrow = nrow)
+    return(p)
+    
   } else {
-    if (is.null(color) || is.na(color))
-      color <- "red"
+    if (is.null(palette) || is.na(palette))
+      palette <- "RdBu"
     if (is.null(title) || is.na(title))
       title <- ""
-    peakHeatmap.internal(tagMatrix, xlim, color, xlab, ylab, title)
+    peakHeatmap.internal(tagMatrix = tagMatrix, 
+                         palette = palette, 
+                         xlab = xlab, 
+                         ylab = ylab, 
+                         title = title)
   }
 }
 
 
 ##' @import BiocGenerics
-##' @importFrom grDevices colorRampPalette
-peakHeatmap.internal <- function(tagMatrix, xlim=NULL, color="red", xlab="", ylab="", title="") {
+##' @importFrom yulab.utils mat2df
+##' @importFrom ggplot2 ggplot
+##' @importFrom ggplot2 aes
+##' @importFrom ggplot2 geom_tile
+##' @importFrom ggplot2 scale_fill_distiller
+##' @importFrom ggplot2 theme
+##' @importFrom ggplot2 element_blank
+##' @importFrom ggplot2 labs
+##' @importFrom ggplot2 scale_x_continuous
+peakHeatmap.internal <- function(tagMatrix, 
+                                 palette="RdBu", 
+                                 xlab="", 
+                                 ylab="",
+                                 title="") {
+  
+  upstream <- attr(tagMatrix, "upstream")
+  downstream <- attr(tagMatrix, "downstream")
+  binning_Flag <- attr(tagMatrix,"is.binning")
+  type <- attr(tagMatrix,"type")
+  
+  body_Flag <- FALSE
+  if(type == "body"){
+    body_Flag <- TRUE
+    label <- attr(tagMatrix,"label")
+  }
+  
+  if(binning_Flag){
+    nbin <- dim(tagMatrix)[2]
+  }
+  
   tagMatrix <- t(apply(tagMatrix, 1, function(x) x/max(x)))
   ii <- order(rowSums(tagMatrix))
   tagMatrix <- tagMatrix[ii,]
-  cols <- colorRampPalette(c("white",color))(200)
-  if (is.null(xlim)) {
-    xlim <- 1:ncol(tagMatrix)
-  } else if (length(xlim) == 2) {
-    xlim <- seq(xlim[1], xlim[2])
+  
+  colnames(tagMatrix) <- seq_len(dim(tagMatrix)[2])
+  rownames(tagMatrix) <- seq_len(dim(tagMatrix)[1])
+  
+  tagMatrix <- mat2df(tagMatrix)
+  colnames(tagMatrix) <- c("values","sample_ID","coordinate")
+
+  sample_ID <- coordinate <- NULL
+  
+  p <- ggplot(tagMatrix, aes(x = coordinate,y = sample_ID)) + 
+    geom_tile(aes(fill = values)) +
+    scale_fill_distiller(palette = palette)  +
+    theme(axis.text.y=element_blank(),
+          axis.ticks.y=element_blank(),
+          axis.line.y = element_blank(),
+          panel.grid=element_blank(),
+          panel.background = element_blank()) +
+    labs(x = xlab, y = ylab, title = title)
+
+  if(body_Flag){
+    
+    if(inherits(upstream, 'rel')){
+      
+      p <- p + scale_x_continuous(breaks=c(1, 
+                                           floor(nbin*(as.numeric(upstream)*100/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           floor(nbin*((as.numeric(upstream)*100+25)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           floor(nbin*((as.numeric(upstream)*100+50)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           floor(nbin*((as.numeric(upstream)*100+75)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           floor(nbin*((as.numeric(upstream)*100+100)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           nbin),
+                                  labels=c(paste0("-",as.numeric(upstream)*100,"%"), 
+                                           label[1],
+                                           "25%",
+                                           "50%",
+                                           "75%",
+                                           label[2],
+                                           paste0("+",as.numeric(downstream)*100,"%")))
+    }
+    
+    if(is.null(upstream)){
+      p <- p + scale_x_continuous(breaks=c(1, 
+                                           floor(nbin*0.25),
+                                           floor(nbin*0.5),
+                                           floor(nbin*0.75),
+                                           nbin),
+                                  labels=c(label[1], 
+                                           "25%",
+                                           "50%",
+                                           "75%",
+                                           label[2]))
+    }
+    
+    if(!is.null(upstream) && !inherits(upstream, 'rel')){
+      
+      upstreamPer <- floor(upstream/1000)*0.1
+      downstreamPer <- floor(downstream/1000)*0.1
+      
+      p <- p + scale_x_continuous(breaks=c(1, 
+                                           floor(nbin*(upstreamPer/(1+upstreamPer+downstreamPer))),
+                                           floor(nbin*((upstreamPer+0.25)/(1+upstreamPer+downstreamPer))),
+                                           floor(nbin*((upstreamPer+0.5)/(1+upstreamPer+downstreamPer))),
+                                           floor(nbin*((upstreamPer+0.75)/(1+upstreamPer+downstreamPer))),
+                                           floor(nbin*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
+                                           nbin),
+                                  labels=c(paste0("-",upstream,"bp"), 
+                                           label[1],
+                                           "25%",
+                                           "50%",
+                                           "75%",
+                                           label[2],
+                                           paste0(downstream,"bp")))
+    }
+    
+    p <- p + scale_y_continuous(expand = c(0,0))
+    return(p)
+    
   }
-  image(x=xlim, y=1:nrow(tagMatrix),z=t(tagMatrix),useRaster=TRUE, col=cols, yaxt="n", ylab="", xlab=xlab, main=title)
+  
+  if(binning_Flag){
+    
+    p <- p + scale_x_continuous(breaks = c(1,
+                                           floor(nbin*(downstream*0.5/(downstream+upstream))),
+                                           floor(nbin*(downstream/(downstream+upstream))),
+                                           floor(nbin*((downstream + upstream*0.5)/(downstream+upstream))),
+                                           nbin),
+                                labels = c((-1*downstream),
+                                           floor(-1*downstream*0.5),
+                                           0,
+                                           floor(upstream*0.5),
+                                           upstream))
+  }else{
+    
+    p <- p + scale_x_continuous(breaks = c(1,
+                                           floor(downstream*0.5),
+                                           (downstream + 1),
+                                           (downstream + 1 + floor(upstream * 0.5)), 
+                                           upstream+downstream+1),
+                                labels = c((-1*downstream),
+                                           floor(-1*downstream*0.5),
+                                           0,
+                                           floor(upstream*0.5),
+                                           upstream))    
+    
+  }
+  
+  p <- p + scale_y_continuous(expand = c(0,0))
+  
+  p
 }
 
+##' plot the heatmap of peaks align to a sets of regions
+##'
+##'
+##' @title peakHeatmap
+##' @param peak peak file or GRanges object
+##' @param weightCol column name of weight
+##' @param TxDb TxDb object
+##' @param upstream upstream position
+##' @param downstream downstream position
+##' @param xlab xlab
+##' @param ylab ylab
+##' @param title title
+##' @param palette palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}
+##' @param verbose print message or not
+##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'
+##' @param type one of "start_site", "end_site", "body"
+##' @param nbin the amount of nbines 
+##' @param ignore_strand ignore the strand information or not
+##' @param windows_name the name for each window, which will also be showed in the picture as labels
+##' @param nrow the nrow of plotting a list of peak
+##' @param ncol the ncol of plotting a list of peak
+##' @param facet_label_text_size the size of facet label text
+##' @importFrom ggplot2 ggplot
+##' @importFrom ggplot2 aes
+##' @importFrom ggplot2 geom_tile
+##' @importFrom ggplot2 scale_fill_distiller
+##' @importFrom ggplot2 theme
+##' @importFrom ggplot2 element_blank
+##' @importFrom ggplot2 labs
+##' @importFrom ggplot2 scale_x_continuous
+##' @return figure
+##' @export
+peakHeatmap_multiple_Sets <- function(peak, 
+                                      weightCol=NULL,
+                                      TxDb=NULL,
+                                      upstream=1000, 
+                                      downstream=1000,
+                                      xlab="", 
+                                      ylab="", 
+                                      title=NULL,
+                                      palette=NULL, 
+                                      verbose=TRUE,
+                                      by="gene", 
+                                      type="start_site",
+                                      nbin = NULL,
+                                      ignore_strand = FALSE,
+                                      windows_name = NULL,
+                                      ncol = NULL,
+                                      nrow = NULL,
+                                      facet_label_text_size = 12){
+  listFlag <- FALSE
+  if ( is(peak, "list") ) {
+    listFlag <- TRUE
+    if (is.null(names(peak)))
+      stop("peak should be a peak file or a name list of peak files...")
+  }
+  
+  if (verbose) {
+    cat(">> preparing promoter regions...\t",
+        format(Sys.time(), "%Y-%m-%d %X"), "\n")
+  }
+  
+  
+  ## check type
+  if(length(type) != 1){
+    stop("It should be only one type...")
+  }
+  
+  if(is.null(windows_name) && !is.null(names(TxDb)))
+    windows_name <- names(TxDb)
+  
+  ## make the window name
+  if (is.null(windows_name)) {
+    nn <- by
+    warning("set the name automatically to ", paste(nn, collapse=' '))
+    windows_name <- nn
+  }else{
+    if (length(windows_name) != length(by)) {
+      stop("the length of the window name and the by should be equal...")
+    }
+  }
+  
+  if ( is(peak, "list") ) {
+    tagMatrix <- lapply(peak, getTagMatrix2,
+                        upstream=upstream,
+                        downstream=downstream,
+                        windows_name=windows_name,
+                        type=type,
+                        by=by,
+                        TxDb=TxDb,
+                        weightCol = weightCol, 
+                        nbin = nbin,
+                        verbose = verbose,
+                        ignore_strand= ignore_strand)
+  } else {
+    tagMatrix <- getTagMatrix2(peak=peak, 
+                               upstream=upstream,
+                               downstream=downstream,
+                               windows_name=windows_name,
+                               type=type,
+                               by=by,
+                               TxDb=TxDb,
+                               weightCol = weightCol, 
+                               nbin = nbin,
+                               verbose = verbose,
+                               ignore_strand= ignore_strand)
+  }
+  
+  if(listFlag){
+    
+    nc <- length(tagMatrix)
+    if ( is.null(palette) || is.na(palette) ) {
+      palette <- getPalette(nc)
+    } else if (length(palette) != nc) {
+      palette <- rep(palette[1], nc)
+    } else {
+      palette <- palette
+    }
+    
+    if (is.null(title) || is.na(title))
+      title <- names(tagMatrix)
+    if (length(xlab) != nc) {
+      xlab <- rep(xlab[1], nc)
+    }
+    if (length(ylab) != nc) {
+      ylab <- rep(ylab[1], nc)
+    }
+    if (length(title) != nc) {
+      title <- rep(title[1], nc)
+    }
+    
+    tmp <- list()
+    
+    for (i in 1:nc) {
+      
+      p <- peakHeatmap_multiple_Sets.internal(tagMatrix = tagMatrix[[i]],
+                                              upstream=upstream, 
+                                              downstream=downstream,
+                                              xlab=xlab[[i]], 
+                                              ylab=ylab[[i]], 
+                                              title=title[[i]],
+                                              palette=palette[[i]], 
+                                              ncol = ncol,
+                                              nrow = nrow,
+                                              facet_label_text_size = facet_label_text_size)
+      
+      p <- p + theme(plot.title = element_text(hjust = 0.5))
+      
+      tmp[[i]] <- p
+    }
+    
+    if(is.null(nrow) && is.null(ncol))
+      nrow <- 1
+    
+    p <- plot_list(gglist = tmp,
+                   ncol = ncol,
+                   nrow = nrow)
+    
+  }else{
+    
+    if (is.null(palette) || is.na(palette))
+      palette <- "RdBu"
+    if (is.null(title) || is.na(title))
+      title <- ""
+    
+    p <- peakHeatmap_multiple_Sets.internal(tagMatrix = tagMatrix,
+                                            upstream=upstream, 
+                                            downstream=downstream,
+                                            xlab=xlab, 
+                                            ylab=ylab, 
+                                            title=title,
+                                            palette=palette, 
+                                            ncol = ncol,
+                                            nrow = nrow,
+                                            facet_label_text_size = facet_label_text_size)
+    
+  }
+  
+  return(p)
+  
+}
+
+
+##' @importFrom yulab.utils mat2df
+##' @importFrom ggplot2 ggplot
+##' @importFrom ggplot2 aes
+##' @importFrom ggplot2 geom_tile
+##' @importFrom ggplot2 scale_fill_distiller
+##' @importFrom ggplot2 theme
+##' @importFrom ggplot2 element_blank
+##' @importFrom ggplot2 labs
+##' @importFrom ggplot2 scale_x_continuous
+##' @importFrom ggplot2 facet_grid
+##' @importFrom ggplot2 element_text
+##' @importFrom ggplot2 element_blank
+peakHeatmap_multiple_Sets.internal <- function(tagMatrix,
+                                               upstream=1000, 
+                                               downstream=1000,
+                                               xlab="", 
+                                               ylab="", 
+                                               title=NULL,
+                                               palette=NULL, 
+                                               ncol = NULL,
+                                               nrow = NULL,
+                                               facet_label_text_size = 12){
+
+  binning_Flag <- attr(tagMatrix[[1]],"is.binning")
+  if(binning_Flag) nbin <- dim(tagMatrix[[1]])[2]
+  
+  type <- attr(tagMatrix,"type")
+  body_Flag <- FALSE
+  if(attr(tagMatrix[[1]],"type") == "body"){
+    body_Flag <- TRUE
+    label <- attr(tagMatrix,"label")
+  }
+  
+  name_of_list <- as.list(names(tagMatrix))
+  
+  peak_list <- lapply(name_of_list,function(x){
+    
+    tagMatrix[[x]] <- t(apply(tagMatrix[[x]], 1, function(x) x/max(x)))
+    ii <- order(rowSums(tagMatrix[[x]]))
+    tagMatrix[[x]] <- tagMatrix[[x]][ii,]
+    
+    colnames(tagMatrix[[x]]) <- seq_len(dim(tagMatrix[[x]])[2])
+    rownames(tagMatrix[[x]]) <- seq_len(dim(tagMatrix[[x]])[1])
+    
+    tagMatrix[[x]] <- mat2df(tagMatrix[[x]])
+    colnames(tagMatrix[[x]]) <- c("values","sample_ID","coordinate")
+    
+    tagMatrix[[x]]$sample <- x
+    return(tagMatrix[[x]])
+  })
+  
+  peak_df <- list_to_dataframe(peak_list)
+  
+  sample_ID <- coordinate <- NULL
+  
+  p <- ggplot(peak_df, aes(x = coordinate,y = sample_ID)) + 
+    geom_tile(aes(fill = values)) +
+    scale_fill_distiller(palette = palette)  +
+    theme(axis.text.y=element_blank(),
+          axis.ticks.y=element_blank(),
+          axis.line.y = element_blank(),
+          panel.grid=element_blank(),
+          panel.background = element_blank()) +
+    labs(x = xlab, y = ylab, title = title)
+  
+  if(body_Flag){
+    
+    if(inherits(upstream, 'rel')){
+      
+      p <- p + scale_x_continuous(breaks=c(1, 
+                                           floor(nbin*(as.numeric(upstream)*100/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           floor(nbin*((as.numeric(upstream)*100+25)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           floor(nbin*((as.numeric(upstream)*100+50)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           floor(nbin*((as.numeric(upstream)*100+75)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           floor(nbin*((as.numeric(upstream)*100+100)/(100+(as.numeric(upstream)+as.numeric(downstream))*100))),
+                                           nbin),
+                                  labels=c(paste0("-",as.numeric(upstream)*100,"%"), 
+                                           label[1],
+                                           "25%",
+                                           "50%",
+                                           "75%",
+                                           label[2],
+                                           paste0("+",as.numeric(downstream)*100,"%")))
+    }
+    
+    if(is.null(upstream)){
+      p <- p + scale_x_continuous(breaks=c(1, 
+                                           floor(nbin*0.25),
+                                           floor(nbin*0.5),
+                                           floor(nbin*0.75),
+                                           nbin),
+                                  labels=c(label[1], 
+                                           "25%",
+                                           "50%",
+                                           "75%",
+                                           label[2]))
+    }
+    
+    if(!is.null(upstream) && !inherits(upstream, 'rel')){
+      
+      upstreamPer <- floor(upstream/1000)*0.1
+      downstreamPer <- floor(downstream/1000)*0.1
+      
+      p <- p + scale_x_continuous(breaks=c(1, 
+                                           floor(nbin*(upstreamPer/(1+upstreamPer+downstreamPer))),
+                                           floor(nbin*((upstreamPer+0.25)/(1+upstreamPer+downstreamPer))),
+                                           floor(nbin*((upstreamPer+0.5)/(1+upstreamPer+downstreamPer))),
+                                           floor(nbin*((upstreamPer+0.75)/(1+upstreamPer+downstreamPer))),
+                                           floor(nbin*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
+                                           nbin),
+                                  labels=c(paste0("-",upstream,"bp"), 
+                                           label[1],
+                                           "25%",
+                                           "50%",
+                                           "75%",
+                                           label[2],
+                                           paste0(downstream,"bp")))
+    }
+    
+    p <-  p + facet_grid(sample ~ .,switch = "y",space = "free_y",scales = "free_y") +
+      theme(strip.text.y.left = element_text(color = "black",face = "bold",
+                                             size = facet_label_text_size),
+            strip.background = element_blank())
+    
+    return(p)
+    
+  }
+  
+  if(binning_Flag){
+    
+    p <- p + scale_x_continuous(breaks = c(1,
+                                           floor(nbin*(downstream*0.5/(downstream+upstream))),
+                                           floor(nbin*(downstream/(downstream+upstream))),
+                                           floor(nbin*((downstream + upstream*0.5)/(downstream+upstream))),
+                                           nbin),
+                                labels = c((-1*downstream),
+                                           floor(-1*downstream*0.5),
+                                           0,
+                                           floor(upstream*0.5),
+                                           upstream))
+  }else{
+    
+    p <- p + scale_x_continuous(breaks = c(1,
+                                           floor(downstream*0.5),
+                                           (downstream + 1),
+                                           (downstream + 1 + floor(upstream * 0.5)), 
+                                           upstream+downstream+1),
+                                labels = c((-1*downstream),
+                                           floor(-1*downstream*0.5),
+                                           0,
+                                           floor(upstream*0.5),
+                                           upstream))    
+    
+  }
+  
+  p <-  p + facet_grid(sample ~ .,switch = "y",scales = "free_y",space = "free") +
+    theme(strip.text.y.left = element_text(color = "black",face = "bold",
+                                           size = facet_label_text_size),
+          strip.background = element_blank()) +
+    scale_y_continuous(expand = c(0,0))
+  
+  return(p)
+  
+}
+
+
+
+
+##' plot peak heatmap and profile in a picture
+##' 
+##' 
+##' @title peak_Profile_Heatmap
+##' @param peak peak file or GRanges object
+##' @param weightCol column name of weight
+##' @param TxDb TxDb object
+##' @param upstream upstream position
+##' @param downstream downstream position
+##' @param xlab xlab
+##' @param ylab ylab
+##' @param title title
+##' @param palette palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}
+##' @param verbose print message or not
+##' @param by one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'
+##' @param type one of "start_site", "end_site", "body"
+##' @param nbin the amount of nbines 
+##' @param ignore_strand ignore the strand information or not
+##' @param windows_name the name for each window, which will also be showed in the picture as labels
+##' @param nrow the nrow of plotting a list of peak
+##' @param ncol the ncol of plotting a list of peak
+##' @param facet_label_text_size the size of facet label text
+##' @param conf confidence interval
+##' @param facet one of 'none', 'row' and 'column'
+##' @param free_y if TRUE, y will be scaled by AvgProf
+##' @param height_proportion the proportion of profiling picture and heatmap
+##' @importFrom aplot insert_bottom
+##' @importFrom aplot plot_list
+##' @export
+peak_Profile_Heatmap <- function(peak, 
+                                 weightCol=NULL,
+                                 TxDb=NULL,
+                                 upstream=1000, 
+                                 downstream=1000,
+                                 xlab="", 
+                                 ylab="", 
+                                 title=NULL,
+                                 palette=NULL, 
+                                 verbose=TRUE,
+                                 by="gene", 
+                                 type="start_site",
+                                 nbin = NULL,
+                                 ignore_strand = FALSE,
+                                 windows_name = NULL,
+                                 ncol = NULL,
+                                 nrow = NULL,
+                                 facet_label_text_size = 12,
+                                 conf,
+                                 facet = "row",
+                                 free_y = TRUE,
+                                 height_proportion = 4){
+  
+  conf <- if(missingArg(conf)) NA else conf
+  
+  if(is(peak, "list")){
+    
+    nc <- length(peak)
+    
+    tmp <- list()
+    
+    if ( is.null(names(peak)) ) {
+      nn <- paste0("peak", seq_along(peak))
+      warning("input is not a named list, set the name automatically to ", paste(nn, collapse=' '))
+      names(peak) <- nn
+      ## stop("tagMatrix should be a named list...")
+    }
+    
+    if(is.null(palette)) palette <- getPalette(nc)
+    
+    if(is.null(title)) title_of_plot <- names(peak)
+    
+    for (i in 1:nc) {
+      peak_profile <- plotPeakProf(peak = peak[[i]],
+                                   upstream = upstream,
+                                   downstream = downstream,
+                                   conf = conf,
+                                   by = by,
+                                   type = type,
+                                   windows_name = windows_name,
+                                   weightCol = weightCol,
+                                   TxDb = TxDb,
+                                   xlab = xlab,
+                                   ylab = ylab,
+                                   facet = facet,
+                                   free_y = free_y,
+                                   verbose = verbose,
+                                   nbin = nbin,
+                                   ignore_strand = ignore_strand)
+      
+      peak_profile <- peak_profile + labs(title = title_of_plot[i]) +
+        theme(plot.title = element_text(hjust = 0.5))
+      
+      if(length(by) != 1){
+        peak_heatmap <- peakHeatmap_multiple_Sets(peak = peak[[i]], 
+                                                  weightCol=weightCol,
+                                                  TxDb=TxDb,
+                                                  upstream=upstream, 
+                                                  downstream=downstream,
+                                                  xlab=xlab, 
+                                                  ylab=ylab, 
+                                                  title=title,
+                                                  palette=palette[[i]], 
+                                                  verbose=verbose,
+                                                  by=by, 
+                                                  type=type,
+                                                  nbin = nbin,
+                                                  ignore_strand = ignore_strand,
+                                                  windows_name = windows_name,
+                                                  ncol = ncol,
+                                                  nrow = nrow,
+                                                  facet_label_text_size = facet_label_text_size)
+      }else{
+        
+        peak_heatmap <- peakHeatmap(peak[[i]], 
+                                    weightCol=weightCol, 
+                                    TxDb=TxDb,
+                                    upstream=upstream, 
+                                    downstream=downstream,
+                                    xlab=xlab, 
+                                    ylab=ylab, 
+                                    title=title,
+                                    palette=palette[[i]], 
+                                    verbose=verbose,
+                                    by=by, 
+                                    type=type,
+                                    nbin = nbin,
+                                    ignore_strand = ignore_strand,
+                                    ncol = ncol,
+                                    nrow = nrow)
+        
+      }
+      
+      p <- peak_profile %>% 
+        insert_bottom(peak_heatmap,height = height_proportion)
+      
+      tmp[[i]] <- p
+    }
+    
+    if (is.null(ncol) && is.null(nrow))
+      nrow <- 1
+    
+    p <- plot_list(gglist = tmp,
+                   ncol = ncol,
+                   nrow = nrow)
+    
+    return(p)
+    
+  }
+  
+  peak_profile <- plotPeakProf(peak = peak,
+                               upstream = upstream,
+                               downstream = downstream,
+                               conf = conf,
+                               by = by,
+                               type = type,
+                               windows_name = windows_name,
+                               weightCol = weightCol,
+                               TxDb = TxDb,
+                               xlab = xlab,
+                               ylab = ylab,
+                               facet = facet,
+                               free_y = free_y,
+                               verbose = verbose,
+                               nbin = nbin,
+                               ignore_strand = ignore_strand)
+  
+  
+  if(length(by) != 1){
+    peak_heatmap <- peakHeatmap_multiple_Sets(peak = peak, 
+                                              weightCol=weightCol,
+                                              TxDb=TxDb,
+                                              upstream=upstream, 
+                                              downstream=downstream,
+                                              xlab=xlab, 
+                                              ylab=ylab, 
+                                              title=title,
+                                              palette=palette, 
+                                              verbose=verbose,
+                                              by=by, 
+                                              type=type,
+                                              nbin = nbin,
+                                              ignore_strand = ignore_strand,
+                                              windows_name = windows_name,
+                                              ncol = ncol,
+                                              nrow = nrow,
+                                              facet_label_text_size = facet_label_text_size)
+  }else{
+    
+    peak_heatmap <- peakHeatmap(peak = peak, 
+                                weightCol=weightCol, 
+                                TxDb=TxDb,
+                                upstream=upstream, 
+                                downstream=downstream,
+                                xlab=xlab, 
+                                ylab=ylab, 
+                                title=title,
+                                palette=palette, 
+                                verbose=verbose,
+                                by=by, 
+                                type=type,
+                                nbin = nbin,
+                                ignore_strand = ignore_strand,
+                                ncol = ncol,
+                                nrow = nrow)
+    
+  }
+  
+  p <- peak_profile %>% 
+    insert_bottom(peak_heatmap,height = height_proportion)
+  
+
+  return(p)
+}

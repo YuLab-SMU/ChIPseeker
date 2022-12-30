@@ -78,6 +78,15 @@ getCols <- function(n) {
     col3[1:n]
 }
 
+getPalette <- function(n){
+  
+  palette <- c("RdBu", "RdYlGn", "Spectral",
+               "RdYlBu", "PiYG", "PRGn",
+               "PuOr", "BrBG", "RdGy")
+  
+  palette[1:n]
+  
+}
 
 getSgn <- function(data, idx){
     d <- data[idx, ]

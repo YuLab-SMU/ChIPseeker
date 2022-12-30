@@ -93,7 +93,6 @@ plotAnnoPie.csAnno <- function(x,
     annoPie(anno.df, ndigit=ndigit, cex=cex, col=col, legend.position=legend.position, radius=radius, ...)
  }
 
-##' @importFrom RColorBrewer brewer.pal
 ##' @importFrom grDevices colorRampPalette
 ##' @importFrom graphics par
 ##' @importFrom graphics layout
@@ -158,7 +157,7 @@ annoPie3D <- function(anno.df,
 }
 
 getGenomicAnnoStat <- function(peakAnno) {
-    if ( class(peakAnno) == "GRanges" )
+    if(inherits(peakAnno,"GRanges"))
         peakAnno <- as.data.frame(peakAnno)
     anno <- peakAnno$annotation
     ## anno <- sub(" \\(.+", "", anno)

@@ -4,12 +4,18 @@
 \alias{tagHeatmap}
 \title{tagHeatmap}
 \usage{
-tagHeatmap(tagMatrix, xlim, xlab = "", ylab = "", title = NULL, color = "red")
+tagHeatmap(
+  tagMatrix,
+  xlab = "",
+  ylab = "",
+  title = NULL,
+  palette = "RdBu",
+  nrow = NULL,
+  ncol = NULL
+)
 }
 \arguments{
 \item{tagMatrix}{tagMatrix or a list of tagMatrix}
-
-\item{xlim}{xlim}
 
 \item{xlab}{xlab}
 
@@ -17,7 +23,11 @@ tagHeatmap(tagMatrix, xlim, xlab = "", ylab = "", title = NULL, color = "red")
 
 \item{title}{title}
 
-\item{color}{color}
+\item{palette}{palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}}
+
+\item{nrow}{the nrow of plotting a list of peak}
+
+\item{ncol}{the ncol of plotting a list of peak}
 }
 \value{
 figure
