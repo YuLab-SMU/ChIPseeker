@@ -1,5 +1,6 @@
-# ChIPseeker 1.35.0.001
+# ChIPseeker 1.35.1
 
++ use `ggplot` to plot heatmap (2022-12-30, Fri, #203)
 + update startup message to display the 'Current Protocols (2022)' paper. 
 
 # ChIPseeker 1.34.0
