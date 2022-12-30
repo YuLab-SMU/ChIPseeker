@@ -396,7 +396,7 @@ plotPeakProf2(files, upstream = 3000, downstream = 3000, conf = 0.95,
 
 ### Peak heatmaps
 
-```{r eval=TRUE, fig.cap="Heatmap of ChIP peaks among different experiments", fig.align="center", fig.height=8, fig.width=7}
+```{r eval=TRUE, fig.cap="Heatmap of ChIP peaks among different experiments", fig.align="center", fig.height=8, fig.width=16}
 tagHeatmap(tagMatrixList)
 ```
 
