@@ -123,7 +123,7 @@ In the above code, you should notice that tagMatrix is not restricted to TSS reg
 
 ### Heatmap of ChIP binding to TSS regions
 
-```{r fig.cap="Heatmap of ChIP peaks binding to TSS regions", fig.align="center", fig.height=12, fig.width=4}
+```{r fig.cap="Heatmap of ChIP peaks binding to TSS regions", fig.align="center", fig.height=9, fig.width=6}
 tagHeatmap(tagMatrix)
 ```
 
@@ -143,6 +143,55 @@ Users can also use ggplot method to change the details of the figures.
 ```{r eval=FALSE}
 peakHeatmap(files[[4]],TxDb = txdb,nbin = 800,upstream=3000, downstream=3000) +
   scale_fill_distiller(palette = "RdYlGn")
+```
+
+Users can also profile genebody regions with `peakHeatmap()`.
+```{r fig.cap="Heatmap of genebody regions", fig.align="center", fig.height=9, fig.width=6,results='hide'}
+peakHeatmap(peak = files[[4]],
+            TxDb = txdb,
+            upstream = rel(0.2),
+            downstream = rel(0.2),
+            by = "gene",
+            type = "body",
+            nbin = 800)
+```
+
+Sometimes there will be a need to explore the comparison of the peak heatmap over two regions, for example, the following picture is the peak over two gene sets. One possible scenery of using this method is to compare the peak heatmap over up-regulating genes and down-regulating genes. Here `txdb1` and `txdb2` is the simulated gene sets obtain from `TxDb.Hsapiens.UCSC.hg19.knownGene`. Using `peakHeatmap_multiple_Sets()`, accepting `list` object containing different regions information. The length of each part is correlated to the amount of regions.
+```{r fig.cap="Heatmap of over two regions", fig.align="center", fig.height=9, fig.width=6,results='hide'}
+txdb1 <- transcripts(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdb2 <- unlist(fiveUTRsByTranscript(TxDb.Hsapiens.UCSC.hg19.knownGene))[1:10000,]
+
+region_list <- list(geneX = txdb1, geneY = txdb2)
+peakHeatmap_multiple_Sets(peak = files[[4]],
+                          upstream = 1000,downstream = 1000,
+                          by = c("geneX","geneY"),
+                          type = "start_site",
+                          TxDb = region_list,nbin = 800)
+```
+
+We also meet the need of ploting heatmap and peak profiling together.
+```{r fig.cap="Combination of heatmap and peak profiling", fig.align="center", fig.height=9, fig.width=6,results='hide'}
+peak_Profile_Heatmap(peak = files[[4]],
+                     upstream = 1000,
+                     downstream = 1000,
+                     by = "gene",
+                     type = "start_site",
+                     TxDb = txdb,
+                     nbin = 800)
+```
+
+Exploring several regions with heatmap and peak profiling is also supported.
+```{r fig.cap="Combination of heatmap and peak profiling over several regions", fig.align="center", fig.height=12, fig.width=6,results='hide'}
+txdb1 <- transcripts(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdb2 <- unlist(fiveUTRsByTranscript(TxDb.Hsapiens.UCSC.hg19.knownGene))[1:10000,]
+
+region_list <- list(geneX = txdb1, geneY = txdb2)
+peak_Profile_Heatmap(peak = files[[4]],
+                     upstream = 1000,
+                     downstream = 1000,
+                     by = c("geneX","geneY"),
+                     type = "start_site",
+                     TxDb = region_list,nbin = 800)
 ```
 
 ### Average Profile of ChIP peaks binding to TSS region
