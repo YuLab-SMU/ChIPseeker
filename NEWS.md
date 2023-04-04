@@ -1,3 +1,6 @@
+# ChIPseeker 1.35.2
+
++ fixed R check by adding 'prettydoc' to Suggests (2023-04-04, Tue)
 # ChIPseeker 1.35.1
 
 + use `ggplot` to plot heatmap (2022-12-30, Fri, #203)
