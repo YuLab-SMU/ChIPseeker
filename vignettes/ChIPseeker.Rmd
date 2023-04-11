@@ -26,17 +26,8 @@ knitr::opts_chunk$set(tidy         = FALSE,
                       warning      = FALSE,
                       message      = FALSE)
 
-CRANpkg <- function (pkg) {
-    cran <- "https://CRAN.R-project.org/package"
-    fmt <- "[%s](%s=%s)"
-    sprintf(fmt, pkg, cran, pkg)
-}
-
-Biocpkg <- function (pkg) {
-    sprintf("[%s](http://bioconductor.org/packages/%s)", pkg, pkg)
-}
-
-Biocannopkg <- Biocpkg
+library(yulab.utils)
+Biocannopkg <- yulab.utils::Biocpkg
 ```
 
 ```{r echo=FALSE, results='hide', message=FALSE}
@@ -304,7 +295,7 @@ peakAnno <- annotatePeak(files[[4]], tssRegion=c(-3000, 3000),
 ```
 
 Note that it would also be possible to use Ensembl-based `EnsDb` annotation 
-databases created by the `r BiocStyle::Biocpkg("ensembldb")` package for the
+databases created by the `r Biocpkg("ensembldb")` package for the
 peak annotations by providing it with the `TxDb` parameter. Since UCSC-style 
 chromosome names are used we have to change the style of the chromosome names
 from *Ensembl* to *UCSC* in the example below.
