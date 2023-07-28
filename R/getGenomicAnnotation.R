@@ -191,8 +191,8 @@ getGenomicAnnotation <- function(peaks,
                 }else{
                     lbs <- paste("Downstream (", i-1, "-", i, "kb)", sep="")
                 }
+		annotation[j] <- lbs
             }
-            annotation[j] <- lbs
         }
         
         ## downstream (dsd/1000) kb - dsd bp
