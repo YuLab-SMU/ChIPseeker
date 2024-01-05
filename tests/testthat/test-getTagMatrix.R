@@ -1,202 +1,206 @@
-# library(ChIPseeker)
-# library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+testing <- getOption(".yulab_check_ChIPseeker", default = FALSE)
 
-# context("test getTagMatrix() and related functions")
+if(testing){
+    library(ChIPseeker)
+    library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 
-# test_that("getBioRegion function", {
-  
-#   # test three kinds of regions derived from getBioRegion()
-#   txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-  
-#   gene_start <- getBioRegion(TxDb = txdb,
-#                              upstream = 1000,
-#                              downstream = 1000,
-#                              by = 'gene',
-#                              type = "start_site")
-#   expect_is(gene_start,"GRanges")
-  
-#   gene_end <- getBioRegion(TxDb = txdb,
-#                            upstream = 1000,
-#                            downstream = 1000,
-#                            by = 'gene',
-#                            type = "end_site")
-#   expect_is(gene_end,"GRanges")
-  
-#   gene_body <- getBioRegion(TxDb = txdb,
-#                             upstream = 1000,
-#                             downstream = 1000,
-#                             by = 'gene',
-#                             type = "body")
-#   expect_is(gene_body,"GRanges")
-  
-#   })
+    context("test getTagMatrix() and related functions")
 
-# test_that("getPromoters functions",{
+    test_that("getBioRegion function", {
   
-#   # test two kinds of regions derived from getPromoters
-#   txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+        # test three kinds of regions derived from getBioRegion()
+        txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
   
-#   gene <- getPromoters(TxDb=txdb,
-#                        upstream=1000,
-#                        downstream=1000,
-#                        by = "gene")
+        gene_start <- getBioRegion(TxDb = txdb,
+                                   upstream = 1000,
+                                   downstream = 1000,
+                                   by = 'gene',
+                                   type = "start_site")
+        expect_is(gene_start,"GRanges")
   
-#   transcript <- getPromoters(TxDb=txdb,
-#                              upstream=1000,
-#                              downstream=1000,
-#                              by = "transcript")
+        gene_end <- getBioRegion(TxDb = txdb,
+                                 upstream = 1000,
+                                 downstream = 1000,
+                                 by = 'gene',
+                                 type = "end_site")
+        expect_is(gene_end,"GRanges")
   
-#   expect_is(gene,"GRanges")
-#   expect_is(transcript,"GRanges")
+        gene_body <- getBioRegion(TxDb = txdb,
+                                  upstream = 1000,
+                                  downstream = 1000,
+                                  by = 'gene',
+                                  type = "body")
+        expect_is(gene_body,"GRanges")
   
-# })
+    })
 
-# test_that("makeBioRegionFromGranges function",{
+    test_that("getPromoters functions",{
   
-#   # we consider transcript region as enhancer region
-#   # and make self-made granges object
-#   # they can be the same in the form of granges object
-#   txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-#   enhancer <- transcripts(txdb)[1:5000,]
+        # test two kinds of regions derived from getPromoters
+        txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
   
-#   ## we test three kinds of region, start_site, end_site and body
-#   enhancer_body <- makeBioRegionFromGranges(gr = enhancer,
-#                                             by = "enhancer",
-#                                             type = "body")
+        gene <- getPromoters(TxDb=txdb,
+                             upstream=1000,
+                             downstream=1000,
+                             by = "gene")
+        
+        transcript <- getPromoters(TxDb=txdb,
+                                   upstream=1000,
+                                   downstream=1000,
+                                   by = "transcript")
   
-#   enhancer_start <- makeBioRegionFromGranges(gr = enhancer,
-#                                              by = "enhancer",
-#                                              type = "start_site",
-#                                              upstream = 1000,
-#                                              downstream = 1000)
+        expect_is(gene,"GRanges")
+        expect_is(transcript,"GRanges")
   
-#   enhancer_end <- makeBioRegionFromGranges(gr = enhancer,
-#                                            by = "enhancer",
-#                                            type = "end_site",
-#                                            upstream = 1000,
-#                                            downstream = 1000)
-  
-#   expect_is(enhancer_body,"GRanges")
-#   expect_is(enhancer_start,"GRanges")
-#   expect_is(enhancer_end,"GRanges")
-  
-#   ## test the label
-#   expect_equal(attr(enhancer_body,'label'),c("enhancer_SS","enhancer_TS"))
-#   expect_equal(attr(enhancer_start,'label'),"enhancer_SS")
-#   expect_equal(attr(enhancer_end,'label'),"enhancer_TS")
-  
-# })
+    })
 
-# test_that("getTagMatrix function for single peak file",{
+    test_that("makeBioRegionFromGranges function",{
   
-#   peak <- getSampleFiles()[[4]]
-#   txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+        # we consider transcript region as enhancer region
+        # and make self-made granges object
+        # they can be the same in the form of granges object
+        txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+        enhancer <- transcripts(txdb)[1:5000,]
   
-#   # make the window by getBioRegion()
-#   gene_start <- getBioRegion(TxDb = txdb,
-#                              upstream = 1000,
-#                              downstream = 1000,
-#                              by = 'gene',
-#                              type = "start_site")
+        ## we test three kinds of region, start_site, end_site and body
+        enhancer_body <- makeBioRegionFromGranges(gr = enhancer,
+                                                  by = "enhancer",
+                                                  type = "body")
   
-#   # make the window by makeBioRegionFromGranges()
-#   enhancer <- transcripts(txdb)[1:5000,]
+        enhancer_start <- makeBioRegionFromGranges(gr = enhancer,
+                                                   by = "enhancer",
+                                                   type = "start_site",
+                                                   upstream = 1000,
+                                                   downstream = 1000)
   
-#   enhancer_body <- makeBioRegionFromGranges(gr = enhancer,
-#                                             by = "enhancer",
-#                                             type = "body")
+        enhancer_end <- makeBioRegionFromGranges(gr = enhancer,
+                                                 by = "enhancer",
+                                                 type = "end_site",
+                                                 upstream = 1000,
+                                                 downstream = 1000)
   
-#   # test input window parameter
-#   mt1 <- getTagMatrix(peak = peak,
-#                       windows = gene_start,
-#                       weightCol = "V5")
+        expect_is(enhancer_body,"GRanges")
+        expect_is(enhancer_start,"GRanges")
+        expect_is(enhancer_end,"GRanges")
   
-#   expect_is(mt1, "matrix")
+        ## test the label
+        expect_equal(attr(enhancer_body,'label'),c("enhancer_SS","enhancer_TS"))
+        expect_equal(attr(enhancer_start,'label'),"enhancer_SS")
+        expect_equal(attr(enhancer_end,'label'),"enhancer_TS")
   
-#   # without extending flank
-#   mt2_1 <- getTagMatrix(peak = peak,
-#                         windows = enhancer_body,
-#                         weightCol = "V5",
-#                         nbin = 800)
+    })
+
+    test_that("getTagMatrix function for single peak file",{
   
-#   expect_is(mt2_1, "matrix")
+        peak <- getSampleFiles()[[4]]
+        txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+    
+        # make the window by getBioRegion()
+        gene_start <- getBioRegion(TxDb = txdb,
+                                   upstream = 1000,
+                                   downstream = 1000,
+                                   by = 'gene',
+                                   type = "start_site")
   
-#   # extend flank by rel object
-#   mt2_2 <- getTagMatrix(peak = peak,
-#                         windows = enhancer_body,
-#                         weightCol = "V5",
-#                         upstream = rel(0.2),
-#                         downstream = rel(0.2),
-#                         nbin = 800)
+        # make the window by makeBioRegionFromGranges()
+        enhancer <- transcripts(txdb)[1:5000,]
   
-#   expect_is(mt2_2, "matrix")
+        enhancer_body <- makeBioRegionFromGranges(gr = enhancer,
+                                                  by = "enhancer",
+                                                  type = "body")
   
-#   # extend flank by actual number
-#   mt2_3 <- getTagMatrix(peak = peak,
-#                         windows = enhancer_body,
-#                         weightCol = "V5",
-#                         upstream = 1000,
-#                         downstream = 1000,
-#                         nbin = 800)
+        # test input window parameter
+        mt1 <- getTagMatrix(peak = peak,
+                            windows = gene_start,
+                            weightCol = "V5")
   
-#   expect_is(mt2_3, "matrix")
+        expect_is(mt1, "matrix")
   
-#   # test input without window parameter 
+        # without extending flank
+        mt2_1 <- getTagMatrix(peak = peak,
+                              windows = enhancer_body,
+                              weightCol = "V5",
+                              nbin = 800)
   
-#   # make window through txdb object
-#   mt3 <- getTagMatrix(peak = peak,
-#                       weightCol = "V5",
-#                       TxDb = txdb,
-#                       by = "gene",
-#                       type = "start_site",
-#                       upstream = 3000,
-#                       downstream = 3000)
+        expect_is(mt2_1, "matrix")
   
-#   expect_is(mt3, "matrix")
+        # extend flank by rel object
+        mt2_2 <- getTagMatrix(peak = peak,
+                              windows = enhancer_body,
+                              weightCol = "V5",
+                              upstream = rel(0.2),
+                              downstream = rel(0.2),
+                              nbin = 800)
   
-#   # make window through self-made grange object
-#   mt4 <- getTagMatrix(peak = peak,
-#                       weightCol = "V5",
-#                       TxDb = enhancer,
-#                       by = "gene",
-#                       type = "start_site",
-#                       upstream = 1000,
-#                       downstream = 1000)
+        expect_is(mt2_2, "matrix")
   
-#   expect_is(mt4, "matrix")
+        # extend flank by actual number
+        mt2_3 <- getTagMatrix(peak = peak,
+                                windows = enhancer_body,
+                                weightCol = "V5",
+                                upstream = 1000,
+                                downstream = 1000,
+                                nbin = 800)
   
-#   # without extending flank
-#   mt5_1 <- getTagMatrix(peak = peak,
-#                         weightCol = "V5",
-#                         TxDb = txdb,
-#                         by = "gene",
-#                         type = "body",
-#                         nbin = 800)
+        expect_is(mt2_3, "matrix")
   
-#   expect_is(mt5_1, "matrix")
+        # test input without window parameter 
   
-#   # extend flank by rel object
-#   mt5_2 <- getTagMatrix(peak = peak,
-#                         TxDb = enhancer,
-#                         weightCol = "V5",
-#                         by = "enhancer",
-#                         type = "body",
-#                         upstream = rel(0.2),
-#                         downstream = rel(0.2),
-#                         nbin = 800)
+        # make window through txdb object
+        mt3 <- getTagMatrix(peak = peak,
+                            weightCol = "V5",
+                            TxDb = txdb,
+                            by = "gene",
+                            type = "start_site",
+                            upstream = 3000,
+                            downstream = 3000)
   
-#   expect_is(mt5_2, "matrix")
+        expect_is(mt3, "matrix")
   
-#   # extend flank by actual number
-#   mt5_3 <- getTagMatrix(peak = peak,
-#                         TxDb = txdb,
-#                         weightCol = "V5",
-#                         by = "gene",
-#                         type = "body",
-#                         upstream = 1000,
-#                         downstream = 1000,
-#                         nbin = 800)
+        # make window through self-made grange object
+        mt4 <- getTagMatrix(peak = peak,
+                            weightCol = "V5",
+                            TxDb = enhancer,
+                            by = "gene",
+                            type = "start_site",
+                            upstream = 1000,
+                            downstream = 1000)
   
-#   expect_is(mt5_3, "matrix")
+        expect_is(mt4, "matrix")
   
-# })
+        # without extending flank
+        mt5_1 <- getTagMatrix(peak = peak,
+                              weightCol = "V5",
+                              TxDb = txdb,
+                              by = "gene",
+                              type = "body",
+                              nbin = 800)
+  
+        expect_is(mt5_1, "matrix")
+  
+        # extend flank by rel object
+        mt5_2 <- getTagMatrix(peak = peak,
+                              TxDb = enhancer,
+                              weightCol = "V5",
+                              by = "enhancer",
+                              type = "body",
+                              upstream = rel(0.2),
+                              downstream = rel(0.2),
+                              nbin = 800)
+  
+        expect_is(mt5_2, "matrix")
+  
+        # extend flank by actual number
+        mt5_3 <- getTagMatrix(peak = peak,
+                              TxDb = txdb,
+                              weightCol = "V5",
+                              by = "gene",
+                              type = "body",
+                              upstream = 1000,
+                              downstream = 1000,
+                              nbin = 800)
+  
+        expect_is(mt5_3, "matrix")
+  
+    })
+}
