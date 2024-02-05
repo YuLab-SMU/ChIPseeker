@@ -72,4 +72,4 @@ VignetteBuilder: knitr
 ByteCompile: true
 License: Artistic-2.0
 biocViews: Annotation, ChIPSeq, Software, Visualization, MultipleComparison
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0

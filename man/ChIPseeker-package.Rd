@@ -2,22 +2,33 @@
 % Please edit documentation in R/ChIPseeker-package.R
 \docType{package}
 \name{ChIPseeker-package}
-\alias{ChIPseeker-package}
 \alias{ChIPseeker}
-\title{ChIP-SEQ Annotation, Visualization and Comparison}
+\alias{ChIPseeker-package}
+\title{ChIPseeker: ChIPseeker for ChIP peak Annotation, Comparison, and Visualization}
 \description{
-This package is designed for chip-seq data analysis
+This package implements functions to retrieve the nearest genes around the peak, annotate genomic region of the peak, statstical methods for estimate the significance of overlap among ChIP peak data sets, and incorporate GEO database for user to compare the own dataset with those deposited in database. The comparison can be used to infer cooperative regulation and thus can be used to generate hypotheses. Several visualization functions are implemented to summarize the coverage of the peak experiment, average profile and heatmap of peaks binding to TSS regions, genomic annotation, distance to TSS, and overlap of peaks or genes.
 }
-\details{
-\tabular{ll}{ Package: \tab ChIPseeker\cr Type: \tab Package\cr Version: \tab
-1.5.1\cr Date: \tab 27-04-2015\cr biocViews:\tab ChIPSeq,
-Annotation, Software\cr Depends:\tab \cr Imports: \tab methods, ggplot2
-\cr Suggests:\tab clusterProfiler, GOSemSim\cr License: \tab
-Artistic-2.0\cr }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://onlinelibrary.wiley.com/share/author/GYJGUBYCTRMYJFN2JFZZ?target=10.1002/cpz1.585}
+  \item Report bugs at \url{https://github.com/YuLab-SMU/ChIPseeker/issues}
+}
+
 }
 \author{
-Guangchuang Yu
+\strong{Maintainer}: Guangchuang Yu \email{guangchuangyu@gmail.com} (\href{https://orcid.org/0000-0002-6485-8781}{ORCID})
 
-Maintainer: Guangchuang Yu \email{guangchuangyu@gmail.com}
+Other contributors:
+\itemize{
+  \item Ming Li \email{limiang929@gmail.com} [contributor]
+  \item Qianwen Wang \email{treywea@gmail.com} [contributor]
+  \item Yun Yan \email{youryanyun@gmail.com} [contributor]
+  \item Hervé Pagès \email{hpages.on.github@gmail.com} [contributor]
+  \item Michael Kluge \email{michael.kluge@bio.ifi.lmu.de} [contributor]
+  \item Thomas Schwarzl \email{schwarzl@embl.de} [contributor]
+  \item Zhougeng Xu \email{xuzhougeng@163.com} [contributor]
 }
-\keyword{package}
+
+}
+\keyword{internal}
