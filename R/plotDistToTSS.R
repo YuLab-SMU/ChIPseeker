@@ -115,6 +115,8 @@ plotDistToTSS.data.frame <- function(peakDist,
                                      ylab="Binding sites (%) (5'->3')",
                                      title="Distribution of transcription factor-binding loci relative to TSS",
                                      categoryColumn = ".id") {
+    # suppress check() warnings
+    Feature <- .id <- freq <- NULL
 
     distanceBreaks = sort(distanceBreaks)
     hasZero = sum(distanceBreaks == 0)
@@ -129,7 +131,7 @@ plotDistToTSS.data.frame <- function(peakDist,
 
     ## sign containing -1 and 1 for upstream and downstream
     peakDist$sign <- sign(peakDist[,distanceColumn])
-
+  
     ## count frequencies
     if (categoryColumn == 1) {
       peakDist = peakDist |> 
