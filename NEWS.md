@@ -1,3 +1,7 @@
+# ChIPseeker 1.48.0
+
++ Bioconductor RELEASE_3_23 (2026-04-29, Wed)
+
 # ChIPseeker 1.47.1
 
 + fixed issue in 'test-txdb.R' as 'TxDb.Hsapiens.UCSC.hg19.knownGene' changes its transcript ID from UCSC (e.g., uc002qsd.4) to Ensembl (e.g., ENST00000487630.1_3) (2025-11-04, Tue)
