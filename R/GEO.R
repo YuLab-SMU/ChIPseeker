@@ -103,7 +103,6 @@ downloadGEO.internal <- function(info, destDir) {
     }
 }
 
-##' @importFrom utils data
 ## @importFrom GEOmetadb
 ## @importFrom RSQLite dbConnect
 ## @importFrom RSQLite dbGetQuery
