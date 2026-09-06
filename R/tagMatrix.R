@@ -533,7 +533,7 @@ getTagMatrix.internal <- function(peak,
   
   ## get the index of windows, that are reorganized by as(windows, "IntegerRangesList")
   idx.list <- split(1:length(windows),  as.factor(seqnames(windows)))
-  idx <- do.call("c", idx.list)
+  idx <- unlist(idx.list[chr.idx], use.names=FALSE)
   
   rownames(tagMatrix) <- idx
   tagMatrix <- tagMatrix[order(idx),]
@@ -679,6 +679,9 @@ getTagMatrix.binning.internal <- function(peak,
   
   chr.idx <- intersect(names(peak.cov),
                        unique(as.character(seqnames(windows))))
+
+  idx.list <- split(seq_len(length(windows)), as.factor(seqnames(windows)))
+  idx.list <- idx.list[chr.idx]
   
   windows <- as(windows, "IntegerRangesList")[chr.idx]
   attr(windows,'type') <- type
@@ -692,6 +695,7 @@ getTagMatrix.binning.internal <- function(peak,
     index <- viewSums(peakView[[i]])!= 0
     peakView[[i]] <- peakView[[i]][index]
     windows[[i]] <- windows[[i]][index]
+    idx.list[[i]] <- idx.list[[i]][index]
   } 
   
   tagMatrixList <- lapply(peakView, function(x) viewApply(x, as.vector))
@@ -704,6 +708,7 @@ getTagMatrix.binning.internal <- function(peak,
     index <- vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))
     tagMatrixList <- tagMatrixList[index]
     windows <- windows[index]
+    idx.list <- idx.list[index]
     
     ## create a matrix to receive binning results
     tagMatrix <- list()
@@ -772,6 +777,7 @@ getTagMatrix.binning.internal <- function(peak,
       index <- vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))
       tagMatrixList <- tagMatrixList[index]
       windows <- windows[index]
+      idx.list <- idx.list[index]
       
       ## count the amount before filtering
       pre_amount <- 0
@@ -784,6 +790,7 @@ getTagMatrix.binning.internal <- function(peak,
         index <- vapply(tagMatrixList[[i]], function(y) length(y)>min_body_length,FUN.VALUE = logical(1))
         tagMatrixList[[i]] <- tagMatrixList[[i]][index]
         windows[[i]] <- windows[[i]][index]
+        idx.list[[i]] <- idx.list[[i]][index]
       }
       
       ## count the amount after filtering
@@ -908,6 +915,7 @@ getTagMatrix.binning.internal <- function(peak,
       index <- vapply(tagMatrixList, function(x) length(x)>0, FUN.VALUE = logical(1))
       tagMatrixList <- tagMatrixList[index]
       windows <- windows[index]
+      idx.list <- idx.list[index]
       
       ## count the amount before filtering
       pre_amount <- 0
@@ -920,6 +928,7 @@ getTagMatrix.binning.internal <- function(peak,
         index <- vapply(tagMatrixList[[i]], function(y) length(y)>min_body_length,FUN.VALUE = logical(1))
         tagMatrixList[[i]] <- tagMatrixList[[i]][index]
         windows[[i]] <- windows[[i]][index]
+        idx.list[[i]] <- idx.list[[i]][index]
       }
       
       ## count the amount after filtering
@@ -977,6 +986,8 @@ getTagMatrix.binning.internal <- function(peak,
   
   ## combine the results
   tagMatrix <- do.call("rbind",tagMatrix)
+  idx <- unlist(idx.list, use.names=FALSE)
+  tagMatrix <- tagMatrix[order(idx),,drop=FALSE]
   
   return(tagMatrix)
 }
