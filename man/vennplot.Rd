@@ -2,45 +2,103 @@
 % Please edit documentation in R/vennplot.R
 \name{vennplot}
 \alias{vennplot}
-\title{vennplot}
+\title{Plot Venn diagram for overlapping sets}
 \usage{
 vennplot(Sets, by = "gplots", ...)
 }
 \arguments{
-\item{Sets}{a list of object, can be vector or GRanges object}
+\item{Sets}{named list of objects to compare. Each element can be:
+\itemize{
+  \item A vector (e.g., gene IDs, peak names)
+  \item A GRanges object (genomic regions)
+}
+If the list is not named, names will be auto-generated as "Set1", "Set2", etc.}
 
-\item{by}{one of gplots, ggVennDiagram or Vennerable}
+\item{by}{character, plotting method to use. One of:
+\itemize{
+  \item "gplots" (default): Simple black-and-white Venn diagrams
+  \item "ggVennDiagram": Colorful, customizable ggplot2-based diagrams
+  \item "Vennerable": Alternative method (requires Vennerable package)
+}}
 
-\item{...}{extra parameters using ggVennDiagram. Details see \link[ggVennDiagram]{ggVennDiagram}}
+\item{...}{additional parameters passed to \code{ggVennDiagram::ggVennDiagram()}
+when \code{by="ggVennDiagram"}. Common parameters include:
+\itemize{
+  \item \code{show_percentage}: logical, whether to show percentages
+  \item \code{label_alpha}: numeric, transparency of labels
+  \item \code{edge_size}: numeric, size of circle edges
+}
+See \code{\link[ggVennDiagram]{ggVennDiagram}} for all available options}
 }
 \value{
-venn plot that summarize the overlap of peaks
-from different experiments or gene annotation from
-different peak files.
+A Venn diagram plot. The return type depends on the \code{by} parameter:
+  \itemize{
+    \item \code{gplots}: Base R plot (invisible return)
+    \item \code{ggVennDiagram}: ggplot2 object that can be further customized
+    \item \code{Vennerable}: Grid plot (invisible return)
+  }
 }
 \description{
-plot the overlap of a list of object
+The function calculates all possible intersections between sets using the
+\code{overlap()} function, then visualizes the results as a Venn diagram.
+It supports three plotting backends, each with different features:
+\itemize{
+  \item \code{gplots}: Default method, produces simple black-and-white Venn
+        diagrams using the \code{gplots} package
+  \item \code{ggVennDiagram}: Produces colorful, customizable Venn diagrams
+        using ggplot2, allowing full control over colors, labels, and styling
+  \item \code{Vennerable}: Alternative method using the Vennerable package
+        (requires installation from R-Forge)
+}
 }
 \details{
-There are two ways to plot, which users can specify through `by`.
+This function creates Venn diagrams to visualize overlaps between multiple
+sets of objects (e.g., peaks, genes, genomic regions). It supports three
+different plotting methods with different features and customization options.
 
-The first way is to use `gplots` packages, by setting `by = gplots`. This method
-is default method. The venn plot produced through this way has no color.
 
-The second way is to use `ggVennDiagram` packages, by setting `by = ggVennDiagram`. 
-The venn plot produced through this way has colors which can be defined by users using
-ggplot2 grammar e.g.(scale_fill_distiller()). And users can specify any details, like digital number,
-text size and showing percentage or not, by inputting `...` extra parameters.
+The function performs the following steps:
+\enumerate{
+  \item Validates input: ensures the list is named (auto-generates names if
+        missing, e.g., "Set1", "Set2", ...)
+  \item Calculates all possible intersections using \code{overlap()}, which
+        handles both vectors and GRanges objects
+  \item Creates the Venn diagram using the specified method:
+    \itemize{
+      \item \code{gplots}: Uses \code{plot.venn()} with a matrix format
+      \item \code{ggVennDiagram}: Passes sets directly to
+            \code{ggVennDiagram::ggVennDiagram()} with additional parameters
+      \item \code{Vennerable}: Creates a Venn object and plots it
+    }
+}
+
+For GRanges objects, the function uses set intersection to find overlapping
+genomic regions. For vectors, it uses standard set intersection.
 }
 \examples{
-## example not run
-## require(TxDb.Hsapiens.UCSC.hg19.knownGene)
-## txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-## peakfiles <- getSampleFiles()
-## peakAnnoList <- lapply(peakfiles, annotatePeak)
-## names(peakAnnoList) <- names(peakfiles)
-## genes= lapply(peakAnnoList, function(i) as.data.frame(i)$geneId)
-## vennplot(genes)
+\dontrun{
+require(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+peakfiles <- getSampleFiles()
+peakAnnoList <- lapply(peakfiles, annotatePeak, TxDb=txdb)
+names(peakAnnoList) <- names(peakfiles)
+
+## Compare genes from different peak files
+genes <- lapply(peakAnnoList, function(i) as.data.frame(i)$geneId)
+vennplot(genes)
+
+## Use ggVennDiagram for customizable plot
+vennplot(genes, by="ggVennDiagram", show_percentage=TRUE)
+
+## Compare GRanges objects directly
+peaks <- lapply(peakfiles, readPeakFile)
+names(peaks) <- names(peakfiles)
+vennplot(peaks)
+}
+}
+\seealso{
+\code{\link{overlap}} for calculating set intersections,
+  \code{\link{vennplot.peakfile}} for a convenience function for peak files
 }
 \author{
 G Yu

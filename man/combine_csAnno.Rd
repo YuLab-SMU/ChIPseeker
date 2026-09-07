@@ -2,21 +2,69 @@
 % Please edit documentation in R/csAnno.R
 \name{combine_csAnno}
 \alias{combine_csAnno}
-\title{combine_csAnno}
+\title{Combine multiple csAnno objects}
 \usage{
 combine_csAnno(x, ...)
 }
 \arguments{
-\item{x}{csAnno object}
+\item{x}{\code{csAnno} object (first object to combine)}
 
-\item{...}{csAnno objects}
+\item{...}{additional \code{csAnno} objects to combine. At least one additional
+object must be provided}
 }
 \value{
-csAnno object
+A new \code{csAnno} object containing:
+  \itemize{
+    \item All peaks from all input objects combined
+    \item Merged annotation statistics with aggregated frequencies
+    \item Combined detail genomic annotations
+    \item Sum of peak counts from all objects
+  }
+  The \code{tssRegion}, \code{level}, and \code{hasGenomicAnnotation} are
+  inherited from the first object (all must be identical)
 }
 \description{
-Combine csAnno Object
+The function merges multiple \code{csAnno} objects that were created with
+the same annotation parameters (TSS region, level, genomic annotation status).
+It combines all peaks, merges annotation statistics, and creates a unified
+summary. This is useful for comparing or combining results from multiple
+ChIP-seq experiments.
 }
 \details{
+This function combines two or more \code{csAnno} objects into a single
+object, merging their peaks and aggregating annotation statistics.
+
+
+The function performs the following operations:
+\enumerate{
+  \item Validates that all objects are \code{csAnno} instances
+  \item Checks that all objects have the same \code{tssRegion}, \code{level},
+        and \code{hasGenomicAnnotation} values
+  \item Combines all GRanges objects from the \code{anno} slots
+  \item Merges \code{detailGenomicAnnotation} data frames by row binding
+  \item Aggregates annotation statistics by merging and summing frequencies
+        across all objects
+  \item Sums the total peak counts
+}
+
+The resulting object contains all peaks from all input objects with combined
+annotation statistics showing the overall distribution across genomic features.
+}
+\examples{
+\dontrun{
+## Combine two peak annotation results
+combined <- combine_csAnno(peakAnno1, peakAnno2, peakAnno3)
+
+## Visualize combined statistics
+plotAnnoBar(combined)
+}
+}
+\references{
 https://github.com/YuLab-SMU/ChIPseeker/issues/157
+}
+\seealso{
+\code{\link{annotatePeak}} for creating csAnno objects
+}
+\author{
+Guangchuang Yu \url{https://guangchuangyu.github.io}
 }

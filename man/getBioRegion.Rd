@@ -2,7 +2,7 @@
 % Please edit documentation in R/tagMatrix.R
 \name{getBioRegion}
 \alias{getBioRegion}
-\title{getBioRegion}
+\title{Prepare a biological region of selected feature from TxDb}
 \usage{
 getBioRegion(
   TxDb = NULL,
@@ -13,42 +13,70 @@ getBioRegion(
 )
 }
 \arguments{
-\item{TxDb}{TxDb}
+\item{TxDb}{TxDb or EnsDb annotation object. If NULL, will attempt to
+determine from the data}
 
-\item{upstream}{upstream from start site or end site}
+\item{upstream}{numeric, distance in base pairs to extend upstream from start
+site or end site. For \code{body} type, this can extend the 5' flank.
+Default is 1000}
 
-\item{downstream}{downstream from start site or end site}
+\item{downstream}{numeric, distance in base pairs to extend downstream from
+start site or end site. For \code{body} type, this can extend the 3' flank.
+Default is 1000}
 
-\item{by}{one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'}
+\item{by}{character, one of 'gene', 'transcript', 'exon', 'intron', '3UTR',
+'5UTR', 'UTR'. Determines which feature type to extract. Default is "gene"}
 
-\item{type}{one of "start_site", "end_site", "body"}
+\item{type}{character, one of "start_site", "end_site", "body". Determines
+which part of the feature to extract. Default is "start_site"}
 }
 \value{
-GRanges object
+GRanges object containing the extracted regions with attributes:
+  \itemize{
+    \item \code{type}: The region type ("start_site", "end_site", or "body")
+    \item \code{by}: The feature type used
+    \item \code{label}: Generated label for the regions
+    \item \code{upstream}: Upstream distance (for start_site/end_site)
+    \item \code{downstream}: Downstream distance (for start_site/end_site)
+  }
 }
 \description{
-prepare a bioregion of selected feature
+The function extracts genomic regions based on feature type and region type.
+It supports three region types:
+\itemize{
+  \item \code{start_site}: Region around the transcription start site (TSS).
+        For a transcript at chr1:1000-1400, with upstream=100 and downstream=100,
+        this extracts chr1:900-1100 (TSS +/- 100bp)
+  \item \code{end_site}: Region around the transcription termination site (TTS).
+        For a transcript at chr1:1000-1400, with upstream=100 and downstream=100,
+        this extracts chr1:1300-1500 (TTS +/- 100bp)
+  \item \code{body}: The full feature body. For a transcript at chr1:1000-1400,
+        this extracts chr1:1000-1400 (the entire transcript)
+}
 }
 \details{
-this function combined previous functions getPromoters(), getBioRegion() and getGeneBody() in order
-to solve the following issues.
+This function extracts biological regions (promoters, gene bodies, UTRs, etc.)
+from a TxDb or EnsDb annotation object. It provides a unified interface for
+extracting different types of genomic regions.
 
-(1) \url{https://github.com/GuangchuangYu/ChIPseeker/issues/16}
 
-(2) \url{https://github.com/GuangchuangYu/ChIPseeker/issues/87}
+The function supports multiple feature types:
+\itemize{
+  \item \code{gene}: Gene-level regions
+  \item \code{transcript}: Transcript-level regions
+  \item \code{exon}: Exon regions
+  \item \code{intron}: Intron regions
+  \item \code{3UTR}, \code{5UTR}, \code{UTR}: UTR regions
+}
 
-The getBioRegion() function can prevoid a region of interest from
-\code{txdb} object. There are three kinds of regions, \code{start_site},
-\code{end_site} and \code{body}. 
-
-We take transcript region to expain the differences of these three regions.
-tx: chr1 1000 1400. 
-
-\code{body} region refers to the 1000-1400bp.
-
-\code{start_site} region with \code{upstream = 100, downstream = 100} refers to 900-1100bp. 
-
-\code{end_site} region with \code{upstream = 100, downstream = 100} refers to 1300-1500bp.
+For \code{start_site} and \code{end_site} types, the function creates regions
+extending upstream and downstream from the site. For \code{body} type, it
+returns the full feature body. The function handles strand information
+correctly (upstream/downstream are relative to the feature's strand).
+}
+\seealso{
+\code{\link{getPromoters}} for a convenience function to get promoters,
+  \code{\link{makeBioRegionFromGranges}} for creating regions from custom GRanges
 }
 \author{
 Guangchuang Yu, Ming L

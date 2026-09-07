@@ -2,7 +2,7 @@
 % Please edit documentation in R/tagMatrix.R
 \name{getTagMatrix.binning.internal}
 \alias{getTagMatrix.binning.internal}
-\title{getTagMatrix.binning.internal}
+\title{Calculate tag matrix using binning method (internal function)}
 \usage{
 getTagMatrix.binning.internal(
   peak,
@@ -15,25 +15,63 @@ getTagMatrix.binning.internal(
 )
 }
 \arguments{
-\item{peak}{peak peak file or GRanges object}
+\item{peak}{peak file (BED format) or GRanges object containing ChIP-seq peaks}
 
-\item{weightCol}{weightCol column name of weight, default is NULL}
+\item{weightCol}{character, name of a metadata column to use as weights.
+If NULL, all peaks have equal weight. Default is NULL}
 
-\item{windows}{windows a collection of region with equal or not equal size, eg. promoter region, gene region.}
+\item{windows}{GRanges object containing regions. Regions can have variable
+sizes (e.g., gene bodies of different lengths)}
 
-\item{nbin}{the amount of nbines needed to be splited and it should not be more than min_body_length}
+\item{nbin}{integer, number of bins to divide each region into. Should not
+exceed the minimum region length. Default is 800}
 
-\item{upstream}{rel object, NULL or actual number}
+\item{upstream}{numeric, \code{rel()} object, or NULL. Distance to extend
+upstream. For \code{type='body'}, can extend 5' flank. If \code{rel()},
+extends by a fraction of region width. Default is NULL}
 
-\item{downstream}{rel object, NULL or actual number}
+\item{downstream}{numeric, \code{rel()} object, or NULL. Distance to extend
+downstream. For \code{type='body'}, can extend 3' flank. If \code{rel()},
+extends by a fraction of region width. Default is NULL}
 
-\item{ignore_strand}{ignore the strand information or not}
+\item{ignore_strand}{logical, whether to ignore strand information. If FALSE,
+negative strand regions are reverse-complemented. Default is FALSE}
 }
 \value{
-tagMatrix
+A matrix with:
+  \itemize{
+    \item Rows: One per window (regions meeting minimum length requirement)
+    \item Columns: One per bin (\code{nbin} columns)
+    \item Values: Average coverage/signal per bin
+  }
 }
 \description{
-calculate the tagMatrix by binning
-the idea was derived from the function of deeptools
-https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html
+The function divides each region into a fixed number of bins and calculates
+average coverage per bin. This allows handling regions of variable size (e.g.,
+gene bodies of different lengths) by normalizing them to the same number
+of bins. The approach is similar to deeptools computeMatrix
+(\url{https://deeptools.readthedocs.io/en/develop/content/tools/computeMatrix.html}).
+}
+\details{
+This is an internal function that calculates peak coverage using a binning
+approach, inspired by deeptools computeMatrix. It is called by \code{getTagMatrix()}
+when \code{nbin} is specified.
+
+
+The function performs the following steps:
+\enumerate{
+  \item Loads peaks and calculates coverage (optionally weighted)
+  \item Filters windows to those within chromosome boundaries
+  \item Optionally extends windows by \code{upstream} and \code{downstream}
+        (can be relative values using \code{rel()})
+  \item For each window, divides it into \code{nbin} equal-sized bins
+  \item Calculates average coverage per bin
+  \item Creates a matrix with one row per window and one column per bin
+  \item Reverse-complements negative strand regions (if \code{ignore_strand=FALSE})
+  \item Filters out windows shorter than the minimum required length
+}
+
+The binning method is essential for visualizing coverage across variable-length
+regions (e.g., gene bodies), as it normalizes all regions to the same number
+of data points.
 }

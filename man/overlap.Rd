@@ -2,18 +2,46 @@
 % Please edit documentation in R/utilities.R
 \name{overlap}
 \alias{overlap}
-\title{overlap}
+\title{Calculate overlap matrix for sets}
 \usage{
 overlap(Sets)
 }
 \arguments{
-\item{Sets}{a list of objects}
+\item{Sets}{list of objects (e.g., GRanges objects, character vectors, etc.)
+to calculate overlaps for. Each element should support \code{intersect()}
+and \code{length()} methods}
 }
 \value{
-data.frame
+A data.frame with:
+  \itemize{
+    \item One column per set (named after the sets)
+    \item Binary values (0 or 1) indicating which sets are included in each
+          intersection
+    \item A "Weight" column containing the number of elements in each intersection
+  }
+  Rows represent all possible combinations of set intersections
 }
 \description{
-calculate the overlap matrix, which is useful for vennplot
+The function computes the number of elements in each possible intersection
+of the input sets. It handles all combinations of set intersections using
+an inclusion-exclusion principle approach.
+}
+\details{
+This function calculates the overlap matrix for multiple sets, which is
+useful for creating Venn diagrams and understanding set relationships.
+
+
+The function:
+\enumerate{
+  \item Generates all possible combinations of set inclusion/exclusion
+  \item For each combination, calculates the intersection size
+  \item Uses inclusion-exclusion principle to handle overlapping intersections
+  \item Returns a data frame with binary indicators for each set and the
+        intersection size
+}
+
+The function is generic and works with any objects that support \code{intersect()}
+and \code{length()} methods, including GRanges objects.
 }
 \author{
 G Yu

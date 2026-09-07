@@ -10,28 +10,52 @@
 \alias{plotAnnoPie,csAnno-method}
 \alias{upsetplot,csAnno-method}
 \alias{subset,csAnno-method}
-\title{Class "csAnno"
-This class represents the output of ChIPseeker Annotation}
+\title{Class "csAnno"}
 \description{
-Class "csAnno"
-This class represents the output of ChIPseeker Annotation
+The \code{csAnno} class is the main output object from \code{annotatePeak()}.
+It stores annotated peaks as a GRanges object along with metadata about the
+annotation process and summary statistics. This object can be used for
+visualization, further analysis, and conversion to other formats.
+}
+\details{
+This class represents the output of ChIPseeker peak annotation. It contains
+annotated peaks along with their genomic annotations, nearest gene information,
+and annotation statistics.
+
+
+The class contains the following slots:
+\itemize{
+  \item \code{anno}: GRanges object containing all annotated peaks with
+        metadata columns (annotation, geneId, distanceToTSS, etc.)
+  \item \code{tssRegion}: numeric vector of length 2 specifying the TSS
+        region used for promoter annotation (e.g., c(-3000, 3000))
+  \item \code{level}: character, annotation level - either "transcript" or
+        "gene"
+  \item \code{hasGenomicAnnotation}: logical, whether genomic feature
+        annotations (Promoter, Exon, UTR, etc.) were assigned
+  \item \code{detailGenomicAnnotation}: data.frame with logical columns
+        indicating which genomic features each peak overlaps
+  \item \code{annoStat}: data.frame containing annotation statistics showing
+        the percentage of peaks in each genomic feature category
+  \item \code{peakNum}: numeric, total number of peaks that were annotated
+}
 }
 \section{Slots}{
 
 \describe{
-\item{\code{anno}}{annotation}
+\item{\code{anno}}{GRanges object containing annotated peaks with all metadata}
 
-\item{\code{tssRegion}}{TSS region}
+\item{\code{tssRegion}}{numeric vector of length 2, TSS region for promoter annotation}
 
-\item{\code{level}}{transcript or gene}
+\item{\code{level}}{character, annotation level ("transcript" or "gene")}
 
-\item{\code{hasGenomicAnnotation}}{logical}
+\item{\code{hasGenomicAnnotation}}{logical, whether genomic annotations were assigned}
 
-\item{\code{detailGenomicAnnotation}}{Genomic Annotation in detail}
+\item{\code{detailGenomicAnnotation}}{data.frame, detailed genomic annotation matrix}
 
-\item{\code{annoStat}}{annotation statistics}
+\item{\code{annoStat}}{data.frame, annotation statistics summary}
 
-\item{\code{peakNum}}{number of peaks}
+\item{\code{peakNum}}{numeric, total number of annotated peaks}
 }}
 
 \seealso{

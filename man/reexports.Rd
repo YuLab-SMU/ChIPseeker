@@ -12,8 +12,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{GenomicRanges}{\code{\link[GenomicRanges:GRangesList-class]{GRangesList}}}
+  \item{GenomicRanges}{\code{\link[GenomicRanges:GRangesList]{GRangesList()}}}
 
-  \item{ggplot2}{\code{\link[ggplot2:element]{rel}}}
+  \item{ggplot2}{\code{\link[ggplot2:rel]{rel()}}}
 }}
 

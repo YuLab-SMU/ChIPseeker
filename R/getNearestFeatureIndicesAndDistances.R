@@ -1,15 +1,74 @@
-##' get index of features that closest to peak and calculate distance
+##' Get index of nearest features to peaks and calculate distances
 ##'
+##' This function identifies the nearest gene/transcript feature to each peak and
+##' calculates the distance from the peak to the feature's transcription start site (TSS).
 ##'
-##' @title getNearestFeatureIndicesAndDistances
-##' @param peaks peak in GRanges
-##' @param features features in GRanges
-##' @param sameStrand logical, whether find nearest gene in the same strand
-##' @param ignoreOverlap logical, whether ignore overlap of TSS with peak
-##' @param ignoreUpstream logical, if True only annotate gene at the 3' of the peak.
-##' @param ignoreDownstream logical, if True only annotate gene at the 5' of the peak.
-##' @param overlap one of "TSS" or "all"
-##' @return list
+##' @description
+##' The function finds the closest feature to each peak by considering both upstream
+##' and downstream directions. It calculates distances from both the peak start and
+##' peak end to the feature's TSS, then selects the feature with the minimum absolute
+##' distance. The function handles overlaps between peaks and features, with different
+##' behaviors depending on the \code{overlap} parameter.
+##'
+##' @details
+##' The function performs the following steps:
+##' \enumerate{
+##'   \item Resizes features to width=1 (TSS points) for efficient distance calculation
+##'   \item Finds nearest upstream features using \code{follow()} and nearest
+##'         downstream features using \code{precede()}
+##'   \item Calculates distances from both peak start and peak end to each feature's TSS
+##'   \item Selects the feature with the minimum absolute distance (or enforces
+##'         direction based on \code{ignoreUpstream}/\code{ignoreDownstream})
+##'   \item If overlaps are allowed (\code{ignoreOverlap=FALSE}), identifies
+##'         overlapping features and assigns them with distance=0 (for \code{overlap="TSS"})
+##'         or calculates distance from the closer peak end (for \code{overlap="all"})
+##'   \item Returns indices, distances, and filtered peaks (excluding peaks with no
+##'         nearest feature)
+##' }
+##'
+##' Distance calculation is strand-aware: positive values indicate downstream,
+##' negative values indicate upstream. Overlapping peaks get distance=0 if overlap is "TSS".
+##'
+##' @param peaks GRanges object containing genomic ranges of peaks
+##' @param features GRanges object containing genomic features (genes or
+##'   transcripts) to search for nearest features. Typically obtained from
+##'   \code{getGene(TxDb)} or similar functions
+##' @param sameStrand logical, whether to only consider features on the same
+##'   strand as the peak when finding nearest features. If FALSE, searches both
+##'   strands. Default is FALSE
+##' @param ignoreOverlap logical, whether to ignore overlaps between peaks and
+##'   features when finding the nearest feature. If FALSE, overlapping features
+##'   will be prioritized and assigned distance=0 (for TSS overlaps) or calculated
+##'   distance (for full feature overlaps). Default is FALSE
+##' @param ignoreUpstream logical, if TRUE, only considers features downstream
+##'   (3' end) of the peak. This restricts annotation to genes that come after the
+##'   peak. Default is FALSE
+##' @param ignoreDownstream logical, if TRUE, only considers features upstream
+##'   (5' end) of the peak. This restricts annotation to genes that come before
+##'   the peak. Default is FALSE
+##' @param overlap character, one of "TSS" or "all". Determines how overlaps are
+##'   detected and handled:
+##'   \itemize{
+##'     \item "TSS": Only considers overlaps with the TSS point (after features
+##'           are resized to width=1). Overlapping peaks get distance=0
+##'     \item "all": Considers overlaps with any part of the full feature range
+##'           (before resizing). For overlapping peaks, calculates distance from
+##'           the closer peak end (start or end) to the feature's TSS
+##'   }
+##'   Default is "TSS"
+##' @return A list with three components:
+##'   \itemize{
+##'     \item \code{index}: Integer vector of feature indices (1-based) for the
+##'       nearest feature to each peak. Length equals the number of peaks with
+##'       valid nearest features
+##'     \item \code{distance}: Numeric vector of distances from each peak to the
+##'       TSS of its nearest feature. Positive values indicate downstream, negative
+##'       values indicate upstream, and 0 indicates overlap. Length equals the
+##'       number of peaks with valid nearest features
+##'     \item \code{peak}: GRanges object containing only the peaks that have
+##'       valid nearest features (peaks with no nearest feature in either direction
+##'       are excluded)
+##'   }
 ##' @import BiocGenerics IRanges GenomicRanges
 ##' @author G Yu
 getNearestFeatureIndicesAndDistances <- function(peaks, features,
@@ -21,6 +80,7 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
 
     overlap <- match.arg(overlap, c("TSS", "all"))
 
+   ### find overlap between peaks and features
     if (!ignoreOverlap && overlap == "all") {
         overlap_hit <- findOverlaps(peaks, unstrand(features))
     }
@@ -53,6 +113,8 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
     features <- append(features, dummy)
     dummyID <- length(features)
 
+
+    ### nearest upstream and downstream features, but ignore overlap with peak
     if (sameStrand) {
         ## nearest from peak start
         ps.idx <- follow(peaks, features)
@@ -115,8 +177,6 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
     index[!na.idx] <- idx
 
     if (!ignoreOverlap) {
-        ## hit <- findOverlaps(peaks, unstrand(features))
-
         if (overlap == "all") {
             hit <- overlap_hit
             if ( length(hit) != 0 ) {
@@ -136,19 +196,20 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
                 distanceToTSS[peakIdx] <- distance_minimal * ifelse(strand(features[featureIdx]) == "+", 1, -1)
 
             }
-        }
+        } else {
+            ## overlap == "TSS": find overlaps with TSS points (resized features of width 1, TSS sites only)
+            hit <- findOverlaps(peaks, unstrand(features))
 
-        hit <- findOverlaps(peaks, unstrand(features))
+            if ( length(hit) != 0 ) {
+                qh <- queryHits(hit)
+                hit.idx <- getFirstHitIndex(qh)
+                hit <- hit[hit.idx]
+                peakIdx <- queryHits(hit)
+                featureIdx <- subjectHits(hit)
 
-        if ( length(hit) != 0 ) {
-            qh <- queryHits(hit)
-            hit.idx <- getFirstHitIndex(qh)
-            hit <- hit[hit.idx]
-            peakIdx <- queryHits(hit)
-            featureIdx <- subjectHits(hit)
-
-            index[peakIdx] <- featureIdx
-            distanceToTSS[peakIdx] <- 0
+                index[peakIdx] <- featureIdx
+                distanceToTSS[peakIdx] <- 0
+            }
         }
 
     }

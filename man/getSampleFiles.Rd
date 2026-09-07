@@ -2,15 +2,23 @@
 % Please edit documentation in R/utilities.R
 \name{getSampleFiles}
 \alias{getSampleFiles}
-\title{getSampleFiles}
+\title{Get sample peak files included in the package}
 \usage{
 getSampleFiles()
 }
 \value{
-list of file names
+A named list of file paths. Names are extracted from filenames
+  (typically protein/condition names), and values are full file paths to the
+  sample BED files
 }
 \description{
-get filenames of sample files
+The function scans the package's extdata directory for sample peak files
+and returns their paths. The files are named based on the protein/condition
+they represent (extracted from the filename).
+}
+\details{
+This function returns a list of sample ChIP-seq peak files included in the
+package for demonstration and testing purposes.
 }
 \author{
 G Yu

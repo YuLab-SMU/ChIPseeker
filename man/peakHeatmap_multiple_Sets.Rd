@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotTagMatrix.R
 \name{peakHeatmap_multiple_Sets}
 \alias{peakHeatmap_multiple_Sets}
-\title{peakHeatmap}
+\title{Plot heatmap of peaks aligned to multiple sets of regions}
 \usage{
 peakHeatmap_multiple_Sets(
   peak,
@@ -26,45 +26,80 @@ peakHeatmap_multiple_Sets(
 )
 }
 \arguments{
-\item{peak}{peak file or GRanges object}
+\item{peak}{peak file (BED format) or GRanges object, or a named list of
+peak files/GRanges objects for comparing multiple datasets}
 
-\item{weightCol}{column name of weight}
+\item{weightCol}{character, name of metadata column to use as weights. If NULL,
+all peaks have equal weight. Default is NULL}
 
-\item{TxDb}{TxDb object}
+\item{TxDb}{TxDb or EnsDb annotation object, or a named list of GRanges
+objects containing custom genomic features. If a list, names are used as
+window names}
 
-\item{upstream}{upstream position}
+\item{upstream}{numeric, upstream distance in base pairs. Must be the same
+for all windows. Default is 1000}
 
-\item{downstream}{downstream position}
+\item{downstream}{numeric, downstream distance in base pairs. Must be the
+same for all windows. Default is 1000}
 
-\item{xlab}{xlab}
+\item{xlab}{character, x-axis label. Default is "" (empty)}
 
-\item{ylab}{ylab}
+\item{ylab}{character, y-axis label. Default is "" (empty)}
 
-\item{title}{title}
+\item{title}{character, plot title. If NULL, no title is shown. Default is NULL}
 
-\item{palette}{palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}}
+\item{palette}{character, color palette name from RColorBrewer. If NULL, uses
+default. Default is NULL}
 
-\item{verbose}{print message or not}
+\item{verbose}{logical, whether to print progress messages. Default is TRUE}
 
-\item{by}{one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'}
+\item{by}{character vector, feature types for each window. With TxDb: one
+of "gene", "transcript", "exon", "intron", "3UTR", "5UTR", "UTR". Length
+must match number of windows. Default is "gene"}
 
-\item{type}{one of "start_site", "end_site", "body"}
+\item{type}{character, one of "start_site", "end_site", or "body". Must be
+the same for all windows. Default is "start_site"}
 
-\item{nbin}{the amount of nbines}
+\item{nbin}{integer, number of bins for binning mode. If NULL, uses absolute
+positioning. Default is NULL}
 
-\item{ignore_strand}{ignore the strand information or not}
+\item{ignore_strand}{logical, whether to ignore strand information. Default is FALSE}
 
-\item{windows_name}{the name for each window, which will also be showed in the picture as labels}
+\item{windows_name}{character vector, names for each window (displayed as
+facet labels). If NULL and TxDb is a named list, uses names from TxDb.
+Default is NULL}
 
-\item{ncol}{the ncol of plotting a list of peak}
+\item{ncol}{integer, number of columns for arranging heatmaps. Default is NULL (auto)}
 
-\item{nrow}{the nrow of plotting a list of peak}
+\item{nrow}{integer, number of rows for arranging heatmaps. Default is NULL (auto)}
 
-\item{facet_label_text_size}{the size of facet label text}
+\item{facet_label_text_size}{numeric, size of facet label text. Default is 12}
 }
 \value{
 figure
 }
 \description{
-plot the heatmap of peaks align to a sets of regions
+The function extends \code{peakHeatmap()} to support multiple window sets.
+It generates tag matrices for each window set and creates a faceted heatmap
+visualization, with each facet showing peaks aligned to a different set of
+regions. This is useful for comparing peak patterns across different feature
+types (e.g., promoters vs enhancers) or conditions.
+}
+\details{
+This function creates heatmaps showing peak distributions across multiple
+sets of genomic regions (windows), allowing comparison of peak patterns
+across different feature types or conditions.
+
+
+The function:
+\enumerate{
+  \item Generates tag matrices for each window set (specified via \code{by}
+        or custom \code{TxDb} GRanges)
+  \item Creates heatmaps for each window set
+  \item Arranges them in a grid with faceting
+  \item Supports both absolute positioning and binning modes
+}
+
+All windows must have the same \code{type} (start_site, end_site, or body)
+and the same \code{upstream} and \code{downstream} parameters.
 }

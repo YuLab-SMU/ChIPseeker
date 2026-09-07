@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotTagMatrix.R
 \name{plotAvgProf2}
 \alias{plotAvgProf2}
-\title{plotAvgProf}
+\title{plotAvgProf2}
 \usage{
 plotAvgProf2(
   peak,
@@ -21,31 +21,41 @@ plotAvgProf2(
 )
 }
 \arguments{
-\item{peak}{peak file or GRanges object}
+\item{peak}{peak file (BED format) or GRanges object, or a list of peak
+files/GRanges objects for comparing multiple datasets}
 
-\item{weightCol}{column name of weight}
+\item{weightCol}{character, name of a metadata column in the GRanges object
+to use as weights for coverage calculation. If NULL, all peaks have equal
+weight. Default is NULL}
 
-\item{TxDb}{TxDb object}
+\item{TxDb}{TxDb or EnsDb annotation object. Default is NULL}
 
-\item{upstream}{upstream position}
+\item{upstream}{numeric, upstream distance in base pairs from the start site.
+Default is 1000}
 
-\item{downstream}{downstream position}
+\item{downstream}{numeric, downstream distance in base pairs from the start
+site. Default is 1000}
 
-\item{xlab}{xlab}
+\item{xlab}{character, x-axis label. Default is "Genomic Region (5'->3')"}
 
-\item{ylab}{ylab}
+\item{ylab}{character, y-axis label. Default is "Peak Count Frequency"}
 
-\item{conf}{confidence interval}
+\item{conf}{numeric, confidence level (e.g., 0.95 for 95% CI). If provided,
+confidence intervals are displayed. If NA or missing, no confidence
+intervals are shown}
 
-\item{facet}{one of 'none', 'row' and 'column'}
+\item{facet}{character, one of "none", "row", or "column". Controls how
+multiple datasets are displayed. Default is "none"}
 
-\item{free_y}{if TRUE, y will be scaled by AvgProf}
+\item{free_y}{logical, if TRUE and faceting is used, y-axis scales
+independently for each facet. Default is TRUE}
 
-\item{verbose}{print message or not}
+\item{verbose}{logical, whether to print progress messages. Default is TRUE}
 
-\item{ignore_strand}{ignore the strand information or not}
+\item{ignore_strand}{logical, whether to ignore strand information when
+calculating coverage. Default is FALSE}
 
-\item{...}{additional parameter}
+\item{...}{additional arguments passed to ggplot2 functions}
 }
 \value{
 ggplot object

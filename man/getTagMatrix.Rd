@@ -2,7 +2,7 @@
 % Please edit documentation in R/tagMatrix.R
 \name{getTagMatrix}
 \alias{getTagMatrix}
-\title{getTagMatrix}
+\title{Calculate tag matrix for peak coverage visualization}
 \usage{
 getTagMatrix(
   peak,
@@ -19,84 +19,101 @@ getTagMatrix(
 )
 }
 \arguments{
-\item{peak}{peak peak file or GRanges object}
+\item{peak}{peak file (BED format) or GRanges object containing ChIP-seq peaks}
 
-\item{upstream}{the distance of upstream extension}
+\item{upstream}{numeric or \code{rel()} object, distance to extend upstream.
+For \code{type='body'}, can extend 5' flank. For \code{type='start_site'/'end_site'},
+only used when \code{windows} is missing. Can be NULL for body regions}
 
-\item{downstream}{the distance of downstream extension}
+\item{downstream}{numeric or \code{rel()} object, distance to extend downstream.
+For \code{type='body'}, can extend 3' flank. For \code{type='start_site'/'end_site'},
+only used when \code{windows} is missing. Can be NULL for body regions}
 
-\item{windows}{a collection of region}
+\item{windows}{GRanges object containing regions of interest. Should be created
+by \code{getPromoters()}, \code{getBioRegion()}, or \code{makeBioRegionFromGranges()}.
+If missing, will be created from \code{TxDb} and other parameters}
 
-\item{type}{one of "start_site", "end_site", "body"}
+\item{type}{character, one of "start_site", "end_site", "body". Required if
+\code{windows} is missing}
 
-\item{by}{one of 'gene', 'transcript', 'exon', 'intron', '3UTR' , '5UTR', or specified by users}
+\item{by}{character, one of 'gene', 'transcript', 'exon', 'intron', '3UTR',
+'5UTR', or user-specified label. Required if \code{windows} is missing}
 
-\item{TxDb}{TxDb or self-made granges object, served as txdb}
+\item{TxDb}{TxDb/EnsDb object or GRanges object. If TxDb, used to create windows.
+If GRanges, treated as custom regions and passed to \code{makeBioRegionFromGranges()}.
+Required if \code{windows} is missing}
 
-\item{weightCol}{column name of weight, default is NULL}
+\item{weightCol}{character, name of a metadata column in the peak GRanges to
+use as weights for coverage calculation. If NULL, all peaks have equal weight.
+Default is NULL}
 
-\item{nbin}{the amount of nbines}
+\item{nbin}{integer, number of bins for binning method. Required for
+\code{type='body'}, optional for other types. If NULL, uses direct method
+(requires equal-width windows). Default is NULL}
 
-\item{verbose}{print message or not}
+\item{verbose}{logical, whether to print progress messages. Default is TRUE}
 
-\item{ignore_strand}{ignore the strand information or not}
+\item{ignore_strand}{logical, whether to ignore strand information when
+calculating coverage. If FALSE, negative strand regions are reverse-complemented.
+Default is FALSE}
 }
 \value{
-tagMatrix
+A matrix (tagMatrix) with:
+  \itemize{
+    \item Rows: One per region (window)
+    \item Columns: One per position/bin
+    \item Values: Peak coverage/signal at each position
+  }
+  The matrix has attributes:
+  \itemize{
+    \item \code{upstream}: Upstream distance
+    \item \code{downstream}: Downstream distance
+    \item \code{type}: Region type
+    \item \code{label}: Region label
+    \item \code{is.binning}: Whether binning method was used
+  }
 }
 \description{
-calculate the tag matrix
+The function computes peak coverage across a set of genomic regions (windows).
+It supports two methods:
+\itemize{
+  \item \strong{Direct method} (when \code{nbin=NULL}): For regions of equal
+        size (e.g., promoters), calculates coverage at each base pair position
+  \item \strong{Binning method} (when \code{nbin} is specified): For regions
+        of variable size (e.g., gene bodies), divides each region into a fixed
+        number of bins and calculates average coverage per bin
+}
 }
 \details{
-\code{getTagMatrix()} function can produce the matrix for visualization.
-\code{peak} stands for the peak file. 
-\code{window} stands for a collection of regions that users want to look into. 
-Users can use \code{window} to capture the peak of interest.
-There are two ways to input \code{window}. 
+This function calculates a tag matrix representing peak coverage across genomic
+regions (e.g., promoters, gene bodies). The matrix can be used for visualization
+with functions like \code{plotPeakProf()} or \code{plotAvgProf()}.
 
-The first way is that users can use
-\code{getPromoters()/getBioRegion()/makeBioRegionFromGranges()} to 
-get \code{window} and put it into \code{getTagMatrix()}. 
 
-The second way is that users can use \code{getTagMatrix()} to
-call \code{getPromoters()/getBioRegion()/makeBioRegionFromGranges()}. In this way
-users do not need to input \code{window} parameter but they need to input
-\code{txdb}. 
+The function can work in two modes:
+\enumerate{
+  \item \strong{With pre-made windows}: Provide a \code{windows} GRanges object
+        created by \code{getPromoters()}, \code{getBioRegion()}, or
+        \code{makeBioRegionFromGranges()}
+  \item \strong{Without windows}: Provide \code{TxDb} and region parameters
+        (\code{type}, \code{by}, \code{upstream}, \code{downstream}), and the
+        function will create windows automatically
+}
 
-\code{txdb} is a set of packages contained annotation 
-of regions of different genomes. Users can
-get the regions of interest through specific functions. These specific functions
-are built in \code{getPromoters()/getBioRegion()}. Many regions can not be gain
-through \code{txdb}, like insulator and enhancer regions. 
-Users can provide these regions in the form of granges object. 
-These self-made granges object will be passed to \code{TxDb} parameter and they will
-be passed to \code{makeBioRegionFromGranges()} to produce the \code{window}.
-In a word, \code{TxDb} parameter is a reference information. Users can
-pass \code{txdb object} or self-made granges into it.
+For \code{upstream} and \code{downstream} parameters:
+\itemize{
+  \item If \code{windows} is provided: For \code{type='body'}, these extend
+        the flanks; for \code{type='start_site'/'end_site'}, they are ignored
+        (taken from window attributes)
+  \item If \code{windows} is missing: These define the region size for
+        \code{type='start_site'/'end_site'}, or extend flanks for \code{type='body'}
+}
 
-Details see \code{\link{getPromoters}},\code{\link{getBioRegion}} and \code{\link{makeBioRegionFromGranges}}
-
-\code{upstream} and \code{downstream} parameter have different usages:
-
-(1) \code{window} parameter is provided, 
-
-if \code{type == 'body'}, \code{upstream} and \code{downstream} can use to extend 
-the flank of body region.
-
-if \code{type == 'start_site'/'end_site'}, \code{upstream} and \code{downstream} do not
-play a role in \code{getTagMatrix()} function.
-
-(2) \code{window} parameter is missing,
-
-if \code{type == 'body'}, \code{upstream} and \code{downstream} can use to extend 
-the flank of body region.
-
-if \code{type == 'start_site'/'end_site'}, \code{upstream} and \code{downstream} refer to
-the upstream and downstream of the start_site or the end_site.
-
-\code{weightCol} refers to column in peak file. This column acts as a weight vaule. Details
-see \url{https://github.com/YuLab-SMU/ChIPseeker/issues/15}
-
-\code{nbin} refers to the number of bins. \code{getTagMatrix()} provide a binning method
-to get the tag matrix.
+The \code{weightCol} parameter allows weighting peaks by a metadata column
+(e.g., peak score or signal value), useful for signal-weighted coverage.
+}
+\seealso{
+\code{\link{getPromoters}}, \code{\link{getBioRegion}},
+  \code{\link{makeBioRegionFromGranges}} for creating windows,
+  \code{\link{plotPeakProf}}, \code{\link{plotAvgProf}} for visualization
 }

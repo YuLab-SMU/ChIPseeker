@@ -1,14 +1,60 @@
-##' calcuate overlap significant of ChIP experiments based on their nearest gene annotation
+##' Calculate overlap significance of ChIP experiments based on nearest gene annotation
 ##'
+##' This function tests whether two ChIP-seq experiments share significantly
+##' more genes than expected by chance, based on the genes nearest to their peaks.
 ##'
-##' @title enrichAnnoOverlap
-##' @param queryPeak query bed file
-##' @param targetPeak target bed file(s) or folder containing bed files
-##' @param TxDb TxDb
-##' @param pAdjustMethod pvalue adjustment method
-##' @param chainFile chain file for liftOver
-##' @param distanceToTSS_cutoff restrict nearest gene annotation by distance cutoff
-##' @return data.frame
+##' @description
+##' The function compares the overlap of genes associated with query and target
+##' ChIP-seq peaks. It uses a hypergeometric test to determine if the number of
+##' overlapping genes is significantly higher than expected by chance, suggesting
+##' biological similarity between the experiments.
+##'
+##' @details
+##' The function performs the following steps:
+##' \enumerate{
+##'   \item Annotates both query and target peaks to find their nearest genes
+##'   \item Optionally filters peaks by distance to TSS using
+##'         \code{distanceToTSS_cutoff}
+##'   \item Counts the number of overlapping genes between query and target
+##'   \item Performs a hypergeometric test to calculate p-values
+##'   \item Adjusts p-values for multiple testing
+##' }
+##'
+##' The hypergeometric test parameters:
+##' \itemize{
+##'   \item White balls (m): number of unique genes in query peaks
+##'   \item Black balls (n): total genes minus query genes
+##'   \item Drawn (k): number of unique genes in target peaks
+##'   \item Overlap (q): number of overlapping genes
+##' }
+##'
+##' @param queryPeak character, path to query peak file (BED format), or GRanges
+##'   object containing query peaks
+##' @param targetPeak character vector of target peak file paths, a folder
+##'   containing bed files, or a list of GRanges objects. Multiple target peaks
+##'   can be provided for comparison
+##' @param TxDb TxDb or EnsDb annotation object (already loaded in R). If NULL,
+##'   uses \code{TxDb.Hsapiens.UCSC.hg19.knownGene} as default. Must be an
+##'   already-loaded R object, not a file path. To load from a file, use
+##'   \code{GenomicFeatures::makeTxDbFromGFF()}, \code{AnnotationDbi::loadDb()},
+##'   or similar functions first
+##' @param pAdjustMethod character, method for p-value adjustment. Default is
+##'   "BH" (Benjamini-Hochberg). See \code{\link[stats]{p.adjust}} for options
+##' @param chainFile character, path to chain file for liftOver conversion if
+##'   target peaks are in a different genome assembly. Default is NULL
+##' @param distanceToTSS_cutoff numeric, distance cutoff in base pairs. Peaks
+##'   with absolute distance to TSS greater than this value will be excluded from
+##'   the analysis. If NULL, all peaks are included. Default is NULL
+##' @return A data.frame with one row per target peak comparison, containing:
+##'   \itemize{
+##'     \item \code{qSample}: name of the query sample
+##'     \item \code{tSample}: name of the target sample(s)
+##'     \item \code{qLen}: number of unique genes in query peaks
+##'     \item \code{tLen}: number of unique genes in target peaks
+##'     \item \code{N_OL}: number of overlapping genes
+##'     \item \code{pvalue}: p-value from hypergeometric test
+##'     \item \code{p.adjust}: adjusted p-value
+##'   }
 ##' @importFrom stats p.adjust
 ##' @importFrom stats phyper
 ##' @export
@@ -102,20 +148,73 @@ enrichAnnoOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
     return(res)
 }
 
-##' calculate overlap significant of ChIP experiments based on the genome coordinations
+##' Calculate overlap significance of ChIP experiments based on genomic coordinates
 ##'
+##' This function tests whether two ChIP-seq experiments have significantly more
+##' overlapping peaks than expected by chance, using permutation testing with
+##' shuffled peak positions.
 ##'
-##' @title enrichPeakOverlap
-##' @param queryPeak query bed file or GRanges object
-##' @param targetPeak target bed file(s) or folder that containing bed files or a list of GRanges objects
-##' @param TxDb TxDb
-##' @param pAdjustMethod pvalue adjustment method
-##' @param nShuffle shuffle numbers
-##' @param chainFile chain file for liftOver
-##' @param pool logical, whether pool target peaks
-##' @param mc.cores number of cores, see \link[parallel]{mclapply}
-##' @param verbose logical
-##' @return data.frame
+##' @description
+##' The function compares the genomic overlap between query and target ChIP-seq
+##' peaks. It uses a permutation test approach: randomly shuffling target peaks
+##' across the genome and comparing the observed overlap to the distribution of
+##' overlaps from shuffled data. This provides a p-value indicating whether the
+##' observed overlap is significantly higher than expected by chance.
+##'
+##' @details
+##' The function performs the following steps:
+##' \enumerate{
+##'   \item Loads query and target peaks (supports BED files or GRanges objects)
+##'   \item Optionally converts target peaks to query genome using liftOver
+##'         (if \code{chainFile} is provided)
+##'   \item If \code{pool=TRUE}, pools all target peaks and tests overlap with
+##'         the pooled set
+##'   \item If \code{pool=FALSE}, tests overlap with each target peak set separately
+##'   \item For permutation testing:
+##'     \itemize{
+##'       \item Calculates the observed overlap ratio (overlapping peaks / total
+##'             target peaks)
+##'       \item Randomly shuffles target peaks \code{nShuffle} times across the
+##'             genome (preserving chromosome and peak width)
+##'       \item Calculates overlap ratio for each shuffled set
+##'       \item Computes p-value as (number of shuffled ratios >= observed ratio + 1) /
+##'             (nShuffle + 1)
+##'     }
+##'   \item Adjusts p-values for multiple testing
+##' }
+##'
+##' @param queryPeak character, path to query peak file (BED format), or GRanges
+##'   object containing query peaks
+##' @param targetPeak character vector of target peak file paths, a folder
+##'   containing bed files, or a list of GRanges objects. Multiple target peaks
+##'   can be provided
+##' @param TxDb TxDb or EnsDb annotation object (already loaded in R). Required
+##'   for shuffling peaks (to get chromosome lengths). If NULL, uses
+##'   \code{TxDb.Hsapiens.UCSC.hg19.knownGene} as default. Must be an
+##'   already-loaded R object, not a file path
+##' @param pAdjustMethod character, method for p-value adjustment. Default is
+##'   "BH" (Benjamini-Hochberg). See \code{\link[stats]{p.adjust}} for options
+##' @param nShuffle integer, number of permutations for the statistical test.
+##'   More shuffles provide more accurate p-values but take longer. Default is 1000.
+##'   Set to 0 to skip permutation testing (p-value will be NA)
+##' @param chainFile character, path to chain file for liftOver conversion if
+##'   target peaks are in a different genome assembly. Default is NULL
+##' @param pool logical, whether to pool all target peaks together for a single
+##'   test. If TRUE, tests overlap with the combined set of all target peaks.
+##'   If FALSE, tests overlap with each target peak set separately. Default is TRUE
+##' @param mc.cores integer, number of CPU cores to use for parallel processing.
+##'   Default is \code{detectCores()-1}. See \code{\link[parallel]{mclapply}}
+##' @param verbose logical, whether to print progress messages. Default is TRUE
+##' @return A data.frame with one row per target peak comparison, containing:
+##'   \itemize{
+##'     \item \code{qSample}: name of the query sample
+##'     \item \code{tSample}: name of the target sample(s)
+##'     \item \code{qLen}: number of peaks in query
+##'     \item \code{tLen}: number of peaks in target (or pooled target if pool=TRUE)
+##'     \item \code{N_OL}: number of overlapping peaks
+##'     \item \code{pvalue}: p-value from permutation test (NA if nShuffle=0)
+##'     \item \code{p.adjust}: adjusted p-value
+##'   }
 ##' @export
 ##' @importFrom rtracklayer import.chain
 ##' @importFrom rtracklayer liftOver
@@ -194,13 +293,39 @@ enrichPeakOverlap <- function(queryPeak, targetPeak, TxDb=NULL, pAdjustMethod="B
 
 
 
-##' shuffle the position of peak
+##' Shuffle peak positions across the genome
 ##'
+##' This function randomly shuffles peak positions across chromosomes while
+##' preserving the original peak widths and chromosome distribution.
 ##'
-##' @title shuffle
-##' @param peak.gr GRanges object
-##' @param TxDb TxDb
-##' @return GRanges object
+##' @description
+##' The function generates a null distribution for permutation testing by randomly
+##' repositioning peaks within their respective chromosomes. It maintains:
+##' \itemize{
+##'   \item The number of peaks per chromosome
+##'   \item The width of each peak
+##'   \item The chromosome assignment
+##' }
+##'
+##' @details
+##' The shuffling process:
+##' \enumerate{
+##'   \item Groups peaks by chromosome
+##'   \item For each chromosome, randomly samples new start positions from the
+##'         valid range (1 to chromosome length - peak width)
+##'   \item Creates new GRanges with shuffled positions but original widths
+##'   \item Sets strand to "*" (unstranded)
+##' }
+##'
+##' This is used in permutation testing to generate null distributions for
+##' statistical significance testing.
+##'
+##' @param peak.gr GRanges object containing peaks to shuffle
+##' @param TxDb TxDb or EnsDb annotation object providing chromosome lengths
+##'   for valid position ranges
+##' @return GRanges object with shuffled peak positions. Peaks are randomly
+##'   repositioned within their chromosomes, maintaining original widths and
+##'   chromosome distribution
 ##' @export
 ##' @author G Yu
 shuffle <- function(peak.gr, TxDb) {
@@ -226,6 +351,7 @@ shuffle <- function(peak.gr, TxDb) {
 ##' @importFrom utils setTxtProgressBar
 ##' @importFrom parallel mclapply
 ##' @importFrom parallel detectCores
+##' @noRd
 enrichOverlap.peak.internal <- function(query.gr, target.gr, TxDb, nShuffle=1000, mc.cores=detectCores()-1, verbose=TRUE) {
     if (verbose) {
         cat(">> permutation test of peak overlap...\t\t",

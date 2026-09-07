@@ -2,7 +2,7 @@
 % Please edit documentation in R/enrichOverlap.R
 \name{enrichPeakOverlap}
 \alias{enrichPeakOverlap}
-\title{enrichPeakOverlap}
+\title{Calculate overlap significance of ChIP experiments based on genomic coordinates}
 \usage{
 enrichPeakOverlap(
   queryPeak,
@@ -17,29 +17,82 @@ enrichPeakOverlap(
 )
 }
 \arguments{
-\item{queryPeak}{query bed file or GRanges object}
+\item{queryPeak}{character, path to query peak file (BED format), or GRanges
+object containing query peaks}
 
-\item{targetPeak}{target bed file(s) or folder that containing bed files or a list of GRanges objects}
+\item{targetPeak}{character vector of target peak file paths, a folder
+containing bed files, or a list of GRanges objects. Multiple target peaks
+can be provided}
 
-\item{TxDb}{TxDb}
+\item{TxDb}{TxDb or EnsDb annotation object (already loaded in R). Required
+for shuffling peaks (to get chromosome lengths). If NULL, uses
+\code{TxDb.Hsapiens.UCSC.hg19.knownGene} as default. Must be an
+already-loaded R object, not a file path}
 
-\item{pAdjustMethod}{pvalue adjustment method}
+\item{pAdjustMethod}{character, method for p-value adjustment. Default is
+"BH" (Benjamini-Hochberg). See \code{\link[stats]{p.adjust}} for options}
 
-\item{nShuffle}{shuffle numbers}
+\item{nShuffle}{integer, number of permutations for the statistical test.
+More shuffles provide more accurate p-values but take longer. Default is 1000.
+Set to 0 to skip permutation testing (p-value will be NA)}
 
-\item{chainFile}{chain file for liftOver}
+\item{chainFile}{character, path to chain file for liftOver conversion if
+target peaks are in a different genome assembly. Default is NULL}
 
-\item{pool}{logical, whether pool target peaks}
+\item{pool}{logical, whether to pool all target peaks together for a single
+test. If TRUE, tests overlap with the combined set of all target peaks.
+If FALSE, tests overlap with each target peak set separately. Default is TRUE}
 
-\item{mc.cores}{number of cores, see \link[parallel]{mclapply}}
+\item{mc.cores}{integer, number of CPU cores to use for parallel processing.
+Default is \code{detectCores()-1}. See \code{\link[parallel]{mclapply}}}
 
-\item{verbose}{logical}
+\item{verbose}{logical, whether to print progress messages. Default is TRUE}
 }
 \value{
-data.frame
+A data.frame with one row per target peak comparison, containing:
+  \itemize{
+    \item \code{qSample}: name of the query sample
+    \item \code{tSample}: name of the target sample(s)
+    \item \code{qLen}: number of peaks in query
+    \item \code{tLen}: number of peaks in target (or pooled target if pool=TRUE)
+    \item \code{N_OL}: number of overlapping peaks
+    \item \code{pvalue}: p-value from permutation test (NA if nShuffle=0)
+    \item \code{p.adjust}: adjusted p-value
+  }
 }
 \description{
-calculate overlap significant of ChIP experiments based on the genome coordinations
+The function compares the genomic overlap between query and target ChIP-seq
+peaks. It uses a permutation test approach: randomly shuffling target peaks
+across the genome and comparing the observed overlap to the distribution of
+overlaps from shuffled data. This provides a p-value indicating whether the
+observed overlap is significantly higher than expected by chance.
+}
+\details{
+This function tests whether two ChIP-seq experiments have significantly more
+overlapping peaks than expected by chance, using permutation testing with
+shuffled peak positions.
+
+
+The function performs the following steps:
+\enumerate{
+  \item Loads query and target peaks (supports BED files or GRanges objects)
+  \item Optionally converts target peaks to query genome using liftOver
+        (if \code{chainFile} is provided)
+  \item If \code{pool=TRUE}, pools all target peaks and tests overlap with
+        the pooled set
+  \item If \code{pool=FALSE}, tests overlap with each target peak set separately
+  \item For permutation testing:
+    \itemize{
+      \item Calculates the observed overlap ratio (overlapping peaks / total
+            target peaks)
+      \item Randomly shuffles target peaks \code{nShuffle} times across the
+            genome (preserving chromosome and peak width)
+      \item Calculates overlap ratio for each shuffled set
+      \item Computes p-value as (number of shuffled ratios >= observed ratio + 1) /
+            (nShuffle + 1)
+    }
+  \item Adjusts p-values for multiple testing
+}
 }
 \author{
 G Yu

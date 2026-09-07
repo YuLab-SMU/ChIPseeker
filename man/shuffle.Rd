@@ -2,20 +2,46 @@
 % Please edit documentation in R/enrichOverlap.R
 \name{shuffle}
 \alias{shuffle}
-\title{shuffle}
+\title{Shuffle peak positions across the genome}
 \usage{
 shuffle(peak.gr, TxDb)
 }
 \arguments{
-\item{peak.gr}{GRanges object}
+\item{peak.gr}{GRanges object containing peaks to shuffle}
 
-\item{TxDb}{TxDb}
+\item{TxDb}{TxDb or EnsDb annotation object providing chromosome lengths
+for valid position ranges}
 }
 \value{
-GRanges object
+GRanges object with shuffled peak positions. Peaks are randomly
+  repositioned within their chromosomes, maintaining original widths and
+  chromosome distribution
 }
 \description{
-shuffle the position of peak
+The function generates a null distribution for permutation testing by randomly
+repositioning peaks within their respective chromosomes. It maintains:
+\itemize{
+  \item The number of peaks per chromosome
+  \item The width of each peak
+  \item The chromosome assignment
+}
+}
+\details{
+This function randomly shuffles peak positions across chromosomes while
+preserving the original peak widths and chromosome distribution.
+
+
+The shuffling process:
+\enumerate{
+  \item Groups peaks by chromosome
+  \item For each chromosome, randomly samples new start positions from the
+        valid range (1 to chromosome length - peak width)
+  \item Creates new GRanges with shuffled positions but original widths
+  \item Sets strand to "*" (unstranded)
+}
+
+This is used in permutation testing to generate null distributions for
+statistical significance testing.
 }
 \author{
 G Yu

@@ -2,18 +2,31 @@
 % Please edit documentation in R/csAnno.R
 \name{as.GRanges}
 \alias{as.GRanges}
-\title{as.GRanges}
+\title{Convert csAnno object to GRanges}
 \usage{
 as.GRanges(x)
 }
 \arguments{
-\item{x}{csAnno object}
+\item{x}{\code{csAnno} object to convert}
 }
 \value{
-GRanges object
+GRanges object containing all annotated peaks with their metadata
+  columns. This is the same as accessing \code{x@anno} directly
 }
 \description{
-convert csAnno object to GRanges
+The function returns the \code{anno} slot from the \code{csAnno} object,
+which contains all annotated peaks as a GRanges object with metadata columns
+(annotation, geneId, distanceToTSS, etc.).
+}
+\details{
+This function extracts the GRanges object containing annotated peaks from a
+\code{csAnno} object.
+}
+\examples{
+\dontrun{
+peak.gr <- as.GRanges(peakAnno)
+## Equivalent to: peak.gr <- peakAnno@anno
+}
 }
 \author{
 Guangchuang Yu \url{https://guangchuangyu.github.io}

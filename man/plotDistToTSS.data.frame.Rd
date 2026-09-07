@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotDistToTSS.R
 \name{plotDistToTSS.data.frame}
 \alias{plotDistToTSS.data.frame}
-\title{plotDistToTSS.data.frame}
+\title{Plot feature distribution based on distances to TSS}
 \usage{
 plotDistToTSS.data.frame(
   peakDist,
@@ -16,28 +16,64 @@ plotDistToTSS.data.frame(
 )
 }
 \arguments{
-\item{peakDist}{peak annotation}
+\item{peakDist}{data.frame containing peak annotation data with a distance
+column. Typically obtained from \code{as.data.frame(csAnno)} or similar}
 
-\item{distanceColumn}{column name of the distance from peak to nearest gene}
+\item{distanceColumn}{character, name of the column containing distances
+from peaks to nearest gene TSS. Default is "distanceToTSS"}
 
-\item{distanceBreaks}{default is 'c(0, 1000, 3000, 5000, 10000, 100000)'}
+\item{distanceBreaks}{numeric vector, breakpoints for distance categories
+in base pairs. The function automatically adds 0 and Inf if not present.
+Default is c(0, 1000, 3000, 5000, 10000, 100000)}
 
-\item{palette}{palette name for coloring different distances. Run `RColorBrewer::display.brewer.all()` to see all applicable values.}
+\item{palette}{character, color palette name from RColorBrewer (e.g., "Set1",
+"Dark2") or NULL for default colors. Run
+\code{RColorBrewer::display.brewer.all()} to see available palettes.
+Default is NULL}
 
-\item{xlab}{x label}
+\item{xlab}{character, label for x-axis. Default is "" (empty)}
 
-\item{ylab}{y lable}
+\item{ylab}{character, label for y-axis. Default is "Binding sites (\%) (5'->3')"}
 
-\item{title}{figure title}
+\item{title}{character, plot title. Default is "Distribution of transcription
+factor-binding loci relative to TSS"}
 
-\item{categoryColumn}{category column, default is ".id"}
+\item{categoryColumn}{character or numeric, column name or index for grouping
+multiple datasets. If 1 or ".id", treats as single dataset. Default is ".id"}
 }
 \value{
-bar plot that summarize distance from peak to
-TSS of the nearest gene.
+A ggplot2 bar plot object showing the distribution of peaks relative
+  to TSS. The plot uses a diverging bar chart format with upstream (5') on
+  the left and downstream (3') on the right, with TSS at the center
 }
 \description{
-plot feature distribution based on the distances to the TSS
+The function visualizes where ChIP-seq peaks are located relative to gene
+TSSs. It categorizes peaks into distance bins (e.g., 0-1kb, 1-3kb, etc.)
+and displays the percentage of peaks in each category, separately for
+upstream (5') and downstream (3') regions. The plot uses a diverging bar
+chart with TSS at the center (0).
+}
+\details{
+This function creates a bar plot showing the distribution of peaks relative
+to transcription start sites (TSS), categorizing peaks by their distance
+from the nearest gene's TSS.
+
+
+The function performs the following steps:
+\enumerate{
+  \item Categorizes peaks into distance bins based on \code{distanceBreaks}
+  \item Separates upstream (negative distance) and downstream (positive
+        distance) peaks
+  \item Calculates percentages for each distance category
+  \item Creates a diverging bar plot with:
+    \itemize{
+      \item Upstream peaks shown as negative bars (left side)
+      \item Downstream peaks shown as positive bars (right side)
+      \item TSS marked at the center (0)
+      \item Distance categories color-coded
+    }
+  \item Supports grouping by a category column for comparing multiple datasets
+}
 }
 \examples{
 \dontrun{
