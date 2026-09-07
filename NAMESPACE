@@ -175,7 +175,6 @@ importFrom(stats,
   phyper
 )
 importFrom(utils,
-  data,
   download.file,
   read.delim,
   setTxtProgressBar,
