@@ -8,6 +8,11 @@
 \alias{tagMatrixList}
 \title{Information Datasets}
 \description{
-ucsc genome version, precalcuated data and gsm information
+Pre-calculated datasets included in the ChIPseeker package:
+\itemize{
+  \item \code{ucsc_release}: UCSC genome version information
+  \item \code{gsminfo}: GEO Sample (GSM) information for ChIP-seq datasets
+  \item \code{tagMatrixList}: Pre-calculated tag matrices for example datasets
+}
 }
 \keyword{datasets}

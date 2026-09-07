@@ -2,17 +2,41 @@
 % Please edit documentation in R/utilities.R
 \name{.ChIPseekerEnv}
 \alias{.ChIPseekerEnv}
-\title{env function for ChIPseeker}
+\title{Initialize and manage ChIPseeker cache environment}
 \usage{
 .ChIPseekerEnv(TxDb, item = "ChIPseekerEnv", force = FALSE)
 }
 \arguments{
-\item{TxDb}{txdb object}
+\item{TxDb}{TxDb or EnsDb annotation object to cache}
 
-\item{item}{item name}
+\item{item}{character, name of the cache item. Default is "ChIPseekerEnv"}
 
-\item{force}{force to update txdb item in cache or not.}
+\item{force}{logical, whether to force update of the TxDb in cache,
+clearing all cached features. Default is FALSE}
+}
+\value{
+Invisibly returns NULL. Prints messages about genome version usage
 }
 \description{
-env function for ChIPseeker
+The function initializes and maintains a cache for TxDb objects and their
+associated genomic features. It checks if the cached TxDb matches the
+provided one, and updates the cache if they differ or if forced to update.
+}
+\details{
+This function manages the caching system for TxDb objects and related
+genomic features to improve performance by avoiding redundant computations.
+
+
+The function performs the following:
+\enumerate{
+  \item Retrieves or creates a cache item
+  \item If no TxDb is cached, stores the provided TxDb
+  \item If a TxDb exists in cache, compares metadata to check if it matches
+  \item Updates cache if TxDb differs or if \code{force=TRUE}
+  \item Prints the genome version being used
+}
+
+This caching mechanism allows the package to reuse computed features
+(exons, introns, transcripts, etc.) across multiple function calls when
+using the same TxDb object.
 }

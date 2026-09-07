@@ -1,3 +1,14 @@
+# ChIPseeker 1.49.0
+
++ Fixed bug in `getNearestFeatureIndicesAndDistances()` where results for
+  `overlap == "all"` were silently overridden by the `overlap == "TSS"` branch,
+  causing the two modes to behave identically.
++ Comprehensive documentation updates for core functions (`annotatePeak()`,
+  `getGenomicAnnotation()`, `getTagMatrix()` and related, `readPeakFile()`,
+  `seq2gene()`, dplyr verb extensions, plotting functions, etc.).
++ Simplified redundant logic in `seq2gene()` by merging the promoter and
+  flanking-gene extraction into a single condition (no behavior change).
+
 # ChIPseeker 1.48.0
 
 + Bioconductor RELEASE_3_23 (2026-04-29, Wed)

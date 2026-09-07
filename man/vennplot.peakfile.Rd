@@ -2,20 +2,63 @@
 % Please edit documentation in R/vennplot.R
 \name{vennplot.peakfile}
 \alias{vennplot.peakfile}
-\title{vennplot.peakfile}
+\title{Plot Venn diagram for peak files}
 \usage{
 vennplot.peakfile(files, labels = NULL)
 }
 \arguments{
-\item{files}{peak files}
+\item{files}{character vector of peak file paths. Supported formats include
+BED, narrowPeak, broadPeak, and other formats supported by
+\code{readPeakFile()}}
 
-\item{labels}{labels for peak files}
+\item{labels}{character vector of labels for each peak file. If NULL, labels
+are automatically generated from filenames by removing file extensions.
+Default is NULL}
 }
 \value{
-figure
+A Venn diagram plot showing the overlap of peaks between different
+  files. The plot is created using the default method (\code{by="gplots"}).
+  See \code{\link{vennplot}} for details on the return type
 }
 \description{
-vennplot for peak files
+The function simplifies the workflow of comparing multiple peak files by
+automatically reading the files and setting up the Venn diagram. It loads
+each peak file using \code{readPeakFile()}, optionally labels them, and then
+calls \code{vennplot()} to create the visualization.
+}
+\details{
+This is a convenience function that reads peak files and creates a Venn
+diagram showing the overlap of genomic regions between different peak sets.
+
+
+The function:
+\enumerate{
+  \item Reads each peak file using \code{readPeakFile()} (converts to GRanges)
+  \item Generates labels from filenames if not provided (removes file extensions)
+  \item Names the peak list with the labels
+  \item Calls \code{vennplot()} to create the Venn diagram
+}
+
+This is particularly useful for quickly comparing multiple ChIP-seq peak
+files to see how many peaks are shared between experiments.
+}
+\examples{
+\dontrun{
+## Compare multiple peak files
+peakfiles <- c("sample1.bed", "sample2.bed", "sample3.bed")
+vennplot.peakfile(peakfiles)
+
+## With custom labels
+vennplot.peakfile(peakfiles, labels=c("Treatment", "Control", "Input"))
+
+## Using getSampleFiles()
+files <- getSampleFiles()
+vennplot.peakfile(files)
+}
+}
+\seealso{
+\code{\link{vennplot}} for the main plotting function,
+  \code{\link{readPeakFile}} for reading peak files
 }
 \author{
 G Yu

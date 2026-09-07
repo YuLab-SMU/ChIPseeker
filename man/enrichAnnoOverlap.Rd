@@ -2,7 +2,7 @@
 % Please edit documentation in R/enrichOverlap.R
 \name{enrichAnnoOverlap}
 \alias{enrichAnnoOverlap}
-\title{enrichAnnoOverlap}
+\title{Calculate overlap significance of ChIP experiments based on nearest gene annotation}
 \usage{
 enrichAnnoOverlap(
   queryPeak,
@@ -14,23 +14,69 @@ enrichAnnoOverlap(
 )
 }
 \arguments{
-\item{queryPeak}{query bed file}
+\item{queryPeak}{character, path to query peak file (BED format), or GRanges
+object containing query peaks}
 
-\item{targetPeak}{target bed file(s) or folder containing bed files}
+\item{targetPeak}{character vector of target peak file paths, a folder
+containing bed files, or a list of GRanges objects. Multiple target peaks
+can be provided for comparison}
 
-\item{TxDb}{TxDb}
+\item{TxDb}{TxDb or EnsDb annotation object (already loaded in R). If NULL,
+uses \code{TxDb.Hsapiens.UCSC.hg19.knownGene} as default. Must be an
+already-loaded R object, not a file path. To load from a file, use
+\code{GenomicFeatures::makeTxDbFromGFF()}, \code{AnnotationDbi::loadDb()},
+or similar functions first}
 
-\item{pAdjustMethod}{pvalue adjustment method}
+\item{pAdjustMethod}{character, method for p-value adjustment. Default is
+"BH" (Benjamini-Hochberg). See \code{\link[stats]{p.adjust}} for options}
 
-\item{chainFile}{chain file for liftOver}
+\item{chainFile}{character, path to chain file for liftOver conversion if
+target peaks are in a different genome assembly. Default is NULL}
 
-\item{distanceToTSS_cutoff}{restrict nearest gene annotation by distance cutoff}
+\item{distanceToTSS_cutoff}{numeric, distance cutoff in base pairs. Peaks
+with absolute distance to TSS greater than this value will be excluded from
+the analysis. If NULL, all peaks are included. Default is NULL}
 }
 \value{
-data.frame
+A data.frame with one row per target peak comparison, containing:
+  \itemize{
+    \item \code{qSample}: name of the query sample
+    \item \code{tSample}: name of the target sample(s)
+    \item \code{qLen}: number of unique genes in query peaks
+    \item \code{tLen}: number of unique genes in target peaks
+    \item \code{N_OL}: number of overlapping genes
+    \item \code{pvalue}: p-value from hypergeometric test
+    \item \code{p.adjust}: adjusted p-value
+  }
 }
 \description{
-calcuate overlap significant of ChIP experiments based on their nearest gene annotation
+The function compares the overlap of genes associated with query and target
+ChIP-seq peaks. It uses a hypergeometric test to determine if the number of
+overlapping genes is significantly higher than expected by chance, suggesting
+biological similarity between the experiments.
+}
+\details{
+This function tests whether two ChIP-seq experiments share significantly
+more genes than expected by chance, based on the genes nearest to their peaks.
+
+
+The function performs the following steps:
+\enumerate{
+  \item Annotates both query and target peaks to find their nearest genes
+  \item Optionally filters peaks by distance to TSS using
+        \code{distanceToTSS_cutoff}
+  \item Counts the number of overlapping genes between query and target
+  \item Performs a hypergeometric test to calculate p-values
+  \item Adjusts p-values for multiple testing
+}
+
+The hypergeometric test parameters:
+\itemize{
+  \item White balls (m): number of unique genes in query peaks
+  \item Black balls (n): total genes minus query genes
+  \item Drawn (k): number of unique genes in target peaks
+  \item Overlap (q): number of overlapping genes
+}
 }
 \author{
 G Yu

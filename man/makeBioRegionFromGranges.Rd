@@ -2,51 +2,67 @@
 % Please edit documentation in R/tagMatrix.R
 \name{makeBioRegionFromGranges}
 \alias{makeBioRegionFromGranges}
-\title{makeBioRegionFromGranges}
+\title{Make biological regions from user-provided GRanges object}
 \usage{
 makeBioRegionFromGranges(gr, by, type, upstream = 1000, downstream = 1000)
 }
 \arguments{
-\item{gr}{a grange object contain region of interest}
+\item{gr}{GRanges object containing regions of interest (e.g., enhancers,
+insulators, custom regulatory elements)}
 
-\item{by}{specify be users, e.g. gene, insulator, enhancer}
+\item{by}{character, user-specified label for the feature type (e.g., "gene",
+"insulator", "enhancer"). Used for generating region labels. Cannot be omitted}
 
-\item{type}{one of "start_site", "end_site", "body"}
+\item{type}{character, one of "start_site", "end_site", "body". Determines
+which part of each range to extract. Cannot be omitted}
 
-\item{upstream}{upstream from start site or end site, can be NULL if the type == 'body'}
+\item{upstream}{numeric or NULL, distance in base pairs to extend upstream
+from start site or end site. Can be NULL if \code{type == 'body'}.
+Default is 1000}
 
-\item{downstream}{downstream from start site or end site, can be NULL if the type == 'body'}
+\item{downstream}{numeric or NULL, distance in base pairs to extend downstream
+from start site or end site. Can be NULL if \code{type == 'body'}.
+Default is 1000}
 }
 \value{
-GRanges object
+GRanges object containing the extracted regions with attributes:
+  \itemize{
+    \item \code{type}: The region type
+    \item \code{by}: The feature type label
+    \item \code{label}: Generated label for the regions
+    \item \code{upstream}: Upstream distance (for start_site/end_site)
+    \item \code{downstream}: Downstream distance (for start_site/end_site)
+  }
 }
 \description{
-make windows from granges object
+The function extracts regions from a custom GRanges object, similar to
+\code{getBioRegion()} but working with user-defined features instead of TxDb
+annotations. This is useful for features like enhancers, insulators, or
+other regulatory elements that are not part of standard gene annotations.
 }
 \details{
-\code{makeBioRegionFromGranges()} function can make bioregion from granges object.
+This function creates biological regions from a user-provided GRanges object,
+allowing extraction of regions around start sites, end sites, or full bodies
+for custom genomic features not available in TxDb objects (e.g., enhancers,
+insulators).
 
-The differences between \code{makeBioRegionFromGranges()} and \code{getBioRegion()} is that
-\code{getBioRegion()} get the region object from \code{txdb} object but
-\code{makeBioRegionFromGranges()} get the region from the granges object provided by users.
-For example, \code{txdb} object do not contain insulator or enhancer regions. Users can
-provide these regions through self-made granges object
 
-There are three kinds of regions, \code{start_site}, \code{end_site} and \code{body}. 
+The function supports three region types:
+\itemize{
+  \item \code{start_site}: Region around the start of each range. For an
+        enhancer at chr1:1000-1400 with upstream=100 and downstream=100,
+        extracts chr1:900-1100 (start +/- 100bp, strand-aware)
+  \item \code{end_site}: Region around the end of each range. For an enhancer
+        at chr1:1000-1400 with upstream=100 and downstream=100, extracts
+        chr1:1300-1500 (end +/- 100bp, strand-aware)
+  \item \code{body}: The full range body. For an enhancer at chr1:1000-1400,
+        extracts chr1:1000-1400. For this type, \code{upstream} and
+        \code{downstream} can be NULL
+}
 
-We take enhancer region to explain the differences of these three regions.
-enhancer: chr1 1000 1400. 
-
-\code{body} region refers to the 1000-1400bp.
-
-\code{start_site} region with \code{upstream = 100, downstream = 100} refers to 900-1100bp. 
-
-\code{end_site} region with \code{upstream = 100, downstream = 100} refers to 1300-1500bp.
-
-In \code{makeBioRegionFromGranges()}, \code{upstream} and \code{downstream} can be
-\code{NULL} if the \code{type == 'body'}. \code{by} should be specified by users and 
-can not be omitted. \code{by} parameter will be used to made labels. \code{type} should also
-be specified.
-
-\url{https://github.com/YuLab-SMU/ChIPseeker/issues/189}
+The function handles strand information correctly: for negative strand features,
+"upstream" and "downstream" are reversed relative to the genomic coordinates.
+}
+\seealso{
+\code{\link{getBioRegion}} for extracting regions from TxDb objects
 }

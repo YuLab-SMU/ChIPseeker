@@ -2,7 +2,7 @@
 % Please edit documentation in R/covplot.R
 \name{covplot}
 \alias{covplot}
-\title{covplot}
+\title{Plot peak coverage across chromosomes}
 \usage{
 covplot(
   peak,
@@ -17,29 +17,68 @@ covplot(
 )
 }
 \arguments{
-\item{peak}{peak file or GRanges object}
+\item{peak}{peak file (BED format) or GRanges object, or a list of peak
+files/GRanges objects for comparing multiple datasets}
 
-\item{weightCol}{weight column of peak}
+\item{weightCol}{character, name of a metadata column in the GRanges object
+to use as weights for coverage calculation. If NULL, all peaks have equal
+weight. Default is NULL}
 
-\item{xlab}{xlab}
+\item{xlab}{character, label for x-axis. Default is "Chromosome Size (bp)"}
 
-\item{ylab}{ylab}
+\item{ylab}{character, label for y-axis. Default is "" (empty)}
 
-\item{title}{title}
+\item{title}{character, plot title. Default is "ChIP Peaks over Chromosomes"}
 
-\item{chrs}{selected chromosomes to plot, all chromosomes by default}
+\item{chrs}{character vector, selected chromosomes to plot. If NULL, all
+chromosomes in the data are plotted. Default is NULL}
 
-\item{xlim}{ranges to plot, default is whole chromosome}
+\item{xlim}{numeric vector of length 2, genomic range to plot (start, end).
+If NULL, the entire chromosome is shown. Note: this applies to all chromosomes
+if specified. Default is NULL}
 
-\item{lower}{lower cutoff of coverage signal}
+\item{lower}{numeric, lower cutoff for coverage signal. Regions with coverage
+below this value are not displayed. Default is 1}
 
-\item{fill_color}{specify the color/palette for the plot. Order matters}
+\item{fill_color}{character vector or single value. For single peak: a color
+name or hex code. For multiple peaks (list): either a vector of colors
+(one per peak set) or a palette name (e.g., "Set1", "Dark2") from
+RColorBrewer. The order of colors matches the order of peak sets. Default
+is "black"}
 }
 \value{
-ggplot2 object
+A ggplot2 object that can be further customized or printed. The plot
+  shows peak coverage as rectangular bars, with one panel per chromosome when
+  multiple chromosomes are present
 }
 \description{
-plot peak coverage
+The function creates a coverage plot showing where peaks are located across
+chromosomes. It calculates coverage by counting overlapping peaks at each
+genomic position, and displays the results as a bar/rectangular plot with
+one panel per chromosome.
+}
+\details{
+This function visualizes the coverage of ChIP-seq peaks across chromosomes,
+showing the density and distribution of peaks along the genome.
+
+
+The function performs the following steps:
+\enumerate{
+  \item Loads peaks from file or uses provided GRanges object
+  \item Calculates coverage using \code{coverage()} function, optionally
+        weighted by a metadata column
+  \item Filters coverage by the \code{lower} threshold to remove low signals
+  \item Aggregates coverage into contiguous regions
+  \item Creates a ggplot2 visualization with:
+    \itemize{
+      \item One facet per chromosome (if multiple chromosomes)
+      \item Rectangular bars showing coverage regions
+      \item Color coding for multiple peak sets (if input is a list)
+    }
+}
+
+For multiple peak sets (list input), the function automatically assigns
+colors and creates a grouped plot showing all sets together.
 }
 \author{
 G Yu

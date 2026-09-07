@@ -2,13 +2,41 @@
 % Please edit documentation in R/csAnno.R
 \name{getAnnoStat}
 \alias{getAnnoStat}
-\title{getAnnoStat}
+\title{Get annotation statistics from csAnno object}
 \usage{
 getAnnoStat(x)
 }
 \arguments{
-\item{x}{csAnno object}
+\item{x}{\code{csAnno} object}
+}
+\value{
+A data.frame with columns:
+  \itemize{
+    \item \code{Feature}: genomic feature category (Promoter, 5' UTR, 3' UTR,
+          Exon, Intron, Downstream, Intergenic, etc.)
+    \item \code{Frequency}: percentage of peaks in each category
+  }
+  Only available if \code{hasGenomicAnnotation=TRUE}
 }
 \description{
-getting status of annotation
+The function returns the \code{annoStat} slot, which contains a summary of
+how peaks are distributed across different genomic feature categories
+(Promoter, Exon, Intron, UTR, Intergenic, etc.) with percentages.
+}
+\details{
+This function extracts the annotation statistics data frame from a
+\code{csAnno} object.
+}
+\examples{
+\dontrun{
+stats <- getAnnoStat(peakAnno)
+## View annotation distribution
+print(stats)
+}
+}
+\seealso{
+\code{\link{plotAnnoBar}} for visualizing these statistics
+}
+\author{
+Guangchuang Yu \url{https://guangchuangyu.github.io}
 }

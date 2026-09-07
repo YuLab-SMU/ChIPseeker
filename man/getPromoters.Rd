@@ -2,22 +2,44 @@
 % Please edit documentation in R/tagMatrix.R
 \name{getPromoters}
 \alias{getPromoters}
-\title{getPromoters}
+\title{Prepare promoter regions from TxDb}
 \usage{
 getPromoters(TxDb = NULL, upstream = 1000, downstream = 1000, by = "gene")
 }
 \arguments{
-\item{TxDb}{TxDb}
+\item{TxDb}{TxDb or EnsDb annotation object. If NULL, will attempt to
+determine from the data}
 
-\item{upstream}{upstream from TSS site}
+\item{upstream}{numeric, distance in base pairs to extend upstream from TSS.
+Default is 1000}
 
-\item{downstream}{downstream from TSS site}
+\item{downstream}{numeric, distance in base pairs to extend downstream from
+TSS. Default is 1000}
 
-\item{by}{one of gene or transcript}
+\item{by}{character, one of "gene" or "transcript". Determines whether to
+extract promoters at gene level or transcript level. Default is "gene"}
 }
 \value{
-GRanges object
+GRanges object containing promoter regions with attributes:
+  \itemize{
+    \item \code{type}: "start_site"
+    \item \code{by}: the value of the \code{by} parameter
+    \item \code{label}: generated label for the regions
+    \item \code{upstream}: upstream distance
+    \item \code{downstream}: downstream distance
+  }
 }
 \description{
-prepare the promoter regions
+The function extracts promoter regions defined as regions around transcription
+start sites (TSS). For each gene or transcript, it creates a region extending
+upstream and downstream from the TSS. The function calls \code{getBioRegion()}
+with \code{type="start_site"}.
+}
+\details{
+This function extracts promoter regions (TSS regions) from a TxDb or EnsDb
+annotation object. It is a convenience wrapper around \code{getBioRegion()}
+for extracting promoter regions.
+}
+\seealso{
+\code{\link{getBioRegion}} for more flexible region extraction
 }

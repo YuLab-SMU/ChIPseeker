@@ -2,7 +2,7 @@
 % Please edit documentation in R/annotatePeak.R
 \name{annotatePeak}
 \alias{annotatePeak}
-\title{annotatePeak}
+\title{Annotate peaks with genomic features}
 \usage{
 annotatePeak(
   peak,
@@ -25,71 +25,155 @@ annotatePeak(
 )
 }
 \arguments{
-\item{peak}{peak file or GRanges object}
+\item{peak}{peak file (BED, narrowPeak, broadPeak, etc.) or GRanges object
+containing genomic ranges of peaks to be annotated}
 
-\item{tssRegion}{Region Range of TSS}
+\item{tssRegion}{numeric vector of length 2 specifying the range of TSS region
+for promoter annotation. Default is c(-3000, 3000), meaning 3kb upstream and
+3kb downstream of TSS. Negative values indicate upstream, positive values
+indicate downstream}
 
-\item{TxDb}{TxDb or EnsDb annotation object}
+\item{TxDb}{TxDb or EnsDb annotation object, or a GRanges object containing
+user-defined genomic features. If a GRanges object is provided, some
+annotation features (genomic annotation, gene annotation, flanking genes)
+will be disabled}
 
-\item{level}{one of transcript and gene}
+\item{level}{character, one of "transcript" or "gene". Determines whether to
+annotate peaks at the transcript level or gene level. Default is "transcript"}
 
-\item{assignGenomicAnnotation}{logical, assign peak genomic annotation or not}
+\item{assignGenomicAnnotation}{logical, whether to assign genomic feature
+categories (Promoter, Exon, UTR, Intron, etc.) to peaks. Default is TRUE}
 
-\item{genomicAnnotationPriority}{genomic annotation priority}
+\item{genomicAnnotationPriority}{character vector specifying the priority order
+of genomic annotations when a peak overlaps multiple features. Must be a
+permutation of c("Promoter", "5UTR", "3UTR", "Exon", "Intron", "Downstream",
+"Intergenic"). Default prioritizes Promoter > 5UTR > 3UTR > Exon > Intron >
+Downstream > Intergenic}
 
-\item{annoDb}{annotation package}
+\item{annoDb}{character, name of annotation database package (e.g., "org.Hs.eg.db")
+to add gene identifiers (ENSEMBL, SYMBOL, GENENAME, ENTREZID). If NULL,
+only gene IDs from TxDb will be included. Default is NULL}
 
-\item{addFlankGeneInfo}{logical, add flanking gene information from the peaks}
+\item{addFlankGeneInfo}{logical, whether to identify and include all flanking
+genes within the specified distance from each peak. If TRUE, adds
+flank_geneIds and flank_gene_distances columns. Default is FALSE}
 
-\item{flankDistance}{distance of flanking sequence}
+\item{flankDistance}{numeric, distance (in base pairs) to extend on both sides
+of each peak when searching for flanking genes. Only used when
+addFlankGeneInfo=TRUE. Default is 5000}
 
-\item{sameStrand}{logical, whether find nearest/overlap gene in the same strand}
+\item{sameStrand}{logical, whether to only consider genes/transcripts on the
+same strand as the peak when finding nearest features. If FALSE, searches
+both strands. Default is FALSE}
 
-\item{ignoreOverlap}{logical, whether ignore overlap of TSS with peak}
+\item{ignoreOverlap}{logical, whether to ignore overlaps between peaks and
+TSS/features when finding the nearest gene. If FALSE, overlapping features
+will be prioritized. Default is FALSE}
 
-\item{ignoreUpstream}{logical, if True only annotate gene at the 3' of the peak.}
+\item{ignoreUpstream}{logical, if TRUE, only annotate genes at the 3' end
+(downstream) of the peak. This restricts annotation to genes that come
+after the peak. Default is FALSE}
 
-\item{ignoreDownstream}{logical, if True only annotate gene at the 5' of the peak.}
+\item{ignoreDownstream}{logical, if TRUE, only annotate genes at the 5' end
+(upstream) of the peak. This restricts annotation to genes that come before
+the peak. Default is FALSE}
 
-\item{overlap}{one of 'TSS' or 'all', if overlap="all", then gene overlap with peak will be reported as nearest gene, no matter the overlap is at TSS region or not.}
+\item{overlap}{character, one of "TSS" or "all". Determines how overlaps are
+detected: "TSS" only considers overlaps with the TSS point (transcription
+start site), while "all" considers overlaps with any part of the gene/transcript
+body. When overlap="all", any gene overlapping the peak will be reported as
+the nearest gene, regardless of whether the overlap is at the TSS region.
+Default is "TSS"}
 
-\item{verbose}{print message or not}
+\item{verbose}{logical, whether to print progress messages during annotation.
+Default is TRUE}
 
-\item{columns}{names of columns to be obtained from database}
+\item{columns}{character vector, names of columns to retrieve from the annotation
+database specified by annoDb. Common values include "ENTREZID", "ENSEMBL",
+"SYMBOL", "GENENAME". Default is c("ENTREZID", "ENSEMBL", "SYMBOL", "GENENAME")}
 }
 \value{
-data.frame or GRanges object with columns of:
+A \code{csAnno} object containing the annotated peaks. The main
+  annotation data is stored in the \code{anno} slot (a GRanges object) with
+  the following metadata columns:
 
-all columns provided by input.
+  \itemize{
+    \item All original columns from the input peak file/GRanges object
+    \item \code{annotation}: Genomic feature category of the peak. Possible
+      values are Promoter-TSS, 5' UTR, 3' UTR, Exon, Intron, Downstream, and
+      Intergenic. Only present if \code{assignGenomicAnnotation=TRUE}
+    \item \code{geneChr}: Chromosome of the nearest gene/transcript
+    \item \code{geneStart}: Start position of the nearest gene/transcript
+    \item \code{geneEnd}: End position of the nearest gene/transcript
+    \item \code{geneLength}: Length of the nearest gene/transcript
+    \item \code{geneStrand}: Strand of the nearest gene/transcript ("+" or "-")
+    \item \code{geneId}: Gene identifier (Entrez ID for TxDb, or gene_id for EnsDb)
+    \item \code{transcriptId}: Transcript identifier (only when \code{level="transcript"})
+    \item \code{distanceToTSS}: Distance from peak to the transcription start site
+      (TSS) of the nearest gene. Positive values indicate downstream, negative
+      values indicate upstream. Distance is 0 for overlapping peaks
+    \item \code{ENSEMBL}: Ensembl gene ID (only if \code{annoDb} is provided)
+    \item \code{SYMBOL}: Gene symbol (only if \code{annoDb} is provided)
+    \item \code{GENENAME}: Full gene name (only if \code{annoDb} is provided)
+    \item \code{ENTREZID}: Entrez gene ID (only if \code{annoDb} is provided and
+      requested in \code{columns})
+    \item \code{flank_geneIds}: Semicolon-separated list of all flanking gene IDs
+      within the specified distance (only if \code{addFlankGeneInfo=TRUE})
+    \item \code{flank_gene_distances}: Semicolon-separated list of distances to
+      flanking genes (only if \code{addFlankGeneInfo=TRUE})
+    \item \code{flank_txIds}: Semicolon-separated list of all flanking transcript
+      IDs (only if \code{addFlankGeneInfo=TRUE} and \code{level="transcript"})
+  }
 
-annotation: genomic feature of the peak, for instance if the peak is
-located in 5'UTR, it will annotated by 5'UTR. Possible annotation is
-Promoter-TSS, Exon, 5' UTR, 3' UTR, Intron, and Intergenic.
-
-geneChr: Chromosome of the nearest gene
-
-geneStart: gene start
-
-geneEnd: gene end
-
-geneLength: gene length
-
-geneStrand: gene strand
-
-geneId: entrezgene ID
-
-distanceToTSS: distance from peak to gene TSS
-
-if annoDb is provided, extra column will be included:
-
-ENSEMBL: ensembl ID of the nearest gene
-
-SYMBOL: gene symbol
-
-GENENAME: full gene name
+  The \code{csAnno} object also contains slots for:
+  \itemize{
+    \item \code{tssRegion}: The TSS region used for annotation
+    \item \code{level}: The annotation level ("transcript" or "gene")
+    \item \code{hasGenomicAnnotation}: Whether genomic annotation was assigned
+    \item \code{detailGenomicAnnotation}: Detailed annotation matrix (if available)
+    \item \code{annoStat}: Annotation statistics
+    \item \code{peakNum}: Total number of peaks
+  }
 }
 \description{
-Annotate peaks
+This function annotates ChIP-seq peaks with genomic features including
+nearest genes, genomic annotation (promoter, exon, intron, etc.),
+distance to TSS, and optional gene annotation from annotation databases.
+It can also identify flanking genes within a specified distance from peaks.
+}
+\details{
+The function performs comprehensive peak annotation through several steps:
+
+1. **Feature extraction**: Extracts gene or transcript features from the
+   provided TxDb or EnsDb annotation object, or uses user-defined GRanges.
+
+2. **Nearest feature identification**: Finds the nearest gene/transcript to
+   each peak using \code{getNearestFeatureIndicesAndDistances}, considering
+   strand specificity and overlap options. The \code{overlap} parameter
+   controls whether to consider overlaps with the entire gene body ("all")
+   or only TSS regions ("TSS").
+
+3. **Distance calculation**: Computes the distance from each peak to the
+   transcription start site (TSS) of the nearest feature, with positive
+   values indicating downstream and negative values indicating upstream.
+
+4. **Genomic annotation**: Assigns genomic feature categories (Promoter-TSS,
+   5' UTR, 3' UTR, Exon, Intron, Downstream, Intergenic) based on the peak's
+   location relative to gene structure. The priority order can be customized
+   via \code{genomicAnnotationPriority}.
+
+5. **Gene annotation**: Optionally adds gene identifiers (ENSEMBL, SYMBOL,
+   GENENAME, ENTREZID) from annotation databases using the \code{annoDb}
+   parameter.
+
+6. **Flanking gene information**: Optionally identifies all genes within a
+   specified flanking distance from each peak, providing comprehensive
+   information about nearby genes.
+
+The function returns a \code{csAnno} object containing the annotated peaks
+with all metadata columns. When \code{TxDb} is provided as a GRanges object,
+some features (genomic annotation, gene annotation, flanking genes) are
+disabled, and the function works with user-defined genomic features.
 }
 \examples{
 \dontrun{

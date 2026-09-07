@@ -15,19 +15,24 @@ tagHeatmap(
 )
 }
 \arguments{
-\item{tagMatrix}{tagMatrix or a list of tagMatrix}
+\item{tagMatrix}{matrix or list of matrices. Tag matrix with features as rows
+and genomic positions as columns, typically obtained from \code{getTagMatrix()}.
+If a list is provided, creates separate heatmaps for each matrix}
 
-\item{xlab}{xlab}
+\item{xlab}{character, x-axis label. Default is "" (empty)}
 
-\item{ylab}{ylab}
+\item{ylab}{character, y-axis label. Default is "" (empty)}
 
-\item{title}{title}
+\item{title}{character, plot title. If NULL, no title is shown. Default is NULL}
 
-\item{palette}{palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}}
+\item{palette}{character, color palette name from RColorBrewer for the heatmap.
+See \code{\link[ggplot2]{scale_colour_brewer}} for options. Default is "RdBu"}
 
-\item{nrow}{the nrow of plotting a list of peak}
+\item{nrow}{integer, number of rows for arranging multiple heatmaps when
+\code{tagMatrix} is a list. If NULL, automatically determined. Default is NULL}
 
-\item{ncol}{the ncol of plotting a list of peak}
+\item{ncol}{integer, number of columns for arranging multiple heatmaps when
+\code{tagMatrix} is a list. If NULL, automatically determined. Default is NULL}
 }
 \value{
 figure

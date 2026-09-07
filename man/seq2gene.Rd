@@ -2,29 +2,86 @@
 % Please edit documentation in R/seq2gene.R
 \name{seq2gene}
 \alias{seq2gene}
-\title{seq2gene}
+\title{Annotate genomic regions to genes in many-to-many mapping}
 \usage{
 seq2gene(seq, tssRegion, flankDistance, TxDb, sameStrand = FALSE)
 }
 \arguments{
-\item{seq}{genomic regions in GRanges object}
+\item{seq}{GRanges object containing genomic regions to be mapped to genes.
+Typically ChIP-seq peaks, enhancers, or other regulatory elements}
 
-\item{tssRegion}{TSS region}
+\item{tssRegion}{numeric vector of length 2 specifying the promoter region
+around the transcription start site (TSS). Default example: c(-1000, 1000)
+means 1kb upstream and 1kb downstream of TSS. Negative values indicate
+upstream, positive values indicate downstream. Regions within this range
+are considered to be in promoter regions}
 
-\item{flankDistance}{flanking search radius}
+\item{flankDistance}{numeric, distance in base pairs to search for flanking
+genes. Regions that are within this distance from a gene (but outside the
+\code{tssRegion}) are considered flanking genes. Default example: 3000 (3kb)}
 
-\item{TxDb}{TranscriptDb object}
+\item{TxDb}{TxDb or EnsDb annotation object containing gene/transcript
+structure information}
 
-\item{sameStrand}{logical whether find nearest/overlap gene in the same strand}
+\item{sameStrand}{logical, whether to only consider genes on the same strand
+as the genomic regions when finding overlaps and nearest features. If FALSE,
+strand is ignored. Default is FALSE}
 }
 \value{
-gene vector
+Character vector of unique gene IDs. The vector contains gene IDs from:
+  \itemize{
+    \item Host genes (regions overlapping exons/introns)
+    \item Proximal genes (regions within TSS region)
+    \item Flanking genes (regions within \code{flankDistance} but outside TSS region)
+  }
+  The gene IDs are typically Entrez IDs (for TxDb) or gene_id (for EnsDb),
+  and can be used directly for functional enrichment analysis with packages
+  like \code{clusterProfiler}, \code{DOSE}, or \code{ReactomePA}
 }
 \description{
-annotate genomic regions to genes in many-to-many mapping
+The function maps genomic regions to genes through three mechanisms:
+\enumerate{
+  \item \strong{Host genes}: Regions that overlap with exons or introns of
+        genes. These are genes that directly contain the genomic regions
+  \item \strong{Proximal genes}: Regions located within the promoter region
+        (TSS region) of genes. These are genes whose transcription start sites
+        are near the genomic regions
+  \item \strong{Flanking genes}: Regions located within a specified distance
+        from genes but outside the promoter region. These are nearby genes that
+        may be regulated via cis-regulatory mechanisms
+}
+
+The function returns a vector of unique gene IDs that can be used for downstream
+functional enrichment analysis (e.g., GO, KEGG, Reactome pathway analysis).
 }
 \details{
-This funciton associates genomic regions with coding genes in a many-to-many mapping. It first maps genomic regions to host genes (either located in exon or intron), proximal genes (located in promoter regions) and flanking genes (located in upstream and downstream within user specify distance).
+This function associates genomic regions (e.g., ChIP-seq peaks, enhancers,
+regulatory elements) with coding genes in a many-to-many mapping. It is
+designed to link both coding and non-coding genomic regions to coding genes
+to facilitate functional enrichment analysis.
+
+
+The function performs the following steps:
+\enumerate{
+  \item Identifies host genes by finding overlaps with exons and introns using
+        \code{getGenomicAnnotation.internal()}
+  \item Extracts gene IDs from overlapping exons and introns, converting
+        transcript-based IDs to gene IDs
+  \item Finds the nearest gene to each region using
+        \code{getNearestFeatureIndicesAndDistances()}
+  \item Categorizes nearest genes into:
+    \itemize{
+      \item Promoter genes: genes where the distance falls within \code{tssRegion}
+      \item Flanking genes: genes where the absolute distance is less than
+            \code{flankDistance} but outside \code{tssRegion}
+    }
+  \item Combines all gene IDs (host, promoter, and flanking) and returns unique
+        gene IDs
+}
+
+This many-to-many mapping allows a single genomic region to be associated with
+multiple genes (e.g., overlapping multiple genes or having multiple nearby genes),
+and a single gene can be associated with multiple genomic regions.
 }
 \examples{
 \dontrun{
@@ -32,8 +89,16 @@ library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 TxDb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 file <- getSampleFiles()[[1]] # a bed file
 gr <- readPeakFile(file)
-genes <- seq2gene(gr, tssRegion=c(-1000, 1000), flankDistance = 3000, TxDb) 
+genes <- seq2gene(gr, tssRegion=c(-1000, 1000), flankDistance = 3000, TxDb)
+
+## Use the gene IDs for enrichment analysis
+## library(clusterProfiler)
+## ego <- enrichGO(gene = genes, OrgDb = org.Hs.eg.db, ont = "BP")
 }
+}
+\seealso{
+\code{\link{annotatePeak}} for detailed peak annotation,
+  \code{\link{getNearestFeatureIndicesAndDistances}} for finding nearest features
 }
 \author{
 Guangchuang Yu

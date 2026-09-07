@@ -2,27 +2,82 @@
 % Please edit documentation in R/readPeakFile.R
 \name{readPeakFile}
 \alias{readPeakFile}
-\title{readPeakFile}
+\title{Read peak file and convert to GRanges or data.frame}
 \usage{
 readPeakFile(peakfile, as = "GRanges", ...)
 }
 \arguments{
-\item{peakfile}{peak file}
+\item{peakfile}{character, path to the peak file. Can be a local file path or
+a URL. Supported formats include BED (.bed, .bed.gz), narrowPeak (.narrowPeak),
+broadPeak (.broadPeak), gappedPeak (.gappedPeak), bedGraph (.bedGraph.gz),
+or any tab-delimited file with chromosome, start, and end positions}
 
-\item{as}{output format, one of GRanges or data.frame}
+\item{as}{character, output format. One of "GRanges" (default) or "data.frame".
+If "GRanges", returns a GRanges object with additional columns as metadata.
+If "data.frame", returns a data.frame}
 
-\item{...}{additional parameter (pass to `utils::read.delim()`)}
+\item{...}{additional parameters passed to \code{utils::read.delim()} for
+reading the file. Useful parameters include \code{sep}, \code{quote},
+\code{stringsAsFactors}, etc. Note: \code{header} is automatically
+determined based on file format, but can be explicitly specified to override}
 }
 \value{
-peak information, in GRanges or data.frame object
+Depending on the \code{as} parameter:
+  \itemize{
+    \item If \code{as="GRanges"}: A GRanges object with:
+      \itemize{
+        \item \code{seqnames}: Chromosome names (from column 1)
+        \item \code{ranges}: IRanges with start and end positions (from columns 2 and 3)
+        \item Additional metadata columns: All columns beyond the first three
+              are preserved as metadata columns with their original names
+      }
+    \item If \code{as="data.frame"}: A data.frame with all columns from the
+      original file, with BED coordinates converted to 1-based if applicable
+  }
 }
 \description{
-read peak file and store in data.frame or GRanges object
+The function reads tab-delimited peak files and converts them to the specified
+output format. It automatically detects BED format files based on file extension
+and handles the coordinate system conversion (BED files use 0-based start
+coordinates, which are converted to 1-based for R compatibility). Additional
+columns beyond chromosome, start, and end positions are preserved in the output.
+}
+\details{
+This function reads peak files in various formats (BED, narrowPeak, broadPeak,
+etc.) and converts them to either a GRanges object or data.frame. The function
+automatically handles BED file coordinate conversion (0-based to 1-based).
+
+
+The function performs the following steps:
+\enumerate{
+  \item Detects file format based on extension (BED files: .bed, .bed.gz,
+        .narrowPeak, .broadPeak, .gappedPeak, .bedGraph.gz, or files ending
+        with Peak.gz)
+  \item Reads the file using \code{utils::read.delim()} with appropriate
+        header settings (BED files have no header, other formats may have headers)
+  \item Converts BED coordinates from 0-based to 1-based by adding 1 to the
+        start position (BED end position is already exclusive, so no adjustment
+        needed)
+  \item Converts to the requested output format (GRanges or data.frame)
+  \item Preserves all additional columns beyond the first three (chromosome,
+        start, end) as metadata columns in GRanges or as additional columns in
+        data.frame
+}
+
+Supported file formats include standard BED files, narrowPeak, broadPeak,
+gappedPeak, bedGraph, and other tab-delimited formats with chromosome, start,
+and end positions in the first three columns.
 }
 \examples{
 peakfile <- system.file("extdata", "sample_peaks.txt", package="ChIPseeker")
 peak.gr <- readPeakFile(peakfile, as="GRanges")
 peak.gr
+
+## Read a BED file
+## peak.gr <- readPeakFile("peaks.bed", as="GRanges")
+
+## Read with custom parameters
+## peak.df <- readPeakFile("peaks.txt", as="data.frame", sep="\t")
 }
 \author{
 G Yu

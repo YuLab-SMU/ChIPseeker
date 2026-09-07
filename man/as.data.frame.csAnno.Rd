@@ -2,24 +2,48 @@
 % Please edit documentation in R/csAnno.R
 \name{as.data.frame.csAnno}
 \alias{as.data.frame.csAnno}
-\title{as.data.frame.csAnno}
+\title{Convert csAnno object to data.frame}
 \usage{
 \method{as.data.frame}{csAnno}(x, row.names = NULL, optional = FALSE, ...)
 }
 \arguments{
-\item{x}{csAnno object}
+\item{x}{\code{csAnno} object to convert}
 
-\item{row.names}{row names}
+\item{row.names}{character vector or NULL, row names for the resulting
+data.frame. If NULL, default row names are used. Default is NULL}
 
-\item{optional}{should be omitted.}
+\item{optional}{logical, kept for compatibility with generic method but
+should be omitted. Default is FALSE}
 
-\item{...}{additional parameters}
+\item{...}{additional parameters (currently unused)}
 }
 \value{
-data.frame
+A data.frame containing all peak information with columns:
+  \itemize{
+    \item Standard GRanges columns: seqnames, start, end, width, strand
+    \item All metadata columns: annotation, geneId, distanceToTSS, geneChr,
+          geneStart, geneEnd, etc.
+  }
 }
 \description{
-convert csAnno object to data.frame
+The function converts the \code{anno} slot (GRanges object) to a data.frame,
+preserving all metadata columns. This is useful for exporting data,
+performing data.frame operations, or using with functions that require
+data.frame input.
+}
+\details{
+This function converts a \code{csAnno} object to a data.frame by extracting
+and converting the GRanges object containing annotated peaks.
+}
+\examples{
+\dontrun{
+peak.df <- as.data.frame(peakAnno)
+## Export to CSV
+write.csv(peak.df, "annotated_peaks.csv")
+}
+}
+\seealso{
+\code{\link{as.GRanges}} for converting to GRanges object
 }
 \author{
 Guangchuang Yu \url{https://guangchuangyu.github.io}

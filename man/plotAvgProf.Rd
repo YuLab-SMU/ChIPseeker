@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotTagMatrix.R
 \name{plotAvgProf}
 \alias{plotAvgProf}
-\title{plotAvgProf}
+\title{plot the profile of peaks}
 \usage{
 plotAvgProf(
   tagMatrix,
@@ -18,31 +18,64 @@ plotAvgProf(
 )
 }
 \arguments{
-\item{tagMatrix}{tagMatrix or a list of tagMatrix}
+\item{tagMatrix}{matrix or list of matrices. Each matrix should have features
+as rows and genomic positions as columns. Tag matrices are typically obtained
+from \code{getTagMatrix()}. If a list is provided, each element should be
+a named tag matrix}
 
-\item{xlim}{xlim}
+\item{xlim}{numeric vector of length 2, x-axis limits (start, end positions).
+Should match the number of columns in tagMatrix. Default example: c(-3000, 3000)}
 
-\item{xlab}{x label}
+\item{xlab}{character, x-axis label. Default is "Genomic Region (5'->3')"}
 
-\item{ylab}{y label}
+\item{ylab}{character, y-axis label. Default is "Peak Count Frequency"}
 
-\item{conf}{confidence interval}
+\item{conf}{numeric, confidence level (e.g., 0.95 for 95% CI). If provided,
+confidence intervals are calculated and displayed as ribbons. If NA or missing,
+no confidence intervals are shown}
 
-\item{facet}{one of 'none', 'row' and 'column'}
+\item{facet}{character, one of "none", "row", or "column". Controls how multiple
+datasets are displayed: "none" overlays them, "row" creates row facets,
+"column" creates column facets. Default is "none"}
 
-\item{free_y}{if TRUE, y will be scaled by AvgProf}
+\item{free_y}{logical, if TRUE and faceting is used, y-axis scales independently
+for each facet. Default is TRUE}
 
-\item{origin_label}{label of the center}
+\item{origin_label}{character, label for the center point (e.g., "TSS", "TES").
+A vertical line is drawn at position 0 with this label. Default is "TSS"}
 
-\item{verbose}{print message or not}
+\item{verbose}{logical, whether to print progress messages. Default is TRUE}
 
-\item{...}{additional parameter}
+\item{...}{additional arguments passed to ggplot2 functions}
 }
 \value{
-ggplot object
+A ggplot2 object showing the average peak profile as a line plot,
+  with optional confidence intervals and faceting
 }
 \description{
-plot the profile of peaks
+The function creates a line plot showing the average signal intensity of
+peaks across genomic regions. It can plot single or multiple peak sets,
+with optional confidence intervals (error bars or ribbons) and faceting
+options for comparing datasets.
+}
+\details{
+Plot average peak profile
+
+This function plots the average profile of peaks around genomic features
+(e.g., TSS, gene body) as a line plot, optionally with confidence intervals.
+
+
+The function:
+\enumerate{
+  \item Calculates average signal across all features for each position
+  \item Optionally calculates confidence intervals (if \code{conf} is provided)
+  \item Creates a line plot with optional ribbon for confidence intervals
+  \item Supports faceting for multiple datasets (row, column, or none)
+  \item Allows independent y-axis scaling per facet
+}
+
+For multiple datasets (list input), the function automatically creates
+separate facets or overlays them based on the \code{facet} parameter.
 }
 \author{
 G Yu; Y Yan

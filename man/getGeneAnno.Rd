@@ -2,24 +2,56 @@
 % Please edit documentation in R/addGeneAnno.R
 \name{getGeneAnno}
 \alias{getGeneAnno}
-\title{getGeneAnno}
+\title{Get gene annotation from annotation database}
 \usage{
 getGeneAnno(annoDb, geneID, type, columns)
 }
 \arguments{
-\item{annoDb}{annotation package}
+\item{annoDb}{character, name of the annotation database package (e.g.,
+"org.Hs.eg.db" for human). The package must be installed and loaded}
 
-\item{geneID}{query geneID}
+\item{geneID}{character vector of gene IDs to query. Can be Entrez Gene IDs
+or Ensembl Gene IDs depending on the \code{type} parameter}
 
-\item{type}{gene ID type}
+\item{type}{character, gene ID type. Must be one of "Entrez Gene ID" or
+"Ensembl gene ID" / "Ensembl Gene ID"}
 
-\item{columns}{names of columns to be obtained from database}
+\item{columns}{character vector, names of columns to retrieve from the
+annotation database. Common values include "SYMBOL", "GENENAME", "ENSEMBL",
+"ENTREZID", "GO", "PATH", etc. See the annotation package documentation
+for available columns}
 }
 \value{
-data.frame
+A data.frame with:
+  \itemize{
+    \item Rows corresponding to the input gene IDs (in the same order)
+    \item Columns as specified in the \code{columns} parameter, plus the
+          keytype column (ENTREZID or ENSEMBL)
+    \item NA values for gene IDs that could not be found in the database
+  }
+  Returns NA if the ID type is not supported or if the database query fails
 }
 \description{
-get gene annotation, symbol, gene name etc.
+The function queries an annotation database to retrieve gene information such
+as gene symbols, full gene names, Ensembl IDs, and other identifiers. It
+handles both Entrez Gene IDs and Ensembl Gene IDs, and returns a data frame
+with the requested annotation columns.
+}
+\details{
+This function retrieves gene annotations (symbol, gene name, etc.) from
+annotation databases (e.g., org.Hs.eg.db) based on gene IDs.
+
+
+The function performs the following steps:
+\enumerate{
+  \item Validates and converts the gene ID type to the appropriate keytype
+        for the annotation database (ENTREZID or ENSEMBL)
+  \item Removes version numbers from Ensembl IDs (e.g., "ENSG00000123456.1"
+        becomes "ENSG00000123456")
+  \item Queries the annotation database using \code{AnnotationDbi::select()}
+  \item Handles duplicate gene IDs by keeping only the first occurrence
+  \item Returns a data frame with rows matching the input gene IDs
+}
 }
 \author{
 G Yu

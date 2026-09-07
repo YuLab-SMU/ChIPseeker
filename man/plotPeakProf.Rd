@@ -26,65 +26,128 @@ plotPeakProf(
 )
 }
 \arguments{
-\item{tagMatrix}{tagMatrix or a list of tagMatrix}
+\item{tagMatrix}{matrix or list of matrices, optional. Pre-computed tag matrix
+(from \code{getTagMatrix()}). If provided, peaks are not required. If NULL,
+tag matrix will be generated from peaks. Default is NULL}
 
-\item{peak}{peak file or GRanges object}
+\item{peak}{peak file (BED format) or GRanges object, or a list of peak
+files/GRanges objects for comparing multiple datasets. Required if
+\code{tagMatrix} is NULL}
 
-\item{upstream}{upstream position}
+\item{upstream}{numeric, upstream distance in base pairs. Interpretation
+depends on \code{type}: for "start_site"/"end_site", it's the distance
+upstream of the site; for "body", it's the extension beyond the feature body.
+Can be NULL if using binning mode. Default varies by function}
 
-\item{downstream}{downstream position}
+\item{downstream}{numeric, downstream distance in base pairs. Interpretation
+depends on \code{type}: for "start_site"/"end_site", it's the distance
+downstream of the site; for "body", it's the extension beyond the feature
+body. Can be NULL if using binning mode. Default varies by function}
 
-\item{conf}{confidence interval}
+\item{conf}{numeric, confidence level (e.g., 0.95 for 95% CI). If provided,
+confidence intervals are calculated and displayed as ribbons around the
+average profile. If NA or missing, no confidence intervals are shown.
+Default varies by function}
 
-\item{by}{feature of interest}
+\item{by}{character vector, feature(s) of interest. If using TxDb: one of
+'gene', 'transcript', 'exon', 'intron', '3UTR', '5UTR', 'UTR'. If using
+self-made GRanges: can be any label (used only for plot labels). For
+\code{plotPeakProf_MultiWindows}, can be a vector of length > 1 to compare
+multiple windows}
 
-\item{type}{one of "start_site", "end_site", "body"}
+\item{type}{character, one of "start_site", "end_site", or "body". Determines
+which part of the feature to plot: transcription start site, transcription
+end site, or the entire feature body. For \code{plotPeakProf_MultiWindows},
+must be a single value (all windows must have the same type)}
 
-\item{windows_name}{the name for each window, which will also be showed in the picture as labels}
+\item{windows_name}{character vector, optional names for each window (used
+in \code{plotPeakProf_MultiWindows}). These names appear as labels in the
+plot. If NULL and \code{TxDb} is a named list, uses names from \code{TxDb}.
+If NULL and \code{by} is provided, uses \code{by} values. Default is NULL}
 
-\item{weightCol}{column name of weight}
+\item{weightCol}{character, name of a metadata column in the GRanges object
+to use as weights for coverage calculation. If NULL, all peaks have equal
+weight. Default is NULL}
 
-\item{TxDb}{TxDb object or self-made granges objects}
+\item{TxDb}{TxDb or EnsDb annotation object, or a list of GRanges objects
+containing user-defined genomic features. If a list of GRanges is provided,
+each element should correspond to a window defined by \code{by}. Default is NULL}
 
-\item{xlab}{xlab}
+\item{xlab}{character, x-axis label. Default is "Genomic Region (5'->3')"}
 
-\item{ylab}{ylab}
+\item{ylab}{character, y-axis label. Default is "Peak Count Frequency"}
 
-\item{facet}{one of 'none', 'row' and 'column'}
+\item{facet}{character, one of "none", "row", or "column". Controls how
+multiple datasets are displayed: "none" overlays them on the same plot,
+"row" creates row facets, "column" creates column facets. Default is "row"
+for \code{plotPeakProf}, "none" for others}
 
-\item{free_y}{if TRUE, y will be scaled by AvgProf}
+\item{free_y}{logical, if TRUE and faceting is used, y-axis scales
+independently for each facet. Default is TRUE}
 
-\item{verbose}{print message or not}
+\item{verbose}{logical, whether to print progress messages. Default is TRUE}
 
-\item{nbin}{the amount of bines}
+\item{nbin}{integer, number of bins for binning mode. If provided, regions
+are divided into this many equal-sized bins instead of using absolute
+positions. Useful for comparing features of different lengths. If NULL,
+uses absolute positions. Default is NULL}
 
-\item{ignore_strand}{ignore the strand information or not}
+\item{ignore_strand}{logical, whether to ignore strand information when
+calculating coverage. If FALSE, peaks and features are matched by strand.
+Default is FALSE}
 
-\item{...}{additional parameter}
+\item{...}{additional arguments passed to ggplot2 functions for plot
+customization}
 }
 \value{
 ggplot object
 }
 \description{
-plot the profile of peaks
-`
-\code{plotPeakProf_MultiWindows()} is almost the same as \code{plotPeakProf2()}, having
-the main difference of accepting two or more granges objects. Accepting more
-granges objects can help compare the same peaks in different windows.
+The function is a flexible entry point for plotting peak profiles. It can
+work with either pre-computed tag matrices or raw peak files/GRanges objects.
+When provided with peaks, it automatically generates tag matrices and plots
+them. The function routes to different plotting functions based on the input
+type and parameters.
 }
 \details{
+Plot peak profiles around genomic features
+
+This function visualizes the distribution of ChIP-seq peaks around genomic
+features (e.g., TSS, gene body, exons) by plotting average peak profiles
+or heatmaps.
+
+
+The function behavior depends on the input:
+\itemize{
+  \item If \code{tagMatrix} is provided: plots directly from the tag matrix
+        (supports both normal and binning modes)
+  \item If \code{tagMatrix} is NULL: generates tag matrix from peaks and routes to:
+    \itemize{
+      \item \code{plotPeakProf2()} if \code{by} has length 1
+      \item \code{plotPeakProf_MultiWindows()} if \code{by} has length > 1
+    }
+}
+
+The function supports:
+\itemize{
+  \item Single or multiple peak sets (list of peaks)
+  \item Confidence intervals for average profiles
+  \item Binning mode for large datasets
+  \item Faceting options for comparing multiple datasets
+}
+
 \code{TxDb} parameter can accept txdb object.
 But many regions can not be obtained by txdb object. In this case,
-Users can provide self-made granges served the same role 
+Users can provide self-made granges served the same role
 as txdb object and pass to \code{TxDb} object.
 
-\code{by} the features of interest. 
+\code{by} the features of interest.
 
-(1) if users use \code{txdb}, \code{by} can be one of 'gene', 'transcript', 'exon', 
+(1) if users use \code{txdb}, \code{by} can be one of 'gene', 'transcript', 'exon',
 'intron' , '3UTR' , '5UTR', 'UTR'. These features can be obtained by functions from txdb object.
 
 (2) if users use self-made granges object, \code{by} can be everything. Because this \code{by}
-will not pass to functions to get features, which is different from the case of using 
+will not pass to functions to get features, which is different from the case of using
 txdb object. This \code{by} is only used to made labels showed in picture.
 
 \code{type} means the property of the region. one of the "start site",
@@ -92,7 +155,7 @@ txdb object. This \code{by} is only used to made labels showed in picture.
 
 \code{upstream} and \code{downstream} parameter have different usages:
 
-(1) if \code{type == 'body'}, \code{upstream} and \code{downstream} can use to extend 
+(1) if \code{type == 'body'}, \code{upstream} and \code{downstream} can use to extend
 the flank of body region.
 
 (2) if \code{type == 'start_site'/'end_site'}, \code{upstream} and \code{downstream} refer to
@@ -108,10 +171,10 @@ There are two ways input a list of window.
 
 (1) Users can input a list of self-made granges objects
 
-(2) Users can input a list of \code{by} and only one \code{type}. In this way, 
+(2) Users can input a list of \code{by} and only one \code{type}. In this way,
 \code{plotPeakProf_MultiWindows()} can made a list of window from txdb object based on \code{by} and \code{type}.
 
-Warning: 
+Warning:
 
 (1) All of these window should be the same type. It means users can only
 compare a list of "start site"/"end site"/"body region" with the same upstream
@@ -121,7 +184,7 @@ and downstream.
 
 (3) Users can make window by txdb object or self-made granges object. Users can only
 choose one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR' or 'UTR' in the
-way of using txdb object. User can input any \code{by} in the way of using 
+way of using txdb object. User can input any \code{by} in the way of using
 self-made granges object.
 
 (4) Users can mingle the \code{by} designed for the two ways. \code{plotPeakProf_MultiWindows} can

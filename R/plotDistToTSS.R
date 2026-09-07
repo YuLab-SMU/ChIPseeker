@@ -8,7 +8,7 @@ merge_two_si = function(x1, x2){
 
 generate_break_lbs = function(breaks) {
   lbs = c()
-  
+
   # break labels
   break_labels = scales::label_number(scale_cut = scales::cut_si(unit = "b"))(breaks)
   break_labels = gsub(" b$"," bp", break_labels)
@@ -21,7 +21,7 @@ generate_break_lbs = function(breaks) {
       lbs = c(lbs, merge_two_si(break_labels[i-1], break_labels[i]))
     }
   }
-  
+
   return(lbs)
 }
 
@@ -32,9 +32,9 @@ generate_colors = function(palette = NULL, n) {
     brewer_cols = old_color
   } else if (length(palette) == 1 && is_valid_palette(palette)){
     brewer_cols = RColorBrewer::brewer.pal(
-      name = palette, 
+      name = palette,
       n = RColorBrewer::brewer.pal.info[palette, "maxcolors"]
-    ) |> rev()     
+    ) |> rev()
   } else if (all(is_valid_color(palette))){
     brewer_cols = palette
   }
@@ -42,13 +42,13 @@ generate_colors = function(palette = NULL, n) {
     warning("Your palette is non-valid, switching to default...")
     brewer_cols = old_color
   }
-  
+
   if (length(brewer_cols) >= n) {
     cols = brewer_cols[1:length(brewer_cols)]
   } else {
     cols = grDevices::colorRampPalette(brewer_cols)(n)
   }
-  
+
   return(cols)
 }
 
@@ -65,20 +65,56 @@ is_valid_color = function(color){
   })
 }
 
-##' plot feature distribution based on the distances to the TSS
+##' Plot feature distribution based on distances to TSS
 ##'
+##' This function creates a bar plot showing the distribution of peaks relative
+##' to transcription start sites (TSS), categorizing peaks by their distance
+##' from the nearest gene's TSS.
 ##'
-##' @title plotDistToTSS.data.frame
-##' @param peakDist peak annotation
-##' @param distanceColumn column name of the distance from peak to nearest gene
-##' @param distanceBreaks default is 'c(0, 1000, 3000, 5000, 10000, 100000)'
-##' @param palette palette name for coloring different distances. Run `RColorBrewer::display.brewer.all()` to see all applicable values.
-##' @param xlab x label
-##' @param ylab y lable
-##' @param title figure title
-##' @param categoryColumn category column, default is ".id"
-##' @return bar plot that summarize distance from peak to
-##' TSS of the nearest gene.
+##' @description
+##' The function visualizes where ChIP-seq peaks are located relative to gene
+##' TSSs. It categorizes peaks into distance bins (e.g., 0-1kb, 1-3kb, etc.)
+##' and displays the percentage of peaks in each category, separately for
+##' upstream (5') and downstream (3') regions. The plot uses a diverging bar
+##' chart with TSS at the center (0).
+##'
+##' @details
+##' The function performs the following steps:
+##' \enumerate{
+##'   \item Categorizes peaks into distance bins based on \code{distanceBreaks}
+##'   \item Separates upstream (negative distance) and downstream (positive
+##'         distance) peaks
+##'   \item Calculates percentages for each distance category
+##'   \item Creates a diverging bar plot with:
+##'     \itemize{
+##'       \item Upstream peaks shown as negative bars (left side)
+##'       \item Downstream peaks shown as positive bars (right side)
+##'       \item TSS marked at the center (0)
+##'       \item Distance categories color-coded
+##'     }
+##'   \item Supports grouping by a category column for comparing multiple datasets
+##' }
+##'
+##' @param peakDist data.frame containing peak annotation data with a distance
+##'   column. Typically obtained from \code{as.data.frame(csAnno)} or similar
+##' @param distanceColumn character, name of the column containing distances
+##'   from peaks to nearest gene TSS. Default is "distanceToTSS"
+##' @param distanceBreaks numeric vector, breakpoints for distance categories
+##'   in base pairs. The function automatically adds 0 and Inf if not present.
+##'   Default is c(0, 1000, 3000, 5000, 10000, 100000)
+##' @param palette character, color palette name from RColorBrewer (e.g., "Set1",
+##'   "Dark2") or NULL for default colors. Run
+##'   \code{RColorBrewer::display.brewer.all()} to see available palettes.
+##'   Default is NULL
+##' @param xlab character, label for x-axis. Default is "" (empty)
+##' @param ylab character, label for y-axis. Default is "Binding sites (\%) (5'->3')"
+##' @param title character, plot title. Default is "Distribution of transcription
+##'   factor-binding loci relative to TSS"
+##' @param categoryColumn character or numeric, column name or index for grouping
+##'   multiple datasets. If 1 or ".id", treats as single dataset. Default is ".id"
+##' @return A ggplot2 bar plot object showing the distribution of peaks relative
+##'   to TSS. The plot uses a diverging bar chart format with upstream (5') on
+##'   the left and downstream (3') on the right, with TSS at the center
 ##' @importFrom magrittr %<>%
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 aes
@@ -123,7 +159,7 @@ plotDistToTSS.data.frame <- function(peakDist,
     hasInf = sum(is.infinite(distanceBreaks))
     if (!hasInf) distanceBreaks = c(distanceBreaks, Inf)
     lbs = generate_break_lbs(distanceBreaks)
-    peakDist$Feature = cut(abs(peakDist[[distanceColumn]]), 
+    peakDist$Feature = cut(abs(peakDist[[distanceColumn]]),
                            breaks = distanceBreaks,
                            labels = lbs,
                            include.lowest = TRUE)
@@ -133,12 +169,12 @@ plotDistToTSS.data.frame <- function(peakDist,
 
     ## count frequencies
     if (categoryColumn == 1) {
-      peakDist = peakDist |> 
-        summarise(freq = length(.data$Feature), .by = c("Feature", "sign")) |> 
+      peakDist = peakDist |>
+        summarise(freq = length(.data$Feature), .by = c("Feature", "sign")) |>
         mutate(freq = .data$freq/sum(.data$freq) * 100)
     } else {
-      peakDist = peakDist |> 
-        summarise(freq = length(.data$Feature), .by = c(categoryColumn, "Feature", "sign")) |> 
+      peakDist = peakDist |>
+        summarise(freq = length(.data$Feature), .by = c(categoryColumn, "Feature", "sign")) |>
         mutate(freq = .data$freq/sum(.data$freq) * 100, .by = categoryColumn)
     }
 

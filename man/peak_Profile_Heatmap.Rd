@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotTagMatrix.R
 \name{peak_Profile_Heatmap}
 \alias{peak_Profile_Heatmap}
-\title{peak_Profile_Heatmap}
+\title{Plot combined peak heatmap and average profile}
 \usage{
 peak_Profile_Heatmap(
   peak,
@@ -30,50 +30,77 @@ peak_Profile_Heatmap(
 )
 }
 \arguments{
-\item{peak}{peak file or GRanges object}
+\item{peak}{peak file (BED format) or GRanges object, or a named list of
+peak files/GRanges objects for comparing multiple datasets}
 
-\item{weightCol}{column name of weight}
+\item{weightCol}{character, name of metadata column to use as weights. If NULL,
+all peaks have equal weight. Default is NULL}
 
-\item{TxDb}{TxDb object}
+\item{TxDb}{TxDb or EnsDb annotation object, or a GRanges object containing
+custom genomic features}
 
-\item{upstream}{upstream position}
+\item{upstream}{numeric, upstream distance in base pairs. Default is 1000}
 
-\item{downstream}{downstream position}
+\item{downstream}{numeric, downstream distance in base pairs. Default is 1000}
 
-\item{xlab}{xlab}
+\item{xlab}{character, x-axis label. Default is "" (empty)}
 
-\item{ylab}{ylab}
+\item{ylab}{character, y-axis label. Default is "" (empty)}
 
-\item{title}{title}
+\item{title}{character, plot title. If NULL, no title is shown. Default is NULL}
 
-\item{palette}{palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}}
+\item{palette}{character, color palette name from RColorBrewer for the heatmap.
+See \code{\link[ggplot2]{scale_colour_brewer}} for options. Default is NULL}
 
-\item{verbose}{print message or not}
+\item{verbose}{logical, whether to print progress messages. Default is TRUE}
 
-\item{by}{one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'}
+\item{by}{character, feature type. With TxDb: one of "gene", "transcript",
+"exon", "intron", "3UTR", "5UTR", "UTR". Default is "gene"}
 
-\item{type}{one of "start_site", "end_site", "body"}
+\item{type}{character, one of "start_site", "end_site", or "body". Default
+is "start_site"}
 
-\item{nbin}{the amount of nbines}
+\item{nbin}{integer, number of bins for binning mode. If NULL, uses absolute
+positioning. Default is NULL}
 
-\item{ignore_strand}{ignore the strand information or not}
+\item{ignore_strand}{logical, whether to ignore strand information. Default is FALSE}
 
-\item{windows_name}{the name for each window, which will also be showed in the picture as labels}
+\item{windows_name}{character vector, names for windows (for multi-window plots).
+Default is NULL}
 
-\item{ncol}{the ncol of plotting a list of peak}
+\item{ncol}{integer, number of columns for arranging multiple plots. Default is NULL}
 
-\item{nrow}{the nrow of plotting a list of peak}
+\item{nrow}{integer, number of rows for arranging multiple plots. Default is NULL}
 
-\item{facet_label_text_size}{the size of facet label text}
+\item{facet_label_text_size}{numeric, size of facet label text. Default is 12}
 
-\item{conf}{confidence interval}
+\item{conf}{numeric, confidence level for confidence intervals in the profile
+plot (e.g., 0.95). If NA or missing, no confidence intervals are shown}
 
-\item{facet}{one of 'none', 'row' and 'column'}
+\item{facet}{character, one of "none", "row", or "column" for faceting the
+profile plot. Default is "none"}
 
-\item{free_y}{if TRUE, y will be scaled by AvgProf}
+\item{free_y}{logical, if TRUE, y-axis scales independently per facet in the
+profile plot. Default is TRUE}
 
-\item{height_proportion}{the proportion of profiling picture and heatmap}
+\item{height_proportion}{numeric, proportion of height allocated to profile
+plot vs heatmap. Values between 0 and 1, where 0.5 means equal heights.
+Default is 0.5}
 }
 \description{
-plot peak heatmap and profile in a picture
+The function generates a two-panel figure:
+\itemize{
+  \item Top panel: Heatmap showing signal intensity for each feature (row)
+        across genomic positions (columns)
+  \item Bottom panel: Average profile line showing the mean signal across
+        all features at each position
+}
+
+This combination allows users to see both individual feature patterns and
+the overall trend simultaneously.
+}
+\details{
+This function creates a combined visualization showing both a heatmap of
+individual features and an average profile line plot in a single figure,
+providing both detailed and summary views of peak distributions.
 }

@@ -24,37 +24,57 @@ plotPeakProf2(
 )
 }
 \arguments{
-\item{peak}{peak file or GRanges object}
+\item{peak}{peak file (BED format) or GRanges object, or a list of peak
+files/GRanges objects for comparing multiple datasets}
 
-\item{upstream}{upstream position}
+\item{upstream}{numeric, upstream distance in base pairs. Interpretation
+depends on \code{type}: for "start_site"/"end_site", it's the distance
+upstream of the site; for "body", it's the extension beyond the feature body}
 
-\item{downstream}{downstream position}
+\item{downstream}{numeric, downstream distance in base pairs. Interpretation
+depends on \code{type}: for "start_site"/"end_site", it's the distance
+downstream of the site; for "body", it's the extension beyond the feature
+body}
 
-\item{conf}{confidence interval}
+\item{conf}{numeric, confidence level (e.g., 0.95 for 95% CI). If provided,
+confidence intervals are displayed. If NA or missing, no confidence
+intervals are shown}
 
-\item{by}{e.g. 'gene', 'transcript', 'exon' or features of interest(e.g. "enhancer")}
+\item{by}{character, feature of interest. If using TxDb: one of 'gene',
+'transcript', 'exon', 'intron', '3UTR', '5UTR', 'UTR'. If using self-made
+GRanges: can be any label (e.g., "enhancer", "promoter") used only for plot
+labels}
 
-\item{type}{one of "start_site", "end_site", "body"}
+\item{type}{character, one of "start_site", "end_site", or "body". Determines
+which part of the feature to plot}
 
-\item{weightCol}{column name of weight}
+\item{weightCol}{character, name of a metadata column in the GRanges object
+to use as weights for coverage calculation. If NULL, all peaks have equal
+weight. Default is NULL}
 
-\item{TxDb}{TxDb object, or self-made granges object}
+\item{TxDb}{TxDb or EnsDb annotation object, or a GRanges object containing
+user-defined genomic features. Default is NULL}
 
-\item{xlab}{xlab}
+\item{xlab}{character, x-axis label. Default is "Genomic Region (5'->3')"}
 
-\item{ylab}{ylab}
+\item{ylab}{character, y-axis label. Default is "Peak Count Frequency"}
 
-\item{facet}{one of 'none', 'row' and 'column'}
+\item{facet}{character, one of "none", "row", or "column". Controls how
+multiple datasets are displayed. Default is "none"}
 
-\item{free_y}{if TRUE, y will be scaled by AvgProf}
+\item{free_y}{logical, if TRUE and faceting is used, y-axis scales
+independently for each facet. Default is TRUE}
 
-\item{verbose}{print message or not}
+\item{verbose}{logical, whether to print progress messages. Default is TRUE}
 
-\item{nbin}{the amount of nbines}
+\item{nbin}{integer, number of bins for binning mode. If provided, regions
+are divided into this many equal-sized bins. If NULL, uses absolute
+positions. Default is NULL}
 
-\item{ignore_strand}{ignore the strand information or not}
+\item{ignore_strand}{logical, whether to ignore strand information when
+calculating coverage. Default is FALSE}
 
-\item{...}{additional parameter}
+\item{...}{additional arguments passed to ggplot2 functions}
 }
 \value{
 ggplot object
@@ -63,15 +83,15 @@ ggplot object
 plot the profile of peaks automatically
 }
 \details{
-\code{peak} stands for the peak file. 
+\code{peak} stands for the peak file.
 
-\code{by} the features of interest. 
+\code{by} the features of interest.
 
-(1) if users use \code{txdb}, \code{by} can be one of 'gene', 'transcript', 'exon', 
+(1) if users use \code{txdb}, \code{by} can be one of 'gene', 'transcript', 'exon',
 'intron' , '3UTR' , '5UTR', 'UTR'. These features can be obtained by functions from txdb object.
 
 (2) if users use self-made granges object, \code{by} can be everything. Because this \code{by}
-will not pass to functions to get features, which is different from the case of using 
+will not pass to functions to get features, which is different from the case of using
 txdb object. This \code{by} is only used to made labels showed in picture.
 
 \code{type} means the property of the region. one of the "start site",
@@ -79,7 +99,7 @@ txdb object. This \code{by} is only used to made labels showed in picture.
 
 \code{upstream} and \code{downstream} parameter have different usages:
 
-(1) if \code{type == 'body'}, \code{upstream} and \code{downstream} can use to extend 
+(1) if \code{type == 'body'}, \code{upstream} and \code{downstream} can use to extend
 the flank of body region.
 
 (2) if \code{type == 'start_site'/'end_site'}, \code{upstream} and \code{downstream} refer to
@@ -93,7 +113,7 @@ to get the tag matrix.
 
 \code{TxDb} parameter can accept txdb object.
 But many regions can not be obtained by txdb object. In this case,
-Users can provide self-made granges served the same role 
+Users can provide self-made granges served the same role
 as txdb object and pass to \code{TxDb} object.
 
 \code{plotPeakProf2()} is different from the \code{plotPeakProf()}. \code{plotPeakProf2()} do not

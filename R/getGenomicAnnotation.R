@@ -1,5 +1,7 @@
-updateGenomicAnnotation <- function(peaks, genomicRegion, type, anno, sameStrand=FALSE) {
-    hits <- getGenomicAnnotation.internal(peaks, genomicRegion, type, sameStrand=sameStrand)
+updateGenomicAnnotation <- function(peaks, genomicRegion, type,
+                                    anno, sameStrand=FALSE) {
+    hits <- getGenomicAnnotation.internal(peaks, genomicRegion,
+                                          type, sameStrand=sameStrand)
     if (length(hits) > 1) {
         hitIndex <- hits$queryIndex
         anno[["annotation"]][hitIndex] <- hits$annotation
@@ -9,23 +11,75 @@ updateGenomicAnnotation <- function(peaks, genomicRegion, type, anno, sameStrand
 }
 
 
-##' get Genomic Annotation of peaks
+##' Get genomic annotation of peaks
 ##'
+##' This function assigns genomic feature categories to peaks based on their
+##' location relative to gene structures (promoters, UTRs, exons, introns, etc.).
 ##'
-##' @title getGenomicAnnotation
-##' @param peaks peaks in GRanges object
-##' @param distance distance of peak to TSS
-##' @param tssRegion tssRegion, default is -3kb to +3kb
-##' @param TxDb TxDb object
-##' @param level one of gene or transcript
-##' @param genomicAnnotationPriority genomic Annotation Priority
-##' @param sameStrand whether annotate gene in same strand
+##' @description
+##' The function categorizes each peak into one of several genomic feature types
+##' by checking for overlaps with different genomic regions. When a peak overlaps
+##' multiple features, a priority system is used to assign the most specific
+##' annotation. The function also provides detailed annotation information
+##' indicating which features each peak overlaps.
+##'
+##' @details
+##' The annotation process follows these steps:
+##' \enumerate{
+##'   \item Initializes annotation vectors and a detailed annotation data frame
+##'   \item Processes genomic regions in reverse priority order (from lowest to
+##'         highest priority) to ensure higher priority annotations overwrite
+##'         lower priority ones
+##'   \item Checks for overlaps with: Introns, Exons, 3' UTR, 5' UTR, Promoter
+##'         (based on distance to TSS), and Intergenic regions
+##'   \item For promoter regions, creates distance-based subcategories (e.g.,
+##'         "Promoter (<=1kb)", "Promoter (1-2kb)") when the TSS region is >= 2kb
+##'   \item Identifies downstream regions (within a configurable distance from
+##'         gene end) and categorizes remaining intergenic peaks as "Distal Intergenic"
+##'   \item Marks peaks as "genic" if they overlap exons or introns, otherwise
+##'         marks as "Intergenic"
+##' }
+##'
+##' The priority order (from highest to lowest) is typically: Promoter > 5' UTR >
+##' 3' UTR > Exon > Intron > Downstream > Intergenic. This can be customized via
+##' \code{genomicAnnotationPriority}.
+##'
+##' @param peaks GRanges object containing genomic ranges of peaks to be annotated
+##' @param distance numeric vector of distances from each peak to the TSS of the
+##'   nearest gene. Positive values indicate downstream, negative values indicate
+##'   upstream. Used to identify promoter regions
+##' @param tssRegion numeric vector of length 2 specifying the TSS region for
+##'   promoter annotation. Default is c(-3000, 3000), meaning 3kb upstream and
+##'   3kb downstream of TSS. Peaks within this region are annotated as "Promoter"
+##' @param TxDb TxDb or EnsDb annotation object containing gene/transcript
+##'   structure information
+##' @param level character, one of "gene" or "transcript". Determines whether to
+##'   annotate at gene level or transcript level
+##' @param genomicAnnotationPriority character vector specifying the priority
+##'   order of genomic annotations. Must be a permutation of c("Promoter", "5UTR",
+##'   "3UTR", "Exon", "Intron", "Downstream", "Intergenic"). Higher priority
+##'   annotations (appearing earlier in the vector) will overwrite lower priority
+##'   ones when a peak overlaps multiple features
+##' @param sameStrand logical, whether to only consider overlaps with features on
+##'   the same strand as the peak. If FALSE, strand is ignored. Default is FALSE
+##' @return A list with two components:
+##'   \itemize{
+##'     \item \code{annotation}: Character vector of length equal to input peaks,
+##'       containing the assigned genomic annotation for each peak. Possible
+##'       values include: "Promoter" (with distance subcategories if applicable),
+##'       "5' UTR", "3' UTR", "Exon (geneID, exon N of M)", "Intron (geneID,
+##'       intron N of M)", "Downstream (distance ranges)", "Distal Intergenic"
+##'     \item \code{detailGenomicAnnotation}: Data frame with logical columns
+##'       indicating which features each peak overlaps: \code{genic},
+##'       \code{Intergenic}, \code{Promoter}, \code{fiveUTR}, \code{threeUTR},
+##'       \code{Exon}, \code{Intron}, \code{downstream}, \code{distal_intergenic}
+##'   }
 ##' @importFrom GenomicFeatures threeUTRsByTranscript
 ##' @importFrom GenomicFeatures fiveUTRsByTranscript
 ##' @importFrom yulab.utils get_cache_element
 ##' @importFrom yulab.utils update_cache_item
-##' @return character vector
 ##' @author G Yu
+##' @noRd
 getGenomicAnnotation <- function(peaks,
                                  distance,
                                  tssRegion=c(-3000, 3000),
@@ -167,18 +221,18 @@ getGenomicAnnotation <- function(peaks,
     } else {
         idx <- follow(peaks, unstrand(features))
     }
-    
+
     na.idx <- which(is.na(idx))
     if (length(na.idx)) {
         idx <- idx[-na.idx]
         peaks <- peaks[-na.idx]
     }
-    
+
     peF <- features[idx]
     dd <- ifelse(strand(peF) == "+",
 		 start(peaks) - end(peF),
 		 end(peaks) - start(peF))
-    
+
     if (length(na.idx)) {
         dd2 <- numeric(length(idx) + length(na.idx))
         dd2[-na.idx] <- dd
@@ -198,7 +252,7 @@ getGenomicAnnotation <- function(peaks,
             annotation[j] <- lbs
         }
     }else{
-        
+
         ## downstream within 0-dsd/1000 kb
         for(i in 1:(dsd/1000)){
             j <- which(annotation == "Intergenic" & abs(dd2) <= i*1000 & dd2 != 0)
@@ -211,7 +265,7 @@ getGenomicAnnotation <- function(peaks,
 		annotation[j] <- lbs
             }
         }
-        
+
         ## downstream (dsd/1000) kb - dsd bp
         z <- which(annotation == "Intergenic" & abs(dd2) <= dsd & dd2 != 0)
         if(length(z)>0){
@@ -229,6 +283,7 @@ getGenomicAnnotation <- function(peaks,
 
 
 ##' @import BiocGenerics S4Vectors IRanges
+##' @noRd
 getGenomicAnnotation.internal <- function(peaks, genomicRegion, type, sameStrand=FALSE){
     GRegion <- unlist(genomicRegion)
     GRegionLen <- elementNROWS(genomicRegion)

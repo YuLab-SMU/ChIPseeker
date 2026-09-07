@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotTagMatrix.R
 \name{peakHeatmap}
 \alias{peakHeatmap}
-\title{peakHeatmap}
+\title{Plot heatmap of peaks around genomic features}
 \usage{
 peakHeatmap(
   peak,
@@ -25,45 +25,74 @@ peakHeatmap(
 )
 }
 \arguments{
-\item{peak}{peak file or GRanges object}
+\item{peak}{peak file (BED format) or GRanges object, or a named list of
+peak files/GRanges objects for comparing multiple datasets}
 
-\item{weightCol}{column name of weight}
+\item{weightCol}{character, name of metadata column to use as weights. If NULL,
+all peaks have equal weight. Default is NULL}
 
-\item{TxDb}{TxDb object}
+\item{TxDb}{TxDb or EnsDb annotation object, or a GRanges object containing
+custom genomic features}
 
-\item{upstream}{upstream position}
+\item{upstream}{numeric, upstream distance in base pairs. Default is 1000}
 
-\item{downstream}{downstream position}
+\item{downstream}{numeric, downstream distance in base pairs. Default is 1000}
 
-\item{xlab}{xlab}
+\item{xlab}{character, x-axis label. Default is "" (empty)}
 
-\item{ylab}{ylab}
+\item{ylab}{character, y-axis label. Default is "" (empty)}
 
-\item{title}{title}
+\item{title}{character, plot title. If NULL, no title is shown. Default is NULL}
 
-\item{palette}{palette to be filled in,details see \link[ggplot2]{scale_colour_brewer}}
+\item{palette}{character, color palette name from RColorBrewer. If NULL, uses
+default. See \code{\link[ggplot2]{scale_colour_brewer}} for options.
+Default is NULL}
 
-\item{verbose}{print message or not}
+\item{verbose}{logical, whether to print progress messages. Default is TRUE}
 
-\item{by}{one of 'gene', 'transcript', 'exon', 'intron' , '3UTR' , '5UTR', 'UTR'}
+\item{by}{character, feature type. With TxDb: one of "gene", "transcript",
+"exon", "intron", "3UTR", "5UTR", "UTR". Default is "gene"}
 
-\item{type}{one of "start_site", "end_site", "body"}
+\item{type}{character, one of "start_site", "end_site", or "body". Default
+is "start_site"}
 
-\item{nbin}{the amount of nbines}
+\item{nbin}{integer, number of bins for binning mode. If NULL, uses absolute
+positioning. Default is NULL}
 
-\item{ignore_strand}{ignore the strand information or not}
+\item{ignore_strand}{logical, whether to ignore strand information. Default is FALSE}
 
-\item{windows}{a collection of region}
+\item{windows}{GRanges object, custom genomic regions to use instead of
+generating from TxDb. If missing, regions are generated from TxDb.
+Default is missing}
 
-\item{ncol}{the ncol of plotting a list of peak}
+\item{ncol}{integer, number of columns for arranging multiple heatmaps. Default is NULL}
 
-\item{nrow}{the nrow of plotting a list of peak}
+\item{nrow}{integer, number of rows for arranging multiple heatmaps. Default is NULL}
 }
 \value{
-figure
+A ggplot2 heatmap object showing peak signals across features and
+  positions. For multiple peak sets, returns a grid of heatmaps
 }
 \description{
-plot the heatmap of peaks
+The function generates tag matrices from peaks and visualizes them as heatmaps.
+It supports both absolute positioning and binning modes. Features are typically
+sorted by signal strength, allowing identification of features with strong
+peak enrichment.
+}
+\details{
+This function creates a heatmap showing the distribution of ChIP-seq peaks
+around genomic features (e.g., TSS, gene body). Each row represents a feature
+and each column represents a genomic position.
+
+
+The function:
+\enumerate{
+  \item Generates tag matrices from peaks using \code{getTagMatrix()}
+  \item Optionally uses custom windows (if provided) or generates them from
+        TxDb based on \code{by} and \code{type}
+  \item Creates heatmap visualization with color-coded signal intensities
+  \item Supports single or multiple peak sets (list input)
+}
 }
 \author{
 G Yu

@@ -2,7 +2,7 @@
 % Please edit documentation in R/getNearestFeatureIndicesAndDistances.R
 \name{getNearestFeatureIndicesAndDistances}
 \alias{getNearestFeatureIndicesAndDistances}
-\title{getNearestFeatureIndicesAndDistances}
+\title{Get index of nearest features to peaks and calculate distances}
 \usage{
 getNearestFeatureIndicesAndDistances(
   peaks,
@@ -15,25 +15,84 @@ getNearestFeatureIndicesAndDistances(
 )
 }
 \arguments{
-\item{peaks}{peak in GRanges}
+\item{peaks}{GRanges object containing genomic ranges of peaks}
 
-\item{features}{features in GRanges}
+\item{features}{GRanges object containing genomic features (genes or
+transcripts) to search for nearest features. Typically obtained from
+\code{getGene(TxDb)} or similar functions}
 
-\item{sameStrand}{logical, whether find nearest gene in the same strand}
+\item{sameStrand}{logical, whether to only consider features on the same
+strand as the peak when finding nearest features. If FALSE, searches both
+strands. Default is FALSE}
 
-\item{ignoreOverlap}{logical, whether ignore overlap of TSS with peak}
+\item{ignoreOverlap}{logical, whether to ignore overlaps between peaks and
+features when finding the nearest feature. If FALSE, overlapping features
+will be prioritized and assigned distance=0 (for TSS overlaps) or calculated
+distance (for full feature overlaps). Default is FALSE}
 
-\item{ignoreUpstream}{logical, if True only annotate gene at the 3' of the peak.}
+\item{ignoreUpstream}{logical, if TRUE, only considers features downstream
+(3' end) of the peak. This restricts annotation to genes that come after the
+peak. Default is FALSE}
 
-\item{ignoreDownstream}{logical, if True only annotate gene at the 5' of the peak.}
+\item{ignoreDownstream}{logical, if TRUE, only considers features upstream
+(5' end) of the peak. This restricts annotation to genes that come before
+the peak. Default is FALSE}
 
-\item{overlap}{one of "TSS" or "all"}
+\item{overlap}{character, one of "TSS" or "all". Determines how overlaps are
+detected and handled:
+\itemize{
+  \item "TSS": Only considers overlaps with the TSS point (after features
+        are resized to width=1). Overlapping peaks get distance=0
+  \item "all": Considers overlaps with any part of the full feature range
+        (before resizing). For overlapping peaks, calculates distance from
+        the closer peak end (start or end) to the feature's TSS
+}
+Default is "TSS"}
 }
 \value{
-list
+A list with three components:
+  \itemize{
+    \item \code{index}: Integer vector of feature indices (1-based) for the
+      nearest feature to each peak. Length equals the number of peaks with
+      valid nearest features
+    \item \code{distance}: Numeric vector of distances from each peak to the
+      TSS of its nearest feature. Positive values indicate downstream, negative
+      values indicate upstream, and 0 indicates overlap. Length equals the
+      number of peaks with valid nearest features
+    \item \code{peak}: GRanges object containing only the peaks that have
+      valid nearest features (peaks with no nearest feature in either direction
+      are excluded)
+  }
 }
 \description{
-get index of features that closest to peak and calculate distance
+The function finds the closest feature to each peak by considering both upstream
+and downstream directions. It calculates distances from both the peak start and
+peak end to the feature's TSS, then selects the feature with the minimum absolute
+distance. The function handles overlaps between peaks and features, with different
+behaviors depending on the \code{overlap} parameter.
+}
+\details{
+This function identifies the nearest gene/transcript feature to each peak and
+calculates the distance from the peak to the feature's transcription start site (TSS).
+
+
+The function performs the following steps:
+\enumerate{
+  \item Resizes features to width=1 (TSS points) for efficient distance calculation
+  \item Finds nearest upstream features using \code{follow()} and nearest
+        downstream features using \code{precede()}
+  \item Calculates distances from both peak start and peak end to each feature's TSS
+  \item Selects the feature with the minimum absolute distance (or enforces
+        direction based on \code{ignoreUpstream}/\code{ignoreDownstream})
+  \item If overlaps are allowed (\code{ignoreOverlap=FALSE}), identifies
+        overlapping features and assigns them with distance=0 (for \code{overlap="TSS"})
+        or calculates distance from the closer peak end (for \code{overlap="all"})
+  \item Returns indices, distances, and filtered peaks (excluding peaks with no
+        nearest feature)
+}
+
+Distance calculation is strand-aware: positive values indicate downstream,
+negative values indicate upstream. Overlapping peaks get distance=0 if overlap is "TSS".
 }
 \author{
 G Yu
