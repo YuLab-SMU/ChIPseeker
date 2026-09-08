@@ -10,3 +10,4 @@ docs
 mkdocs
 .github
 ^CONDUCT\.md$
+^\.reasonix$

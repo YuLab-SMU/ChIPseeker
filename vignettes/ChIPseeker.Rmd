@@ -532,10 +532,11 @@ enrichPeakOverlap(queryPeak     = files[[5]],
                   pAdjustMethod = "BH",
                   nShuffle      = 50,
                   chainFile     = NULL,
+                  mc.cores      = 1,
                   verbose       = FALSE)
 ```
 
-Parameter _queryPeak_ is the query ChIP data, while _targetPeak_ is bed file name or a vector of bed file names from comparison; _nShuffle_ is the number to shuffle the peaks in _targetPeak_. To speed up the compilation of this vignettes, we only set _nShuffle_ to 50 as an example for only demonstration. User should set the number to 1000 or above for more robust result. Parameter _chainFile_ are chain file name for mapping the _targetPeak_ to the genome version consistent with _queryPeak_ when their genome version are different. This creat the possibility of comparison among different genome version and cross species.
+Parameter _queryPeak_ is the query ChIP data, while _targetPeak_ is bed file name or a vector of bed file names from comparison; _nShuffle_ is the number to shuffle the peaks in _targetPeak_. To speed up the compilation of this vignettes, we only set _nShuffle_ to 50 as an example for only demonstration. User should set the number to 1000 or above for more robust result. Similarly, `mc.cores` is set to 1 here to keep the vignette build light and to stay within the parallel process limit enforced by `R CMD check`; increase it for your own analyses. Parameter _chainFile_ are chain file name for mapping the _targetPeak_ to the genome version consistent with _queryPeak_ when their genome version are different. This creat the possibility of comparison among different genome version and cross species.
 
 In the output, _qSample_ is the name of _queryPeak_ and _qLen_ is the the number of peaks in _queryPeak_. _N\_OL_ is the number of overlap between _queryPeak_ and _targetPeak_.
 

@@ -33,7 +33,7 @@
 ##'         profiles and peak profiles around TSS or gene body
 ##'   \item \code{\link{tagHeatmap}}, \code{\link{peakHeatmap}}: Heatmaps of
 ##'         peak binding patterns
-##'   \item \code{\link{vennplot}}, \code{\link{upsetplot}}: Visualize overlap
+##'   \item \code{\link{vennplot}}, \code{\link[enrichplot]{upsetplot}}: Visualize overlap
 ##'         among multiple peak sets
 ##' }
 ##'
