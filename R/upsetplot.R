@@ -58,11 +58,12 @@
 ##'   functions or printed directly
 ##' @importFrom ggplot2 coord_fixed
 ##' @importFrom ggplot2 ggplot
-##' @importFrom ggplot2 aes_
+##' @importFrom ggplot2 aes
 ##' @importFrom ggplot2 geom_bar
 ##' @importFrom ggplot2 xlab
 ##' @importFrom ggplot2 ylab
 ##' @importFrom ggplot2 theme_minimal
+##' @importFrom rlang .data
 ##' @seealso \code{\link{vennpie}} for the vennpie plot function,
 ##'   \code{\link{plotAnnoBar}} for bar plots of annotation distribution
 ##' @examples
@@ -88,7 +89,7 @@ upsetplot.csAnno <- function(x, order_by = "freq", vennpie=FALSE, vp = list(x=.6
     y <- as.matrix(y)
 
     res <- tibble::tibble(anno = lapply(1:nrow(y), function(i) nn[y[i,]]))
-    g <- ggplot(res, aes_(x = ~anno)) + geom_bar() +
+    g <- ggplot(res, aes(x = .data$anno)) + geom_bar() +
         xlab(NULL) + ylab(NULL) + theme_minimal() +
         ggupset::scale_x_upset(n_intersections = 20, order_by = order_by)
 

@@ -19,6 +19,9 @@
 + `plotAnnoBar()` no longer uses the deprecated `ggplot2::aes_string()` (issue #268).
   It follows the tidy evaluation idiom already used by `plotDistToTSS()`.
   (2026-09-14, Mon)
++ `upsetplot()` no longer uses the deprecated `ggplot2::aes_()`; the x aesthetic is
+  now mapped with `.data$anno`, the same tidy evaluation idiom used by
+  `plotDistToTSS()`. (2026-09-17, Thu)
 
 # ChIPseeker 1.49.1
 
