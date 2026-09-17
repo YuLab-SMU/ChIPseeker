@@ -23,8 +23,9 @@
   now mapped with `.data$anno`, the same tidy evaluation idiom used by
   `plotDistToTSS()`. (2026-09-17, Thu)
 + dropped unused `@importFrom` directives that have no call site in the package
-  (`ggplot2::geom_text`, `ggplot2::scale_fill_brewer`, `ggplot2::scale_fill_hue`),
-  so the generated NAMESPACE imports less. (2026-09-17, Thu)
+  (`ggplot2::geom_text`, `ggplot2::geom_segment`, `ggplot2::scale_fill_brewer`,
+  `ggplot2::scale_fill_hue`), so the generated NAMESPACE imports less.
+  (2026-09-17, Thu)
 
 # ChIPseeker 1.49.1
 
