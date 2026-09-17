@@ -2441,7 +2441,6 @@ peakHeatmap_multiple_Sets <- function(peak,
 ##' @importFrom ggplot2 scale_x_continuous
 ##' @importFrom ggplot2 facet_grid
 ##' @importFrom ggplot2 element_text
-##' @importFrom ggplot2 element_blank
 ##' @noRd
 peakHeatmap_multiple_Sets.internal <- function(tagMatrix,
                                                upstream=1000,

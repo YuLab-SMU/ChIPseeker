@@ -102,10 +102,6 @@ getPromoters <- function(TxDb=NULL,
 ##' @importFrom yulab.utils get_cache_item
 ##' @author Guangchuang Yu, Ming L
 ##' @export
-##' @import BiocGenerics IRanges GenomicRanges
-##' @importFrom yulab.utils get_cache_item
-##' @author Guangchuang Yu, Ming L
-##' @export
 getBioRegion <- function(TxDb=NULL,
                          upstream=1000,
                          downstream=1000,

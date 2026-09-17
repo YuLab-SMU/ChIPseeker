@@ -125,7 +125,6 @@ is_valid_color = function(color){
 ##' @importFrom ggplot2 xlab
 ##' @importFrom ggplot2 ylab
 ##' @importFrom ggplot2 ggtitle
-##' @importFrom ggplot2 geom_hline
 ##' @importFrom ggplot2 scale_y_continuous
 ##' @importFrom ggplot2 scale_x_continuous
 ##' @importFrom ggplot2 scale_fill_manual

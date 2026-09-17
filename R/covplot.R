@@ -96,7 +96,6 @@ covplot <- function(peak, weightCol=NULL,
     } else {
         p <- ggplot(tm, aes(start, value))
 
-        ## p <- p + geom_segment(aes(x=start, y=0, xend=end, yend= value))
         if (isList) {
             if (length(fill_color) == length(peak) && all(is_valid_color(fill_color))){
                 cols = fill_color
