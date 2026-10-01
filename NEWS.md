@@ -1,3 +1,43 @@
+# ChIPseeker 1.49.3
+
++ `annotatePeak()` keeps `annotation`, `geneChr/geneStart/geneEnd`, `geneId` and
+  `transcriptId` consistent with each other at transcript level (issue #252). The
+  transcript id of an exon/intron/UTR hit was taken from
+  `names(genomicRegion)[subjectIndex]`, indexing the unlisted ranges with the
+  names of the `GRangesList`; this mostly returned NA and occasionally a wrong
+  transcript, so a peak could be reported with the metadata of an unrelated
+  transcript (even on another chromosome). The ids are now expanded before
+  indexing, and the `Promoter` branch writes the feature id reset into `anno`
+  instead of a stale local variable, so promoter peaks keep the nearest-TSS
+  transcript. The same alignment is now applied at `level = "gene"`: the gene of
+  the overlapping exon/intron/UTR is resolved with `TXID2EG()` and used instead
+  of the nearest gene, so `geneId`/`geneStart`/`geneEnd`/`distanceToTSS` follow
+  the annotation there as well. (2026-10-01, Thu)
++ `seq2gene()` no longer fails with `$ operator is invalid for atomic vectors`
+  when none of the queried regions overlaps an exon
+  (`getGenomicAnnotation.internal()` returns `NA` then); host-gene extraction is
+  skipped and the nearest/flanking genes are still reported (issue #248).
+  (2026-10-01, Thu)
++ `getTagMatrix()`/`plotPeakProf2()` no longer fail with
+  `Error in cursor:(cursor + seq - 1) : result would be too long a vector` when
+  `type = "body"` is used with a flank extension shorter than 1kb (issue #250).
+  The share of bins of a flank is derived from its actual length (500bp now
+  contributes 5% of the bins instead of being rounded down to zero), a
+  non-empty flank always gets at least one column, and the binning loops were
+  replaced by edge-based averaging (which also fixes an off-by-one divisor in
+  the last bin of the upstream/body sections). The x-axis breaks of
+  `plotPeakProf2()` are derived from the same column layout. (2026-10-01, Thu)
++ `downloadGEObedFiles()`/`downloadGSMbedFiles()` rewrite the `ftp://` urls of
+  `gsminfo$supplementary_file` to `https://` before downloading and report the
+  underlying download error when a file cannot be fetched (issue #254).
+  (2026-10-01, Thu)
++ Documented the distance definition of `flank_gene_distances` reported by
+  `annotatePeak(..., addFlankGeneInfo = TRUE)`: a distance of 0 means that the
+  peak overlaps the feature range - at `level = "transcript"` the feature is the
+  whole transcript, which is why most entries can be 0 - while non-overlapping
+  peaks get the signed distance to the feature TSS (issue #235).
+  (2026-10-01, Thu)
+
 # ChIPseeker 1.49.2
 
 + `annotatePeak()` now reports `geneChr` and `geneStrand` as characters instead of

@@ -775,27 +775,16 @@ plotAvgProf.binning.internal <- function(tagMatrix,
     ## x_scale for flank extension by absolute value
     if(!is.null(upstream) & !inherits(upstream, 'rel')){
 
-      upstreamPer <- floor(upstream/1000)*0.1
-      downstreamPer <- floor(downstream/1000)*0.1
+      ## the breaks are derived from the same column layout as the tag matrix
+      ## so that they match the bins, also for sub-1kb flanks (issue #250)
+      flankAxis <- flankScale(nbin, upstream, downstream, label)
 
-      p <- p + scale_x_continuous(breaks=c(1,
-                                           floor(nbin*(upstreamPer/(1+upstreamPer+downstreamPer))),
-                                           floor(nbin*((upstreamPer+0.25)/(1+upstreamPer+downstreamPer))),
-                                           floor(nbin*((upstreamPer+0.5)/(1+upstreamPer+downstreamPer))),
-                                           floor(nbin*((upstreamPer+0.75)/(1+upstreamPer+downstreamPer))),
-                                           floor(nbin*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
-                                           nbin),
-                                  labels=c(paste0("-",upstream,"bp"),
-                                           label[1],
-                                           "25%",
-                                           "50%",
-                                           "75%",
-                                           label[2],
-                                           paste0(downstream,"bp")))
-      p <- p + geom_vline(xintercept=floor(nbin*(upstreamPer/(1+upstreamPer+downstreamPer))),
+      p <- p + scale_x_continuous(breaks = flankAxis$breaks,
+                                  labels = flankAxis$labels)
+      p <- p + geom_vline(xintercept = flankAxis$tss,
                           linetype="longdash")
 
-      p <- p + geom_vline(xintercept=floor(nbin*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
+      p <- p + geom_vline(xintercept = flankAxis$tts,
                           linetype="longdash")
     }
   }
@@ -1757,27 +1746,16 @@ plotMultiProf.binning.internal <- function(tagMatrix,
     ## x_scale for flank extension by absolute value
     if(!is.null(upstream) & !inherits(upstream, 'rel')){
 
-      upstreamPer <- floor(upstream/1000)*0.1
-      downstreamPer <- floor(downstream/1000)*0.1
+      ## the breaks are derived from the same column layout as the tag matrix
+      ## so that they match the bins, also for sub-1kb flanks (issue #250)
+      flankAxis <- flankScale(nbin, upstream, downstream, label)
 
-      p <- p + scale_x_continuous(breaks=c(1,
-                                           floor(nbin*(upstreamPer/(1+upstreamPer+downstreamPer))),
-                                           floor(nbin*((upstreamPer+0.25)/(1+upstreamPer+downstreamPer))),
-                                           floor(nbin*((upstreamPer+0.5)/(1+upstreamPer+downstreamPer))),
-                                           floor(nbin*((upstreamPer+0.75)/(1+upstreamPer+downstreamPer))),
-                                           floor(nbin*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
-                                           nbin),
-                                  labels=c(paste0("-",upstream,"bp"),
-                                           label[1],
-                                           "25%",
-                                           "50%",
-                                           "75%",
-                                           label[2],
-                                           paste0(downstream,"bp")))
-      p <- p + geom_vline(xintercept=floor(nbin*(upstreamPer/(1+upstreamPer+downstreamPer))),
+      p <- p + scale_x_continuous(breaks = flankAxis$breaks,
+                                  labels = flankAxis$labels)
+      p <- p + geom_vline(xintercept = flankAxis$tss,
                           linetype="longdash")
 
-      p <- p + geom_vline(xintercept=floor(nbin*((upstreamPer+1)/(1+upstreamPer+downstreamPer))),
+      p <- p + geom_vline(xintercept = flankAxis$tts,
                           linetype="longdash")
     }
   }

@@ -88,9 +88,24 @@ downloadGSMbedFiles <- function(GSM, destDir=getwd()) {
     downloadGEO.internal(info, destDir)
 }
 
+##' Rewrite the FTP urls of GEO supplementary files to HTTPS
+##'
+##' GEO does not serve the supplementary files of the archived samples via FTP
+##' any more; the very same files are available over HTTPS.  `ftp://` URLs are
+##' therefore rewritten to `https://` before downloading (issue #254).
+##'
+##' @param url character vector of remote URLs
+##' @return character vector with `ftp://` replaced by `https://`
+##' @noRd
+##' @author G Yu
+geoHttpsUrl <- function(url) {
+    url <- as.character(url)
+    sub("^ftp://", "https://", url)
+}
+
 ##' @importFrom utils download.file
 downloadGEO.internal <- function(info, destDir) {
-    fnames <- as.character(info$supplementary_file)
+    fnames <- geoHttpsUrl(info$supplementary_file)
     destfiles <- sub(".*\\/", paste(destDir, "/", sep=""), fnames)
     names(destfiles) <- NULL
 
@@ -99,7 +114,9 @@ downloadGEO.internal <- function(info, destDir) {
             tryCatch(download.file(fnames[i],
                           destfile=destfiles[i],
                           mode="wb"),
-                     error = function(e) message(fnames[i], ': file not found and skip'))
+                     error = function(e) message(fnames[i], ": ",
+                                                 conditionMessage(e),
+                                                 ", skip"))
     }
 }
 

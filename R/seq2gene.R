@@ -122,7 +122,14 @@ seq2gene <- function(seq, tssRegion, flankDistance, TxDb, sameStrand=FALSE) {
     # }
     introns <- getGenomicAnnotation.internal(seq, intronList, type="Intron", sameStrand=sameStrand)
 
-    genes <- c(exons$gene, introns$gene)
+    ## getGenomicAnnotation.internal() returns NA when none of the regions
+    ## overlaps an exon/intron, so `$gene` cannot be used unconditionally.
+    ## Skip the host-gene extraction in that case instead of failing with
+    ## "$ operator is invalid for atomic vectors" (issue #248).
+    exonGenes <- if (is.list(exons)) exons$gene else character(0)
+    intronGenes <- if (is.list(introns)) introns$gene else character(0)
+
+    genes <- c(exonGenes, intronGenes)
     ## > head(genes)
     ## [1] "uc001aed.3/126789"    "uc001aka.3/440556"    "uc001ako.3/49856"
     ## [4] "uc001alg.3/100133612" "uc009vly.2/390992"    "uc001awv.2/79814"

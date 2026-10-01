@@ -288,3 +288,63 @@ test_that("getTagMatrix keeps body windows aligned across seqlevel orders", {
     c(5, 5, 50, 50, 10, 10)
   )
 })
+
+test_that("flankBinLayout keeps sub-1kb flanks and the body non-empty", {
+  ## issue #250: a flank shorter than 1kb used to get zero columns, which
+  ## made the binning code divide by zero
+  expect_true(all(flankBinLayout(50, 500, 500) > 0))
+  expect_equal(sum(flankBinLayout(50, 500, 500)), 50)
+
+  ## 1kb of extension adds 10% bins
+  expect_equal(unname(flankBinLayout(1200, 1000, 1000)), c(100, 1000, 100))
+
+  ## without flank extension all columns belong to the body
+  expect_equal(unname(flankBinLayout(50, 0, 0)), c(0, 50, 0))
+})
+
+test_that("body binning works with a sub-1kb flank extension", {
+  ## issue #250: upstream = downstream = 500 crashed with
+  ## "Error in cursor:(cursor + seq - 1) : result would be too long a vector"
+  txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+  peak <- getSampleFiles()[[4]]
+
+  mt <- getTagMatrix(peak = peak, TxDb = txdb, by = "gene", type = "body",
+                     nbin = 50, upstream = 500, downstream = 500,
+                     ignore_strand = TRUE, verbose = FALSE)
+
+  expect_is(mt, "matrix")
+  expect_equal(ncol(mt), 55)
+  expect_false(anyNA(mt))
+
+  layout <- flankBinLayout(ncol(mt), 500, 500)
+  expect_equal(unname(layout), c(2, 51, 2))
+})
+
+test_that("x-axis breaks follow the tag matrix layout", {
+  scale <- flankScale(55, 500, 500, c("TSS", "TTS"))
+
+  expect_equal(scale$tss, 2)
+  expect_equal(scale$tts, 53)
+  expect_equal(length(scale$breaks), length(scale$labels))
+  expect_true(all(scale$breaks >= 1 & scale$breaks <= 55))
+})
+
+test_that("plotPeakProf2 works with a sub-1kb flank extension", {
+  ## issue #250 was reported for plotPeakProf2(): the x-axis breaks have to
+  ## match the columns of the tag matrix
+  txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+  peak <- getSampleFiles()[[4]]
+
+  p <- plotPeakProf2(peak, TxDb = txdb, type = "body", by = "gene",
+                     nbin = 50, upstream = 500, downstream = 500,
+                     verbose = FALSE)
+
+  expect_s3_class(p, "ggplot")
+  expect_silent(b <- ggplot2::ggplot_build(p))
+
+  x <- b$layout$panel_params[[1]]$x
+  expect_equal(x$get_limits(), c(1, 55))
+  expect_equal(x$get_breaks(), c(1, 2, 14, 27, 40, 53, 55))
+  expect_equal(x$get_labels(),
+               c("-500bp", "TSS", "25%", "50%", "75%", "TTS", "500bp"))
+})

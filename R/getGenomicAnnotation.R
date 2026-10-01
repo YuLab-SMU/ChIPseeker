@@ -5,6 +5,10 @@ updateGenomicAnnotation <- function(peaks, genomicRegion, type,
     if (length(hits) > 1) {
         hitIndex <- hits$queryIndex
         anno[["annotation"]][hitIndex] <- hits$annotation
+        if (!is.null(hits$featureId))
+            anno[["annotationFeatureId"]][hitIndex] <- hits$featureId
+        if (!is.null(hits$featureGene))
+            anno[["annotationFeatureGene"]][hitIndex] <- hits$featureGene
         anno[["detailGenomicAnnotation"]][hitIndex, type] <- TRUE
     }
     return(anno)
@@ -109,6 +113,8 @@ getGenomicAnnotation <- function(peaks,
     # ChIPseekerEnv <- get("ChIPseekerEnv", envir=.GlobalEnv)
 
     annotation <- rep(NA, length(distance))
+    annotationFeatureId <- rep(NA_character_, length(distance))
+    annotationFeatureGene <- rep(NA_character_, length(distance))
 
     flag <- rep(FALSE, length(distance))
     detailGenomicAnnotation <- data.frame(
@@ -123,6 +129,8 @@ getGenomicAnnotation <- function(peaks,
         distal_intergenic=flag)
 
     anno <- list(annotation=annotation,
+                 annotationFeatureId=annotationFeatureId,
+                 annotationFeatureGene=annotationFeatureGene,
                  detailGenomicAnnotation=detailGenomicAnnotation)
 
     genomicAnnotationPriority <- rev(genomicAnnotationPriority)
@@ -176,6 +184,14 @@ getGenomicAnnotation <- function(peaks,
             ## TSS
             tssIndex <- distance >= tssRegion[1] & distance <= tssRegion[2]
             annotation[tssIndex] <- "Promoter"
+            ## the promoter annotation is inferred from the distance to the
+            ## nearest TSS, so a feature id coming from an exon/intron hit of
+            ## another (iso)form must be dropped.  Otherwise the reported
+            ## transcript would not correspond to the 'Promoter' annotation.
+            ## Note: it has to be written into `anno`, a local variable would
+            ## be discarded at the end of this loop (issue #252).
+            anno[["annotationFeatureId"]][tssIndex] <- NA_character_
+            anno[["annotationFeatureGene"]][tssIndex] <- NA_character_
             anno$detailGenomicAnnotation[tssIndex, "Promoter"] <- TRUE
 
             pm <- max(abs(tssRegion))
@@ -203,6 +219,8 @@ getGenomicAnnotation <- function(peaks,
     }
 
     annotation <- anno[["annotation"]]
+    annotationFeatureId <- anno[["annotationFeatureId"]]
+    annotationFeatureGene <- anno[["annotationFeatureGene"]]
     detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
     genicIndex <- which(apply(detailGenomicAnnotation[, c("Exon", "Intron")], 1, any))
     detailGenomicAnnotation[-genicIndex, "Intergenic"] <- TRUE
@@ -278,7 +296,10 @@ getGenomicAnnotation <- function(peaks,
     downstreamIndex <- dd2 > 0 & dd2 < dsd
     detailGenomicAnnotation[downstreamIndex, "downstream"] <- TRUE
     detailGenomicAnnotation[which(annotation == "Distal Intergenic"), "distal_intergenic"] <- TRUE
-    return(list(annotation=annotation, detailGenomicAnnotation=detailGenomicAnnotation))
+    return(list(annotation=annotation,
+                annotationFeatureId=annotationFeatureId,
+                annotationFeatureGene=annotationFeatureGene,
+                detailGenomicAnnotation=detailGenomicAnnotation))
 }
 
 
@@ -287,6 +308,20 @@ getGenomicAnnotation <- function(peaks,
 getGenomicAnnotation.internal <- function(peaks, genomicRegion, type, sameStrand=FALSE){
     GRegion <- unlist(genomicRegion)
     GRegionLen <- elementNROWS(genomicRegion)
+
+    ## `genomicRegion` is a GRangesList (one element per transcript) while
+    ## `subjectIndex` below indexes the unlisted ranges, so the transcript id
+    ## of each range has to be expanded first.  Using names(genomicRegion)
+    ## directly mostly returned NA and occasionally a *wrong* transcript,
+    ## which made annotatePeak() report metadata of an unrelated transcript
+    ## (issue #252).
+    featureId <- rep(names(genomicRegion), times=GRegionLen)
+
+    ## gene id of each region, used to keep the gene level annotation
+    ## (`Exon (tx/gene, ...)`) and the reported geneId consistent, i.e. the
+    ## gene level counterpart of the transcript level alignment (issue #252)
+    featureGene <- rep(TXID2EG(names(genomicRegion), geneIdOnly=TRUE),
+                       times=GRegionLen)
 
     names(GRegionLen) <- names(genomicRegion)
     GRegion$gene_id <- rep(names(genomicRegion), times=GRegionLen)
@@ -343,6 +378,8 @@ getGenomicAnnotation.internal <- function(peaks, genomicRegion, type, sameStrand
     } else {
         anno <- type
     }
-    res <- list(queryIndex=queryIndex, annotation=anno, gene=geneID)
+    res <- list(queryIndex=queryIndex, annotation=anno, gene=geneID,
+                featureId=featureId[subjectIndex],
+                featureGene=featureGene[subjectIndex])
     return(res)
 }

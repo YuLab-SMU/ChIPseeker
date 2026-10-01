@@ -117,8 +117,13 @@
 ##'       requested in \code{columns})
 ##'     \item \code{flank_geneIds}: Semicolon-separated list of all flanking gene IDs
 ##'       within the specified distance (only if \code{addFlankGeneInfo=TRUE})
-##'     \item \code{flank_gene_distances}: Semicolon-separated list of distances to
-##'       flanking genes (only if \code{addFlankGeneInfo=TRUE})
+##'     \item \code{flank_gene_distances}: Semicolon-separated list of distances
+##'       from the peak to each flanking gene. A distance of 0 means that the
+##'       peak overlaps the feature range; at \code{level="transcript"} the
+##'       feature is the whole transcript, so peaks inside a transcript body
+##'       get 0 even when their distance to the TSS is not 0. For
+##'       non-overlapping peaks the signed distance to the feature's TSS is
+##'       reported (positive = downstream, negative = upstream)
 ##'     \item \code{flank_txIds}: Semicolon-separated list of all flanking transcript
 ##'       IDs (only if \code{addFlankGeneInfo=TRUE} and \code{level="transcript"})
 ##'   }
@@ -251,6 +256,33 @@ annotatePeak <- function(peak,
         anno <- getGenomicAnnotation(peak.gr, distance, tssRegion, TxDb, level, genomicAnnotationPriority, sameStrand=sameStrand)
         annotation <- anno[["annotation"]]
         detailGenomicAnnotation <- anno[["detailGenomicAnnotation"]]
+
+        ## The genomic annotation comes from the overlapping
+        ## exon/intron/UTR feature, while nearestFeatures is obtained
+        ## independently from the TSS distance.  Overlapping genes or isoforms
+        ## can therefore make the annotation text and the gene/transcript
+        ## columns refer to different features (issue #252).  Reuse the feature
+        ## that supplied the annotation whenever its id is available and
+        ## recalculate its TSS distance, so that all feature level fields stay
+        ## consistent.
+        if (level == "transcript") {
+            aligned <- .alignTranscriptAnnotation(
+                peak.gr, features, idx.dist$index, distance,
+                anno[["annotationFeatureId"]]
+            )
+        } else if (level == "gene") {
+            aligned <- .alignAnnotationFeature(
+                peak.gr, features, idx.dist$index, distance,
+                anno[["annotationFeatureGene"]], idColumn = "gene_id"
+            )
+        } else {
+            aligned <- NULL
+        }
+
+        if (!is.null(aligned)) {
+            idx.dist$index <- aligned$index
+            distance <- aligned$distance
+        }
     } else {
         annotation <- NULL
         detailGenomicAnnotation <- NULL

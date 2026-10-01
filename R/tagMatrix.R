@@ -660,6 +660,96 @@ getTagMatrix.internal <- function(peak,
 }
 
 
+##' Column layout of a body tag matrix with flank extension
+##'
+##' With a flank extension, `nbins` columns of the tag matrix are shared by the
+##' upstream flank, the body and the downstream flank: each kb of extension
+##' adds 10% of bins.  A non-empty flank always receives at least one column so
+##' that a flank shorter than 1kb (e.g. `upstream = 500`) cannot end up with
+##' zero columns, which previously led to a division by zero in the binning
+##' code (issue #250).  The body always keeps at least one column and the three
+##' parts add up to the number of columns of the matrix.
+##'
+##' @param nbins integer, number of columns of the tag matrix
+##' @param upstream numeric, upstream extension in bp
+##' @param downstream numeric, downstream extension in bp
+##' @return named integer vector with the number of columns of the upstream
+##'   flank, the body and the downstream flank
+##' @noRd
+##' @author G Yu
+flankBinLayout <- function(nbins, upstream, downstream) {
+  upstreamPer <- upstream/1000*0.1
+  downstreamPer <- downstream/1000*0.1
+  totalPer <- 1 + upstreamPer + downstreamPer
+
+  upstreamnbin <- floor(nbins*(upstreamPer/totalPer))
+  downstreamnbin <- floor(nbins*(downstreamPer/totalPer))
+
+  if (upstream > 0)
+    upstreamnbin <- max(1L, as.integer(upstreamnbin))
+  if (downstream > 0)
+    downstreamnbin <- max(1L, as.integer(downstreamnbin))
+
+  bodynbin <- nbins - upstreamnbin - downstreamnbin
+  if (bodynbin < 1L)
+    bodynbin <- 1L
+
+  c(upstream = upstreamnbin, body = bodynbin, downstream = downstreamnbin)
+}
+
+
+##' Axis breaks for a body tag matrix with flank extension
+##'
+##' The breaks are derived from [flankBinLayout()] so that the labels of the
+##' x-axis always match the columns of the tag matrix, including flank
+##' extensions shorter than 1kb (issue #250).
+##'
+##' @param nbins integer, number of columns of the tag matrix
+##' @param upstream numeric, upstream extension in bp
+##' @param downstream numeric, downstream extension in bp
+##' @param label character vector, labels of the start and the end of the body
+##' @return list with `breaks`, `labels` and the positions of the TSS (`tss`)
+##'   and the end (`tts`) of the body
+##' @noRd
+##' @author G Yu
+flankScale <- function(nbins, upstream, downstream, label) {
+  flankBins <- flankBinLayout(nbins, upstream, downstream)
+  upstreamnbin <- flankBins[["upstream"]]
+  bodynbin <- flankBins[["body"]]
+  downstreamnbin <- flankBins[["downstream"]]
+
+  tss_pos <- if (upstreamnbin > 0) upstreamnbin else 1
+  tts_pos <- if (downstreamnbin > 0) upstreamnbin + bodynbin else nbins
+
+  breaks <- numeric(0)
+  labels <- character(0)
+
+  if (upstreamnbin > 0) {
+    breaks <- c(breaks, 1)
+    labels <- c(labels, paste0("-", upstream, "bp"))
+  }
+
+  breaks <- c(breaks, tss_pos,
+              tss_pos + floor(bodynbin*0.25),
+              tss_pos + floor(bodynbin*0.5),
+              tss_pos + floor(bodynbin*0.75),
+              tts_pos)
+  labels <- c(labels, label[1], "25%", "50%", "75%", label[2])
+
+  if (downstreamnbin > 0) {
+    breaks <- c(breaks, nbins)
+    labels <- c(labels, paste0(downstream, "bp"))
+  }
+
+  ## a one bin wide flank shares its position with the TSS/TTS landmark,
+  ## keep the landmark label
+  keep <- !duplicated(breaks, fromLast = TRUE)
+
+  list(breaks = breaks[keep], labels = labels[keep],
+       tss = tss_pos, tts = tts_pos)
+}
+
+
 ##' Calculate tag matrix using binning method (internal function)
 ##'
 ##' This is an internal function that calculates peak coverage using a binning
@@ -816,8 +906,10 @@ getTagMatrix.binning.internal <- function(peak,
     }
 
     windows <- windows1
-    upstreamPer <- floor(upstream/1000)*0.1
-    downstreamPer <- floor(downstream/1000)*0.1
+    ## the proportion of a flank is derived from its actual length, so that a
+    ## 500bp extension is no longer rounded down to zero extra bins (#250)
+    upstreamPer <- upstream/1000*0.1
+    downstreamPer <- downstream/1000*0.1
     nbin <- floor(nbin*(1+upstreamPer+downstreamPer))
     min_body_length <- min_body_length+upstream+downstream
 
@@ -952,97 +1044,58 @@ getTagMatrix.binning.internal <- function(peak,
           "%), having lengths smaller than ",filter_length,"bp, are filtered... ",
           format(Sys.time(), "%Y-%m-%d %X"),"\n",sep = "")
 
-      upstreamnbin <- floor(nbin*(upstreamPer/(1+upstreamPer+downstreamPer)))
-      bodynbin <- floor(nbin*(1/(1+upstreamPer+downstreamPer)))
-      downstreamnbin <- floor(nbin*(downstreamPer/(1+upstreamPer+downstreamPer)))
+      ## number of columns shared by the upstream flank, the body and the
+      ## downstream flank.  A non-empty flank always gets at least one column,
+      ## otherwise a sub-1kb extension would produce a zero-width flank and a
+      ## division by zero in the binning below (issue #250).
+      layout <- flankBinLayout(nbin, upstream, downstream)
+      upstreamnbin <- layout[["upstream"]]
+      bodynbin <- layout[["body"]]
+      downstreamnbin <- layout[["downstream"]]
+      nbin <- upstreamnbin + bodynbin + downstreamnbin
+
+      ## average the values of v[from:to] into nbins bins
+      binAverage <- function(v, from, to, nbins) {
+        res <- rep(NA_real_, nbins)
+        if (nbins < 1 || length(v) == 0 || to < from)
+          return(res)
+
+        brk <- floor(seq(from - 1, to, length.out = nbins + 1))
+        for (k in seq_len(nbins)) {
+          ## bins are NA when the region is shorter than nbins
+          if (brk[k+1] > brk[k])
+            res[k] <- mean(v[(brk[k]+1):brk[k+1]])
+        }
+        res
+      }
 
       tagMatrix <- list()
 
-      for (i in 1:length(tagMatrixList)) {
+      for (i in seq_along(tagMatrixList)) {
 
         tagMatrix[[i]] <- matrix(nrow = length(tagMatrixList[[i]]),ncol = nbin)
 
-        ## count the upstream
-        for (j in 1:length(tagMatrixList[[i]])) {
+        for (j in seq_along(tagMatrixList[[i]])) {
 
-          seq <- floor(upstream/upstreamnbin)
-          cursor <- 1
+          v <- tagMatrixList[[i]][[j]]
+          vlen <- length(v)
 
-          for (k in 1:(upstreamnbin-1)) {
-
-            read <- 0
-
-            for (z in cursor:(cursor+seq-1)) {
-              read <- read + tagMatrixList[[i]][[j]][z]
-            }
-
-            tagMatrix[[i]][j,k] <- read/seq
-
-            cursor <- cursor+seq
+          ## count the upstream, positions 1..upstream
+          if (upstreamnbin > 0) {
+            tagMatrix[[i]][j, seq_len(upstreamnbin)] <-
+              binAverage(v, 1, min(upstream, vlen), upstreamnbin)
           }
 
+          ## count genebody, positions (upstream+1)..(vlen-downstream)
+          tagMatrix[[i]][j, upstreamnbin+seq_len(bodynbin)] <-
+            binAverage(v, upstream+1, vlen-downstream, bodynbin)
 
-          read <- 0
-          for (z in cursor:upstream) {
-            read <- read+tagMatrixList[[i]][[j]][z]
+          ## count downstream, positions (vlen-downstream+1)..vlen
+          if (downstreamnbin > 0) {
+            tagMatrix[[i]][j, upstreamnbin+bodynbin+seq_len(downstreamnbin)] <-
+              binAverage(v, vlen-downstream+1, vlen, downstreamnbin)
           }
 
-          tagMatrix[[i]][j,upstreamnbin] <- read/(upstream-cursor)
-
-        }
-
-        ## count genebody
-        for (j in 1:length(tagMatrixList[[i]])) {
-
-          seq <- floor((length(tagMatrixList[[i]][[j]])-upstream-downstream)/bodynbin)
-          cursor <- upstream+1
-
-          for (k in (upstreamnbin+1):(upstreamnbin+bodynbin-1)) {
-
-            read <- 0
-
-            for (z in cursor:(cursor+seq-1)) {
-              read <- read + tagMatrixList[[i]][[j]][z]
-            }
-
-            tagMatrix[[i]][j,k] <- read/seq
-
-            cursor <- cursor+seq
-          }
-
-          read <- 0
-          for (z in cursor:(length(tagMatrixList[[i]][[j]])-downstream)) {
-            read <- read+tagMatrixList[[i]][[j]][z]
-          }
-
-          tagMatrix[[i]][j,bodynbin+upstreamnbin] <- read/(length(tagMatrixList[[i]][[j]])-downstream-cursor)
-        }
-
-        ## count downstream
-        for (j in 1:length(tagMatrixList[[i]])) {
-
-          seq <- floor(downstream/downstreamnbin)
-          cursor <- length(tagMatrixList[[i]][[j]])-downstream+1
-
-          for (k in (upstreamnbin+bodynbin+1):(nbin-1)) {
-
-            read <- 0
-
-            for (z in cursor:(cursor+seq-1)) {
-              read <- read + tagMatrixList[[i]][[j]][z]
-            }
-
-            tagMatrix[[i]][j,k] <- read/seq
-
-            cursor <- cursor+seq
-          }
-
-          read <- 0
-          for (z in cursor:length(tagMatrixList[[i]][[j]])) {
-            read <- read+tagMatrixList[[i]][[j]][z]
-          }
-
-          tagMatrix[[i]][j,nbin] <- read/(length(tagMatrixList[[i]][[j]])-cursor+1)
         }
 
         if(!ignore_strand){

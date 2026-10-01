@@ -119,8 +119,13 @@ A \code{csAnno} object containing the annotated peaks. The main
       requested in \code{columns})
     \item \code{flank_geneIds}: Semicolon-separated list of all flanking gene IDs
       within the specified distance (only if \code{addFlankGeneInfo=TRUE})
-    \item \code{flank_gene_distances}: Semicolon-separated list of distances to
-      flanking genes (only if \code{addFlankGeneInfo=TRUE})
+    \item \code{flank_gene_distances}: Semicolon-separated list of distances
+      from the peak to each flanking gene. A distance of 0 means that the
+      peak overlaps the feature range; at \code{level="transcript"} the
+      feature is the whole transcript, so peaks inside a transcript body
+      get 0 even when their distance to the TSS is not 0. For
+      non-overlapping peaks the signed distance to the feature's TSS is
+      reported (positive = downstream, negative = upstream)
     \item \code{flank_txIds}: Semicolon-separated list of all flanking transcript
       IDs (only if \code{addFlankGeneInfo=TRUE} and \code{level="transcript"})
   }

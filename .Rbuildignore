@@ -11,3 +11,4 @@ mkdocs
 .github
 ^CONDUCT\.md$
 ^\.reasonix$
+ISSUE_AUDIT_SUMMARY.md

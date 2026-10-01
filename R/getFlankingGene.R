@@ -36,6 +36,15 @@
 ##' This ensures the reported distance represents the shortest distance from any
 ##' point of the peak to the feature's transcription start site.
 ##'
+##' Note on the distance definition: a distance of 0 means that the peak
+##' \emph{overlaps the feature range}.  At \code{level="transcript"} the feature
+##' is the whole transcript, so a peak located anywhere inside a transcript body
+##' gets distance 0 even though its distance to the TSS of that transcript is
+##' not 0.  Only peaks that do not overlap the feature are assigned the signed
+##' distance to the feature's TSS (negative = upstream, positive = downstream).
+##' This mixed definition is the reason why many entries of
+##' \code{flank_gene_distances} are 0 (see issue #235).
+##'
 ##' @param peak.gr GRanges object containing genomic ranges of peaks
 ##' @param features GRanges object containing genomic features (genes or
 ##'   transcripts) to search for flanking genes. Typically obtained from
@@ -51,9 +60,11 @@
 ##'     \item \code{flank_geneIds}: Semicolon-separated list of all flanking
 ##'       gene IDs within the extended region
 ##'     \item \code{flank_gene_distances}: Semicolon-separated list of distances
-##'       from the peak to each flanking gene. Distance of 0 indicates overlap
-##'       with the original peak. Positive values indicate downstream, negative
-##'       values indicate upstream
+##'       from the peak to each flanking gene. A distance of 0 means that the
+##'       peak overlaps the feature range (at \code{level="transcript"} this is
+##'       the whole transcript, so peaks inside a transcript body get 0);
+##'       otherwise it is the signed distance to the feature's TSS. Positive
+##'       values indicate downstream, negative values indicate upstream
 ##'     \item \code{flank_txIds}: (Only when \code{level="transcript"})
 ##'       Semicolon-separated list of all flanking transcript IDs
 ##'   }
