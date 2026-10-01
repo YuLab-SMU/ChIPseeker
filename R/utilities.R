@@ -332,6 +332,41 @@ getTagCount <- function(tagMatrix, xlim, conf, ...) {
 }
 
 
+##' Check the x-axis coordinates of a tag matrix
+##'
+##' `xlim` does not restrict the plotted range, it defines the coordinate
+##' system of the plot, so its width has to match the number of columns of the
+##' tag matrix.  The previous error message ("please specify appropreate
+##' xcoordinations...") neither fixed the typo nor told which `xlim` was
+##' expected, leaving users guessing (issue #240).
+##'
+##' @param xlim numeric vector of length 2, x-axis limits
+##' @param nc integer, number of columns of the tag matrix
+##' @param fun character, name of the calling function used in the message
+##' @return NULL, invisibly; called for its side effect of stopping with an
+##'   informative message when `xlim` does not match the tag matrix
+##' @noRd
+##' @author G Yu
+checkXlim <- function(xlim, nc, fun = "the plotting function") {
+    if (!is.numeric(xlim) || length(xlim) != 2 || any(is.na(xlim))) {
+        stop("'xlim' must be a numeric vector of length 2, e.g. xlim = c(1, ",
+             nc, ")", call. = FALSE)
+    }
+
+    width <- xlim[2] - xlim[1] + 1
+    if (width != nc) {
+        stop(fun, ": the width of 'xlim' (", width, ") has to match the ", nc,
+             " columns of the tag matrix, since 'xlim' defines the x-axis ",
+             "coordinates. Use xlim = c(1, ", nc, "); for a tag matrix built ",
+             "without 'nbin' (one column per base pair, centred on the ",
+             "window) xlim = c(-", (nc - 1) / 2, ", ", (nc - 1) / 2, ") is ",
+             "equally valid.", call. = FALSE)
+    }
+
+    invisible(NULL)
+}
+
+
 ##' Convert transcript IDs to gene IDs
 ##'
 ##' This function converts transcript IDs to gene IDs, with options to return

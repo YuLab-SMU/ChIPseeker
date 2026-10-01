@@ -247,6 +247,18 @@ annotatePeak <- function(peak,
                 call. = FALSE)
     }
 
+    ## nothing left to annotate: report the most common cause instead of
+    ## failing later on with an unrelated error (issue #238)
+    if (length(peak.gr) == 0) {
+        stop("all ", peakNum, " peaks were dropped, so there is nothing to ",
+             "annotate. None of the seqlevels of 'peak' matches the seqlevels ",
+             "of 'TxDb' (e.g. 'chr1' vs 'NC_000001.11'). Align the ",
+             "chromosome names, e.g. GenomeInfoDb::seqlevelsStyle(peak.gr) <- ",
+             "'NCBI' (to convert 'chr1' into 'NC_000001.11') or ",
+             "GenomeInfoDb::seqlevelsStyle(TxDb) <- 'Ensembl'.",
+             call. = FALSE)
+    }
+
     ## annotation
     if (assignGenomicAnnotation == TRUE) {
         if (verbose)

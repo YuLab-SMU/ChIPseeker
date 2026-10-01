@@ -329,6 +329,22 @@ test_that("x-axis breaks follow the tag matrix layout", {
   expect_true(all(scale$breaks >= 1 & scale$breaks <= 55))
 })
 
+test_that("plotAvgProf tells which xlim matches the tag matrix", {
+  ## issue #240: xlim defines the x-axis coordinates, so its width has to match
+  ## the number of columns of the tag matrix; the old message
+  ## ("please specify appropreate xcoordinations...") gave no hint
+  m <- matrix(seq_len(21), nrow = 1)
+  attr(m, "type") <- "start_site"
+
+  expect_error(plotAvgProf(m, xlim = c(-2000, 2000)),
+               "has to match the 21 columns")
+  expect_error(plotAvgProf(m, xlim = c(-2000, 2000)), "x-axis coordinates")
+
+  ## both coordinate systems are accepted for a matrix with one column per bp
+  expect_s3_class(plotAvgProf(m, xlim = c(1, 21)), "ggplot")
+  expect_s3_class(plotAvgProf(m, xlim = c(-10, 10)), "ggplot")
+})
+
 test_that("plotPeakProf2 works with a sub-1kb flank extension", {
   ## issue #250 was reported for plotPeakProf2(): the x-axis breaks have to
   ## match the columns of the tag matrix

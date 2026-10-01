@@ -234,7 +234,14 @@ getGenomicAnnotation <- function(peaks,
     features <- getGene(TxDb, by=level)
 
     ## nearest from gene end
-    if (sameStrand) {
+    ## `follow()` returns a SortedByQueryHits object instead of indices when the
+    ## query is empty, which happens when all peaks were dropped before (e.g.
+    ## because no seqlevel of the peaks matches TxDb). Such an object is not a
+    ## valid row subscript and used to fail with "Error: invalid subscript"
+    ## (issue #238)
+    if (length(peaks) == 0) {
+        idx <- integer(0)
+    } else if (sameStrand) {
         idx <- follow(peaks, features)
     } else {
         idx <- follow(peaks, unstrand(features))

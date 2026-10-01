@@ -37,6 +37,19 @@
   whole transcript, which is why most entries can be 0 - while non-overlapping
   peaks get the signed distance to the feature TSS (issue #235).
   (2026-10-01, Thu)
++ `annotatePeak()` no longer fails with `Error: invalid subscript` when *every*
+  peak is dropped, which typically happens because none of the seqlevels of the
+  peaks matches `TxDb` (`chr1` vs `NC_000001.11`). `getGenomicAnnotation()` no
+  longer hands the `SortedByQueryHits` object returned by `follow()` for an empty
+  query to `features[]`, and `annotatePeak()` now reports the seqlevels
+  mismatch together with how to align the chromosome names
+  (`seqlevelsStyle()`). (2026-10-01, Thu)
++ `plotAvgProf()`/`plotMultiProf()` now state which `xlim` matches the tag matrix
+  instead of stopping with "please specify appropreate xcoordinations...".
+  `xlim` defines the x-axis coordinates, so its width has to match the number of
+  columns of the tag matrix; the typo is gone and both valid forms
+  (`c(1, nc)` and, for a matrix with one column per bp, `c(-(nc-1)/2, (nc-1)/2)`)
+  are shown (issue #240). (2026-10-01, Thu)
 
 # ChIPseeker 1.49.2
 

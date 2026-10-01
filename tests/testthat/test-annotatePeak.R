@@ -42,6 +42,18 @@ test_that("peaks without any feature in TxDb are reported, not silently dropped"
     )
 })
 
+test_that("all peaks dropped reports the seqlevels mismatch", {
+    ## issue #238: when no seqlevel of the peaks matches TxDb every peak is
+    ## dropped and the annotation code then failed with
+    ## "Error: invalid subscript"
+    peak <- GRanges("chr1_gl000191_random", IRanges(1000, 1200))
+
+    expect_error(
+        suppressWarnings(annotatePeak(peak, TxDb = txdb, verbose = FALSE)),
+        "seqlevels"
+    )
+})
+
 test_that("transcript annotation metadata follows the overlapping isoform", {
     ## issue #252: a peak can overlap one isoform while another nested
     ## transcript has the closer TSS.  All transcript-level fields must then

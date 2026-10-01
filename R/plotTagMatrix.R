@@ -433,13 +433,9 @@ plotAvgProf.internal <- function(tagMatrix, conf,
 
   if ( listFlag ) {
     facet <- match.arg(facet, c("none", "row", "column"))
-    if ( (xlim[2]-xlim[1]+1) != ncol(tagMatrix[[1]]) ) {
-      stop("please specify appropreate xcoordinations...")
-    }
+    checkXlim(xlim, ncol(tagMatrix[[1]]), fun = "plotAvgProf")
   } else {
-    if ( (xlim[2]-xlim[1]+1) != ncol(tagMatrix) ) {
-      stop("please specify appropreate xcoordinations...")
-    }
+    checkXlim(xlim, ncol(tagMatrix), fun = "plotAvgProf")
   }
 
   ## S4Vectors change the behavior of ifelse
@@ -1418,13 +1414,9 @@ plotMultiProf.normal.internal <- function(tagMatrix, conf,
 
   if ( listFlag ) {
     facet <- match.arg(facet, c("none", "row", "column"))
-    if ( (xlim[2]-xlim[1]+1) != ncol(tagMatrix[[1]][[1]]) ) {
-      stop("please specify appropreate xcoordinations...")
-    }
+    checkXlim(xlim, ncol(tagMatrix[[1]][[1]]), fun = "plotMultiProf")
   } else {
-    if ( (xlim[2]-xlim[1]+1) != ncol(tagMatrix[[1]]) ) {
-      stop("please specify appropreate xcoordinations...")
-    }
+    checkXlim(xlim, ncol(tagMatrix[[1]]), fun = "plotMultiProf")
   }
 
   ## S4Vectors change the behavior of ifelse
