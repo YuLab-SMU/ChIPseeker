@@ -13,7 +13,8 @@ enrichPeakOverlap(
   chainFile = NULL,
   pool = TRUE,
   mc.cores = detectCores() - 1,
-  verbose = TRUE
+  verbose = TRUE,
+  symmetric = FALSE
 )
 }
 \arguments{
@@ -47,6 +48,15 @@ If FALSE, tests overlap with each target peak set separately. Default is TRUE}
 Default is \code{detectCores()-1}. See \code{\link[parallel]{mclapply}}}
 
 \item{verbose}{logical, whether to print progress messages. Default is TRUE}
+
+\item{symmetric}{logical, whether the p-value should be direction free.
+Default is FALSE, which reports the one-sided test described above. If
+TRUE, the mirrored direction (query and target exchanged) is computed as
+well and the two are combined as \code{min(1, 2*min(p, p_rev))} (Hedges),
+so that the result does not depend on the order of the arguments. Note that
+this doubles the number of permutations and that the smallest reportable
+p-value becomes \code{2/(nShuffle+1)}; use a larger \code{nShuffle} and
+\code{set.seed()} for a reproducible result (issue #84)}
 }
 \value{
 A data.frame with one row per target peak comparison, containing:
@@ -105,8 +115,11 @@ and normalises by the other peak set, so the p-values can differ
 substantially when the two peak sets differ in size. Even for equally sized
 sets the two null distributions are sampled independently, which leaves
 small Monte-Carlo differences (see issue #84). Compare \code{N_OL} directly
-if a direction-free measure is needed, and increase \code{nShuffle} to
-reduce the Monte-Carlo part.
+if a direction-free measure is needed, increase \code{nShuffle} to reduce
+the Monte-Carlo part, or use \code{symmetric=TRUE} for a direction-free
+p-value (the mirrored direction is then computed as well and combined as
+\code{min(1, 2*min(p, p_rev))}, which doubles the number of permutations
+and raises the smallest reportable p-value to \code{2/(nShuffle+1)}).
 }
 \author{
 G Yu

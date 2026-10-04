@@ -59,6 +59,15 @@
   - which explains why `N_OL` is identical in both directions while the p-value
   is not, and that `N_OL` of `enrichAnnoOverlap()` counts genes and can exceed
   the number of input peaks (issue #84). (2026-10-01, Thu)
++ `enrichPeakOverlap()` gained an opt-in `symmetric` argument. With
+  `symmetric = TRUE` the mirrored direction (query and target exchanged) is
+  computed as well and the two one-sided permutation p-values are combined as
+  `min(1, 2*min(p, p_rev))` (Hedges), so the result no longer depends on the
+  order of the arguments. The default stays `FALSE` (one-sided) and all existing
+  numbers are unchanged; the mirrored test doubles the number of permutations and
+  raises the smallest reportable p-value to `2/(nShuffle+1)`. `enrichAnnoOverlap()`
+  needs no such argument, its hypergeometric p-value is already exactly symmetric
+  (issue #84). (2026-10-01, Thu)
 
 # ChIPseeker 1.49.2
 
