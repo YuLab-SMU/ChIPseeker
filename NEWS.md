@@ -50,6 +50,15 @@
   columns of the tag matrix; the typo is gone and both valid forms
   (`c(1, nc)` and, for a matrix with one column per bp, `c(-(nc-1)/2, (nc-1)/2)`)
   are shown (issue #240). (2026-10-01, Thu)
++ `enrichPeakOverlap()` accepts a single `GRanges` as `targetPeak` again: it was
+  passed on unwrapped while the permutation test works on a list of target peak
+  sets, so the call failed with "GRanges objects don't support [[, as.list(),
+  lapply()". The documentation of `enrichPeakOverlap()`/`enrichAnnoOverlap()`
+  now also states the direction of the test - the observed ratio is the fraction
+  of *target* peaks covered by the query peaks and the target is the shuffled set
+  - which explains why `N_OL` is identical in both directions while the p-value
+  is not, and that `N_OL` of `enrichAnnoOverlap()` counts genes and can exceed
+  the number of input peaks (issue #84). (2026-10-01, Thu)
 
 # ChIPseeker 1.49.2
 

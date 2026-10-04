@@ -44,7 +44,11 @@ A data.frame with one row per target peak comparison, containing:
     \item \code{tSample}: name of the target sample(s)
     \item \code{qLen}: number of unique genes in query peaks
     \item \code{tLen}: number of unique genes in target peaks
-    \item \code{N_OL}: number of overlapping genes
+    \item \code{N_OL}: number of overlapping genes. Note that this counts
+      \emph{genes}, not peaks, so it can be larger than the number of input
+      peaks: one peak is annotated to its nearest gene, but the same gene is
+      reported once per peak and a peak region may overlap several target
+      genes (see issue #84)
     \item \code{pvalue}: p-value from hypergeometric test
     \item \code{p.adjust}: adjusted p-value
   }
