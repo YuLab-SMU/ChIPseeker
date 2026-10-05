@@ -24,9 +24,13 @@
   The share of bins of a flank is derived from its actual length (500bp now
   contributes 5% of the bins instead of being rounded down to zero), a
   non-empty flank always gets at least one column, and the binning loops were
-  replaced by edge-based averaging (which also fixes an off-by-one divisor in
-  the last bin of the upstream/body sections). The x-axis breaks of
-  `plotPeakProf2()` are derived from the same column layout. (2026-10-01, Thu)
+  replaced by edge-based averaging of equal-width bins. This changes numbers
+  slightly: the old code divided the last bin of a section by `count-1`
+  instead of `count` (about 10% too high for a 10 bp bin), and it put all
+  leftover positions of a section into its last bin instead of spreading them,
+  which can move that bin considerably (up to ~40% for a 7 bp remainder in a
+  300 bp bin). The x-axis breaks of `plotPeakProf2()` are derived from the same
+  column layout. (2026-10-01, Thu)
 + `downloadGEObedFiles()`/`downloadGSMbedFiles()` rewrite the `ftp://` urls of
   `gsminfo$supplementary_file` to `https://` before downloading and report the
   underlying download error when a file cannot be fetched (issue #254).
