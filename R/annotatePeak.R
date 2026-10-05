@@ -218,6 +218,31 @@ annotatePeak <- function(peak,
             features <- getGene(TxDb, by="gene")
         }
     }
+    ## An empty input returns an empty annotation. The nearest feature lookup
+    ## below and the flank/annotation steps after it are not defined for zero
+    ## peaks and used to fail with unrelated errors ("Error: invalid
+    ## subscript", "replacement has 1 row, data has 0").
+    if (peakNum == 0) {
+        anno <- peak.gr
+        anno@seqinfo <- seqinfo(TxDb)[seqlevels(anno)]
+
+        detail <- data.frame(genic = logical(0), Intergenic = logical(0),
+                             Promoter = logical(0), fiveUTR = logical(0),
+                             threeUTR = logical(0), Exon = logical(0),
+                             Intron = logical(0), downstream = logical(0),
+                             distal_intergenic = logical(0))
+        annoStat <- data.frame(Feature = factor(character(0)),
+                               Frequency = numeric(0))
+
+        return(new("csAnno", anno = anno,
+                    tssRegion = tssRegion,
+                    level = level,
+                    hasGenomicAnnotation = assignGenomicAnnotation,
+                    detailGenomicAnnotation = detail,
+                    annoStat = annoStat,
+                    peakNum = peakNum))
+    }
+
     if (verbose)
         cat(">> identifying nearest features...\t\t",
             format(Sys.time(), "%Y-%m-%d %X"), "\n")

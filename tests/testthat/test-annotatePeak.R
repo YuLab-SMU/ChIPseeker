@@ -54,6 +54,23 @@ test_that("all peaks dropped reports the seqlevels mismatch", {
     )
 })
 
+test_that("an empty input returns an empty annotation", {
+    ## a zero-length peak set used to fail with "Error: invalid subscript" and
+    ## "replacement has 1 row, data has 0"
+    pa <- annotatePeak(GRanges(), TxDb = txdb, verbose = FALSE)
+
+    expect_s4_class(pa, "csAnno")
+    expect_equal(length(pa@anno), 0)
+    expect_equal(pa@peakNum, 0)
+    expect_equal(nrow(pa@detailGenomicAnnotation), 0)
+    expect_equal(nrow(as.data.frame(pa)), 0)
+
+    ## the same for the variants that add columns
+    pa2 <- annotatePeak(GRanges(), TxDb = txdb, verbose = FALSE,
+                        addFlankGeneInfo = TRUE, annoDb = "org.Hs.eg.db")
+    expect_equal(length(pa2@anno), 0)
+})
+
 test_that("transcript annotation metadata follows the overlapping isoform", {
     ## issue #252: a peak can overlap one isoform while another nested
     ## transcript has the closer TSS.  All transcript-level fields must then

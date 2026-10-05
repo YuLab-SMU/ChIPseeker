@@ -80,6 +80,14 @@ getNearestFeatureIndicesAndDistances <- function(peaks, features,
                                                  ignoreDownstream=FALSE,
                                                  overlap = "TSS") {
 
+    ## Nothing to do for an empty query. Without this guard follow()/precede()
+    ## return a SortedByQueryHits object instead of indices, which cannot be used
+    ## as a row subscript ("Error: invalid subscript"), so annotatePeak(),
+    ## annotateSeq() and seq2gene() all failed on an empty input.
+    if (length(peaks) == 0) {
+        return(list(index = integer(0), distance = numeric(0), peak = peaks))
+    }
+
     overlap <- match.arg(overlap, c("TSS", "all"))
 
     ### find overlap between peaks and features

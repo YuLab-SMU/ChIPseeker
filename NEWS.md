@@ -35,6 +35,12 @@
   `gsminfo$supplementary_file` to `https://` before downloading and report the
   underlying download error when a file cannot be fetched (issue #254).
   (2026-10-01, Thu)
++ An empty input is now handled: `annotatePeak(GRanges(), ...)` returns an
+  empty `csAnno` instead of failing with "Error: invalid subscript" or
+  "replacement has 1 row, data has 0". The root cause (follow()/precede()
+  returning a SortedByQueryHits object instead of indices for an empty query) is
+  guarded in `getNearestFeatureIndicesAndDistances()`, which also makes
+  `seq2gene()` return `character(0)` for an empty input. (2026-10-01, Thu)
 + Documented the distance definition of `flank_gene_distances` reported by
   `annotatePeak(..., addFlankGeneInfo = TRUE)`: a distance of 0 means that the
   peak overlaps the feature range - at `level = "transcript"` the feature is the
