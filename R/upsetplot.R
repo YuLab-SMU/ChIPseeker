@@ -56,7 +56,7 @@
 ##' @return A ggplot2 object (or combined plot if vennpie=TRUE) showing the
 ##'   UpSet visualization. The plot can be further customized using ggplot2
 ##'   functions or printed directly
-##' @importFrom ggplot2 coord_fixed
+##' @importFrom ggplot2 theme
 ##' @importFrom ggplot2 ggplot
 ##' @importFrom ggplot2 aes
 ##' @importFrom ggplot2 geom_bar
@@ -97,7 +97,16 @@ upsetplot.csAnno <- function(x, order_by = "freq", vennpie=FALSE, vp = list(x=.6
 
     f <- function() vennpie(x, cex = .9)
 
-    p <- ggplotify::as.ggplot(f) + coord_fixed()
+    ## The sub-view is embedded as an annotation_custom() layer, which ggplot2
+    ## >= 4.0 only supports below coord_cartesian(), so the former
+    ## coord_fixed() had to go. No replacement is added because ggplotify
+    ## rasterises the grob with the aspect ratio of the device anyway and forcing
+    ## a square panel only distorted it further (measured on vennpie():
+    ## anisotropy sqrt(lambda1/lambda2) 1.43 without versus 1.50 with
+    ## theme(aspect.ratio = 1), against 1.41 for the undistorted base graphics
+    ## drawing). Otherwise the plot could not even be drawn:
+    ## "`annotation_custom()` only works with `coord_cartesian()`".
+    p <- ggplotify::as.ggplot(f)
 
     ggplotify::as.ggplot(g) +
         ggimage::geom_subview(subview = p, x = vp$x, y = vp$y, width = vp$width, height = vp$height)

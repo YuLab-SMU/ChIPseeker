@@ -99,7 +99,6 @@ importFrom(dplyr,
 importFrom(enrichplot,upsetplot)
 importFrom(ggplot2,
   aes,
-  coord_fixed,
   coord_flip,
   element_blank,
   element_text,
