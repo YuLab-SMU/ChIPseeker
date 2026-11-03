@@ -485,7 +485,7 @@ Biocpkg("ReactomePA")` for Gene Ontology, KEGG, Disease Ontology, MeSH and React
 
 The `r Biocpkg("clusterProfiler")`[@yu_clusterprofiler_2012] package provides `compareCluster` function for comparing biological themes among gene clusters, and can be easily adopted to compare different ChIP peak experiments.
 
-```{r fig.width=8.5, fig.height=8.5}
+```{r eval=FALSE, fig.width=8.5, fig.height=8.5}
 genes = lapply(peakAnnoList, function(i) as.data.frame(i)$geneId)
 names(genes) = sub("_", "\n", names(genes))
 compKEGG <- compareCluster(geneCluster   = genes,
@@ -494,6 +494,7 @@ compKEGG <- compareCluster(geneCluster   = genes,
                          pAdjustMethod = "BH")
 dotplot(compKEGG, showCategory = 15, title = "KEGG Pathway Enrichment Analysis")
 ```
+![](figures/compareCluster_KEGG.png)
 
 
 ## Overlap of peaks and annotated genes
