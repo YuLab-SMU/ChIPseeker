@@ -5,7 +5,7 @@
   outage of that endpoint aborted `R CMD build` on the Bioconductor Linux
   builder (nebbiolo1, Bioc 3.23) while building the vignettes. The example is kept
   as `eval = FALSE` with a precomputed figure (`figures/compareCluster_KEGG.png`),
-  consistent with the other cached figures in the vignette. (2026-11-03, Mon)
+  consistent with the other cached figures in the vignette. (2026-11-03, Tue)
 + `annotatePeak()` keeps `annotation`, `geneChr/geneStart/geneEnd`, `geneId` and
   `transcriptId` consistent with each other at transcript level (issue #252). The
   transcript id of an exon/intron/UTR hit was taken from
