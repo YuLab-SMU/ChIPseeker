@@ -1,5 +1,11 @@
-# ChIPseeker 1.49.4
+# ChIPseeker 1.49.5
 
++ `test-txdb.R` no longer pins the `tx_id` -> gene mapping of
+  `TxDb.Hsapiens.UCSC.hg19.knownGene`. That mapping is annotation data rebuilt
+  for each Bioconductor release, and tx 70455 changed from
+  `ENST00000487630.1_3` to `ENST00000959756.2_2/3554` in BioC 3.24, failing
+  `R CMD check` on both Linux builders. Expected values are now derived from
+  the installed TxDb at test time. (2026-11-12, Thu)
 + The vignette no longer evaluates the KEGG `compareCluster()` example at build
   time. It calls `enrichKEGG()`, which fetches `rest.kegg.jp` live; a transient
   outage of that endpoint aborted `R CMD build` on the Bioconductor Linux
