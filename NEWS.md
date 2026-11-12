@@ -6,6 +6,9 @@
   `ENST00000487630.1_3` to `ENST00000959756.2_2/3554` in BioC 3.24, failing
   `R CMD check` on both Linux builders. Expected values are now derived from
   the installed TxDb at test time. (2026-11-12, Thu)
+
+# ChIPseeker 1.49.4
+
 + The vignette no longer evaluates the KEGG `compareCluster()` example at build
   time. It calls `enrichKEGG()`, which fetches `rest.kegg.jp` live; a transient
   outage of that endpoint aborted `R CMD build` on the Bioconductor Linux
