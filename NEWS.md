@@ -1,3 +1,7 @@
+# ChIPseeker 1.50.0
+
++ Bioconductor RELEASE_3_24 (2026-11-25, Wed)
+
 # ChIPseeker 1.49.5
 
 + `test-txdb.R` no longer pins the `tx_id` -> gene mapping of
